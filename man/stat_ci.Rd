@@ -4,9 +4,8 @@
 \alias{stat_ci}
 \title{Obtain a bootstrapped confidence interval for a summary statistic of a numeric vector.}
 \usage{
-stat_ci(y, stat, ..., replicates = 2000, plot = FALSE,
-  ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL,
-  na.rm = TRUE)
+stat_ci(y, stat, ..., replicates = 2000, ci_level = 0.95,
+  ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE)
 }
 \arguments{
 \item{y}{A vector/variable (required).}

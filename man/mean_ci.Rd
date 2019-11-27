@@ -4,8 +4,8 @@
 \alias{mean_ci}
 \title{Obtain a (bootstrapped) confidence interval for the mean of a numeric vector.}
 \usage{
-mean_ci(y, replicates = 2000, plot = FALSE, ci_level = 0.95,
-  ci_type = "norm", parallel = FALSE, cores = NULL, na.rm = TRUE)
+mean_ci(y, replicates = 2000, ci_level = 0.95, ci_type = "norm",
+  parallel = FALSE, cores = NULL, na.rm = TRUE)
 }
 \arguments{
 \item{y}{A vector/variable (required).}
@@ -72,7 +72,7 @@ other summary statistics use code{\link{stat_ci}} instead.
 y1 <- rnorm(1:10000, 100, 10)
 
 #using a single core (sequential processing)
-mean_ci()
+mean_ci(y1)
 
 mean_ci(y1, ci_type = "perc")
 
