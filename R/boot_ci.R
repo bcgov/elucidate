@@ -74,7 +74,7 @@
 #' y1 <- rnorm(1:10000, 100, 10)
 #'
 #' #using a single core (sequential processing)
-#' mean_ci()
+#' mean_ci(y1)
 #'
 #' mean_ci(y1, ci_type = "perc")
 #'
@@ -88,7 +88,7 @@
 #' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
 #'
 #' @export
-mean_ci <- function(y, replicates = 2000, plot = FALSE, ci_level = 0.95, ci_type = "norm", parallel = FALSE, cores = NULL, na.rm = TRUE){
+mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", parallel = FALSE, cores = NULL, na.rm = TRUE){
   if(na.rm == TRUE) {
     y <- na.omit(y)
   }
@@ -381,7 +381,7 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
 #'
 #' @export
-stat_ci <- function(y, stat, ..., replicates = 2000, plot = FALSE, ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE){
+stat_ci <- function(y, stat, ..., replicates = 2000, ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE){
   if(na.rm == TRUE) {
     y <- na.omit(y)
   }
