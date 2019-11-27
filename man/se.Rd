@@ -4,10 +4,13 @@
 \alias{se}
 \title{Calculate the standard error of the mean.}
 \usage{
-se(y)
+se(y, na.rm = TRUE)
 }
 \arguments{
 \item{y}{a numeric vector/variable.}
+
+\item{na.rm}{Should missing valued be removed before attempting to calculate
+the standard error (TRUE/FALSE)?}
 }
 \description{
 \code{se} returns the standard error of the mean.
