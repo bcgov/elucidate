@@ -10,6 +10,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+Depends: R (>= 2.10)
 Imports: 
     magrittr (>= 1.5), 
     dplyr (>= 0.8.3), 
@@ -38,6 +39,5 @@ LinkingTo:
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown,
-    R (>= 2.10)
+    rmarkdown
 VignetteBuilder: knitr
