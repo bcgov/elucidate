@@ -19,9 +19,7 @@ a plotly html widget.
 \description{
 Uses \code{\link[plotly]{ggplotly}} or
 \code{\link[DT]{datatable}} to convert a ggplot2 object or data
-frame/tibble to a dynamic & interactive form. To get inline boxplots and
-histograms for the table, use the interactive option (interactive = T) of
-\code{\link{describe}} or \code{\link{describe_ci}} instead.
+frame/tibble to a dynamic & interactive form.
 }
 \examples{
 
@@ -37,8 +35,7 @@ mtcars \%>\% static_to_dynamic(caption = "Table 1")
 
 }
 \seealso{
-\code{\link[DT]{datatable}}, \code{\link[plotly]{ggplotly}},
-\code{\link{describe}}, \code{\link{describe_ci}}
+\code{\link[DT]{datatable}}, \code{\link[plotly]{ggplotly}}
 }
 \author{
 Craig P. Hutton, \email{craig.hutton@gmail.com}

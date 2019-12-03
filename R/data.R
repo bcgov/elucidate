@@ -2,10 +2,9 @@
 #' practice data for package testing and development
 #'
 #' A dataset containing randomly generated practice data of various classes for
-#' testing, developing, and benchmarking elucidate package functions on a
-#' realistic scale an analyst might encounter in "the wild".
+#' testing and developing elucidate package functions.
 #'
-#' @format A data frame of 1,000,000 rows and 11 columns
+#' @format A data frame of 10,000 rows and 11 columns
 #' \describe{
 #'  \item{id}{a sequence of numbers labeling the row id}
 #'  \item{d}{a sequence of dates (yyyy-mm-dd) starting January 1st, 2000}

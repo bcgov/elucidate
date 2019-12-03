@@ -18,8 +18,8 @@ ascending/increasing order.}
 A list of character vectors of the unique value frequency counts for
 each variable of the input data frame sorted in the chosen order. Return
 values are structured as "value_count". Returning a character vector makes
-subsequent manipulation with \code{\link[stringr]} and other tidyverse
-tools fairly easily.
+subsequent manipulation with stringr and other tidyverse tools fairly
+easily.
 }
 \description{
 \code{counts_all} is an extension of \code{\link{counts}} that

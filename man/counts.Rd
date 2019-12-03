@@ -18,7 +18,7 @@ ascending/increasing order.}
 A character vector of the unique value frequency counts from the
 input vector sorted in the chosen order. Return values are structured as
 "value_count". Returning a character vector makes subsequent manipulation
-with \code{\link[stringr]} and other tidyverse tools fairly easily.
+with stringr and other tidyverse tools fairly easily.
 }
 \description{
 \code{counts} returns the most or least common unique value(s)
