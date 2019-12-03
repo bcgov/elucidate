@@ -128,8 +128,13 @@ describe_all(mtcars)
 
 \dontrun{
 describe_all(pdata) #all summary types in a list
-pdata \%>\% describe_all(high_low, output = "dt", class = "n") #numeric summary only
-pdata \%>\% describe_all(high_low, output = "dt", class = c("n", "l")) #numeric and logical summaries only
+
+#numeric summary only
+pdata \%>\% describe_all(high_low, output = "dt", class = "n")
+
+#numeric and logical summaries only
+pdata \%>\%
+describe_all(high_low, output = "dt", class = c("n", "l"))
 }
 
 }

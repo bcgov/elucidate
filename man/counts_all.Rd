@@ -31,9 +31,14 @@ For complex use cases see \code{\link{describe_all}}.
 #using a numeric vector
 data <- data(mtcars)
 
-counts_all(data) #all unique values of all variables in \\code{data} in order of descending frequency
-counts_all(data, n = 1) #the most common values of all variables in \\code{data}
-counts_(data, n = 5) #the top 5 most common unique values for all variables in  \\code{data}
+#all unique values of all variables in \\code{data} in order of descending frequency
+counts_all(data)
+
+#the most common values of all variables in \\code{data}
+counts_all(data, n = 1)
+
+#the top 5 most common unique values for all variables in  \\code{data}
+counts_all(data, n = 5)
 
 }
 \seealso{

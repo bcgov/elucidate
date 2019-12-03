@@ -545,6 +545,7 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #' @importFrom dplyr arrange
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
+#' @importFrom dplyr group_cols
 #' @importFrom lubridate is.Date
 #' @importFrom tidyr nest
 #' @importFrom tidyr unnest
@@ -665,8 +666,13 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #'
 #' \dontrun{
 #' describe_all(pdata) #all summary types in a list
-#' pdata %>% describe_all(high_low, output = "dt", class = "n") #numeric summary only
-#' pdata %>% describe_all(high_low, output = "dt", class = c("n", "l")) #numeric and logical summaries only
+#'
+#' #numeric summary only
+#' pdata %>% describe_all(high_low, output = "dt", class = "n")
+#'
+#' #numeric and logical summaries only
+#' pdata %>%
+#' describe_all(high_low, output = "dt", class = c("n", "l"))
 #' }
 #'
 #' @seealso \code{\link{describe}}
@@ -677,7 +683,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, order = "d", n = 
   if(!missing(...)) {
     gdata <-  data %>% dplyr::group_by(...)
     ndata <- gdata %>% tidyr::nest()
-    g_cols <-  gdata %>% dplyr::select(group_cols()) %>% ncol()
+    g_cols <-  gdata %>% dplyr::select(dplyr::group_cols()) %>% ncol()
 
     if(class == "all" || "d" %chin% class) {
       date_cols <- gdata %>% dplyr::select_if(lubridate::is.Date) %>% ncol()
