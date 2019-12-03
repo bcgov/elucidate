@@ -223,7 +223,7 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #' @return A character vector of the unique value frequency counts from the
 #'   input vector sorted in the chosen order. Return values are structured as
 #'   "value_count". Returning a character vector makes subsequent manipulation
-#'   with \code{\link[stringr]} and other tidyverse tools fairly easily.
+#'   with stringr and other tidyverse tools fairly easily.
 #'
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
@@ -276,8 +276,8 @@ counts <- function(y, n = "all", order = "d") {
 #' @return A list of character vectors of the unique value frequency counts for
 #'   each variable of the input data frame sorted in the chosen order. Return
 #'   values are structured as "value_count". Returning a character vector makes
-#'   subsequent manipulation with \code{\link[stringr]} and other tidyverse
-#'   tools fairly easily.
+#'   subsequent manipulation with stringr and other tidyverse tools fairly
+#'   easily.
 #'
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
