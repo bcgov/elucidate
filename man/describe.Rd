@@ -4,111 +4,132 @@
 \alias{describe}
 \title{Obtain a descriptive summary of a variable.}
 \usage{
-describe(data, y, ..., n = "all", interactive = FALSE, paging = TRUE,
-  caption = NULL)
+describe(data, y = NULL, ..., digits = 3, order = "d", n = "all",
+  type = 2, na.rm = TRUE, output = "tibble")
 }
 \arguments{
-\item{data}{A data frame or tibble containing the dependent measure "Y" and
-any grouping variables.}
+\item{data}{Either a vector or a data frame or tibble containing the
+vector ("y") to be summarized and any grouping variables.}
 
-\item{y}{The numeric variable for which you wish to obtain a descriptive
-summary and normality assessment}
+\item{y}{If the data object is a data.frame, this is the variable for which
+you wish to obtain a descriptive summary}
 
-\item{...}{Any number of grouping variables (also present in the data source)
+\item{...}{If the data object is a data.frame, this special argument accepts
+any number of unquoted grouping variable names (also present in the data source)
 to use for subsetting, separated by commas (e.g. \code{group_var1,
   group_var2})}
 
-\item{n}{The number of unique values you want frequency counts for (default =
-5). Ignored if y is numeric. If you want all unique values or the unique
-value counts for a numeric variable, use code{\link{mcvals}} instead.}
+\item{digits}{This determines the number of digits used for rounding of
+numeric outputs.}
 
-\item{interactive}{Determines whether a data frame or an interactive html
-table with options for editing and exporting and in line box plots and
-histograms produced by \code{\link[sparkline]{sparkline}} and
-\code{\link[DT]{datatable}} are returned.}
+\item{order}{For variables/vectors of class "character" or "factor" this
+determines if the unique values should be sorted in order of
+descending/decreasing = "d" or ascending/increasing = "a" or "i" frequency
+counts.}
 
-\item{paging}{Set to F to disable paging of an interactive table. Ignored if
-interactive = F.}
+\item{n}{For variables/vectors of class "character" or "factor" this
+determines how many of the top unique values based on increasing or
+decreasing frequency (as specified by the order argument) are
+saved/printed. E.g. for just the most common value, set order = "d"
+(default) and n = 1.}
 
-\item{caption}{Add a caption/title to the table (interactive mode only).}
+\item{type}{For numeric and integer vectors this determines the type of
+skewness and kurtosis calculations to perform. See
+\code{\link[e1071]{skewness}} or \code{\link[psych]{skew}} and
+\code{\link[e1071]{kurtosis}} or \code{\link[psych]{kurtosi}} for details.}
+
+\item{na.rm}{This determines whether missing values (NAs) should be removed
+before attempting to calculate summary statistics.}
+
+\item{output}{"tibble" for tibble or "dt" for data.table. Tibble is used as
+the default output to facilitate subsequent use/modification of the output
+with the tidyverse collection of packages.}
 }
 \value{
-A vector of summary statistics if y is numeric, or sample size info
-and the most common n values of y if it is non-numeric, split into
-group(s).
+The output varies as a function of the class of input data/y, referred to as "y" below
 
-For all input variables, the following are returned:
+\strong{For all input variables, the following are returned (part 1):}
 
-cases = the total number of cases
+\describe{
+\item{cases}{the total number of cases}
+\item{n}{number of complete cases}
+\item{na}{the number of missing values}
+\item{cases}{the proportion of total cases with missing values}
+}
 
-n = number of complete cases
+In addition to part 1, these measures are provided for \strong{dates}:
 
-na = number of missing values
+\describe{
+\item{n_unique}{the total number of unique values or levels of y. For dates this tells you how many time points there are}
+\item{start}{the earliest or minimum date in y}
+\item{end}{the latest or maximum date in y}
+\item{p_FALSE}{the proportion of y values that are FALSE}
+}
 
-p_na = percentage of total cases with missing values
+In addition to part 1, these measures are provided for \strong{factors}:
 
-These additional measures are provided for numeric variables:
+\describe{
+\item{n_unique}{the total number of unique values or levels of y}
+\item{ordered}{a logical indicating whether or not y is ordinal}
+\item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+}
 
-mean = the mean of y
+In addition to part 1, these measures are provided for \strong{character/string} vectors:
 
-mode = the mode AKA most common value of y
+\describe{
+\item{n_unique}{the total number of unique values or levels of y}
+\item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+}
 
-sd = standard deviation of y
+In addition to part 1, these measures are provided for \strong{logcial} vectors:
 
-se = standard error of the mean of y
+\describe{
+\item{n_TRUE}{the total number of y values that are TRUE}
+\item{n_FALSE}{the total number of y values that are FALSE}
+\item{p_TRUE}{the proportion of y values that are TRUE}
+\item{p_FALSE}{the proportion of y values that are FALSE}
+}
 
-p0 = the minimum AKA the 0th percentile of y
+In addition to part 1, these measures are provided for \strong{numeric} variables:
 
-p25 = the 25th percentile of y
-
-p50 = the median AKA 50th percentile of y
-
-p75 = the 75th percentile of y
-
-p100 = the maximum AKA the 100th percentile of y
-
-IQR = the interquartile range of y (75th percentile - 25th percentile)
-
-hist = histogram of y (interactive mode only)
-
-box = boxplot of y (interactive mode only)
-
-For non-numeric variables, the top n (default = 5) most common unique
-values and their frequencies are also returned, e.g. Val_1 = most common
-value, Ct_1 = # of occurences of the most common value, etc.
+\describe{
+\item{mean}{the mean of y}
+\item{sd}{the standard deviation of y}
+\item{se}{the standard error of the mean of y}
+\item{p0}{the 0th percentile (the minimum) of y}
+\item{p25}{the 25th percentile of y}
+\item{p50}{the 50th percentile (the median) of y}
+\item{p75}{the 25th percentile of y}
+\item{p100}{the 100th percentile (the maximum) of y}
+\item{skew}{the skewness of the distibution of y}
+\item{kurt}{the kurtosis of the distibution of y}
+}
 }
 \description{
-Obtain a useful array of common summary statistics for a numeric
-variable/vector, or the counts of the most frequent unique values of a
-non-numeric variable, within a data frame with or without first separating
-it into groups based on any number of grouping variables. Also
-pipe-friendly (data is the 1st argument). While other similar functions
-exist in other packages (e.g. \code{\link[psych]{describeBy}}), the use of
-tidy evaluation using \code{\link[dplyr]{dplyr}} pipes makes it easy to subset
-using an arbitrary number of grouping variables. For exploratory or
-publication/presentation purposes, further customization is made easier
-using the interactive mode.
+Obtain a useful array of common summary statistics for a
+vector/variable with customized output depending on the class of variable.
+Uses a combination of tidyverse packages and data.table to provide a
+user-friendly interface that is pipe-friendly while leveraging the
+excellent performance of data.table. The use of the ... argument also makes
+it incredibly easy to obtain summaries split by grouping variables. While
+other similar functions exist in other packages (e.g.
+\code{\link[psych]{describeBy}} or \code{\link[skimr]{skim}}), this version
+provides the some of the useful added outputs of the psych package (e.g.
+skew and kurtosis for numeric variables) while at the same time offering
+slightly more concise syntax than skim (e.g. no preceding group_by
+operation is needed for group-wise calculations) and enhanced customization
+options via clearly defined arguments than the alternatives (e.g. ascending
+or descending sorting, modifying the number of unique values to return
+counts for character/numeric vectors) while still achieving comparable
+processing times to the alternatives. To obtain summaries for all variables
+in a data frame use \code{\link{describe_all}} instead.
 }
 \examples{
-data(gapminder, package = "gapminder") #load the gapminder life expectancy data
 
-#without piping:
-describe(data = gapminder, y = lifeExp) #no grouping variables
-describe(gapminder, lifeExp, continent) #one grouping variable
-describe(gapminder, lifeExp, continent, country) #two grouping variables
-
-#with piping:
-library(magrittr)
-
-gapminder \%>\% describe(lifeExp) #no grouping variables
-gapminder \%>\% describe(lifeExp, continent) #one grouping variables
-gapminder \%>\% describe(lifeExp, continent, country) #two grouping variables
-
-#interactive version
-\dontrun{
-gapminder \%>\% describe(lifeExp, continent, interactive = T)
-}
-
+describe(data = pdata, y = y1) #no grouping variables, numeric input class
+describe(pdata, y1, high_low) #one grouping variable, numeric input class
+describe(pdata, g2) #factor input class
+describe(pdata, even) #logical input class
 
 }
 \references{
@@ -116,11 +137,13 @@ Altman, D. G., & Bland, J. M. (2005). Standard deviations and standard
 errors. Bmj, 331(7521), 903.
 
 Bulmer, M. G. (1979). Principles of statistics. Courier Corporation.
+
+D. N. Joanes and C. A. Gill (1998), Comparing measures of sample skewness and
+kurtosis. The Statistician, 47, 183-189.
 }
 \seealso{
-\code{\link[base]{mean}}, \code{\link[stats]{sd}}, \code{\link[elucidate]{se}},
-\code{\link[stats]{quantile}}, \code{\link[stats]{IQR}},
-\code{\link[sparkline]{sparkline}}, \code{\link[DT]{datatable}}
+\code{\link[base]{mean}}, \code{\link[stats]{sd}}, \code{\link{se}},
+\code{\link[stats]{quantile}}, \code{\link{skewness}}, \code{\link{kurtosis}}
 }
 \author{
 Craig P. Hutton, \email{craig.hutton@gmail.com}

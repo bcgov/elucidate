@@ -202,44 +202,28 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
   return(out)
 }
 
-#most common values in a vector####
+#counts for unique values in a vector####
 #' @title
-#' Obtain the most common values or value (i.e. the mode) of a vector.
+#' Obtain the counts for unique values of a vector.
 #'
-#' @description \code{mcvals} returns the most common unique value(s) of a
-#' vector. Also useful for identifying data entry errors or rare cases.
+#' @description \code{counts} returns the most or least common unique value(s)
+#'   of a vector depending on whether ascending or descending sorting is used.
+#'   Also useful for identifying data entry errors or rare cases. For complex
+#'   use cases see \code{\link{describe}}.
 #'
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_replace_all
-#' @importFrom dplyr select
-#' @importFrom dplyr mutate
-#' @importFrom dplyr group_by
-#' @importFrom dplyr group_keys
-#' @importFrom purrr map_dbl
-#' @importFrom purrr set_names
-#' @importFrom tidyr unite
-#' @importFrom tidyr separate
-#' @importFrom tibble rownames_to_column
-#'
-#' @param data Data frame or tibble containing the column you want the most
-#'   common values for (optional).
+#' @importFrom stringr str_c
 #'
 #' @param y A vector/variable (required).
 #'
-#' @param ... Any number of grouping variables (also present in the data source)
-#'   to use for subsetting, separated by commas (e.g. \code{group_var1,
-#'   group_var2}). If grouping variables are supplied, then data must also be.
+#' @param n The number of unique values you want frequency counts for. Default is "all".
 #'
-#' @param n The number of unique values you want frequency counts for (in order
-#'   of descending count). Default is "all".
+#' @param order "d" for descending/decreasing order. "a" or "i" for
+#'   ascending/increasing order.
 #'
-#' @return A data frame of the most common values from the input vector sorted in
-#'   descending order. The names of the output, printed as the 1st row when the
-#'   output is called, are the unique input values of y. The 2nd row of the
-#'   output contains the counts of the identified unique values. If grouping
-#'   variables are specified, then the values and counts for each level of the
-#'   grouping variable are returned. See the \code{\link{table}} function
-#'   documentation for more information.
+#' @return A character vector of the unique value frequency counts from the
+#'   input vector sorted in the chosen order. Return values are structured as
+#'   "value_count". Returning a character vector makes subsequent manipulation
+#'   with \code{\link[stringr]} and other tidyverse tools fairly easily.
 #'
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
@@ -248,292 +232,71 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #' #using a numeric vector
 #' y <- c(1, 1, 2, 3, 4, 5, 6, 2, 3, 4, 2, 9, 5, 6, 7, 23, 5, 6, 7, 8, 3, 4, 5, 6)
 #'
-#' mcvals(y = y) #all unique values of y in order of descending frequency \code{y}
-#' mcvals(y = y, n = 1) #the most common value of \code{y}
-#' mcvals(y = y, n = 5) #the top 5 most common unique values of \code{y}
+#' counts(y) #all unique values of y in order of descending frequency \code{y}
+#' counts(y, n = 1) #the most common value of \code{y}
+#' counts(y, n = 5) #the top 5 most common unique values of \code{y}
 #'
-#' #using a character vector
-#' ch_vect <- c("a", "b", "c", "a", "b", "a")
-#' mcvals(y = ch_vect)
-#' mcvals(y = ch_vect, n = 1)
-#' mcvals(y = ch_vect, n = 5)
-#'
-#' #top 5 values of y split by a grouping variable
-#' data(mtcars)
-#' mcvals(mtcars, y = mpg, cyl, n = 5)
-#'
-#' @seealso \code{\link{table}}, \code{\link{sort}},
-#'   \code{\link{length}}
+#' @seealso \code{\link{table}}, \code{\link{sort}}
 #'
 #' @export
-mcvals <- function(data = NULL, y, ..., n = "all"){
-  mcvs <- function(y, n) {
-    if(n == "all"){
-      value <- y %>% table() %>% sort(., decreasing = T) %>% names() %>% as.character()
-      count <- y %>% table() %>% sort(., decreasing = T) %>% as.character()
-
-      mcv_df <- rbind(value, count) %>% as.data.frame
-      names(mcv_df) <- stringr::str_replace_all(names(mcv_df), pattern = "V", replacement = "#")
-
-      mcv_df
-      return(mcv_df)
-    } else {
-      value <- y %>% table() %>% sort(., decreasing = T) %>% .[1:n] %>% names() %>% as.character()
-      count <- y %>% table() %>% sort(., decreasing = T) %>% .[1:n] %>% as.character()
-
-      mcv_df <- rbind(value, count) %>% as.data.frame
-      names(mcv_df) <- stringr::str_replace_all(names(mcv_df), pattern = "V", replacement = "#")
-
-      mcv_df
-      return(mcv_df)
-    }
+counts <- function(y, n = "all", order = "d") {
+  if(order == "d") {
+    tab <- sort(table(y), decreasing = TRUE)
+  } else if (order == "a" || order == "i") {
+    tab <- sort(table(y))
   }
+  values <- names(tab)
+  counts <- as.character(tab)
 
-  if(missing(data) & missing(...)){
-    out <- mcvs(y, n = n)
-    return(out)
-  } else if(!missing(data) & missing(...)){
-    if(n == "all"){
-      out <- data %>% dplyr::select({{y}}) %>% mcvs(n = "all")
-      return(out)
-    } else {
-      out <- data %>% dplyr::select({{y}}) %>% mcvs(n = n)
-      return(out)
-    }
-
-  } else if(!missing(data) & !missing(...)){
-    if(n == "all"){
-      keys <- data %>%
-        dplyr::group_by(...) %>%
-        dplyr::group_keys()
-
-      max_len <- data %>% select({{y}}, ...) %>%
-        dplyr::group_by(...) %>%
-        dplyr::group_map(~mcvs(.x, n = n)) %>%
-        purrr::map_dbl(~length(.x)) %>%
-        max(na.rm = T)
-
-      mcv_out <- data %>% select({{y}}, ...) %>%
-        dplyr::group_by(...) %>%
-        dplyr::group_map(~mcvs(.x, n = max_len)) %>%
-        purrr::set_names(x = ., nm = tidyr::unite(keys, col = "group")$group) %>%
-        do.call(rbind, .) %>%
-        tibble::rownames_to_column(var = "group") %>%
-        dplyr::mutate(group = stringr::str_replace_all(group, "\\..{1,10}", "")) %>%
-        tidyr::separate(group, into = names(keys))
-
-      mcv_out <- mcv_out %>%
-        dplyr::mutate(measure = rep(c("value", "count"), nrow(mcv_out)/2)) %>%
-        dplyr::select(ncol(.), 1:(ncol(.)-1))
-      return(mcv_out)
-    } else{
-      keys <- data %>%
-        dplyr::group_by(...) %>%
-        dplyr::group_keys()
-
-      mcv_out <- data %>% select({{y}}, ...) %>%
-        dplyr::group_by(...) %>%
-        dplyr::group_map(~mcvs(.x, n = n)) %>%
-        purrr::set_names(x = ., nm = tidyr::unite(keys, col = "group")$group) %>%
-        do.call(rbind, .) %>%
-        tibble::rownames_to_column(var = "group") %>%
-        dplyr::mutate(group = stringr::str_replace_all(group, "\\..{1,10}", "")) %>%
-        tidyr::separate(group, into = names(keys))
-
-      mcv_out <- mcv_out %>%
-        dplyr::mutate(measure = rep(c("value", "count"), nrow(mcv_out)/2)) %>%
-        dplyr::select(ncol(.), 1:(ncol(.)-1))
-      return(mcv_out)
-    }
+  out <- stringr::str_c(values, counts, sep = "_")
+  if(n != "all") {
+    out <- out[1:n]
   }
+  return(out)
 }
 
-#most common values for all vectors in a data frame####
-#' @title Obtain the most common value or values of each column in a data frame.
+#counts for unique values in a dataframe####
+#' @title
+#' Obtain the counts for unique values of all variables in a data frame.
 #'
-#' @description \code{mcvals_all} extends \code{\link{mcvals}} by
-#'   returning the most common unique value(s) for all columns of a data frame or
-#'   tibble, with or without first splitting the data into groups. Useful for
-#'   identifying data entry errors or rare cases, among other things.
+#' @description \code{counts_all} is an extension of \code{\link{counts}} that
+#'   returns the most or least common unique value(s) for each column vector of
+#'   a data frame. Also useful for identifying data entry errors or rare cases.
+#'   For complex use cases see \code{\link{describe_all}}.
 #'
-#' @importFrom magrittr %>%
-#' @importFrom purrr map_df
 #' @importFrom purrr map
-#' @importFrom purrr set_names
-#' @importFrom dplyr arrange
-#' @importFrom dplyr group_by
-#' @importFrom dplyr group_keys
-#' @importFrom dplyr group_map
-#' @importFrom dplyr mutate
-#' @importFrom dplyr bind_cols
-#' @importFrom tibble rownames_to_column
-#' @importFrom tidyr separate
-#' @importFrom tidyr unite
-#' @importFrom rlang enquos
 #'
+#' @param data A data frame (required).
 #'
-#' @param data A data frame or tibble.
+#' @param n The number of unique values you want frequency counts for. Default is "all".
 #'
-#' @param ... Any number of grouping variables (also present in the data source)
-#'   to use for subsetting, separated by commas (e.g. \code{group_var1,
-#'   group_var1}).
+#' @param order "d" for descending/decreasing order. "a" or "i" for
+#'   ascending/increasing order.
 #'
-#' @param n The number of unique values you want frequency counts for from all
-#'   variables in data when data frame output is requested (the default). If you
-#'   want all unique values, set output = "list" instead.
-#'
-#' @param output Request either a data frame (\code{output} = "df") with the
-#'   number of unique values for each variable in data specified by \code{n}, or
-#'   a list (\code{output} = "list") for all value counts.
-#'
-#' @return A data frame or list of the top \code{n} most common value(s) from
-#'   all columns in \code{data}, shown in descending order (from left to right
-#'   across the numbered columns in the output, e.g. #1 = most common value AKA
-#'   the mode, #2 = 2nd most common value, etc.). When in "df" output mode, if
-#'   the range of indices passed to \code{n} exceeds the number of unique values
-#'   for a measure, the output will contain missing values for those indices.
-#'   See the \code{\link[base]{table}} and \code{\link[purrr]{map}}
-#'   documentation for more information.
-#'
-#'   Note that when using grouping variables and requesting
-#'   list output (for all of the unique values of each variable), the results will be structured as follows:
-#'
-#'   $group_1
-#'   $group_1$measure_1
-#'   y #just ignore this
-#'   A, B, C, D, E, F (example unique values of measure 1 for group 1)
-#'   5, 4, 3, 2, 1, 1 (example count for each of the above unique values)
-#'
-#'   $group_1$measure_2
-#'   y
-#'   2010, 2011, 2012, 2013, 2014, 2015 (unique values of measure 1 for group 1)
-#'      5,    4,    3,    2,    1,    1 (count for each of the above unique values)
-#'
-#'   $group_1$measure_3
-#'   y
-#'   male, female (unique values of measure 1 for group 1)
-#'     60,     60 (count for each of the above unique values)
-#'
-#'   $group_2
-#'   $group_2$measure_1
-#'   y #just ignore this
-#'    A, B, C, D, E, F (unique values of measure 1 for group 1)
-#'   10, 9, 8, 7, 2, 1 (count for each of the above unique values)
-#'
-#'   $group_2$measure_2
-#'   y
-#'   2010, 2011, 2012, 2013, 2014, 2015 (unique values of measure 1 for group 1)
-#'     15,    8,    8,    6,    2,    2 (count for each of the above unique values)
-#'
-#'   $group_2$measure_3
-#'   y
-#'   male, female (unique values of measure 1 for group 1)
-#'    109,   109 (count for each of the above unique values)
-#'
-#'   If multiple grouping variables are provided to ... then the output will look more like this,
-#'   e.g. for 2 factors called A and B:
-#'
-#'   $Alevel1name_Blevel1name$measure_1
-#'   y #just ignore this
-#'   A, B, C, D, E, F (example unique values of measure 1 for group 1)
-#'   5, 4, 3, 2, 1, 1 (example count for each of the above unique values)
+#' @return A list of character vectors of the unique value frequency counts for
+#'   each variable of the input data frame sorted in the chosen order. Return
+#'   values are structured as "value_count". Returning a character vector makes
+#'   subsequent manipulation with \code{\link[stringr]} and other tidyverse
+#'   tools fairly easily.
 #'
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
 #'
 #' @examples
-#' data(mtcars)
+#' #using a numeric vector
+#' data <- data(mtcars)
 #'
-#' #without piping
-#' mcvals_all(mtcars)
+#' counts_all(data) #all unique values of all variables in \code{data} in order of descending frequency
+#' counts_all(data, n = 1) #the most common values of all variables in \code{data}
+#' counts_(data, n = 5) #the top 5 most common unique values for all variables in  \code{data}
 #'
-#' #with piping
-#' mtcars %>% mcvals_all
-#'
-#' #get the top 10 for each variable instead
-#' mtcars %>% mcvals_all(n = 10)
-#'
-#' #get unique values for each variable split by levels of a grouping variable
-#' mtcars %>% mcvals_all(cyl)
-#'
-#' mtcars %>% mcvals_all(cyl, am) #split by two grouping variables
-#'
-#' #to obtain all unqiue values, set output = "list":
-#' mtcars %>% mcvals_all(output = "list")
-#' mtcars %>% mcvals_all(cyl, output = "list")
-#'
-#' @seealso \code{\link{table}}, \code{\link[purrr]{map}}, \code{\link{mcvals}}
+#' @seealso \code{\link{table}}, \code{\link{sort}}, \code{\link[purrr]{map}}
 #'
 #' @export
-mcvals_all <- function(data, ..., n = 10, output = "df"){
-  mcvs <- function(y) {
-    mcvs <- table(y) %>% sort(., decreasing = T)
-    return(mcvs)
-
-  }
-  map_mcvs <- function(data, n = 5, output = "df") {
-    if (output == "df") {
-      values <- data %>%
-        purrr::map_df(~names(mcvs(.x)[1:n])) %>%
-        purrr::map_df(as.character)
-
-      names(values) <- paste0(names(values), "_value")
-
-      counts <- data %>%
-        purrr::map_df(~mcvs(.x)[1:n]) %>%
-        purrr::map_df(as.character)
-
-      names(counts) <- paste0(names(counts), "_count")
-
-      mcv_df <- dplyr::bind_cols(values, counts)
-
-      mcv_df <- mcv_df %>% t %>%
-        as.data.frame %>%
-        tibble::rownames_to_column("measure") %>%
-        tidyr::separate(col = measure, into = c("variable", "metric"), sep = "_") %>%
-        dplyr::arrange(variable)
-
-      names(mcv_df) <- stringr::str_replace_all(names(mcv_df), pattern = "V", replacement = "#")
-      return(mcv_df)
-
-    } else if (output == "list") {
-      mcv_list <- data %>% purrr::map(~mcvals(y = .x))
-      return(mcv_list)
-    }
-  }
-  if(missing(...)){
-    mcv_out <- data %>% map_mcvs(n = n, output = output)
-    return(mcv_out)
-  } else if (!missing(...) & output == "list") {
-    group_vars <- enquos(...)
-    keys <- data %>%
-      dplyr::group_by(!!!group_vars) %>%
-      dplyr::group_keys()
-
-    mcv_out <- data %>%
-      dplyr::group_by(!!!group_vars) %>%
-      dplyr::group_map(~map_mcvs(.x, output = "list")) %>%
-      purrr::set_names(x = ., nm = tidyr::unite(keys, col = "group")$group)
-    return(mcv_out)
-  } else {
-    group_vars <- enquos(...)
-    keys <- data %>%
-      dplyr::group_by(!!!group_vars) %>%
-      dplyr::group_keys()
-
-    mcv_out <- data %>%
-      dplyr::group_by(!!!group_vars) %>%
-      dplyr::group_map(~map_mcvs(.x, n = n)) %>%
-      purrr::set_names(x = ., nm = tidyr::unite(keys, col = "group")$group) %>%
-      do.call(rbind, .) %>%
-      tibble::rownames_to_column(var = "group") %>%
-      dplyr::mutate(group = stringr::str_replace_all(group, "\\..{1,10}", "")) %>%
-      tidyr::separate(group, into = names(keys)) %>%
-      dplyr::arrange(variable)
-    return(mcv_out)
-  }
+counts_all <- function(data, n = "all", order = "d") {
+  out <- purrr::map(data, ~counts(.x), n = n, order = order)
+  return(out)
 }
-
 
 # static_to_dynamic -------------------------------------------------------
 #' @title Convert a static data frame or ggplot object to a dynamic form.
