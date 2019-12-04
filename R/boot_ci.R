@@ -85,7 +85,9 @@
 #' Efron, B., & Tibshirani, R. J. (1993). An introduction to the bootstrap. New
 #' York: Chapman & Hall.
 #'
-#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
+#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
+#'   \code{\link{median_ci}}, \code{\link{stat_ci}}, \code{\link{describe_ci}},
+#'   \code{\link{describe_ci_all}}
 #'
 #' @export
 mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", parallel = FALSE, cores = NULL, na.rm = TRUE){
@@ -97,7 +99,7 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
     mn <- mean(y)
     mean_lb <- mean(y, na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se(y))
     mean_ub <- mean(y, na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se(y))
-    out <- c("mean" = mn, "lower" = mean_lb, "upper" = mean_ub)
+    out <- c("lower" = mean_lb, "mean" = mn, "upper" = mean_ub)
     return(out)
   } else {
 
@@ -146,7 +148,7 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
       mean_ub <- bci$basic[5]
     }
 
-    out <- c("mean" = mn, "lower" = mean_lb, "upper" = mean_ub)
+    out <- c("lower" = mean_lb, "mean" = mn, "upper" = mean_ub)
     return(out)
   }
 }
@@ -210,7 +212,7 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
 #'   parallel::detectCores()
 #'
 #' @param na.rm should missing values be removed before attempting to calculate
-#'   the mean and confidence intervals? Default is TRUE.
+#'   the median and confidence intervals? Default is TRUE.
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
 #'
@@ -231,7 +233,9 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
 #' Efron, B., & Tibshirani, R. J. (1993). An introduction to the bootstrap. New
 #' York: Chapman & Hall.
 #'
-#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
+#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
+#'   \code{\link{mean_ci}}, \code{\link{stat_ci}}, \code{\link{describe_ci}},
+#'   \code{\link{describe_ci_all}}
 #'
 #' @export
 median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE){
@@ -287,7 +291,7 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
     p50_ub <- bci$basic[5]
   }
 
-  out <- c("median" = p50, "lower" = p50_lb, "upper" = p50_ub)
+  out <- c("lower" = p50_lb, "median" = p50, "upper" = p50_ub)
   return(out)
 }
 
@@ -296,9 +300,9 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #' @title
 #' Obtain a bootstrapped confidence interval for a summary statistic of a numeric vector.
 #'
-#' @description stat_ci functions returns bootstrapped confidence intervals for
-#'   a specific summary statistic for numeric vectors. This function provides a
-#'   simplified user interface to the \code{\link[boot]{boot}} and
+#' @description stat_ci returns bootstrapped confidence intervals for a specific
+#'   summary statistic for numeric vectors. This function provides a simplified
+#'   user interface to the \code{\link[boot]{boot}} and
 #'   \code{\link[boot]{boot.ci}} functions similarly to the
 #'   \code{\link[simpleboot]{one.boot}} function but retains more of the boot
 #'   package's functionality, most notably including options for
@@ -315,9 +319,9 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #'
 #' @param y A vector/variable (required).
 #'
-#' @param stat the name of a summary statistic function to calculate confidence
-#'   intervals for. Only functions which return a single value and operate on
-#'   numeric variables are currently supported.
+#' @param stat the unquoted name (e.g. mean, not "mean") of a summary statistic
+#'   function to calculate confidence intervals for. Only functions which return
+#'   a single value and operate on numeric variables are currently supported.
 #'
 #' @param ... any number of additional named arguments passed to stat function
 #'   for further customization.
@@ -357,7 +361,7 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #'   parallel::detectCores()
 #'
 #' @param na.rm should missing values be removed before attempting to calculate
-#'   the mean and confidence intervals? Default is TRUE.
+#'   the chosen statistic and confidence intervals? Default is TRUE.
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
 #'
@@ -378,7 +382,9 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #' Efron, B., & Tibshirani, R. J. (1993). An introduction to the bootstrap. New
 #' York: Chapman & Hall.
 #'
-#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
+#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
+#'   \code{\link{mean_ci}}, \code{\link{median_ci}}, \code{\link{describe_ci}},
+#'   \code{\link{describe_ci_all}}
 #'
 #' @export
 stat_ci <- function(y, stat, ..., replicates = 2000, ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE){
@@ -432,8 +438,8 @@ stat_ci <- function(y, stat, ..., replicates = 2000, ci_level = 0.95, ci_type = 
     st_lb <- bci$basic[4]
     st_ub <- bci$basic[5]
   }
-  nms <- c(deparse(substitute(stat)), "lower", "upper")
-  out <- c(st, st_lb, st_ub)
+  nms <- c("lower", deparse(substitute(stat)), "upper")
+  out <- c(st_lb, st, st_ub)
   names(out) <- nms
   return(out)
 }

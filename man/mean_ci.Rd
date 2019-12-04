@@ -85,7 +85,9 @@ Efron, B., & Tibshirani, R. J. (1993). An introduction to the bootstrap. New
 York: Chapman & Hall.
 }
 \seealso{
-\code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
+\code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
+\code{\link{median_ci}}, \code{\link{stat_ci}}, \code{\link{describe_ci}},
+\code{\link{describe_ci_all}}
 }
 \author{
 Craig P. Hutton, \email{craig.hutton@gmail.com}

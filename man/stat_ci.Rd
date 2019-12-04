@@ -10,9 +10,9 @@ stat_ci(y, stat, ..., replicates = 2000, ci_level = 0.95,
 \arguments{
 \item{y}{A vector/variable (required).}
 
-\item{stat}{the name of a summary statistic function to calculate confidence
-intervals for. Only functions which return a single value and operate on
-numeric variables are currently supported.}
+\item{stat}{the unquoted name (e.g. mean, not "mean") of a summary statistic
+function to calculate confidence intervals for. Only functions which return
+a single value and operate on numeric variables are currently supported.}
 
 \item{...}{any number of additional named arguments passed to stat function
 for further customization.}
@@ -52,12 +52,12 @@ to use. To see how many cores are available on your machine, use
 parallel::detectCores()}
 
 \item{na.rm}{should missing values be removed before attempting to calculate
-the mean and confidence intervals? Default is TRUE.}
+the chosen statistic and confidence intervals? Default is TRUE.}
 }
 \description{
-stat_ci functions returns bootstrapped confidence intervals for
-a specific summary statistic for numeric vectors. This function provides a
-simplified user interface to the \code{\link[boot]{boot}} and
+stat_ci returns bootstrapped confidence intervals for a specific
+summary statistic for numeric vectors. This function provides a simplified
+user interface to the \code{\link[boot]{boot}} and
 \code{\link[boot]{boot.ci}} functions similarly to the
 \code{\link[simpleboot]{one.boot}} function but retains more of the boot
 package's functionality, most notably including options for
@@ -87,7 +87,9 @@ Efron, B., & Tibshirani, R. J. (1993). An introduction to the bootstrap. New
 York: Chapman & Hall.
 }
 \seealso{
-\code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}}, \code{\link[boot]{boot.ci}}
+\code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
+\code{\link{mean_ci}}, \code{\link{median_ci}}, \code{\link{describe_ci}},
+\code{\link{describe_ci_all}}
 }
 \author{
 Craig P. Hutton, \email{craig.hutton@gmail.com}
