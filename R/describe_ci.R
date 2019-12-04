@@ -120,7 +120,8 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 
   if(is.numeric(data)){
     if(st == "mean") {
-      description <- dt[[1]] %>% mean_ci
+      description <- dt[[1]] %>% mean_ci(replicates = replicates, ci_type = ci_type,
+                                         ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
       description <- data.table::data.table(description[1], description[2], description[3])
       names(description) <- c("lower", st, "upper")
     } else {
@@ -142,7 +143,8 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
       if(st == "mean") {
         description <- dt[,
                           .(measure = c("lower", st, "upper"),
-                            value = mean_ci(get(y))),
+                            value = mean_ci(get(y), replicates = replicates, ci_type = ci_type,
+                                            ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)),
                           by = eval(g)] %>% stats::na.omit() %>%
           data.table::dcast(formula = ... ~ measure, value.var = "value")
       } else {
@@ -155,7 +157,8 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
       }
     } else {
       if(st == "mean") {
-        description <- dt[[y]] %>% mean_ci
+        description <- dt[[y]] %>% mean_ci(replicates = replicates, ci_type = ci_type,
+                                           ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
         description <- data.table::data.table(description[1], description[2], description[3])
         names(description) <- c("lower", st, "upper")
       } else {
