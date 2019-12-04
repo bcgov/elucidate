@@ -92,11 +92,13 @@
 #' #using a single core (sequential processing)
 #' describe_ci(pdata[1:1000, ], y1, stat = median) #bootstrapped CIs for the median
 #' describe_ci(pdata, y1, stat = mean) #the default
+#' \dontrun{
 #' describe_ci(pdata, y1, high_low, stat = mean) #split by a grouping variable
-#'
+#' }
+#' \dontrun{
 #' #using multiple cores (parallel processing)
 #' describe_ci(pdata[1:1000, ], y1, stat = sd, parallel = TRUE, cores = 2)
-#'
+#' }
 #'
 #' @references
 #' Efron, B. (1987). Better bootstrap confidence intervals. Journal of the
@@ -273,13 +275,16 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 #' @examples
 #'
 #' #using a single core (sequential processing)
+#' \dontrun{
 #' describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
+#' }
 #' describe_ci_all(pdata, stat = mean) #the default
 #' describe_ci_all(pdata, high_low, stat = mean) #split by a grouping variable
 #'
+#' \dontrun{
 #' #using multiple cores (parallel processing)
 #' describe_ci_all(pdata[1:1000, ], stat = sd, parallel = TRUE, cores = 2)
-#'
+#' }
 #'
 #' @references
 #' Efron, B. (1987). Better bootstrap confidence intervals. Journal of the
