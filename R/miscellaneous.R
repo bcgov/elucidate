@@ -614,3 +614,40 @@ recode_errors <- function(data, errors, replacement = NA,
     return(data)
   }
 }
+
+
+# "%ni%"-------------------------------------------------------------
+#' @title
+#' negative value matching
+#'
+#' @description "%ni%" is a convenience shortcut for the
+#'   negation of the match function (i.e. the %in%" operator).
+#'
+#' @param x the values to be negatively matched.
+#'
+#' @param y the values to be negatively matched against.
+#'
+#' @return A logical vector of the same length as x which is FALSE for matching
+#'   values of y and TRUE for non-matching values of y.
+#'
+#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#'
+#' @examples
+#' c(1:100) %ni% c(2, 3, 5, 10, 78:91)
+#'
+#' #subset data to extract rows with matching values using "%in%"
+#' subset(pdata, g2 %in% c("a", "e"))
+#'
+#' #subset data to extract rows with non-matching values using "%ni%"
+#' subset(pdata, g2 %ni% c("a", "e"))
+#'
+#' #equivalent to subset function for tidyverse users
+#' dplyr::filter(pdata, g2 %ni% c("a", "e"))
+#'
+#' @seealso \code{\link{match}}, \code{\link{Negate}}
+#'
+#' @export
+"%ni%" <- function(x, y) {
+  nm <- !(x %in% y)
+  return(nm)
+}

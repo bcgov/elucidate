@@ -313,11 +313,11 @@ plot_density <- function(data, x, #essential parameters
     data <- data %>%
       dplyr::mutate({{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- data %>%
       dplyr::mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- data %>%
       dplyr::mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
@@ -327,11 +327,11 @@ plot_density <- function(data, x, #essential parameters
     data <- data %>%
       dplyr::mutate({{colour_var}} := as.character({{colour_var}}))
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- data %>%
       dplyr::mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- data %>%
       dplyr::mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
@@ -341,11 +341,11 @@ plot_density <- function(data, x, #essential parameters
     data <- data %>%
       dplyr::mutate({{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- data %>%
       dplyr::mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- data %>%
       dplyr::mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
@@ -369,11 +369,11 @@ plot_density <- function(data, x, #essential parameters
   }
 
   #modification of x-axis limits
-  if(!missing(xlim) & transform_x == FALSE){
+  if(!missing(xlim) && transform_x == FALSE){
     p <- p + ggplot2::lims(x = xlim)
-  } else if (missing(xlim) & transform_x == TRUE){
+  } else if (missing(xlim) && transform_x == TRUE){
     p <- p + ggplot2::scale_x_continuous(limits = c(NA, NA), trans = x_transformation)
-  } else if (!missing(xlim) & transform_x  == TRUE){
+  } else if (!missing(xlim) && transform_x  == TRUE){
     p <- p + ggplot2::scale_x_continuous(limits = c(xlim[1], xlim[2]), trans = x_transformation)
   }
 
@@ -425,7 +425,7 @@ plot_density <- function(data, x, #essential parameters
   if(!missing(facet_var)){
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
-  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+  if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
@@ -702,11 +702,11 @@ plot_histogram <- function(data, x, #essential parameters
     data <- data %>%
       dplyr::mutate({{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- data %>%
       dplyr::mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- data %>%
       dplyr::mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
@@ -716,11 +716,11 @@ plot_histogram <- function(data, x, #essential parameters
     data <- data %>%
       dplyr::mutate({{colour_var}} := as.character({{colour_var}}))
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- data %>%
       dplyr::mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- data %>%
       dplyr::mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
@@ -730,18 +730,18 @@ plot_histogram <- function(data, x, #essential parameters
     data <- data %>%
       dplyr::mutate({{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- data %>%
       dplyr::mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- data %>%
       dplyr::mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
   p <- data %>%
-    ggplot2::ggplot(aes(x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+    ggplot2::ggplot(ggplot2::aes(x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
 
   #add the geom layer
   p <- p +
@@ -759,11 +759,11 @@ plot_histogram <- function(data, x, #essential parameters
   }
 
   #modification of x-axis limits
-  if(!missing(xlim) & transform_x == FALSE){
+  if(!missing(xlim) && transform_x == FALSE){
     p <- p + ggplot2::lims(x = xlim)
-  } else if (missing(xlim) & transform_x == TRUE){
+  } else if (missing(xlim) && transform_x == TRUE){
     p <- p + ggplot2::scale_x_continuous(limits = c(NA, NA), trans = x_transformation)
-  } else if (!missing(xlim) & transform_x  == TRUE){
+  } else if (!missing(xlim) && transform_x  == TRUE){
     p <- p + ggplot2::scale_x_continuous(limits = c(xlim[1], xlim[2]), trans = x_transformation)
   }
 
@@ -789,11 +789,11 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
   } else if (theme == "bw"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
+  } else if (theme == "b && w"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
   } else if (theme == "black and white"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
+  } else if (theme == "black && white"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
   } else if (theme == "grey"){
     p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
@@ -815,7 +815,7 @@ plot_histogram <- function(data, x, #essential parameters
   if(!missing(facet_var)){
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
-  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+  if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
@@ -1152,7 +1152,7 @@ plot_box <- function(data, y,#essential parameters
 
   #setup foundational plotting object layer
   p <- data %>%
-    ggplot2::ggplot(aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
+    ggplot2::ggplot(ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
 
   #add the geom layer
   p <- p +
@@ -1584,7 +1584,7 @@ plot_violin <- function(data, y,#essential parameters
 
   #setup foundational plotting object layer
   p <- data %>%
-    ggplot2::ggplot(aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
+    ggplot2::ggplot(ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
 
   #add the geom layer
   p <- p +
@@ -2241,14 +2241,14 @@ plot_scatter <- function(data, y, x,#essential parameters
   #core plotting layer
   if(jitter == FALSE){
     p <- data %>%
-      ggplot2::ggplot(aes(x = {{x}}, y = {{y}},
+      ggplot2::ggplot(ggplot2::aes(x = {{x}}, y = {{y}},
                           colour = {{colour_var}}, fill = {{fill_var}},
                           shape = {{shape_var}}, size = {{size_var}})) +
       ggplot2::geom_point(alpha = alpha, ...)
 
   } else if(jitter == TRUE){
     p <- data %>%
-      ggplot2::ggplot(aes(x = {{x}}, y = {{y}},
+      ggplot2::ggplot(ggplot2::aes(x = {{x}}, y = {{y}},
                           colour = {{colour_var}}, fill = {{fill_var}},
                           shape = {{shape_var}}, size = {{size_var}})) +
       ggplot2::geom_jitter(alpha = alpha, ...)
@@ -2470,6 +2470,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 geom_errorbar
 #' @importFrom ggplot2 aes
+#' @importFrom ggplot2 position_dodge
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
 #' @importFrom ggplot2 scale_y_continuous
@@ -2491,9 +2492,8 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom ggplot2 element_blank
 #' @importFrom stats quantile
 #' @importFrom stats qnorm
-#' @importFrom stats median
-#' @importFrom boot boot.ci
-#' @importFrom simpleboot one.boot
+#' @importFrom stats var
+#' @importFrom scales percent
 #' @importFrom plotly ggplotly
 #' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
@@ -2513,18 +2513,31 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   are "mean" (the default) or "median".
 #'
 #' @param error The statistic to use for the error bars. When stat = "mean",
-#'   available options include se (standard error), sd (standard deviation), and
-#'   ci (confidence interval; the default). When stat = "median", options
-#'   include "quartile" (lower bound = 25th percentile & upper bound = 75th
-#'   percentile), or "ci". See below for more details on confidence intervals.
-#'   With respect to CIs, when stat = "mean", CIs are calculated directly from a
-#'   normal distribution based on the standard error using
-#'   \code{\link[stats]{qnorm}}. In contrast, bootstrapped bias-corrected &
-#'   accelerated CIs are returned via \code{\link[boot]{boot.ci}} when stat =
-#'   "median".
+#'   available options include se (standard error), sd (standard deviation),
+#'   var(variance), and ci (confidence interval; the default). When stat =
+#'   "median", options include "quartile" (lower bound = 25th percentile & upper
+#'   bound = 75th percentile), or "ci". See below for more details on confidence
+#'   intervals. With respect to CIs, when stat = "mean", CIs are calculated
+#'   directly from a normal distribution based on the standard error using
+#'   \code{\link[stats]{qnorm}}. In contrast, bootstrapped CIs of the specified
+#'   type are returned via \code{\link{median_ci}} when stat = "median".
 #'
 #' @param ci_level The confidence level to use for constructing confidence
 #'   intervals. Default is set to \code{ci_level = 0.95} for 95 percent CIs.
+#'
+#' @param ci_type The type of confidence intervals to calculate from the
+#'   bootstrap samples when stat = "median" and error = "ci". Most of the
+#'   options available in the underlying boot.ci function are implemented
+#'   (except for studentized intervals): "norm" for an approximation based on
+#'   the normal distribution, "perc" for percentile, "basic" for basic, and
+#'   "bca" for bias-corrected and accelerated. Percentile intervals are the
+#'   default since these are typically sufficient when working with large data
+#'   sets (e.g. >= 100,000 rows of data) and are faster to calculate than BCa
+#'   intervals. However, BCa intervals (the default for the more primitive
+#'   \code{\link{median_ci}} function) tend to provide the most
+#'   accurate/least-biased results (Efron, 1987), particularly for small-medium
+#'   sized samples, at the obvious cost of requiring more time to calculate. See
+#'   \code{\link[boot]{boot.ci}} for details.
 #'
 #' @param replicates The number of bootstrap replicates to use for calculating
 #'   bootstrapped CIs when stat = "median" and error = "ci". Default is 2,000,
@@ -2533,6 +2546,19 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   recommended. N.B. more replications will of course take longer to run. If
 #'   you get the error: "estimated adjustment 'a' is NA" then try again with
 #'   more replications.
+#'
+#' @param parallel set to TRUE if you want to use multiple cores or FALSE if you
+#'   don't (the default). Note that there is some processing overhead involved
+#'   when operating in parallel so speed gains may not be very noticable for
+#'   smaller samples (and may even take longer than sequential processing). Due
+#'   to the nature of the underlying parallelization architecture, performance
+#'   gains will likely be greater on non-Windows machines that can use the
+#'   "multicore" implementation instead of "snow". For obvious reasons this
+#'   option only works on machines with more than 1 logical processing core.
+#'
+#' @param cores If parallel is set to TRUE, this determines the number of cores
+#'   to use. To see how many cores are available on your machine, use
+#'   parallel::detectCores()
 #'
 #' @param ylab Specify/overwrite the y-axis label using a character string, e.g.
 #'   "y-axis label". If not specified, this label will reflect a combination of
@@ -2753,6 +2779,9 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   allows you to extract/save the values for subsequent reporting or
 #'   utilization.
 #'
+#' @param na.rm This determines whether missing values (NAs) should be removed
+#'   before attempting to calculate the summary statistics used for plotting.
+#'
 #' @return A ggplot object or plotly object depending on whether static or
 #'   interactive output was requested. This is returned as a standalone object
 #'   if output = "p", or as the "plot" component of a list also containing the
@@ -2834,11 +2863,12 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @seealso \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_line}},
 #'   \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
 #'   \code{\link[base]{mean}}, \code{\link[stats]{sd}}, \code{\link[stats]{quantile}},
-#'   \code{\link[boot]{boot.ci}}, \code{\link[simpleboot]{one.boot}},
+#'   \code{\link[boot]{boot.ci}}, \code{\link{median_ci}},
 #'
 #' @export
 plot_stat_error <- function(data, y, x = NULL, geom = "bar",
-                            stat = "mean", error = "ci", ci_level = 0.95, replicates = 2000,
+                            stat = "mean", error = "ci", ci_level = 0.95, ci_type = "perc",
+                            replicates = 2000, parallel = FALSE, cores = NULL,
                             xlab = NULL, ylab = NULL, title = NULL, ...,
                             ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10",
                             x_var_order = NULL, x_var_labs = NULL,
@@ -2856,7 +2886,8 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
                             facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL,
                             facet_var_strip_position = "top", facet_var_text_bold = TRUE,
                             print_stats = F, aesthetic_options = FALSE,
-                            output = "p", interactive = FALSE){
+                            output = "p", interactive = FALSE, na.rm = TRUE){
+
   #x-variable recoding
   if(!missing(x)){
     data <- data %>%
@@ -2876,11 +2907,11 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
     data <- data %>%
       dplyr::mutate({{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- data %>%
       dplyr::mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- data %>%
       dplyr::mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
@@ -2890,11 +2921,11 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
     data <- data %>%
       dplyr::mutate({{colour_var}} := as.character({{colour_var}}))
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- data %>%
       dplyr::mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- data %>%
       dplyr::mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
@@ -2904,293 +2935,316 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
     data <- data %>%
       dplyr::mutate({{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- data %>%
       dplyr::mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- data %>%
       dplyr::mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
+  DT <- data.table::as.data.table(data)
+  ST <- deparse(substitute(stat))
+  Y <- deparse(substitute(y))
 
-  y_name <- data %>% select({{y}}) %>% names
-
-  #grouping options
-  if (!missing(x) & missing(fill_var) & missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}})
-
-  } else if (missing(x) & !missing(fill_var) & missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{fill_var}})
-
-  } else if (missing(x) & missing(fill_var) & !missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{colour_var}})
-
-  } else if (missing(x) & missing(fill_var) & missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{facet_var}})
-
-  } else if (!missing(x) & !missing(fill_var) & missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{fill_var}})
-
-  } else if (!missing(x) & missing(fill_var) & !missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{colour_var}})
-
-  } else if (!missing(x) & missing(fill_var) & missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{facet_var}})
-
-  } else if (missing(x) & !missing(fill_var) & !missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{fill_var}}, {{colour_var}})
-
-  } else if (missing(x) & !missing(fill_var) & missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{fill_var}}, {{facet_var}})
-
-  } else if (missing(x) & missing(fill_var) & !missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{colour_var}}, {{facet_var}})
-
-  } else if (!missing(x) & !missing(fill_var) & !missing(colour_var) & missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{fill_var}}, {{colour_var}})
-
-  } else if (!missing(x) & !missing(fill_var) & missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{fill_var}}, {{facet_var}})
-
-  } else if (!missing(x) & missing(fill_var) & !missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{colour_var}}, {{facet_var}})
-
-  } else if (missing(x) & !missing(fill_var) & !missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{fill_var}}, {{colour_var}}, {{facet_var}})
-
-  } else if (!missing(x) & !missing(fill_var) & !missing(colour_var) & !missing(facet_var)) {
-
-    gdata <- data %>%
-      dplyr::group_by({{x}}, {{fill_var}}, {{colour_var}}, {{facet_var}})
-
+  if(!is.numeric(DT[[Y]])){
+    stop("y must be a numeric vector or column of a data frame")
   }
 
-  #produce the descriptive stats and plot
+  #grouping options
+  if (!missing(x) && missing(fill_var) && missing(colour_var) && missing(facet_var)) {
+    G <- deparse(substitute(x))
+  } else if (missing(x) && !missing(fill_var) && missing(colour_var) && missing(facet_var)) {
+    G <- deparse(substitute(fill_var))
+  } else if (missing(x) && missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- deparse(substitute(colour_var))
+  } else if (missing(x) && missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- deparse(substitute(facet_var))
+  } else if (!missing(x) && !missing(fill_var) && missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(fill_var)))
+  } else if (!missing(x) && missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)))
+  } else if (!missing(x) && missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(facet_var)))
+  } else if (missing(x) && !missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)))
+  } else if (missing(x) && !missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+  } else if (missing(x) && missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+  } else if (!missing(x) && !missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)))
+  } else if (!missing(x) && !missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+  } else if (!missing(x) && missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+  } else if (missing(x) && !missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+  } else if (!missing(x) && !missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+  }
+
+  #produce the descriptive stats & plot
+
   if(stat == "mean" & error == "se"){
-    if(missing(x) & missing(fill_var) & missing(colour_var) & missing(facet_var)){
-      desc <- data %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         mean = round(mean({{y}}, na.rm = T), 3),
-                         se = round(se({{y}}), 3))
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+    if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     se = round(se(get(Y), na.rm = na.rm), 3)),
+                 by = eval(G)] %>%
+        tibble::as_tibble()
+
     } else {
-      desc <- gdata %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         mean = round(mean({{y}}, na.rm = T), 3),
-                         se = round(se({{y}}), 3))
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     se = round(se(get(Y), na.rm = na.rm), 3))] %>%
+        tibble::as_tibble()
+    }
+    if (print_stats == T){
+      print(desc, n = Inf)
     }
 
     if(missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
 
     } else if(!missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
     }
 
     if (geom == "bar") {
-      p  <- p + ggplot2::geom_bar(position = position_dodge(dodge_width), width = b_width,
+      p  <- p + ggplot2::geom_bar(position = ggplot2::position_dodge(dodge_width), width = b_width,
                                   stat = "identity", ...)
     } else if (geom == "point"){
-      p  <- p + ggplot2::geom_point(position = position_dodge(dodge_width),
+      p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
                                     size = p_size, shape = p_shape, ...)
     }
 
     if (missing(eb_colour)){
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - se, ymax = mean + se),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & missing(colour_var)){
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+    } else if (!missing(eb_colour) && missing(colour_var)){
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - se, ymax = mean + se),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & !missing(colour_var)){
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean - se, ymax = mean + se, group = {{colour_var}}),
+    } else if (!missing(eb_colour) && !missing(colour_var)){
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - se, ymax = mean + se, group = {{colour_var}}),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
     }
 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = glue::glue("mean {y_name[1]} \u00B1 SE"))
+      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 SE"))
     }
 
   } else if(stat == "mean" & error == "sd"){
-    if(missing(x) & missing(fill_var) & missing(colour_var) & missing(facet_var)){
-      desc <- data %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         mean = round(mean({{y}}, na.rm = T), 3),
-                         sd = round(sd({{y}}, na.rm = T), 3))
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+    if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     sd = round(stats::sd(get(Y), na.rm = na.rm), 3)),
+                 by = eval(G)] %>%
+        tibble::as_tibble()
+
     } else {
-      desc <- gdata %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         mean = round(mean({{y}}, na.rm = T), 3),
-                         sd = round(sd({{y}}, na.rm = T), 3))
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     sd = round(stats::sd(get(Y), na.rm = na.rm), 3))] %>%
+        tibble::as_tibble()
+    }
+    if (print_stats == T){
+      print(desc, n = Inf)
     }
 
     if(missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
 
     } else if(!missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
     }
 
     if (geom == "bar") {
-      p  <- p + ggplot2::geom_bar(position = position_dodge(dodge_width), width = b_width,
+      p  <- p + ggplot2::geom_bar(position = ggplot2::position_dodge(dodge_width), width = b_width,
                                   stat = "identity", ...)
     } else if (geom == "point"){
-      p  <- p + ggplot2::geom_point(position = position_dodge(dodge_width),
+      p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
                                     size = p_size, shape = p_shape, ...)
     }
 
     if (missing(eb_colour)){
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - sd, ymax = mean + sd),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd),
+    } else if (!missing(eb_colour) && missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - sd, ymax = mean + sd),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd, group = {{colour_var}}),
+    } else if (!missing(eb_colour) && !missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - sd, ymax = mean + sd, group = {{colour_var}}),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
     }
 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = glue::glue("mean {y_name[1]} \u00B1 sd"))
+      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 s"))
+    }
+
+  } else if(stat == "mean" && error == "var"){
+    if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     var = round(stats::var(get(Y), na.rm = na.rm), 3)),
+                 by = eval(G)] %>%
+        tibble::as_tibble()
+
+    } else {
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     var = round(stats::var(get(Y), na.rm = na.rm), 3))] %>%
+        tibble::as_tibble()
+    }
+    if (print_stats == T){
+      print(desc, n = Inf)
+    }
+
+    if(missing(x)){
+      p <- desc %>%
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+
+    } else if(!missing(x)){
+      p <- desc %>%
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+    }
+
+    if (geom == "bar") {
+      p  <- p + ggplot2::geom_bar(position = ggplot2::position_dodge(dodge_width), width = b_width,
+                                  stat = "identity", ...)
+    } else if (geom == "point"){
+      p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
+                                    size = p_size, shape = p_shape, ...)
+    }
+
+    if (missing(eb_colour)){
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - var, ymax = mean + var),
+                                      size = eb_size, width = eb_width, alpha = eb_alpha,
+                                      linetype = eb_linetype,
+                                      position = ggplot2::position_dodge(dodge_width))
+      p
+    } else if (!missing(eb_colour) && missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - var, ymax = mean + var),
+                                      size = eb_size, width = eb_width, alpha = eb_alpha,
+                                      linetype = eb_linetype, colour = eb_colour,
+                                      position = ggplot2::position_dodge(dodge_width))
+      p
+    } else if (!missing(eb_colour) && !missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - var, ymax = mean + var, group = {{colour_var}}),
+                                      size = eb_size, width = eb_width, alpha = eb_alpha,
+                                      linetype = eb_linetype, colour = eb_colour,
+                                      position = ggplot2::position_dodge(dodge_width))
+      p
+    }
+
+    if(!missing(ylab)){
+      p <- p + ggplot2::labs(y = ylab)
+    } else if(missing(ylab)){
+      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 s\u00B2"))
     }
 
   } else if(stat == "mean" & error == "ci"){
-    if(missing(x) & missing(fill_var) & missing(colour_var) & missing(facet_var)){
-      desc <- data %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         mean = round(mean({{y}}, na.rm = T), 3),
-                         mean_LB = round(mean({{y}}, na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se({{y}})), 3),
-                         mean_UB = round(mean({{y}}, na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se({{y}})), 3)
-        )
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+    if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     lower = round(mean(get(Y), na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     upper = round(mean(get(Y), na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3)),
+                 by = eval(G)] %>%
+        tibble::as_tibble()
+
     } else {
-      desc <- gdata %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         mean = round(mean({{y}}, na.rm = T), 3),
-                         mean_LB = round(mean({{y}}, na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se({{y}})), 3),
-                         mean_UB = round(mean({{y}}, na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se({{y}})), 3)
-        )
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     lower = round(mean(get(Y), na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3),
+                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
+                     upper = round(mean(get(Y), na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3))] %>%
+        tibble::as_tibble()
+    }
+    if (print_stats == T){
+      print(desc, n = Inf)
     }
 
     if(missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
 
     } else if(!missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
     }
 
     if (geom == "bar") {
-      p  <- p + ggplot2::geom_bar(position = position_dodge(dodge_width),
+      p  <- p + ggplot2::geom_bar(position = ggplot2::position_dodge(dodge_width),
                                   width = b_width,
                                   stat = "identity", ...)
     } else if (geom == "point"){
-      p  <- p + ggplot2::geom_point(position = position_dodge(dodge_width),
+      p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
                                     size = p_size, shape = p_shape, ...)
     }
     if (missing(eb_colour)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean_LB, ymax = mean_UB),
-                                      position = position_dodge(dodge_width),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper),
+                                      position = ggplot2::position_dodge(dodge_width),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype)
       p
-    } else if (!missing(eb_colour) & missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean_LB, ymax = mean_UB),
-                                      position = position_dodge(dodge_width),
+    } else if (!missing(eb_colour) && missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper),
+                                      position = ggplot2::position_dodge(dodge_width),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour)
       p
-    } else if (!missing(eb_colour) & !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = mean_LB, ymax = mean_UB, group = {{colour_var}}),
-                                      position = position_dodge(dodge_width),
+    } else if (!missing(eb_colour) && !missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper, group = {{colour_var}}),
+                                      position = ggplot2::position_dodge(dodge_width),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour)
       p
@@ -3198,173 +3252,175 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = glue::glue("mean {y_name[1]} \u00B1 {scales::percent(ci_level)} CI"))
+      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 ", scales::percent(ci_level),  " CI"))
     }
 
-  } else if(stat == "median" & error == "quartile"){
-    if(missing(x) & missing(fill_var) & missing(colour_var) & missing(facet_var)){
-      desc <- data %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         p50 = round(stats::quantile({{y}}, probs = 0.50, na.rm = T), 3),
-                         p25 = round(stats::quantile({{y}}, probs = 0.25, na.rm = T), 3),
-                         p75 = round(stats::quantile({{y}}, probs = 0.75, na.rm = T), 3))
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+  } else if(stat == "median" && error == "quartile"){
+    if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     p25 = round(stats::quantile(get(Y), probs = 0.25, na.rm = na.rm), 3),
+                     p50 = round(stats::quantile(get(Y), probs = 0.50, na.rm = na.rm), 3),
+                     p75 = round(stats::quantile(get(Y), probs = 0.75, na.rm = na.rm), 3)),
+                 by = eval(G)] %>%
+        tibble::as_tibble()
+
     } else {
-      desc <- gdata %>%
-        dplyr::summarise(cases = length({{y}}),
-                         n = sum(!is.na({{y}})),
-                         na = sum(is.na({{y}})),
-                         p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                         p50 = round(stats::quantile({{y}}, probs = 0.50, na.rm = T), 3),
-                         p25 = round(stats::quantile({{y}}, probs = 0.25, na.rm = T), 3),
-                         p75 = round(stats::quantile({{y}}, probs = 0.75, na.rm = T), 3))
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+      desc <- DT[, .(cases = .N,
+                     n = sum(!is.na(get(Y))),
+                     na = sum(is.na(get(Y))),
+                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
+                     p25 = round(stats::quantile(get(Y), probs = 0.25, na.rm = na.rm), 3),
+                     p50 = round(stats::quantile(get(Y), probs = 0.50, na.rm = na.rm), 3),
+                     p75 = round(stats::quantile(get(Y), probs = 0.75, na.rm = na.rm), 3))] %>%
+        tibble::as_tibble()
     }
-
+    if (print_stats == T){
+      print(desc, n = Inf)
+    }
     if(missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = p50, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = p50, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
 
     } else if(!missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = p50, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = p50, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
     }
 
     if (geom == "bar") {
-      p  <- p + ggplot2::geom_bar(position = position_dodge(dodge_width), width = b_width,
+      p  <- p + ggplot2::geom_bar(position = ggplot2::position_dodge(dodge_width), width = b_width,
                                   stat = "identity", ...)
     } else if (geom == "point"){
-      p  <- p + ggplot2::geom_point(position = position_dodge(dodge_width),
+      p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
                                     size = p_size, shape = p_shape, ...)
     }
     if (missing(eb_colour)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = p25, ymax = p75),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = p25, ymax = p75),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = p25, ymax = p75),
+    } else if (!missing(eb_colour) && missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = p25, ymax = p75),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = p25, ymax = p75, group = {{colour_var}}),
+    } else if (!missing(eb_colour) && !missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = p25, ymax = p75, group = {{colour_var}}),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
     }
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = glue::glue("median {y_name[1]} \u00B1 quartile"))
+      p <- p + ggplot2::labs(y = paste0("median ", Y, " \u00B1 quartile"))
     }
   } else if(stat == "median" & error == "ci"){
-    if(missing(x) & missing(fill_var) & missing(colour_var) & missing(facet_var)){
-      suppressWarnings(
-        desc <- data %>%
-          dplyr::summarise(cases = length({{y}}),
-                           n = sum(!is.na({{y}})),
-                           na = sum(is.na({{y}})),
-                           p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                           median = round(stats::median({{y}}, na.rm = T), 3),
-                           median_LB = boot::boot.ci(boot.out = simpleboot::one.boot({{y}}, stats::median,
-                                                                                     R = replicates, na.rm = TRUE),
-                                                     conf = ci_level, type = "bca")$bca[4],
-                           median_LB = round(median_LB, 3),
-                           median_UB = boot::boot.ci(boot.out = simpleboot::one.boot({{y}}, stats::median,
-                                                                                     R = replicates, na.rm = TRUE),
-                                                     conf = ci_level, type = "bca")$bca[5],
-                           median_UB = round(median_UB, 3)
-          )
+    if(!missing(x) || !missing(fill_var) || !missing(colour_var) || !missing(facet_var)){
+      desc1 <- DT[, .(cases = .N,
+                      n = sum(!is.na(get(Y))),
+                      na = sum(is.na(get(Y))),
+                      p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3)),
+                  by = eval(G)] %>%
+        tibble::as_tibble()
+      desc2 <- DT[,
+                  .(measure = c("lower", "median", "upper"),
+                    value = median_ci(get(Y), replicates = replicates, ci_type = ci_type,
+                                      ci_level = ci_level, parallel = parallel, cores = cores)),
+                  by = eval(G)] %>%
+        stats::na.omit() %>%
+        data.table::dcast(formula = ... ~ measure, value.var = "value") %>%
+        tibble::as_tibble()
+      suppressMessages(
+        desc <- dplyr::left_join(desc1, desc2)
       )
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
     } else {
-      suppressWarnings(
-        desc <- gdata %>%
-          dplyr::summarise(cases = length({{y}}),
-                           n = sum(!is.na({{y}})),
-                           na = sum(is.na({{y}})),
-                           p_na = round(sum(is.na({{y}}))/length({{y}})*100, 2),
-                           median = round(stats::median({{y}}, na.rm = T), 3),
-                           median_LB = boot::boot.ci(boot.out = simpleboot::one.boot({{y}}, stats::median,
-                                                                                     R = replicates, na.rm = TRUE),
-                                                     conf = ci_level, type = "bca")$bca[4],
-                           median_LB = round(median_LB, 3),
-                           median_UB = boot::boot.ci(boot.out = simpleboot::one.boot({{y}}, stats::median,
-                                                                                     R = replicates, na.rm = TRUE),
-                                                     conf = ci_level, type = "bca")$bca[5],
-                           median_UB = round(median_UB, 3)
-          )
-      )
-      if (print_stats == T){
-        print(desc, n = Inf)
-      }
+      desc1 <- DT[, .(cases = .N,
+                      n = sum(!is.na(get(Y))),
+                      na = sum(is.na(get(Y))),
+                      p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3))] %>%
+        tibble::as_tibble()
+      desc2 <- DT[,
+                  .(measure = c("lower", "median", "upper"),
+                    value = median_ci(get(Y), replicates = replicates, ci_type = ci_type,
+                                      ci_level = ci_level, parallel = parallel, cores = cores))] %>%
+        stats::na.omit() %>%
+        data.table::dcast(formula = ... ~ measure, value.var = "value") %>%
+        tibble::as_tibble() %>% .[,-1]
+      desc <- dplyr::bind_cols(desc1, desc2)
     }
-
+    if (print_stats == T){
+      print(desc, n = Inf)
+    }
     if(missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = median, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = median, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
 
     } else if(!missing(x)){
       p <- desc %>%
-        ggplot2::ggplot(aes(y = median, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+        ggplot2::ggplot(ggplot2::aes(y = median, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
     }
 
     if (geom == "bar") {
-      p  <- p + ggplot2::geom_bar(position = position_dodge(dodge_width), width = b_width,
+      p  <- p + ggplot2::geom_bar(position = ggplot2::position_dodge(dodge_width), width = b_width,
                                   stat = "identity", ...)
     } else if (geom == "point"){
-      p  <- p + ggplot2::geom_point(position = position_dodge(dodge_width),
+      p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
                                     size = p_size, shape = p_shape, ...)
     }
     if (missing(eb_colour)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = median_LB, ymax = median_UB),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = median_LB, ymax = median_UB),
+    } else if (!missing(eb_colour) && missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
-    } else if (!missing(eb_colour) & !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(aes(ymin = median_LB, ymax = median_UB, group = {{colour_var}}),
+    } else if (!missing(eb_colour) && !missing(colour_var)) {
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper, group = {{colour_var}}),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_linetype, colour = eb_colour,
-                                      position = position_dodge(dodge_width))
+                                      position = ggplot2::position_dodge(dodge_width))
       p
     }
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = glue::glue("median {y_name[1]} \u00B1 {scales::percent(ci_level)} BCa CI ({scales::comma(replicates)} replicates)"))
+      if(ci_type == "bca"){
+        ci_tp <- "BCa"
+      } else if(ci_type == "perc") {
+        ci_tp <- "percentile"
+      } else if(ci_type == "norm") {
+        ci_tp <- "normal"
+      } else if(ci_type == "basic") {
+        ci_tp <- "basic"
+      }
+      p <- p + ggplot2::labs(y = paste0("median ", Y, " \u00B1 ",
+                                        scales::percent(ci_level),  " ", ci_tp,
+                                        " CI\n(", scales::comma(replicates)," replicates)"))
     }
   }
+
   #change the values of the fill or colour variables
-  if (!missing(fill_var) & !missing(fill_var_values)){
+  if (!missing(fill_var) && !missing(fill_var_values)){
     p <- p +
       ggplot2::scale_fill_manual(values = fill_var_values)
   }
-  if (!missing(colour_var) & !missing(colour_var_values)){
+  if (!missing(colour_var) && !missing(colour_var_values)){
     p <- p +
       ggplot2::scale_colour_manual(values = colour_var_values)
   }
   #modification of axis labels
-  y_name <-  data %>% select({{y}}) %>% names
+  y_name <-  data %>% dplyr::select({{y}}) %>% names
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
@@ -3402,53 +3458,53 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
   }
 
   #lines
-  if(add_lines == T & missing(x)){
+  if(add_lines == T && missing(x)){
     errorCondition("a variable must be assigned to x to connect statistical estimates with lines")
-  } else if (add_lines == T & !missing(x)) {
-    if (missing(fill_var) & missing(colour_var)){
+  } else if (add_lines == T && !missing(x)) {
+    if (missing(fill_var) && missing(colour_var)){
       if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = 1), position = position_dodge(dodge_width),
+        p <- p + ggplot2::geom_line(aes(group = 1), position = ggplot2::position_dodge(dodge_width),
                                     colour = line_colour, linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       } else {
-        p <- p + ggplot2::geom_line(aes(group = 1), position = position_dodge(dodge_width),
+        p <- p + ggplot2::geom_line(aes(group = 1), position = ggplot2::position_dodge(dodge_width),
                                     linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       }
 
-    } else if (!missing(fill_var) & missing(colour_var)){
+    } else if (!missing(fill_var) && missing(colour_var)){
       if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = {{fill_var}}), position = position_dodge(dodge_width),
+        p <- p + ggplot2::geom_line(aes(group = {{fill_var}}), position = ggplot2::position_dodge(dodge_width),
                                     colour = line_colour, linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       } else {
-        p <- p + ggplot2::geom_line(aes(group = {{fill_var}}), position = position_dodge(dodge_width),
+        p <- p + ggplot2::geom_line(aes(group = {{fill_var}}), position = ggplot2::position_dodge(dodge_width),
                                     linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       }
-    } else if (missing(fill_var) & !missing(colour_var)){
+    } else if (missing(fill_var) && !missing(colour_var)){
       if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = {{colour_var}}), position = position_dodge(dodge_width),
+        p <- p + ggplot2::geom_line(aes(group = {{colour_var}}), position = ggplot2::position_dodge(dodge_width),
                                     colour = line_colour, linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       } else {
         p <- p + ggplot2::geom_line(aes(group = {{colour_var}}, colour = {{colour_var}}),
-                                    position = position_dodge(dodge_width),
+                                    position = ggplot2::position_dodge(dodge_width),
                                     linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       }
-    } else if (!missing(fill_var) & !missing(colour_var) & !missing(line_group)){
+    } else if (!missing(fill_var) && !missing(colour_var) && !missing(line_group)){
       if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = {{line_group}}), position = position_dodge(dodge_width),
+        p <- p + ggplot2::geom_line(aes(group = {{line_group}}), position = ggplot2::position_dodge(dodge_width),
                                     colour = line_colour, linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       } else {
         p <- p + ggplot2::geom_line(aes(group = {{line_group}}, colour = {{line_group}}),
-                                    position = position_dodge(dodge_width),
+                                    position = ggplot2::position_dodge(dodge_width),
                                     colour = line_colour, linetype = linetype, size = line_size,
                                     alpha = line_alpha)
       }
-    } else if (!missing(fill_var) & !missing(colour_var) & missing(line_group)){
+    } else if (!missing(fill_var) && !missing(colour_var) && missing(line_group)){
       errorCondition("When variables are assigned to both fill and colour, specify which to use for splitting lines using line_group")
     }
   }
@@ -3501,7 +3557,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
   if(!missing(facet_var)){
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
-  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+  if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
 

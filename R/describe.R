@@ -19,6 +19,7 @@
 #'   ascending/increasing order.
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @noRd
 tcv <- function(y, n = "all", order = "d") {
   if(order == "d") {
     tab <- sort(table(y), decreasing = TRUE)
@@ -205,7 +206,7 @@ tcv <- function(y, n = "all", order = "d") {
 #'
 #' @export
 describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = "all", type = 2, na.rm = TRUE, output = "tibble"){
-  if((is.vector(data) | is.factor(data)) | lubridate::is.Date(data)) {
+  if((is.vector(data) || is.factor(data)) || lubridate::is.Date(data)) {
     if(is.numeric(data)){
       dt <- data.table::as.data.table(data)
       description <- dt[, .(cases = .N,
@@ -439,6 +440,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = "all", ty
 #' @param na.rm passed to \code{\link{describe}}
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @noRd
 dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = "dt", order = "d", na.rm = TRUE) {
   ls <- list()
 

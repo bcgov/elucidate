@@ -110,8 +110,8 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
     ncores <- parallel::detectCores()
     OS <- Sys.info()['sysname']
 
-    if(ncores > 1 & parallel == TRUE) {
-      if (OS == "Windows" | OS == "windows"){
+    if(ncores > 1 && parallel == TRUE) {
+      if (OS == "Windows" || OS == "windows"){
         if(missing(cores)){
           b <- boot::boot(y, bmean, R = replicates, parallel = "snow", ncpus = ncores - 1, simple = TRUE)
         } else {
@@ -249,8 +249,8 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
   ncores <- parallel::detectCores()
   OS <- Sys.info()['sysname']
 
-  if(ncores > 1 & parallel == TRUE) {
-    if (OS == "Windows" | OS == "windows"){
+  if(ncores > 1 && parallel == TRUE) {
+    if (OS == "Windows" || OS == "windows"){
       if(missing(cores)){
         b <- boot::boot(y, bmed, R = replicates, parallel = "snow", ncpus = ncores - 1, simple = TRUE)
       } else {
@@ -397,8 +397,8 @@ stat_ci <- function(y, stat, ..., replicates = 2000, ci_level = 0.95, ci_type = 
   ncores <- parallel::detectCores()
   OS <- Sys.info()['sysname']
 
-  if(ncores > 1 & parallel == TRUE) {
-    if (OS == "Windows" | OS == "windows"){
+  if(ncores > 1 && parallel == TRUE) {
+    if (OS == "Windows" || OS == "windows"){
       if(missing(cores)){
         b <- boot::boot(y, bstat, R = replicates, parallel = "snow", ncpus = ncores - 1, simple = TRUE)
       } else {

@@ -1,7 +1,7 @@
 Package: elucidate
 Type: Package
 Title: A Collection of Convenience Functions to Help Researchers Elucidate Patterns in Their Data 
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Author: person("Craig", "Hutton", email = "craig.hutton@gmail.com", role = c("aut", "cre"))
 Maintainer: Craig P. Hutton <craig.hutton@gmail.com>
 Description: A collection of convenience functions to facilitate data analysis by researchers. While many of the functions are geared towards data analysis tasks typical in the behavioural and health sciences (e.g. analysis of numerical variables between experimental groups), they are useful for working with any type of data. The package has also been designed with the goal of making common analytical processes in R more accessible to science trainees by providing a consistent API for data analysis and visualization. See "A Scientist's Guide to R blog" at https://craig.rbind.io/ for related tutorials. Note This package is currently in development and its functionality will be improved over time.
@@ -16,7 +16,6 @@ Imports:
     dplyr (>= 0.8.3), 
     data.table (>= 1.12.2),
     lubridate (>= 1.7.4),
-    glue (>= 1.3.1), 
     tidyr (>= 1.0.0), 
     tidyselect(>= 0.2.5),
     stringr (>= 1.4.0), 
@@ -26,8 +25,8 @@ Imports:
     tibble (>= 2.1.3), 
     boot (>= 1.3-22),
     gapminder, 
+    scales (>= 1.0.0),
     ggplot2 (>= 3.2.1),
-    simpleboot,
     DT (>= 0.8), 
     plotly (>= 4.9.0), 
     htmltools (>= 0.3.6), 

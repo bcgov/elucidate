@@ -5,7 +5,8 @@
 \title{Plot a sample mean or median +/- error bars.}
 \usage{
 plot_stat_error(data, y, x = NULL, geom = "bar", stat = "mean",
-  error = "ci", ci_level = 0.95, replicates = 2000, xlab = NULL,
+  error = "ci", ci_level = 0.95, ci_type = "perc",
+  replicates = 2000, parallel = FALSE, cores = NULL, xlab = NULL,
   ylab = NULL, title = NULL, ..., ylim = c(NA, NA),
   transform_y = FALSE, y_transformation = "log10",
   x_var_order = NULL, x_var_labs = NULL, fill_var = NULL,
@@ -23,7 +24,7 @@ plot_stat_error(data, y, x = NULL, geom = "bar", stat = "mean",
   facet_var_order = NULL, facet_var_labs = NULL,
   facet_var_strip_position = "top", facet_var_text_bold = TRUE,
   print_stats = F, aesthetic_options = FALSE, output = "p",
-  interactive = FALSE)
+  interactive = FALSE, na.rm = TRUE)
 }
 \arguments{
 \item{data}{A data frame or tibble containing the dependent measure "y", the
@@ -41,18 +42,31 @@ using \code{\link[ggplot2]{geom_bar}} (geom = "bar"; the default) or
 are "mean" (the default) or "median".}
 
 \item{error}{The statistic to use for the error bars. When stat = "mean",
-available options include se (standard error), sd (standard deviation), and
-ci (confidence interval; the default). When stat = "median", options
-include "quartile" (lower bound = 25th percentile & upper bound = 75th
-percentile), or "ci". See below for more details on confidence intervals.
-With respect to CIs, when stat = "mean", CIs are calculated directly from a
-normal distribution based on the standard error using
-\code{\link[stats]{qnorm}}. In contrast, bootstrapped bias-corrected &
-accelerated CIs are returned via \code{\link[boot]{boot.ci}} when stat =
-"median".}
+available options include se (standard error), sd (standard deviation),
+var(variance), and ci (confidence interval; the default). When stat =
+"median", options include "quartile" (lower bound = 25th percentile & upper
+bound = 75th percentile), or "ci". See below for more details on confidence
+intervals. With respect to CIs, when stat = "mean", CIs are calculated
+directly from a normal distribution based on the standard error using
+\code{\link[stats]{qnorm}}. In contrast, bootstrapped CIs of the specified
+type are returned via \code{\link{median_ci}} when stat = "median".}
 
 \item{ci_level}{The confidence level to use for constructing confidence
 intervals. Default is set to \code{ci_level = 0.95} for 95 percent CIs.}
+
+\item{ci_type}{The type of confidence intervals to calculate from the
+bootstrap samples when stat = "median" and error = "ci". Most of the
+options available in the underlying boot.ci function are implemented
+(except for studentized intervals): "norm" for an approximation based on
+the normal distribution, "perc" for percentile, "basic" for basic, and
+"bca" for bias-corrected and accelerated. Percentile intervals are the
+default since these are typically sufficient when working with large data
+sets (e.g. >= 100,000 rows of data) and are faster to calculate than BCa
+intervals. However, BCa intervals (the default for the more primitive
+\code{\link{median_ci}} function) tend to provide the most
+accurate/least-biased results (Efron, 1987), particularly for small-medium
+sized samples, at the obvious cost of requiring more time to calculate. See
+\code{\link[boot]{boot.ci}} for details.}
 
 \item{replicates}{The number of bootstrap replicates to use for calculating
 bootstrapped CIs when stat = "median" and error = "ci". Default is 2,000,
@@ -61,6 +75,19 @@ need more precise estimates, more replications (e.g. >= 5,000) are
 recommended. N.B. more replications will of course take longer to run. If
 you get the error: "estimated adjustment 'a' is NA" then try again with
 more replications.}
+
+\item{parallel}{set to TRUE if you want to use multiple cores or FALSE if you
+don't (the default). Note that there is some processing overhead involved
+when operating in parallel so speed gains may not be very noticable for
+smaller samples (and may even take longer than sequential processing). Due
+to the nature of the underlying parallelization architecture, performance
+gains will likely be greater on non-Windows machines that can use the
+"multicore" implementation instead of "snow". For obvious reasons this
+option only works on machines with more than 1 logical processing core.}
+
+\item{cores}{If parallel is set to TRUE, this determines the number of cores
+to use. To see how many cores are available on your machine, use
+parallel::detectCores()}
 
 \item{xlab}{Specify/overwrite the x-axis label using a character string, e.g.
 "x-axis label". If no variable is assigned to x, then this label will be
@@ -280,6 +307,9 @@ utilization.}
 
 \item{interactive}{Determines whether a static ggplot object or an interactive html
 plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.}
+
+\item{na.rm}{This determines whether missing values (NAs) should be removed
+before attempting to calculate the summary statistics used for plotting.}
 }
 \value{
 A ggplot object or plotly object depending on whether static or
@@ -371,7 +401,7 @@ York: Chapman & Hall.
 \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_line}},
 \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
 \code{\link[base]{mean}}, \code{\link[stats]{sd}}, \code{\link[stats]{quantile}},
-\code{\link[boot]{boot.ci}}, \code{\link[simpleboot]{one.boot}},
+\code{\link[boot]{boot.ci}}, \code{\link{median_ci}},
 }
 \author{
 Craig P. Hutton, \email{craig.hutton@gmail.com}

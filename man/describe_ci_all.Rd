@@ -87,13 +87,16 @@ a data frame, use \code{\link{describe_ci}} instead.
 \examples{
 
 #using a single core (sequential processing)
+\dontrun{
 describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
+}
 describe_ci_all(pdata, stat = mean) #the default
 describe_ci_all(pdata, high_low, stat = mean) #split by a grouping variable
 
+\dontrun{
 #using multiple cores (parallel processing)
 describe_ci_all(pdata[1:1000, ], stat = sd, parallel = TRUE, cores = 2)
-
+}
 
 }
 \references{
