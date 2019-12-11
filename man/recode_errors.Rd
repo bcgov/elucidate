@@ -47,5 +47,5 @@ recode_errors(mtcars,
 
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }

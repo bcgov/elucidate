@@ -38,5 +38,5 @@ mtcars \%>\% static_to_dynamic(caption = "Table 1")
 \code{\link[DT]{datatable}}, \code{\link[plotly]{ggplotly}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }

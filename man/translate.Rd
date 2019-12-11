@@ -52,5 +52,5 @@ mtcars \%>\%
 \code{\link[base]{match}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }

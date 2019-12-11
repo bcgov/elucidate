@@ -45,5 +45,5 @@ counts_all(data, n = 5)
 \code{\link{table}}, \code{\link{sort}}, \code{\link[purrr]{map}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }

@@ -37,5 +37,5 @@ kurtosis. The Statistician, 47, 183–189.
 \code{\link[e1071]{skewness}}, \code{\link[psych]{skew}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }

@@ -39,5 +39,5 @@ counts(y, n = 5) #the top 5 most common unique values of \\code{y}
 \code{\link{table}}, \code{\link{sort}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }

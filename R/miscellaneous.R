@@ -1,4 +1,14 @@
-# misc functions ----------------------------------------------------------
+# Copyright 2019 Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and limitations under the License.
 
 #standard error of the mean####
 #' @title
@@ -15,7 +25,7 @@
 #' @param na.rm Should missing valued be removed before attempting to calculate
 #'   the standard error (TRUE/FALSE)?
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' y <- c(1:100)
@@ -52,7 +62,7 @@ se <- function(y, na.rm = TRUE) {
 #'
 #' @param digits determines the how many digits the result is rounded to
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' y <- c(1:100)
@@ -81,7 +91,7 @@ inv_quantile <- function(y, values, digits = NULL){
 #'
 #' @param y a numeric vector/variable.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' y <- c(1:100)
@@ -115,7 +125,7 @@ mode_of_y <- function(y){
 #' @param type the calculation method you wish to use. See
 #'   \code{\link[e1071]{skewness}} and Joanes & Gill (1998) for details.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' y <- rnorm(1:1000, 100, 15)
@@ -171,7 +181,7 @@ skewness <- function (y, na.rm = TRUE, type = 2) {
 #' @param type the calculation method you wish to use. See
 #'   \code{\link[e1071]{kurtosis}} and Joanes & Gill (1998) for details.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' y <- rnorm(1:1000, 100, 15)
@@ -226,7 +236,7 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #'   with stringr and other tidyverse tools fairly easily.
 #'
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' #using a numeric vector
@@ -280,7 +290,7 @@ counts <- function(y, n = "all", order = "d") {
 #'   easily.
 #'
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' #using a numeric vector
@@ -324,7 +334,7 @@ counts_all <- function(data, n = "all", order = "d") {
 #'   datatables html widget. If a ggplot object was provided, the output will be
 #'   a plotly html widget.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #'
@@ -342,7 +352,7 @@ counts_all <- function(data, n = "all", order = "d") {
 #'
 #' @export
 static_to_dynamic <- function(static_object, caption = NULL){
-  if(tibble::is_tibble(static_object) | is.data.frame(static_object)){
+  if(tibble::is_tibble(static_object) || is.data.frame(static_object)){
     dynamic_object <- static_object %>% DT::datatable(filter = "top",
                                                       caption = htmltools::tags$caption(
                                                         style = 'caption-side: top; text-align: left;',
@@ -442,7 +452,7 @@ static_to_dynamic <- function(static_object, caption = NULL){
 #' @return An updated version of the input vector that has been translated from
 #'   the old coding scheme to the new one.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' library(magrittr)
@@ -526,7 +536,7 @@ wash_df <- function(data, clean_names = TRUE, case = "snake",
 #' @return An updated version of the input vector that has been translated from
 #'   the old coding scheme to the new one.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #'
@@ -584,7 +594,7 @@ translate <- function(y, old, new) {
 #'   indices in data. Use "rows" &/or "cols" to specify indices to operate upon
 #'   if data is not a vector.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #'
@@ -630,7 +640,7 @@ recode_errors <- function(data, errors, replacement = NA,
 #' @return A logical vector of the same length as x which is FALSE for matching
 #'   values of y and TRUE for non-matching values of y.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
 #' c(1:100) %ni% c(2, 3, 5, 10, 78:91)

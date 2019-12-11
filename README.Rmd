@@ -1,0 +1,262 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# elucidate
+
+<!-- badges: start -->
+<a id="devex-badge" rel="Exploration" href="https://github.com/BCDevExchange/assets/blob/master/README.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>
+<!-- badges: end -->
+
+## Project Status
+
+This package is currently maintained by [Craig Hutton](https://craig.rbind.io/), a Data Science Fellow working with the Data Science and Analytics Branch of the [British Columbia Ministry of Citizens’ Services](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/citizens-services) and the Research Branch of the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction).
+
+## Why `elucidate`?
+
+`Elucidate` provides a collection of convenience functions to make data analysis in R easier and more accessible for researchers:
+
+* Functions that help summarize data of multiple types (numeric, character strings, logicals, etc.) using descriptive statistics (`describe*`) split by any number of grouping variables with comparable performance to existing alternatives and enhanced customization via arguments.
+
+* Functions that make it easier to access the power of the [boot](https://cran.r-project.org/web/packages/boot/index.html) package to obtain confidence intervals for a variety of summary statistics (`*_ci`), with options for within-group calculations and parallelized computation to maximize performance.
+
+* Functions that help you visualize your data using the popular [ggplot2](https://ggplot2.tidyverse.org/) & [plotly](https://plot.ly/r/) packages more easily via a relatively simple API with sensible and well documented arguments rather than layers (`plot_*`). 
+
+* Miscellaneous functions that fill in a few of the (rare) gaps in `R`'s statistical computing & data science toolkit, e.g. functions which are easy for experienced users to write on the fly but are challenging for `R` novices or researchers without programming experience to implement: the standard error of the mean (`se`), an operator that returns the values that do not match a vector (`%ni%`, i.e. the opposite of `%in%`), the mode of a numeric variable (`mode_of_y`), etc.
+
+Inspired by tidyverse naming conventions, the core functions of `elucidate` are organized into sets that begin with a common root (e.g. `describe*`, `plot_*`), since this enables the user to see them all as suggestions as you are coding in R studio.
+
+Drawing from similar inspiration, many elucidate functions are also designed to accept a data object as the 1st argument and to return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package for easy integration into data processing pipelines.
+
+## Installation
+
+You can install the development version of elucidate from the [BC SDPR Research Branch Azure repository](https://dev.azure.com/BC-SDPR-Research/R-elucidate) with:
+
+``` r
+install.packages("R:/ResearchDB/repos/cache/local.r/elucidate_0.0.0.9009.tar.gz",
+                 repos = NULL, type="source", dependencies = TRUE)
+```
+Note: this currently requires a connect to the local SDPR network while access to `elucidate` is limited to the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction) Research branch. Installation instructions will be updated after public release (pending administration approval).
+
+
+The authors of `elucidate` acknowledge and express their gratitude to the authors of the [tidyverse packages](https://www.tidyverse.org/), [data.table](https://github.com/Rdatatable/data.table), and the functions of other dependency packages which were used to build `elucidate`, since without their effort and ingenuity `elucidate` would mostly have remained a collection of ideas instead of functions. 
+
+## Usage
+
+Use `describe()` to describe a single variable in a data frame of vector of values:
+
+```{r describe, cache = TRUE}
+library(elucidate)
+
+#using a vector as input
+describe(data = rnorm(1:1000, 100, 5))
+
+#using a data frame and specifying a variable in that data frame
+
+describe(data = pdata, y = y1) #no grouping variables, numeric input class 
+
+describe(pdata, g2) #factor input class 
+
+describe(pdata, even) #logical input class 
+
+pdata %>% describe(high_low) #character input class, data piped in
+
+describe(pdata, d) #date input class 
+
+#obtain within-group summaries by adding grouping variables
+
+describe(pdata, y1, high_low) #one grouping variable
+
+describe(pdata, y1, high_low, g2) #two grouping variables
+
+description <- describe(pdata, y1, high_low, g2, even) #three grouping variables
+
+```
+
+To describe all variables in a data frame, use `describe_all()`:
+
+```{r describe_all}
+
+#if more than one class of variable is summarized you'll get a list
+#if only one class is present in the data, or only one is requested, you'll get a dataframe
+
+describe_all(pdata) #all summary types in a list, not split by any grouping variables
+
+#only want summaries of certain variable classes? No problem, use the class argument: 
+
+#numeric summary only, split by a grouping variable
+pdata %>% 
+  describe_all(high_low, 
+               output = "dt", #you can ask for a tibble or data.table as output options
+               class = "n") 
+
+#numeric and logical summaries only, split by a grouping variable
+pdata %>%
+ describe_all(high_low, output = "dt", class = c("n", "l"))
+
+```
+
+
+If you want the counts for unique values of a variable, regardless of class, use `counts()` or `counts_all()`:
+
+```{r counts}
+
+counts(pdata$high_low) #output stucture is value_count, sorted in descending order by default
+
+#use the order argument to sort in ascending order instead
+counts(pdata$high_low, order = "a") 
+
+counts_all(pdata[, c("high_low", "even", "g2")])
+
+```
+
+
+Calculate confidence intervals for a sample mean, median or other summary statistic using `describe_ci()` & `describe_ci_all()`:
+
+```{r ci}
+
+#confidence intervals for the mean are calculated (by default) using a theoretical normal distribution...
+pdata[1:100, ] %>% describe_ci(y1, stat = mean)
+
+pdata[1:100, ] %>% describe_ci(y1, g2, stat = mean) #obtain CIs and means split by a grouping variable
+
+#confidence intervals for other statistics are obtained using bootstrapping
+pdata[1:100, ] %>% 
+  describe_ci(y1, stat = median) #bootstrapped median
+
+pdata[1:100, ] %>% 
+  describe_ci(y1, stat = sd) #bootstrapped standard deviation
+
+#describe_ci_all will return CIs for all numeric variables in a data frame
+
+describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
+
+describe_ci_all(pdata, stat = mean) #the default
+
+describe_ci_all(pdata, high_low, stat = mean) #split by a grouping variable
+
+```
+
+
+
+Use the `plot_*` set of functions to easily obtain ggplot2 or plotly visualizations:
+
+```{r plot}
+data(mtcars)
+
+#basic density plot
+plot_density(mtcars, x = mpg)
+
+#histogram
+plot_histogram(mtcars, x = mpg, fill_var = cyl) #mapping of variables to aesthetics is accomplished using *_var arguments
+
+#customized density plot
+mtcars %>% plot_density(x = mpg,
+                        colour_var = cyl, #assign a variable to colour
+                        colour_var_order = c("6", "8", "4"), #reorder the levels of the colour variable
+                        colour_var_labs = c("six" = "6", "eight" = "8"), #recode the colour variable labels
+                        colour_var_values = c("blue3", "red3", "green3"), #change the colours from the ggplot2 defaults
+                        colour_var_title = "# cylinders")
+
+
+#boxplot showing additional customization
+plot_box(data = mtcars, #data source
+         x = cyl, #variable on the x-axis
+         y = hp, #variable to go on the y-axis
+         xlab = "# of cylinders", #custom x-axis label
+         ylab = "horsepower", #custom y-axis label
+         fill_var = am, #assign variable am to fill
+         fill_var_order = c("0", "1"), 
+         fill_var_title = "transmission", #relabel the fill variable title in the legend
+         fill_var_labs = c("manual" = "0", "automatic" = "1"), #recode the fill variable labels
+         fill_var_values = c("blue", "red"), #change the colours from the ggplot2 defaults
+         theme = "bw") #specify the theme
+
+#violin plot with quantiles added
+mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
+
+#scatterplot with a regression lines
+mtcars %>% plot_scatter(y = mpg, x = hp, colour_var = cyl, 
+                        regression_line = T, 
+                        regression_method = "lm") #default is to fit lines using a generalized additive model
+
+#polynomial regression line can be added by specifying a model formula
+mtcars %>%
+  plot_scatter(y = mpg, x = hp,
+               regression_line = T, regression_method = "lm", regression_se = T,
+               regression_formula = y ~ poly(x, 2))
+
+
+#plot a statistic with error bars
+library(gapminder)
+
+gapminder %>%
+   plot_stat_error(y = lifeExp, x = year, 
+                   stat = "mean", error = "se", #mean +/- standard error, default error metric is a 95% CI
+                   colour_var = continent, 
+                   print_stats = T, #print the stats used for plotting to the console (FALSE by default)
+                   geom = "point", #either "bar" or "point"
+                   p_size = 3, #adjust the size of the points
+                   add_lines = T, #connect the points with lines. This is useful for repeated-measures data.
+                   alpha = 0.6) #adjusts the transparency
+
+gapminder %>%
+   plot_stat_error(y = lifeExp, x = year, 
+                   stat = "median", #plot the points using the median instead
+                   error = "ci", #generated using bootstrapping
+                   colour_var = continent, 
+                   geom = "point", #either "bar" or "point"
+                   p_size = 3, #adjust the size of the points
+                   add_lines = T, #connect the points with lines. This is useful for repeated-measures data.
+                   alpha = 0.6) #adjusts the transparency
+
+```
+
+The `%ni%` operator ("ni" for "not in") can help you subset your data like the `%in%` operator but returns an indicator for non-matches instead of matches. This is particularly useful if you want to specify exclusion criteria instead of inclusion criteria.
+
+```{r, eval = FALSE}
+#subset data to extract rows with matching values using "%in%"
+subset(pdata, g2 %in% c("a", "e"))
+
+#subset data to extract rows with non-matching values using "%ni%"
+subset(pdata, g2 %ni% c("a", "e"))
+
+#equivalent to subset function for tidyverse users
+dplyr::filter(pdata, g2 %ni% c("a", "e"))
+
+#output omitted for space considerations
+```
+
+## Development Notes
+
+`Elucidate` is still in the formative stage of development and considerable changes will occur to it over the next several months leading up to public release. For example, an additional function set (`model_*`), which will facilitate the fitting and evaluation of statistical models, is in the process of being drafted. Since the goal of `elucidate` is to help you understand the underlying processes that generated your data, coverage of models will be limited to those with a high degree of interpretability, e.g. linear, generalized linear, additive, mixed effects, etc. 
+
+These tend to be the types of models used for explanatory purposes and are the most common in scientific research, e.g. to evaluate the outcomes of a research project. Despite the great need to use these models, there currently isn't really a convenient API availble that makes it easy to figure out which functions/packages are needed to fit them or provide a consistent syntax for using and evaluating them. Unfortunately, this variety and inconsistency can be discouraging for science trainees and new R users, which is one of the things I hope to remedy.
+
+While `R` does offer a large number of predictive ("machine learning") models, these tend to have limited explanatory utility due to a lack of interpretability and they are also already covered quite well by other packages (e.g. [caret](https://topepo.github.io/caret/index.html)).
+
+## Getting Help or Reporting an Issue
+
+To report bugs/issues/feature requests, please contact the package maintainer using the contact form located [here](https://craig.rbind.io/). After `elucidate` has been released publicly, a more formal method of reporting issues and requests will be implemented.
+
+## License
+
+Copyright 2017 Province of British Columbia
+
+Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+

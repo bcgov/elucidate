@@ -1,11 +1,11 @@
 Package: elucidate
 Type: Package
 Title: A Collection of Convenience Functions to Help Researchers Elucidate Patterns in Their Data 
-Version: 0.0.0.9008
-Author: person("Craig", "Hutton", email = "craig.hutton@gmail.com", role = c("aut", "cre"))
-Maintainer: Craig P. Hutton <craig.hutton@gmail.com>
+Version: 0.0.0.9009
+Author: person("Craig", "Hutton", email = "Craig.Hutton@gov.bc.ca", role = c("aut", "cre"))
+Maintainer: Craig P. Hutton <Craig.Hutton@gov.bc.ca>
 Description: A collection of convenience functions to facilitate data analysis by researchers. While many of the functions are geared towards data analysis tasks typical in the behavioural and health sciences (e.g. analysis of numerical variables between experimental groups), they are useful for working with any type of data. The package has also been designed with the goal of making common analytical processes in R more accessible to science trainees by providing a consistent API for data analysis and visualization. See "A Scientist's Guide to R blog" at https://craig.rbind.io/ for related tutorials. Note This package is currently in development and its functionality will be improved over time.
-License: GPL-3
+License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

@@ -1,3 +1,15 @@
+# Copyright 2019 Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and limitations under the License.
+
 # plot functions ------------------------------------------------------------
 # colour options --------------------------------------------------------
 #' @title
@@ -2986,7 +2998,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
 
   #produce the descriptive stats & plot
 
-  if(stat == "mean" & error == "se"){
+  if(stat == "mean" && error == "se"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
                      n = sum(!is.na(get(Y))),
@@ -3053,7 +3065,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
       p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 SE"))
     }
 
-  } else if(stat == "mean" & error == "sd"){
+  } else if(stat == "mean" && error == "sd"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
                      n = sum(!is.na(get(Y))),

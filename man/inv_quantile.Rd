@@ -25,5 +25,5 @@ inv_quantile(y = y, values = c(2, 25, 50, 75, 95), digits = 2)
 \code{\link[stats]{ecdf}}, \code{\link{round}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
 }
