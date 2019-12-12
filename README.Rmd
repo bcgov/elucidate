@@ -43,10 +43,31 @@ Drawing from similar inspiration, many elucidate functions are also designed to 
 
 You can install the development version of elucidate from the [BC SDPR Research Branch Azure repository](https://dev.azure.com/BC-SDPR-Research/R-elucidate) with:
 
+
 ``` r
-install.packages("R:/ResearchDB/repos/cache/local.r/elucidate_0.0.0.9009.tar.gz",
-                 repos = NULL, type="source", dependencies = TRUE)
-```
+# use devtools to install from a git repository
+library(devtools)
+
+install_git("git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate", 
+dependencies = TRUE)
+
+# if you need to specify a non-standard SSH keyfile
+cred <- git2r::cred_ssh_key('c:\\.ssh\\id_key.pub', 'c:\\.ssh\\id_key')
+
+install_git(
+  "git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate",
+  credentials = cred,
+  dependencies = TRUE
+)
+
+# if you want to install a specific branch or tag (e.g. a tagged version 1.0)
+install_git(
+"git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate",
+branch = "v1.0",
+dependencies = TRUE
+)
+``` 
+
 Note: this currently requires a connect to the local SDPR network while access to `elucidate` is limited to the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction) Research branch. Installation instructions will be updated after public release (pending administration approval).
 
 

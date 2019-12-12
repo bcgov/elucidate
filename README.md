@@ -67,12 +67,30 @@ for easy integration into data processing pipelines.
 
 You can install the development version of elucidate from the [BC SDPR
 Research Branch Azure
-repository](https://dev.azure.com/BC-SDPR-Research/R-elucidate)
-with:
+repository](https://dev.azure.com/BC-SDPR-Research/R-elucidate) with:
 
 ``` r
-install.packages("R:/ResearchDB/repos/cache/local.r/elucidate_0.0.0.9009.tar.gz",
-                 repos = NULL, type="source", dependencies = TRUE)
+# use devtools to install from a git repository
+library(devtools)
+
+install_git("git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate", 
+dependencies = TRUE)
+
+# if you need to specify a non-standard SSH keyfile
+cred <- git2r::cred_ssh_key('c:\\.ssh\\id_key.pub', 'c:\\.ssh\\id_key')
+
+install_git(
+  "git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate",
+  credentials = cred,
+  dependencies = TRUE
+)
+
+# if you want to install a specific branch or tag (e.g. a tagged version 1.0)
+install_git(
+"git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate",
+branch = "v1.0",
+dependencies = TRUE
+)
 ```
 
 Note: this currently requires a connect to the local SDPR network while
@@ -102,7 +120,7 @@ describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
 #>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100
 #>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1  1000  1000     0     0  99.9  4.92 0.155  84.4  96.7  100.  103.  116.
+#> 1  1000  1000     0     0 100.0  5.13 0.162  84.1  96.4  100.  104.  114.
 #> # ... with 2 more variables: skew <dbl>, kurt <dbl>
 
 #using a data frame and specifying a variable in that data frame
@@ -317,17 +335,17 @@ pdata[1:100, ] %>% describe_ci(y1, stat = mean)
 #> # A tibble: 1 x 3
 #>   lower  mean upper
 #>   <dbl> <dbl> <dbl>
-#> 1  96.7  98.4  100.
+#> 1  96.5  98.4  100.
 
 pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split by a grouping variable
 #> # A tibble: 5 x 4
 #>   g     lower  mean upper
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 a      94.2  97.1 100. 
-#> 2 b      96.9 101.  105. 
-#> 3 c      93.2  99.6 106. 
-#> 4 d      93.1  96.2  99.2
-#> 5 e      95.0  99.2 104.
+#> 1 a      94.3  97.1 100. 
+#> 2 b      96.8 101.  105. 
+#> 3 c      93.1  99.6 106. 
+#> 4 d      93.1  96.2  99.4
+#> 5 e      94.8  99.2 104.
 
 #confidence intervals for other statistics are obtained using bootstrapping
 pdata[1:100, ] %>% 
@@ -335,14 +353,14 @@ pdata[1:100, ] %>%
 #> # A tibble: 1 x 3
 #>   lower median upper
 #>   <dbl>  <dbl> <dbl>
-#> 1  96.5   97.8  100.
+#> 1  96.5   97.8  101.
 
 pdata[1:100, ] %>% 
   describe_ci(y1, stat = sd) #bootstrapped standard deviation
 #> # A tibble: 1 x 3
 #>   lower    sd upper
 #>   <dbl> <dbl> <dbl>
-#> 1  7.99  9.24  10.4
+#> 1  8.03  9.24  10.3
 
 #describe_ci_all will return CIs for all numeric variables in a data frame
 
@@ -350,7 +368,7 @@ describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
 #> # A tibble: 6 x 4
 #>   variable lower median upper
 #>   <chr>    <dbl>  <dbl> <dbl>
-#> 1 id       469     500.  532.
+#> 1 id       470     500.  532.
 #> 2 y1        99.8   101.  101.
 #> 3 y2        99.6   101.  101.
 #> 4 x1        47      51    53 
