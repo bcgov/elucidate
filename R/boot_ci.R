@@ -79,7 +79,7 @@
 #' @param na.rm should missing values be removed before attempting to calculate
 #'   the mean and confidence intervals? Default is TRUE.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'
@@ -226,7 +226,7 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
 #' @param na.rm should missing values be removed before attempting to calculate
 #'   the median and confidence intervals? Default is TRUE.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'
@@ -375,7 +375,7 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #' @param na.rm should missing values be removed before attempting to calculate
 #'   the chosen statistic and confidence intervals? Default is TRUE.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'

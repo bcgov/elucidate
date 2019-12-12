@@ -16,6 +16,7 @@
 #' A dataset containing randomly generated practice data of various classes for
 #' testing and developing elucidate package functions.
 #'
+#'
 #' @format A data frame of 12,000 rows and 10 columns
 #' \describe{
 #'  \item{id}{a sequence of numbers from 1:1000 labeling the row id, repeats for each unique value of d}

@@ -35,7 +35,7 @@
 #'   "base_r_colour_options.pdf". Must end in .pdf. Ignored if print_to_pdf =
 #'   FALSE.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
 #'
 #' @examples
 #' \dontrun{
@@ -253,7 +253,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @return A ggplot object or plotly object depending on whether static or
 #'   interactive output was requested.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
 #'
 #' @examples
 #' data(mtcars) #load the mtcars data
@@ -652,7 +652,7 @@ plot_density <- function(data, x, #essential parameters
 #' @return A ggplot object or plotly object depending on whether static or
 #'   interactive output was requested.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
 #'
 #' @examples
 #' data(mtcars) #load the mtcars data
@@ -1036,7 +1036,7 @@ plot_histogram <- function(data, x, #essential parameters
 #' @return A ggplot object or plotly object depending on whether static or
 #'   interactive output was requested.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
 #'
 #' @examples
 #' data(mtcars) #load the mtcars data
@@ -1467,7 +1467,7 @@ plot_box <- function(data, y,#essential parameters
 #' @return A ggplot object or plotly object depending on whether static or
 #'   interactive output was requested.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #' data(mtcars) #load the mtcars data
@@ -1998,7 +1998,7 @@ plot_violin <- function(data, y,#essential parameters
 #' @return A ggplot object or plotly object depending on whether static or
 #'   interactive output was requested.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #' data(mtcars) #load the mtcars data
@@ -2797,7 +2797,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   if output = "p", or as the "plot" component of a list also containing the
 #'   underlying "stats" as a 2nd component if output = "ps.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #' data(mtcars) #load the mtcars data

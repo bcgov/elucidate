@@ -30,7 +30,7 @@
 #' @param order "d" for descending/decreasing order. "a" or "i" for
 #'   ascending/increasing order.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #' @noRd
 tcv <- function(y, n = "all", order = "d") {
   if(order == "d") {
@@ -195,7 +195,7 @@ tcv <- function(y, n = "all", order = "d") {
 #'     \item{kurt}{the kurtosis of the distibution of y}
 #'   }
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'
@@ -451,7 +451,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = "all", ty
 #' @param order passed to \code{\link{describe}}
 #' @param na.rm passed to \code{\link{describe}}
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #' @noRd
 dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = "dt", order = "d", na.rm = TRUE) {
   ls <- list()
@@ -672,7 +672,7 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #'     \item{kurt}{the kurtosis of the distibution of y}
 #'   }
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'

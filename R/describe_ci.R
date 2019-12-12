@@ -97,7 +97,7 @@
 #'   the default output to facilitate subsequent use/modification of the output
 #'   with the tidyverse collection of packages.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'
@@ -282,7 +282,7 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 #'   the default output to facilitate subsequent use/modification of the output
 #'   with the tidyverse collection of packages.
 #'
-#' @author Craig P. Hutton, \email{craig.hutton@@gmail.com}
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
 #' @examples
 #'
