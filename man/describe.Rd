@@ -146,5 +146,5 @@ kurtosis. The Statistician, 47, 183-189.
 \code{\link[stats]{quantile}}, \code{\link{skewness}}, \code{\link{kurtosis}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{craig.hutton@gov.bc.ca}
 }

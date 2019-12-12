@@ -112,5 +112,5 @@ York: Chapman & Hall.
 \code{\link{describe_ci}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{craig.hutton@gov.bc.ca}
 }

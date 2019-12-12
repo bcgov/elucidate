@@ -220,5 +220,5 @@ Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.:
 \code{\link[ggplot2]{geom_density}}, \code{\link[plotly]{ggplotly}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

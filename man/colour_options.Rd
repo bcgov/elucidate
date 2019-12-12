@@ -32,5 +32,5 @@ colour_options(print_to_pdf = TRUE) #print to a single page PDF file in your wor
 Code was adapted from http://bc.bojanorama.pl/2013/04/r-color-reference-sheet/
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

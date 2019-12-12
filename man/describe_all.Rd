@@ -142,5 +142,5 @@ describe_all(high_low, output = "dt", class = c("n", "l"))
 \code{\link{describe}}
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{craig.hutton@gov.bc.ca}
 }

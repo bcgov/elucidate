@@ -395,5 +395,5 @@ York: Chapman & Hall.
 \code{\link[boot]{boot.ci}}, \code{\link{median_ci}},
 }
 \author{
-Craig P. Hutton, \email{craig.hutton@gmail.com}
+Craig P. Hutton, \email{craig.hutton@gov.bc.ca}
 }
