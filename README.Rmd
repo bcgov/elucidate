@@ -66,7 +66,7 @@ describe(data = rnorm(1:1000, 100, 5))
 
 describe(data = pdata, y = y1) #no grouping variables, numeric input class 
 
-describe(pdata, g2) #factor input class 
+describe(pdata, g) #factor input class 
 
 describe(pdata, even) #logical input class 
 
@@ -78,9 +78,9 @@ describe(pdata, d) #date input class
 
 describe(pdata, y1, high_low) #one grouping variable
 
-describe(pdata, y1, high_low, g2) #two grouping variables
+describe(pdata, y1, high_low, g) #two grouping variables
 
-description <- describe(pdata, y1, high_low, g2, even) #three grouping variables
+description <- describe(pdata, y1, high_low, g, even) #three grouping variables
 
 ```
 
@@ -117,7 +117,7 @@ counts(pdata$high_low) #output stucture is value_count, sorted in descending ord
 #use the order argument to sort in ascending order instead
 counts(pdata$high_low, order = "a") 
 
-counts_all(pdata[, c("high_low", "even", "g2")])
+counts_all(pdata[, c("high_low", "even", "g")])
 
 ```
 
@@ -129,7 +129,7 @@ Calculate confidence intervals for a sample mean, median or other summary statis
 #confidence intervals for the mean are calculated (by default) using a theoretical normal distribution...
 pdata[1:100, ] %>% describe_ci(y1, stat = mean)
 
-pdata[1:100, ] %>% describe_ci(y1, g2, stat = mean) #obtain CIs and means split by a grouping variable
+pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split by a grouping variable
 
 #confidence intervals for other statistics are obtained using bootstrapping
 pdata[1:100, ] %>% 
@@ -199,22 +199,11 @@ mtcars %>%
 
 
 #plot a statistic with error bars
-library(gapminder)
+library(gapminder) #import the gapminder dataset from the gapminder package
 
 gapminder %>%
    plot_stat_error(y = lifeExp, x = year, 
                    stat = "mean", error = "se", #mean +/- standard error, default error metric is a 95% CI
-                   colour_var = continent, 
-                   print_stats = T, #print the stats used for plotting to the console (FALSE by default)
-                   geom = "point", #either "bar" or "point"
-                   p_size = 3, #adjust the size of the points
-                   add_lines = T, #connect the points with lines. This is useful for repeated-measures data.
-                   alpha = 0.6) #adjusts the transparency
-
-gapminder %>%
-   plot_stat_error(y = lifeExp, x = year, 
-                   stat = "median", #plot the points using the median instead
-                   error = "ci", #generated using bootstrapping
                    colour_var = continent, 
                    geom = "point", #either "bar" or "point"
                    p_size = 3, #adjust the size of the points
@@ -227,28 +216,24 @@ The `%ni%` operator ("ni" for "not in") can help you subset your data like the `
 
 ```{r, eval = FALSE}
 #subset data to extract rows with matching values using "%in%"
-subset(pdata, g2 %in% c("a", "e"))
+subset(pdata, g %in% c("a", "e"))
 
 #subset data to extract rows with non-matching values using "%ni%"
-subset(pdata, g2 %ni% c("a", "e"))
+subset(pdata, g %ni% c("a", "e"))
 
 #equivalent to subset function for tidyverse users
-dplyr::filter(pdata, g2 %ni% c("a", "e"))
+dplyr::filter(pdata, g %ni% c("a", "e"))
 
 #output omitted for space considerations
 ```
 
 ## Development Notes
 
-`Elucidate` is still in the formative stage of development and considerable changes will occur to it over the next several months leading up to public release. For example, an additional function set (`model_*`), which will facilitate the fitting and evaluation of statistical models, is in the process of being drafted. Since the goal of `elucidate` is to help you understand the underlying processes that generated your data, coverage of models will be limited to those with a high degree of interpretability, e.g. linear, generalized linear, additive, mixed effects, etc. 
-
-These tend to be the types of models used for explanatory purposes and are the most common in scientific research, e.g. to evaluate the outcomes of a research project. Despite the great need to use these models, there currently isn't really a convenient API availble that makes it easy to figure out which functions/packages are needed to fit them or provide a consistent syntax for using and evaluating them. Unfortunately, this variety and inconsistency can be discouraging for science trainees and new R users, which is one of the things I hope to remedy.
-
-While `R` does offer a large number of predictive ("machine learning") models, these tend to have limited explanatory utility due to a lack of interpretability and they are also already covered quite well by other packages (e.g. [caret](https://topepo.github.io/caret/index.html)).
+`Elucidate` is still in the formative stage of development and considerable changes may occur to it over the next several months leading up to public release.
 
 ## Getting Help or Reporting an Issue
 
-To report bugs/issues/feature requests, please contact the package maintainer using the contact form located [here](https://craig.rbind.io/). After `elucidate` has been released publicly, a more formal method of reporting issues and requests will be implemented.
+To report bugs/issues/feature requests, please contact the package maintainer by [e-mail](mailto:Craig.Hutton@gov.bc.ca?subject=elucidate). After `elucidate` has been released publicly, a more formal method of reporting issues and requests will be implemented.
 
 ## License
 

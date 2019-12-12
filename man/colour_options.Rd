@@ -24,8 +24,7 @@ to specify custom colours for plots.
 \examples{
 \dontrun{
 #default settings. Prints to the active graphics device.
-colour_options(print_to_pdf = FALSE, pop_out_window = FALSE)
-colour_options() #same as above
+colour_options(print_to_pdf = FALSE) #the default
 colour_options(print_to_pdf = TRUE) #print to a single page PDF file in your working directory.
 }
 }

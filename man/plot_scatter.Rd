@@ -401,38 +401,37 @@ mtcars \%>\%
                regression_line = T, regression_se = T, regression_line_type = "dashed")
 
 #more complex example with overplotting
-gapminder::gapminder \%>\%
-  plot_scatter(y = lifeExp, x = year, colour_var = continent,
+pdata \%>\%
+  plot_scatter(y = y1, x = d, colour_var = g,
                regression_line = T)
 
 #option 1 for dealing with overplotting: add jittering to offset overlappping points
-gapminder::gapminder \%>\%
-  plot_scatter(y = lifeExp, x = year, colour_var = continent,
+ pdata \%>\%
+ plot_scatter(y = y1, x = d, colour_var = g,
                jitter = T,
                regression_line = T)
 
 #option 2: make overlapping values more transparent
-gapminder::gapminder \%>\%
-  plot_scatter(y = lifeExp, x = year, colour_var = continent,
-               jitter = F, alpha = 0.2,
+ pdata \%>\%
+  plot_scatter(y = y1, x = d, colour_var = g,
+               alpha = 0.2,
                regression_line = T)
 
 #option 3: do both and make it interactive
-gapminder::gapminder \%>\%
-  plot_scatter(y = lifeExp, x = year, colour_var = continent,
-               jitter = T, alpha = 0.3,
-               regression_line = T,
-               interactive = T)
+pdata \%>\%
+ plot_scatter(y = y1, x = d, colour_var = g,
+              jitter = T, alpha = 0.2,
+              regression_line = T, interactive = TRUE)
 
 #add a faceting variable
 windows()
-gapminder::gapminder \%>\%
- plot_scatter(y = lifeExp, x = year,
+pdata \%>\%
+ plot_scatter(y = y1, x = d,
               colour = "black", shape = 21, fill = "green4",
               jitter = T, size = 4, alpha = 0.1,
               regression_line = T, regression_se = T,
-              facet_var = continent,
-              ylab = "life expectancy",
+              facet_var = g,
+              ylab = "outcome",
               theme = "bw")
 
 #open a web page with details on the aesthetic options for ggplot2

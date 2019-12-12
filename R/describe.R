@@ -201,7 +201,7 @@ tcv <- function(y, n = "all", order = "d") {
 #'
 #' describe(data = pdata, y = y1) #no grouping variables, numeric input class
 #' describe(pdata, y1, high_low) #one grouping variable, numeric input class
-#' describe(pdata, g2) #factor input class
+#' describe(pdata, g) #factor input class
 #' describe(pdata, even) #logical input class
 #'
 #' @references
@@ -283,7 +283,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = "all", ty
     }
   } else {
     if(missing(y)){
-      stop("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.\nIf you want summaries for all variables in data, use elucidate::describe_all() instead")
+      stop("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.\nIf you want summaries for all variables in data, use describe_all() instead")
     }
     dt <- data.table::as.data.table(data)
     y <- deparse(substitute(y))

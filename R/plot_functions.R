@@ -40,8 +40,7 @@
 #' @examples
 #' \dontrun{
 #' #default settings. Prints to the active graphics device.
-#' colour_options(print_to_pdf = FALSE, pop_out_window = FALSE)
-#' colour_options() #same as above
+#' colour_options(print_to_pdf = FALSE) #the default
 #' colour_options(print_to_pdf = TRUE) #print to a single page PDF file in your working directory.
 #'}
 #' @references
@@ -2111,38 +2110,37 @@ plot_violin <- function(data, y,#essential parameters
 #'                regression_line = T, regression_se = T, regression_line_type = "dashed")
 #'
 #' #more complex example with overplotting
-#' gapminder::gapminder %>%
-#'   plot_scatter(y = lifeExp, x = year, colour_var = continent,
+#' pdata %>%
+#'   plot_scatter(y = y1, x = d, colour_var = g,
 #'                regression_line = T)
 #'
 #' #option 1 for dealing with overplotting: add jittering to offset overlappping points
-#' gapminder::gapminder %>%
-#'   plot_scatter(y = lifeExp, x = year, colour_var = continent,
+#'  pdata %>%
+#'  plot_scatter(y = y1, x = d, colour_var = g,
 #'                jitter = T,
 #'                regression_line = T)
 #'
 #' #option 2: make overlapping values more transparent
-#' gapminder::gapminder %>%
-#'   plot_scatter(y = lifeExp, x = year, colour_var = continent,
-#'                jitter = F, alpha = 0.2,
+#'  pdata %>%
+#'   plot_scatter(y = y1, x = d, colour_var = g,
+#'                alpha = 0.2,
 #'                regression_line = T)
 #'
 #' #option 3: do both and make it interactive
-#' gapminder::gapminder %>%
-#'   plot_scatter(y = lifeExp, x = year, colour_var = continent,
-#'                jitter = T, alpha = 0.3,
-#'                regression_line = T,
-#'                interactive = T)
+#' pdata %>%
+#'  plot_scatter(y = y1, x = d, colour_var = g,
+#'               jitter = T, alpha = 0.2,
+#'               regression_line = T, interactive = TRUE)
 #'
 #' #add a faceting variable
 #' windows()
-#' gapminder::gapminder %>%
-#'  plot_scatter(y = lifeExp, x = year,
+#' pdata %>%
+#'  plot_scatter(y = y1, x = d,
 #'               colour = "black", shape = 21, fill = "green4",
 #'               jitter = T, size = 4, alpha = 0.1,
 #'               regression_line = T, regression_se = T,
-#'               facet_var = continent,
-#'               ylab = "life expectancy",
+#'               facet_var = g,
+#'               ylab = "outcome",
 #'               theme = "bw")
 #'
 #' #open a web page with details on the aesthetic options for ggplot2
@@ -2811,46 +2809,37 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' mtcars %>% plot_stat_error(y = mpg, x = cyl, colour = "blue", geom = "point")
 #'
 #' \dontrun{
-#' library(gapminder)
 #'
-#' gapminder %>%
-#'   plot_stat_error(y = lifeExp, x = year, colour_var = continent, print_stats = T,
+#' pdata %>%
+#'   plot_stat_error(y = y1, x = d, colour_var = g, print_stats = T,
 #'                   geom = "point", p_size = 3,
 #'                   add_lines = T,
 #'                   dodge_width = 0,
 #'                   alpha = 0.6)
 #'
-#' windows()
-#' gapminder %>%
-#'  plot_stat_error(y = lifeExp, x = year, fill_var = continent,
-#'                  geom = "point",
-#'                  colour_var = country,
-#'                  add_lines = T, dodge_width = 0,
+#' pdata %>%
+#'  plot_stat_error(y = y1, x = g, flip_coordinates = T,
+#'                  fill_var = g, geom = "point", eb_size = 0.6,
 #'                  alpha = 0.6)
 #'
-#' gapminder %>%
-#'  plot_stat_error(y = lifeExp, x = continent, flip_coordinates = T,
-#'                  fill_var = continent, geom = "point", eb_size = 0.6,
-#'                  alpha = 0.6)
-#'
-#' gapminder %>%
-#'   plot_stat_error(y = lifeExp, x = continent, fill = "blue", alpha = 0.6,
+#' pdata %>%
+#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
 #'                   stat = "median", error = "quartile")
 #'
-#' gapminder %>%
-#'   plot_stat_error(y = lifeExp, x = continent, fill = "blue", alpha = 0.6,
+#' pdata %>%
+#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
 #'                   stat = "median", error = "ci")
 #'
 #'
-#' gapminder %>%
-#'   plot_stat_error(y = lifeExp, x = continent, fill = "blue", alpha = 0.6,
+#' pdata %>%
+#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
 #'                   stat = "mean", error = "ci", ci_level = 0.8, interactive = T)
 #'
 #' #when output = "ps" the plot is stored as the 1st element of a
 #' #list
 #'
-#' out <- gapminder %>%
-#'   plot_stat_error(y = lifeExp, x = continent, fill = "blue", alpha = 0.6,
+#' out <- pdata %>%
+#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
 #'                   stat = "mean", error = "ci", output = "ps")
 #'
 #' out$plot #print the plot to the appropriate active graphics device

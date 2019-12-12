@@ -309,7 +309,7 @@ counts <- function(y, n = "all", order = "d") {
 #'
 #' @export
 counts_all <- function(data, n = "all", order = "d") {
-  out <- purrr::map(data, ~counts(.x), n = n, order = order)
+  out <- purrr::map(data, ~counts(.x, n = n, order = order))
   return(out)
 }
 
@@ -646,13 +646,13 @@ recode_errors <- function(data, errors, replacement = NA,
 #' c(1:100) %ni% c(2, 3, 5, 10, 78:91)
 #'
 #' #subset data to extract rows with matching values using "%in%"
-#' subset(pdata, g2 %in% c("a", "e"))
+#' subset(pdata, g %in% c("a", "e"))
 #'
 #' #subset data to extract rows with non-matching values using "%ni%"
-#' subset(pdata, g2 %ni% c("a", "e"))
+#' subset(pdata, g %ni% c("a", "e"))
 #'
 #' #equivalent to subset function for tidyverse users
-#' dplyr::filter(pdata, g2 %ni% c("a", "e"))
+#' dplyr::filter(pdata, g %ni% c("a", "e"))
 #'
 #' @seealso \code{\link{match}}, \code{\link{Negate}}
 #'

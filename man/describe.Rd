@@ -128,7 +128,7 @@ in a data frame use \code{\link{describe_all}} instead.
 
 describe(data = pdata, y = y1) #no grouping variables, numeric input class
 describe(pdata, y1, high_low) #one grouping variable, numeric input class
-describe(pdata, g2) #factor input class
+describe(pdata, g) #factor input class
 describe(pdata, even) #logical input class
 
 }
