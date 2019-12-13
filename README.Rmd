@@ -68,9 +68,6 @@ dependencies = TRUE
 )
 ``` 
 
-Note: this currently requires a connect to the local SDPR network while access to `elucidate` is limited to the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction) Research branch. Installation instructions will be updated after public release (pending administration approval).
-
-
 The authors of `elucidate` acknowledge and express their gratitude to the authors of the [tidyverse packages](https://www.tidyverse.org/), [data.table](https://github.com/Rdatatable/data.table), and the functions of other dependency packages which were used to build `elucidate`, since without their effort and ingenuity `elucidate` would mostly have remained a collection of ideas instead of functions. 
 
 ## Usage
@@ -258,7 +255,7 @@ To report bugs/issues/feature requests, please contact the package maintainer by
 
 ## License
 
-Copyright 2017 Province of British Columbia
+Copyright 2019 Province of British Columbia
 
 Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
