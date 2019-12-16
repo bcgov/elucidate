@@ -37,5 +37,4 @@ stages:
     - template: ./templates/r-library.yml
     - template: ./templates/dev-dependency.yml
     - template: ./templates/pkg-dependency.yml
-    - template: ./templates/testthat.yml
     - template: ./templates/pkg-check.yml
