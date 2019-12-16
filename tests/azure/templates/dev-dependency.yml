@@ -1,0 +1,5 @@
+steps:
+- bash: |
+    Rscript -e "install.packages(c('remotes', 'rcmdcheck'))"
+    Rscript -e "install.packages(c('roxygen2', 'lintr', 'covr', 'testthat'))"
+  displayName: 'Install dev dependencies'

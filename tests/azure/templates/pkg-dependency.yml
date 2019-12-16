@@ -1,0 +1,4 @@
+steps:
+- bash: |
+    Rscript -e "remotes::install_deps('.', dependencies = NA)"
+  displayName: 'Install package dependencies'

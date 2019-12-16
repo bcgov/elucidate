@@ -1,0 +1,4 @@
+steps:
+- bash: |
+    Rscript -e 'testthat::test_dir("./tests/testthat", stop_on_failure=TRUE, stop_on_warning=TRUE, reporter="progress")'
+  displayName: 'Run tests via `testthat`'
