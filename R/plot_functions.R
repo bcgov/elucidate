@@ -440,7 +440,11 @@ plot_density <- function(data, x, #essential parameters
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
-    print(grDevices::windowsFonts())
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -830,7 +834,11 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
-    print(grDevices::windowsFonts())
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -1257,7 +1265,11 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
-    print(grDevices::windowsFonts())
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -1689,7 +1701,11 @@ plot_violin <- function(data, y,#essential parameters
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
-    print(grDevices::windowsFonts())
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -2442,7 +2458,11 @@ plot_scatter <- function(data, y, x,#essential parameters
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   if(font_options == TRUE){
-    print(grDevices::windowsFonts())
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -3539,7 +3559,11 @@ plot_stat_error <- function(data, y, x = NULL, geom = "bar",
     }
   }
   if(font_options == TRUE){
-    print(grDevices::windowsFonts())
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
   }
 
   if(legend_position != "right"){
