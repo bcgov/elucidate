@@ -21,8 +21,9 @@ Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structu
 
 ## Why `elucidate`?
 
-`elucidate` provides a collection of convenience functions to make data
-analysis in R easier and more accessible for researchers:
+`elucidate` provides a collection of convenience functions to make
+exploratory data analysis in R easier and more accessible to
+researchers:
 
   - Functions that help summarize data of multiple types (numeric,
     character strings, logicals, etc.) using descriptive statistics
@@ -96,7 +97,7 @@ describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
 #>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100
 #>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1  1000  1000     0     0  100.  4.93 0.156  83.4  97.0  100.  103.  117.
+#> 1  1000  1000     0     0   100  4.95 0.157  85.0  96.8  100.  103.  116.
 #> # ... with 2 more variables: skew <dbl>, kurt <dbl>
 
 #using a data frame and specifying a variable in that data frame
@@ -319,9 +320,9 @@ pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split b
 #>   <fct> <dbl> <dbl> <dbl>
 #> 1 a      94.3  97.1 100. 
 #> 2 b      97.0 101.  105. 
-#> 3 c      93.6  99.6 106. 
-#> 4 d      93.0  96.2  99.1
-#> 5 e      94.8  99.2 104.
+#> 3 c      93.2  99.6 106. 
+#> 4 d      93.0  96.2  99.2
+#> 5 e      94.7  99.2 104.
 
 #confidence intervals for other statistics are obtained using bootstrapping
 pdata[1:100, ] %>% 
@@ -336,7 +337,7 @@ pdata[1:100, ] %>%
 #> # A tibble: 1 x 3
 #>   lower    sd upper
 #>   <dbl> <dbl> <dbl>
-#> 1  8.00  9.24  10.4
+#> 1  7.96  9.24  10.4
 
 #describe_ci_all will return CIs for all numeric variables in a data frame
 
@@ -344,7 +345,7 @@ describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
 #> # A tibble: 6 x 4
 #>   variable lower median upper
 #>   <chr>    <dbl>  <dbl> <dbl>
-#> 1 id       470.    500.  532.
+#> 1 id       471     500.  530.
 #> 2 y1        99.8   101.  101.
 #> 3 y2        99.6   101.  101.
 #> 4 x1        47      51    53 
