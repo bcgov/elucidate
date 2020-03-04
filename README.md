@@ -21,7 +21,7 @@ Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structu
 
 ## Why `elucidate`?
 
-`Elucidate` provides a collection of convenience functions to make data
+`elucidate` provides a collection of convenience functions to make data
 analysis in R easier and more accessible for researchers:
 
   - Functions that help summarize data of multiple types (numeric,
@@ -96,7 +96,7 @@ describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
 #>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100
 #>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1  1000  1000     0     0  99.7  5.12 0.162  82.4  96.3  99.6  103.  119.
+#> 1  1000  1000     0     0  100.  4.93 0.156  83.4  97.0  100.  103.  117.
 #> # ... with 2 more variables: skew <dbl>, kurt <dbl>
 
 #using a data frame and specifying a variable in that data frame
@@ -317,10 +317,10 @@ pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split b
 #> # A tibble: 5 x 4
 #>   g     lower  mean upper
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 a      94.2  97.1 100. 
-#> 2 b      96.6 101.  105. 
-#> 3 c      93.1  99.6 106. 
-#> 4 d      92.9  96.2  99.3
+#> 1 a      94.3  97.1 100. 
+#> 2 b      97.0 101.  105. 
+#> 3 c      93.6  99.6 106. 
+#> 4 d      93.0  96.2  99.1
 #> 5 e      94.8  99.2 104.
 
 #confidence intervals for other statistics are obtained using bootstrapping
@@ -336,7 +336,7 @@ pdata[1:100, ] %>%
 #> # A tibble: 1 x 3
 #>   lower    sd upper
 #>   <dbl> <dbl> <dbl>
-#> 1  7.98  9.24  10.4
+#> 1  8.00  9.24  10.4
 
 #describe_ci_all will return CIs for all numeric variables in a data frame
 
@@ -344,7 +344,7 @@ describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
 #> # A tibble: 6 x 4
 #>   variable lower median upper
 #>   <chr>    <dbl>  <dbl> <dbl>
-#> 1 id       470     500.  532.
+#> 1 id       470.    500.  532.
 #> 2 y1        99.8   101.  101.
 #> 3 y2        99.6   101.  101.
 #> 4 x1        47      51    53 
@@ -464,7 +464,53 @@ mtcars %>%
 ``` r
 
 
-#plot a statistic with error bars
+#plot a mean with SE error bars
+
+mtcars %>% 
+  plot_stat_error(y = mpg, x = cyl, alpha = 0.6,
+                  stat = "mean", error = "se")
+```
+
+<img src="man/figures/README-plot-8.png" width="100%" />
+
+``` r
+
+
+#plot means with 95% confidence interval error bars 
+#using points instead of bars & customize fill colour
+mtcars %>% 
+  plot_stat_error(y = mpg, x = cyl, 
+                  geom = "point", 
+                  p_size = 3,
+                  fill = "darkorchid4", #default point shape is 21, which allows fill specification
+                  stat = "mean", error = "ci") 
+```
+
+<img src="man/figures/README-plot-9.png" width="100%" />
+
+``` r
+
+#notice that the y-axis default reflects the specified statistic (mean or
+#median) and error metric
+
+#You can also produce a bar graph of group medians with 95% bootstrapped
+#confidence interval error bars and easily modify fill, colour, and transparency
+mtcars %>% 
+  plot_stat_error(y = mpg, x = cyl,
+                  stat = "median", 
+                  fill = "blue2",
+                  colour = "black",
+                  alpha = 0.7, 
+                  replicates = 5000) #controls the number of bootstrapped samples to use
+```
+
+<img src="man/figures/README-plot-10.png" width="100%" />
+
+``` r
+
+
+#an example with longitudinal data
+
 library(gapminder) #import the gapminder dataset from the gapminder package
 
 gapminder %>%
@@ -472,12 +518,12 @@ gapminder %>%
                    stat = "mean", error = "se", #mean +/- standard error, default error metric is a 95% CI
                    colour_var = continent, 
                    geom = "point", #either "bar" or "point"
-                   p_size = 3, #adjust the size of the points
+                   p_size = 2, #adjust the size of the points
                    add_lines = T, #connect the points with lines. This is useful for repeated-measures data.
                    alpha = 0.6) #adjusts the transparency
 ```
 
-<img src="man/figures/README-plot-8.png" width="100%" />
+<img src="man/figures/README-plot-11.png" width="100%" />
 
 The `%ni%` operator (“ni” for “not in”) can help you subset your data
 like the `%in%` operator but returns an indicator for non-matches
@@ -486,22 +532,47 @@ exclusion criteria instead of inclusion criteria.
 
 ``` r
 #subset data to extract rows with matching values using "%in%"
-subset(pdata, g %in% c("a", "e"))
+subset(pdata, g %in% c("a", "e")) %>% 
+  head #only the 1st 6 rows are printed for space considerations
+#> # A tibble: 6 x 10
+#>      id d          g     high_low even     y1    y2    x1    x2    x3
+#>   <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>
+#> 1     1 2008-01-01 e     high     FALSE 106.  118.     59   116   248
+#> 2     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284
+#> 3     6 2008-01-01 a     high     TRUE  102.  114.     19   163   206
+#> 4     9 2008-01-01 e     low      FALSE  99.8  89.8    92   106   277
+#> 5    11 2008-01-01 a     high     FALSE  93.8 102.     56   142   285
+#> 6    12 2008-01-01 a     low      TRUE   96.5  92.4   100   111   277
 
 #subset data to extract rows with non-matching values using "%ni%"
-subset(pdata, g %ni% c("a", "e"))
+subset(pdata, g %ni% c("a", "e")) %>% head
+#> # A tibble: 6 x 10
+#>      id d          g     high_low even     y1    y2    x1    x2    x3
+#>   <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>
+#> 1     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238
+#> 2     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250
+#> 3     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287
+#> 4     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201
+#> 5     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249
+#> 6    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209
 
 #equivalent to subset function for tidyverse users
-dplyr::filter(pdata, g %ni% c("a", "e"))
-
-#output omitted for space considerations
+dplyr::filter(pdata, g %ni% c("a", "e")) %>% head
+#> # A tibble: 6 x 10
+#>      id d          g     high_low even     y1    y2    x1    x2    x3
+#>   <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>
+#> 1     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238
+#> 2     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250
+#> 3     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287
+#> 4     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201
+#> 5     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249
+#> 6    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209
 ```
 
 ## Development Notes
 
-`Elucidate` is still in the formative stage of development and
-considerable changes may occur to it over the next several months
-leading up to public release.
+`elucidate` is still in the formative stage of development and
+considerable changes may occur to it in the near future.
 
 ## Getting Help or Reporting an Issue
 

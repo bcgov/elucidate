@@ -19,10 +19,10 @@
 #' @description mean_ci returns confidence intervals for the mean of a numeric
 #'   vector. One might want to use bootstrapping to obtain robust estimates for
 #'   a confidence interval of the mean if the sample size is small (e.g. n = 10)
-#'   to directly calculate them from a theoretical normal distribution. Note
+#'   or calculate them from a theoretical normal distribution otherwise. Note
 #'   that the usual calculation based on quantiles of the theoretical
-#'   distribution can also be obtained with this function using the default
-#'   ci_type = "norm". This function provides a simplified user interface to the
+#'   distribution can be obtained with this function using the default ci_type =
+#'   "norm". This function provides a simplified user interface to the
 #'   \code{\link[boot]{boot}} and \code{\link[boot]{boot.ci}} functions
 #'   similarly to the \code{\link[simpleboot]{one.boot}} function but retains
 #'   more of the boot package's functionality, most notably including options
