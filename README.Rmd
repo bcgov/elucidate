@@ -41,31 +41,14 @@ Drawing from similar inspiration, many elucidate functions are also designed to 
 
 ## Installation
 
-You can install the development version of elucidate from the [BC SDPR Research Branch Azure repository](https://dev.azure.com/BC-SDPR-Research/R-elucidate) with:
-
+You can install the development version of elucidate from this repository with:
 
 ``` r
 # use devtools to install from a git repository
+# install.packages("devtools") #uncomment and run this 1st if you haven't installed devtools already
 library(devtools)
 
-install_git("git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate", 
-dependencies = TRUE)
-
-# if you need to specify a non-standard SSH keyfile
-cred <- git2r::cred_ssh_key('c:\\.ssh\\id_key.pub', 'c:\\.ssh\\id_key')
-
-install_git(
-  "git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate",
-  credentials = cred,
-  dependencies = TRUE
-)
-
-# if you want to install a specific branch or tag (e.g. a tagged version 1.0)
-install_git(
-"git@ssh.dev.azure.com:v3/BC-SDPR-Research/R-elucidate/R-elucidate",
-branch = "v1.0",
-dependencies = TRUE
-)
+install_github("bcgov/elucidate", dependencies = TRUE)
 ``` 
 
 The authors of `elucidate` acknowledge and express their gratitude to the authors of the [tidyverse packages](https://www.tidyverse.org/), [data.table](https://github.com/Rdatatable/data.table), and the functions of other dependency packages which were used to build `elucidate`, since without their effort and ingenuity `elucidate` would mostly have remained a collection of ideas instead of functions. 
@@ -104,7 +87,7 @@ description <- describe(pdata, y1, high_low, g, even) #three grouping variables
 
 To describe all variables in a data frame, use `describe_all()`:
 
-```{r describe_all}
+```{r describe_all, cache = TRUE}
 
 #if more than one class of variable is summarized you'll get a list
 #if only one class is present in the data, or only one is requested, you'll get a dataframe
@@ -128,7 +111,7 @@ pdata %>%
 
 If you want the counts for unique values of a variable, regardless of class, use `counts()` or `counts_all()`:
 
-```{r counts}
+```{r counts, cache = T}
 
 counts(pdata$high_low) #output stucture is value_count, sorted in descending order by default
 
