@@ -69,11 +69,11 @@ You can install the development version of elucidate from this
 repository with:
 
 ``` r
-# use devtools to install from a git repository
-# install.packages("devtools") #uncomment and run this 1st if you haven't installed devtools already
-library(devtools)
+# use the remotes package to install from a github repository
 
-install_github("bcgov/elucidate", dependencies = TRUE)
+install.packages("remotes") #only run this 1st if you haven't installed remotes before
+
+remotes::install_github("bcgov/elucidate")
 ```
 
 The authors of `elucidate` acknowledge and express their gratitude to
@@ -96,7 +96,7 @@ describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
 #>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100
 #>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1  1000  1000     0     0  100.  4.89 0.155  86.7  96.8  100.  104.  115.
+#> 1  1000  1000     0     0  99.7  5.12 0.162  82.4  96.3  99.6  103.  119.
 #> # ... with 2 more variables: skew <dbl>, kurt <dbl>
 
 #using a data frame and specifying a variable in that data frame
@@ -311,16 +311,16 @@ pdata[1:100, ] %>% describe_ci(y1, stat = mean)
 #> # A tibble: 1 x 3
 #>   lower  mean upper
 #>   <dbl> <dbl> <dbl>
-#> 1  96.7  98.4  100.
+#> 1  96.6  98.4  100.
 
 pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split by a grouping variable
 #> # A tibble: 5 x 4
 #>   g     lower  mean upper
 #>   <fct> <dbl> <dbl> <dbl>
 #> 1 a      94.2  97.1 100. 
-#> 2 b      97.0 101.  104. 
-#> 3 c      93.4  99.6 106. 
-#> 4 d      93.2  96.2  99.2
+#> 2 b      96.6 101.  105. 
+#> 3 c      93.1  99.6 106. 
+#> 4 d      92.9  96.2  99.3
 #> 5 e      94.8  99.2 104.
 
 #confidence intervals for other statistics are obtained using bootstrapping
@@ -336,7 +336,7 @@ pdata[1:100, ] %>%
 #> # A tibble: 1 x 3
 #>   lower    sd upper
 #>   <dbl> <dbl> <dbl>
-#> 1  8.00  9.24  10.3
+#> 1  7.98  9.24  10.4
 
 #describe_ci_all will return CIs for all numeric variables in a data frame
 
@@ -344,7 +344,7 @@ describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
 #> # A tibble: 6 x 4
 #>   variable lower median upper
 #>   <chr>    <dbl>  <dbl> <dbl>
-#> 1 id       470.    500.  530.
+#> 1 id       470     500.  532.
 #> 2 y1        99.8   101.  101.
 #> 3 y2        99.6   101.  101.
 #> 4 x1        47      51    53 

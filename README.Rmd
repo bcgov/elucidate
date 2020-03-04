@@ -44,11 +44,11 @@ Drawing from similar inspiration, many elucidate functions are also designed to 
 You can install the development version of elucidate from this repository with:
 
 ``` r
-# use devtools to install from a git repository
-# install.packages("devtools") #uncomment and run this 1st if you haven't installed devtools already
-library(devtools)
+# use the remotes package to install from a github repository
 
-install_github("bcgov/elucidate", dependencies = TRUE)
+install.packages("remotes") #only run this 1st if you haven't installed remotes before
+
+remotes::install_github("bcgov/elucidate")
 ``` 
 
 The authors of `elucidate` acknowledge and express their gratitude to the authors of the [tidyverse packages](https://www.tidyverse.org/), [data.table](https://github.com/Rdatatable/data.table), and the functions of other dependency packages which were used to build `elucidate`, since without their effort and ingenuity `elucidate` would mostly have remained a collection of ideas instead of functions. 
