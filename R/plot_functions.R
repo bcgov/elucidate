@@ -109,7 +109,6 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom plotly ggplotly
-#' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "x" and
@@ -493,7 +492,6 @@ plot_density <- function(data, x, #essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom plotly ggplotly
-#' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "x" and
@@ -888,7 +886,6 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom plotly ggplotly
-#' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "y" and
@@ -1319,7 +1316,6 @@ plot_box <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom plotly ggplotly
-#' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "y" and
@@ -1760,7 +1756,6 @@ plot_violin <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom plotly ggplotly
-#' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "y", the
@@ -2525,7 +2520,6 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom stats var
 #' @importFrom scales percent
 #' @importFrom plotly ggplotly
-#' @importFrom grDevices windowsFonts
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "y", the
