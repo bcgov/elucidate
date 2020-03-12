@@ -54,7 +54,7 @@ The output varies as a function of the class of input data/y, referred to as "y"
 \item{cases}{the total number of cases}
 \item{n}{number of complete cases}
 \item{na}{the number of missing values}
-\item{cases}{the proportion of total cases with missing values}
+\item{p_na}{the proportion of total cases with missing values}
 }
 
 In addition to part 1, these measures are provided for \strong{dates}:

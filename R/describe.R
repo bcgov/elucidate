@@ -144,7 +144,7 @@ tcv <- function(y, n = "all", order = "d") {
 #'     \item{cases}{the total number of cases}
 #'     \item{n}{number of complete cases}
 #'     \item{na}{the number of missing values}
-#'     \item{cases}{the proportion of total cases with missing values}
+#'     \item{p_na}{the proportion of total cases with missing values}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{dates}:
@@ -621,7 +621,7 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #'     \item{cases}{the total number of cases}
 #'     \item{n}{number of complete cases}
 #'     \item{na}{the number of missing values}
-#'     \item{cases}{the proportion of total cases with missing values}
+#'     \item{p_na}{the proportion of total cases with missing values}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{dates}:
