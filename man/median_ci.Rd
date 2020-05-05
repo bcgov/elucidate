@@ -4,8 +4,15 @@
 \alias{median_ci}
 \title{Obtain a bootstrapped confidence interval for the median of a numeric vector.}
 \usage{
-median_ci(y, replicates = 2000, ci_level = 0.95, ci_type = "bca",
-  parallel = FALSE, cores = NULL, na.rm = TRUE)
+median_ci(
+  y,
+  replicates = 2000,
+  ci_level = 0.95,
+  ci_type = "bca",
+  parallel = FALSE,
+  cores = NULL,
+  na.rm = TRUE
+)
 }
 \arguments{
 \item{y}{A vector/variable (required).}

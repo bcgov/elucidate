@@ -5,9 +5,18 @@
 \title{Confidence intervals for a summary statistic of numeric variables in a data
 frame.}
 \usage{
-describe_ci_all(data, ..., stat = mean, replicates = 2000,
-  ci_level = 0.95, ci_type = "perc", parallel = FALSE,
-  cores = NULL, na.rm = TRUE, output = "tibble")
+describe_ci_all(
+  data,
+  ...,
+  stat = mean,
+  replicates = 2000,
+  ci_level = 0.95,
+  ci_type = "perc",
+  parallel = FALSE,
+  cores = NULL,
+  na.rm = TRUE,
+  output = "tibble"
+)
 }
 \arguments{
 \item{data}{A data frame or tibble containing the numeric vectors to be

@@ -4,27 +4,71 @@
 \alias{plot_stat_error}
 \title{Plot a sample mean or median +/- error bars.}
 \usage{
-plot_stat_error(data, y, x = NULL, geom = "bar", stat = "mean",
-  error = "ci", ci_level = 0.95, ci_type = "perc",
-  replicates = 2000, parallel = FALSE, cores = NULL, xlab = NULL,
-  ylab = NULL, title = NULL, ..., ylim = c(NA, NA),
-  transform_y = FALSE, y_transformation = "log10",
-  x_var_order = NULL, x_var_labs = NULL, fill_var = NULL,
-  fill_var_order = NULL, fill_var_values = NULL,
-  fill_var_labs = NULL, fill_var_title = NULL, colour_var = NULL,
-  colour_var_order = NULL, colour_var_values = NULL,
-  colour_var_labs = NULL, colour_var_title = NULL, greyscale = FALSE,
-  b_width = 0.75, p_size = 2, p_shape = 21, dodge_width = 0.9,
-  eb_size = 0.3, eb_width = 0.2, eb_alpha = 1, eb_linetype = 1,
-  eb_colour = NULL, add_lines = F, line_alpha = 0.75,
-  line_group = NULL, line_colour = NULL, linetype = 1,
-  line_size = 0.5, theme = "classic", text_size = 14,
-  font = "sans", font_options = FALSE, flip_coordinates = FALSE,
-  omit_legend = FALSE, legend_position = "right", facet_var = NULL,
-  facet_var_order = NULL, facet_var_labs = NULL,
-  facet_var_strip_position = "top", facet_var_text_bold = TRUE,
-  print_stats = F, aesthetic_options = FALSE, output = "p",
-  interactive = FALSE, na.rm = TRUE)
+plot_stat_error(
+  data,
+  y,
+  x = NULL,
+  geom = "bar",
+  stat = "mean",
+  error = "ci",
+  ci_level = 0.95,
+  ci_type = "perc",
+  replicates = 2000,
+  parallel = FALSE,
+  cores = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  ...,
+  ylim = c(NA, NA),
+  transform_y = FALSE,
+  y_transformation = "log10",
+  x_var_order = NULL,
+  x_var_labs = NULL,
+  fill_var = NULL,
+  fill_var_order = NULL,
+  fill_var_values = NULL,
+  fill_var_labs = NULL,
+  fill_var_title = NULL,
+  colour_var = NULL,
+  colour_var_order = NULL,
+  colour_var_values = NULL,
+  colour_var_labs = NULL,
+  colour_var_title = NULL,
+  greyscale = FALSE,
+  b_width = 0.75,
+  p_size = 2,
+  p_shape = 21,
+  dodge_width = 0.9,
+  eb_size = 0.3,
+  eb_width = 0.2,
+  eb_alpha = 1,
+  eb_linetype = 1,
+  eb_colour = NULL,
+  add_lines = F,
+  line_alpha = 0.75,
+  line_group = NULL,
+  line_colour = NULL,
+  linetype = 1,
+  line_size = 0.5,
+  theme = "classic",
+  text_size = 14,
+  font = "sans",
+  font_options = FALSE,
+  flip_coordinates = FALSE,
+  omit_legend = FALSE,
+  legend_position = "right",
+  facet_var = NULL,
+  facet_var_order = NULL,
+  facet_var_labs = NULL,
+  facet_var_strip_position = "top",
+  facet_var_text_bold = TRUE,
+  print_stats = F,
+  aesthetic_options = FALSE,
+  output = "p",
+  interactive = FALSE,
+  na.rm = TRUE
+)
 }
 \arguments{
 \item{data}{A data frame or tibble containing the dependent measure "y", the
@@ -209,8 +253,8 @@ jittering set this to 0.}
 0.2.}
 
 \item{eb_alpha}{This adjusts the transparency/opacity of the graphical
-components of the error bars, ranging from 0 = 100\% transparent to 1 =
-100\% opaque.}
+components of the error bars, ranging from 0 = 100\\% transparent to 1 =
+100\\% opaque.}
 
 \item{eb_linetype}{Controls the error bar line type. Default = 1 or "solid".}
 
@@ -228,8 +272,8 @@ these parameters are specified and you want the lines split by a grouping
 variable, assign the chosen variable to line_group.}
 
 \item{line_alpha}{This adjusts the transparency/opacity of the lines
-connecting each (groupwise) estimate, ranging from 0 = 100\% transparent to
-1 = 100\% opaque.}
+connecting each (groupwise) estimate, ranging from 0 = 100\\% transparent to
+1 = 100\\% opaque.}
 
 \item{line_group}{Determines which variable to split the connecting lines on.
 Only required if (2 different) variabes are already assigned to both

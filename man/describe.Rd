@@ -4,8 +4,17 @@
 \alias{describe}
 \title{Obtain a descriptive summary of a variable.}
 \usage{
-describe(data, y = NULL, ..., digits = 3, order = "d", n = "all",
-  type = 2, na.rm = TRUE, output = "tibble")
+describe(
+  data,
+  y = NULL,
+  ...,
+  digits = 3,
+  order = "d",
+  n = "all",
+  type = 2,
+  na.rm = TRUE,
+  output = "tibble"
+)
 }
 \arguments{
 \item{data}{Either a vector or a data frame or tibble containing the

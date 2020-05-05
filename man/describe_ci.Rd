@@ -4,9 +4,19 @@
 \alias{describe_ci}
 \title{Obtain confidence intervals for a summary statistic of a numeric vector.}
 \usage{
-describe_ci(data, y = NULL, ..., stat = mean, replicates = 2000,
-  ci_level = 0.95, ci_type = "perc", parallel = FALSE,
-  cores = NULL, na.rm = TRUE, output = "tibble")
+describe_ci(
+  data,
+  y = NULL,
+  ...,
+  stat = mean,
+  replicates = 2000,
+  ci_level = 0.95,
+  ci_type = "perc",
+  parallel = FALSE,
+  cores = NULL,
+  na.rm = TRUE,
+  output = "tibble"
+)
 }
 \arguments{
 \item{data}{Either a numeric vector or a data frame or tibble containing the

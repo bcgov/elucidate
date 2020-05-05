@@ -4,8 +4,15 @@
 \alias{mean_ci}
 \title{Obtain a (bootstrapped) confidence interval for the mean of a numeric vector.}
 \usage{
-mean_ci(y, replicates = 2000, ci_level = 0.95, ci_type = "norm",
-  parallel = FALSE, cores = NULL, na.rm = TRUE)
+mean_ci(
+  y,
+  replicates = 2000,
+  ci_level = 0.95,
+  ci_type = "norm",
+  parallel = FALSE,
+  cores = NULL,
+  na.rm = TRUE
+)
 }
 \arguments{
 \item{y}{A vector/variable (required).}

@@ -4,11 +4,20 @@
 \alias{wash_df}
 \title{clean up a data frame by parsing/updating column classes.}
 \usage{
-wash_df(data, clean_names = TRUE, case = "snake",
-  remove_empty = TRUE, remove_which = c("rows", "cols"),
-  parse = TRUE, guess_integer = FALSE, na = c("", "NA"),
-  rownames_to_column = FALSE, col_name = "rowname",
-  column_to_rownames = FALSE, names_col = "rowname")
+wash_df(
+  data,
+  clean_names = TRUE,
+  case = "snake",
+  remove_empty = TRUE,
+  remove_which = c("rows", "cols"),
+  parse = TRUE,
+  guess_integer = FALSE,
+  na = c("", "NA"),
+  rownames_to_column = FALSE,
+  col_name = "rowname",
+  column_to_rownames = FALSE,
+  names_col = "rowname"
+)
 }
 \arguments{
 \item{data}{A messy data frame that contains inappropriate column
