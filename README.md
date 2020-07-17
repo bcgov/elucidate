@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# elucidate
+# elucidate <img src='man/figures/hex-elucidate.png' align="right" height="139" />
 
 <!-- badges: start -->
 
@@ -11,12 +11,9 @@
 ## Project Status
 
 This package is currently maintained by [Craig
-Hutton](https://craig.rbind.io/), a Data Science Fellow working with the
-Data Science and Analytics Branch of the [British Columbia Ministry of
-Citizens’
-Services](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/citizens-services)
-and the Research Branch of the [British Columbia Ministry of Social
-Development & Poverty
+Hutton](https://craig.rbind.io/), a Data Scientist working with the
+Research Branch of the [British Columbia Ministry of Social Development
+& Poverty
 Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction).
 
 ## Why `elucidate`?
@@ -62,7 +59,8 @@ designed to accept a data object as the 1st argument and to return a
 data or plotting object (e.g. ggplot2 or plotly) so they are compatible
 with the pipe operator from the
 [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package
-for easy integration into data processing pipelines.
+for easy integration into data processing pipelines. For convenience,
+the pipe operator is also imported when elucidate is loaded.
 
 ## Installation
 
@@ -95,25 +93,25 @@ library(elucidate)
 #using a vector as input
 describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
-#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100
-#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1  1000  1000     0     0   100  4.95 0.157  85.0  96.8  100.  103.  116.
-#> # ... with 2 more variables: skew <dbl>, kurt <dbl>
+#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew
+#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
+#> 1  1000  1000     0     0  100.  4.90 0.155  85.4  96.9  100.  103.  115. -0.029
+#> # ... with 1 more variable: kurt <dbl>
 
 #using a data frame and specifying a variable in that data frame
 
 describe(data = pdata, y = y1) #no grouping variables, numeric input class 
 #> # A tibble: 1 x 14
-#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100
-#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 12000 12000     0     0  154.  42.7  0.39  69.2  121.  145.  181.  289.
-#> # ... with 2 more variables: skew <dbl>, kurt <dbl>
+#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100  skew
+#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 12000 12000     0     0  154.  42.7  0.39  69.2  121.  145.  181.  289. 0.739
+#> # ... with 1 more variable: kurt <dbl>
 
 describe(pdata, g) #factor input class 
 #> # A tibble: 1 x 11
-#>   cases     n    na  p_na n_unique ordered v1_n   v2_n   v3_n   v4_n  v5_n 
-#>   <int> <int> <int> <dbl>    <int> <lgl>   <chr>  <chr>  <chr>  <chr> <chr>
-#> 1 12000 12000     0     0        5 FALSE   a_2592 b_2460 d_2376 e_23~ c_22~
+#>   cases     n    na  p_na n_unique ordered v1_n   v2_n   v3_n   v4_n   v5_n  
+#>   <int> <int> <int> <dbl>    <int> <lgl>   <chr>  <chr>  <chr>  <chr>  <chr> 
+#> 1 12000 12000     0     0        5 FALSE   a_2592 b_2460 d_2376 e_2352 c_2220
 
 describe(pdata, even) #logical input class 
 #> # A tibble: 1 x 8
@@ -137,28 +135,27 @@ describe(pdata, d) #date input class
 
 describe(pdata, y1, high_low) #one grouping variable
 #> # A tibble: 2 x 15
-#>   high_low cases     n    na  p_na  mean    sd    se    p0   p25   p50
-#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 high      6045  6045     0     0  154.  42.9 0.552  70.7  121.  145.
-#> 2 low       5955  5955     0     0  154.  42.5 0.551  69.2  121.  145.
-#> # ... with 4 more variables: p75 <dbl>, p100 <dbl>, skew <dbl>, kurt <dbl>
+#>   high_low cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75
+#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 high      6045  6045     0     0  154.  42.9 0.552  70.7  121.  145.  182.
+#> 2 low       5955  5955     0     0  154.  42.5 0.551  69.2  121.  145.  180.
+#> # ... with 3 more variables: p100 <dbl>, skew <dbl>, kurt <dbl>
 
 describe(pdata, y1, high_low, g) #two grouping variables
 #> # A tibble: 10 x 16
-#>    high_low g     cases     n    na  p_na  mean    sd    se    p0   p25
-#>    <chr>    <fct> <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1 high     e      1185  1185     0     0  134.  18.4 0.535  75.1  123.
-#>  2 high     c      1117  1117     0     0  177.  57.5 1.72   77.8  125.
-#>  3 low      d      1194  1194     0     0  174.  43.6 1.26   69.2  138.
-#>  4 high     a      1303  1303     0     0  134.  26.0 0.721  75.9  112.
-#>  5 low      b      1202  1202     0     0  151.  37.6 1.08   81.7  118.
-#>  6 low      e      1167  1167     0     0  135.  18.8 0.55   77.4  123.
-#>  7 low      c      1103  1103     0     0  177.  56.5 1.7    77.0  128.
-#>  8 low      a      1289  1289     0     0  134.  25.6 0.713  80.1  112.
-#>  9 high     d      1182  1182     0     0  174.  44.2 1.29   70.7  138.
-#> 10 high     b      1258  1258     0     0  152.  38.0 1.07   74.4  118.
-#> # ... with 5 more variables: p50 <dbl>, p75 <dbl>, p100 <dbl>, skew <dbl>,
-#> #   kurt <dbl>
+#>    high_low g     cases     n    na  p_na  mean    sd    se    p0   p25   p50
+#>    <chr>    <fct> <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1 high     e      1185  1185     0     0  134.  18.4 0.535  75.1  123.  136.
+#>  2 high     c      1117  1117     0     0  177.  57.5 1.72   77.8  125.  168.
+#>  3 low      d      1194  1194     0     0  174.  43.6 1.26   69.2  138.  173.
+#>  4 high     a      1303  1303     0     0  134.  26.0 0.721  75.9  112.  133.
+#>  5 low      b      1202  1202     0     0  151.  37.6 1.08   81.7  118.  143.
+#>  6 low      e      1167  1167     0     0  135.  18.8 0.55   77.4  123.  137.
+#>  7 low      c      1103  1103     0     0  177.  56.5 1.7    77.0  128.  163.
+#>  8 low      a      1289  1289     0     0  134.  25.6 0.713  80.1  112.  132.
+#>  9 high     d      1182  1182     0     0  174.  44.2 1.29   70.7  138.  178.
+#> 10 high     b      1258  1258     0     0  152.  38.0 1.07   74.4  118.  150.
+#> # ... with 4 more variables: p75 <dbl>, p100 <dbl>, skew <dbl>, kurt <dbl>
 
 description <- describe(pdata, y1, high_low, g, even) #three grouping variables
 ```
@@ -198,15 +195,15 @@ describe_all(pdata) #all summary types in a list, not split by any grouping vari
 #> 
 #> $numeric
 #> # A tibble: 6 x 15
-#>   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50
-#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 id       12000 12000     0     0 500.  289.  2.64    1   251.   500.
-#> 2 y1       12000 12000     0     0 154.   42.7 0.39   69.2 121.   145.
-#> 3 y2       12000 12000     0     0 100.   10.1 0.092  60.0  93.4  100.
-#> 4 x1       12000 12000     0     0  50.5  28.9 0.264   1    25     50 
-#> 5 x2       12000 12000     0     0 151.   28.8 0.263 101   126    150 
-#> 6 x3       12000 12000     0     0 250.   28.9 0.264 201   225    251 
-#> # ... with 4 more variables: p75 <dbl>, p100 <dbl>, skew <dbl>, kurt <dbl>
+#>   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75
+#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 id       12000 12000     0     0 500.  289.  2.64    1   251.   500.  750.
+#> 2 y1       12000 12000     0     0 154.   42.7 0.39   69.2 121.   145.  181.
+#> 3 y2       12000 12000     0     0 100.   10.1 0.092  60.0  93.4  100.  107.
+#> 4 x1       12000 12000     0     0  50.5  28.9 0.264   1    25     50    75 
+#> 5 x2       12000 12000     0     0 151.   28.8 0.263 101   126    150   176 
+#> 6 x3       12000 12000     0     0 250.   28.9 0.264 201   225    251   276 
+#> # ... with 3 more variables: p100 <dbl>, skew <dbl>, kurt <dbl>
 
 #only want summaries of certain variable classes? No problem, use the class argument: 
 
@@ -215,32 +212,32 @@ pdata %>%
   describe_all(high_low, 
                output = "dt", #you can ask for a tibble or data.table as output options
                class = "n") 
-#>     variable high_low cases    n na p_na    mean      sd    se      p0
-#>  1:       id     high  6045 6045  0    0 494.339 288.067 3.705   1.000
-#>  2:       id      low  5955 5955  0    0 506.754 289.205 3.748   1.000
-#>  3:       x1     high  6045 6045  0    0  50.499  28.760 0.370   1.000
-#>  4:       x1      low  5955 5955  0    0  50.490  29.117 0.377   1.000
-#>  5:       x2     high  6045 6045  0    0 150.870  28.829 0.371 101.000
-#>  6:       x2      low  5955 5955  0    0 150.429  28.812 0.373 101.000
-#>  7:       x3     high  6045 6045  0    0 250.458  28.941 0.372 201.000
-#>  8:       x3      low  5955 5955  0    0 250.537  28.791 0.373 201.000
-#>  9:       y1     high  6045 6045  0    0 153.740  42.936 0.552  70.748
-#> 10:       y1      low  5955 5955  0    0 153.669  42.511 0.551  69.224
-#> 11:       y2     high  6045 6045  0    0 108.084   6.081 0.078 100.005
-#> 12:       y2      low  5955 5955  0    0  91.980   6.179 0.080  59.963
-#>         p25     p50     p75     p100   skew   kurt
-#>  1: 245.000 489.000 743.000 1000.000  0.031 -1.203
-#>  2: 256.000 513.000 759.000 1000.000 -0.032 -1.194
-#>  3:  26.000  50.000  75.000  100.000  0.009 -1.199
-#>  4:  25.000  51.000  76.000  100.000  0.006 -1.217
-#>  5: 126.000 151.000 176.000  200.000  0.003 -1.213
-#>  6: 125.000 150.000 175.000  200.000  0.000 -1.206
-#>  7: 225.000 250.000 276.000  300.000  0.017 -1.214
-#>  8: 225.000 251.000 275.000  300.000 -0.004 -1.214
-#>  9: 120.520 144.509 182.297  289.235  0.721 -0.230
-#> 10: 121.375 145.085 179.503  288.781  0.758 -0.128
-#> 11: 103.233 106.867 111.612  142.181  0.996  0.862
-#> 12:  88.417  93.268  96.877   99.990 -1.055  1.125
+#>     variable high_low cases    n na p_na    mean      sd    se      p0     p25
+#>  1:       id     high  6045 6045  0    0 494.339 288.067 3.705   1.000 245.000
+#>  2:       id      low  5955 5955  0    0 506.754 289.205 3.748   1.000 256.000
+#>  3:       x1     high  6045 6045  0    0  50.499  28.760 0.370   1.000  26.000
+#>  4:       x1      low  5955 5955  0    0  50.490  29.117 0.377   1.000  25.000
+#>  5:       x2     high  6045 6045  0    0 150.870  28.829 0.371 101.000 126.000
+#>  6:       x2      low  5955 5955  0    0 150.429  28.812 0.373 101.000 125.000
+#>  7:       x3     high  6045 6045  0    0 250.458  28.941 0.372 201.000 225.000
+#>  8:       x3      low  5955 5955  0    0 250.537  28.791 0.373 201.000 225.000
+#>  9:       y1     high  6045 6045  0    0 153.740  42.936 0.552  70.748 120.520
+#> 10:       y1      low  5955 5955  0    0 153.669  42.511 0.551  69.224 121.375
+#> 11:       y2     high  6045 6045  0    0 108.084   6.081 0.078 100.005 103.233
+#> 12:       y2      low  5955 5955  0    0  91.980   6.179 0.080  59.963  88.417
+#>         p50     p75     p100   skew   kurt
+#>  1: 489.000 743.000 1000.000  0.031 -1.203
+#>  2: 513.000 759.000 1000.000 -0.032 -1.194
+#>  3:  50.000  75.000  100.000  0.009 -1.199
+#>  4:  51.000  76.000  100.000  0.006 -1.217
+#>  5: 151.000 176.000  200.000  0.003 -1.213
+#>  6: 150.000 175.000  200.000  0.000 -1.206
+#>  7: 250.000 276.000  300.000  0.017 -1.214
+#>  8: 251.000 275.000  300.000 -0.004 -1.214
+#>  9: 144.509 182.297  289.235  0.721 -0.230
+#> 10: 145.085 179.503  288.781  0.758 -0.128
+#> 11: 106.867 111.612  142.181  0.996  0.862
+#> 12:  93.268  96.877   99.990 -1.055  1.125
 
 #numeric and logical summaries only, split by a grouping variable
 pdata %>%
@@ -251,32 +248,32 @@ pdata %>%
 #> 2:     even      low  5955 5955  0    0   2986    2969  0.501   0.499
 #> 
 #> $numeric
-#>     variable high_low cases    n na p_na    mean      sd    se      p0
-#>  1:       id     high  6045 6045  0    0 494.339 288.067 3.705   1.000
-#>  2:       id      low  5955 5955  0    0 506.754 289.205 3.748   1.000
-#>  3:       x1     high  6045 6045  0    0  50.499  28.760 0.370   1.000
-#>  4:       x1      low  5955 5955  0    0  50.490  29.117 0.377   1.000
-#>  5:       x2     high  6045 6045  0    0 150.870  28.829 0.371 101.000
-#>  6:       x2      low  5955 5955  0    0 150.429  28.812 0.373 101.000
-#>  7:       x3     high  6045 6045  0    0 250.458  28.941 0.372 201.000
-#>  8:       x3      low  5955 5955  0    0 250.537  28.791 0.373 201.000
-#>  9:       y1     high  6045 6045  0    0 153.740  42.936 0.552  70.748
-#> 10:       y1      low  5955 5955  0    0 153.669  42.511 0.551  69.224
-#> 11:       y2     high  6045 6045  0    0 108.084   6.081 0.078 100.005
-#> 12:       y2      low  5955 5955  0    0  91.980   6.179 0.080  59.963
-#>         p25     p50     p75     p100   skew   kurt
-#>  1: 245.000 489.000 743.000 1000.000  0.031 -1.203
-#>  2: 256.000 513.000 759.000 1000.000 -0.032 -1.194
-#>  3:  26.000  50.000  75.000  100.000  0.009 -1.199
-#>  4:  25.000  51.000  76.000  100.000  0.006 -1.217
-#>  5: 126.000 151.000 176.000  200.000  0.003 -1.213
-#>  6: 125.000 150.000 175.000  200.000  0.000 -1.206
-#>  7: 225.000 250.000 276.000  300.000  0.017 -1.214
-#>  8: 225.000 251.000 275.000  300.000 -0.004 -1.214
-#>  9: 120.520 144.509 182.297  289.235  0.721 -0.230
-#> 10: 121.375 145.085 179.503  288.781  0.758 -0.128
-#> 11: 103.233 106.867 111.612  142.181  0.996  0.862
-#> 12:  88.417  93.268  96.877   99.990 -1.055  1.125
+#>     variable high_low cases    n na p_na    mean      sd    se      p0     p25
+#>  1:       id     high  6045 6045  0    0 494.339 288.067 3.705   1.000 245.000
+#>  2:       id      low  5955 5955  0    0 506.754 289.205 3.748   1.000 256.000
+#>  3:       x1     high  6045 6045  0    0  50.499  28.760 0.370   1.000  26.000
+#>  4:       x1      low  5955 5955  0    0  50.490  29.117 0.377   1.000  25.000
+#>  5:       x2     high  6045 6045  0    0 150.870  28.829 0.371 101.000 126.000
+#>  6:       x2      low  5955 5955  0    0 150.429  28.812 0.373 101.000 125.000
+#>  7:       x3     high  6045 6045  0    0 250.458  28.941 0.372 201.000 225.000
+#>  8:       x3      low  5955 5955  0    0 250.537  28.791 0.373 201.000 225.000
+#>  9:       y1     high  6045 6045  0    0 153.740  42.936 0.552  70.748 120.520
+#> 10:       y1      low  5955 5955  0    0 153.669  42.511 0.551  69.224 121.375
+#> 11:       y2     high  6045 6045  0    0 108.084   6.081 0.078 100.005 103.233
+#> 12:       y2      low  5955 5955  0    0  91.980   6.179 0.080  59.963  88.417
+#>         p50     p75     p100   skew   kurt
+#>  1: 489.000 743.000 1000.000  0.031 -1.203
+#>  2: 513.000 759.000 1000.000 -0.032 -1.194
+#>  3:  50.000  75.000  100.000  0.009 -1.199
+#>  4:  51.000  76.000  100.000  0.006 -1.217
+#>  5: 151.000 176.000  200.000  0.003 -1.213
+#>  6: 150.000 175.000  200.000  0.000 -1.206
+#>  7: 250.000 276.000  300.000  0.017 -1.214
+#>  8: 251.000 275.000  300.000 -0.004 -1.214
+#>  9: 144.509 182.297  289.235  0.721 -0.230
+#> 10: 145.085 179.503  288.781  0.758 -0.128
+#> 11: 106.867 111.612  142.181  0.996  0.862
+#> 12:  93.268  96.877   99.990 -1.055  1.125
 ```
 
 If you want the counts for unique values of a variable, regardless of
@@ -312,17 +309,17 @@ pdata[1:100, ] %>% describe_ci(y1, stat = mean)
 #> # A tibble: 1 x 3
 #>   lower  mean upper
 #>   <dbl> <dbl> <dbl>
-#> 1  96.6  98.4  100.
+#> 1  96.5  98.4  100.
 
 pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split by a grouping variable
 #> # A tibble: 5 x 4
 #>   g     lower  mean upper
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 a      94.3  97.1 100. 
-#> 2 b      97.0 101.  105. 
-#> 3 c      93.2  99.6 106. 
-#> 4 d      93.0  96.2  99.2
-#> 5 e      94.7  99.2 104.
+#> 1 a      94.2  97.1 100. 
+#> 2 b      96.6 101.  105. 
+#> 3 c      93.4  99.6 106. 
+#> 4 d      93.1  96.2  99.3
+#> 5 e      94.3  99.2 104.
 
 #confidence intervals for other statistics are obtained using bootstrapping
 pdata[1:100, ] %>% 
@@ -337,7 +334,7 @@ pdata[1:100, ] %>%
 #> # A tibble: 1 x 3
 #>   lower    sd upper
 #>   <dbl> <dbl> <dbl>
-#> 1  7.96  9.24  10.4
+#> 1  8.04  9.24  10.4
 
 #describe_ci_all will return CIs for all numeric variables in a data frame
 
@@ -345,7 +342,7 @@ describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
 #> # A tibble: 6 x 4
 #>   variable lower median upper
 #>   <chr>    <dbl>  <dbl> <dbl>
-#> 1 id       471     500.  530.
+#> 1 id       470.    500.  531 
 #> 2 y1        99.8   101.  101.
 #> 3 y2        99.6   101.  101.
 #> 4 x1        47      51    53 
@@ -447,6 +444,7 @@ mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue", draw_quantiles = c(0.25,
 mtcars %>% plot_scatter(y = mpg, x = hp, colour_var = cyl, 
                         regression_line = T, 
                         regression_method = "lm") #default is to fit lines using a generalized additive model
+#> `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="man/figures/README-plot-6.png" width="100%" />

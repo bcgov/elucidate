@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# elucidate
+# elucidate <img src='man/figures/hex-elucidate.png' align="right" height="139" />
 
 <!-- badges: start -->
 <a id="devex-badge" rel="Exploration" href="https://github.com/BCDevExchange/assets/blob/master/README.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Project Status
 
-This package is currently maintained by [Craig Hutton](https://craig.rbind.io/), a Data Science Fellow working with the Data Science and Analytics Branch of the [British Columbia Ministry of Citizens’ Services](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/citizens-services) and the Research Branch of the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction).
+This package is currently maintained by [Craig Hutton](https://craig.rbind.io/), a Data Scientist working with the Research Branch of the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction).
 
 ## Why `elucidate`?
 
@@ -37,7 +37,7 @@ This package is currently maintained by [Craig Hutton](https://craig.rbind.io/),
 
 Inspired by tidyverse naming conventions, the core functions of `elucidate` are organized into sets that begin with a common root (e.g. `describe*`, `plot_*`), since this enables the user to see them all as suggestions as you are coding in R studio.
 
-Drawing from similar inspiration, many elucidate functions are also designed to accept a data object as the 1st argument and to return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package for easy integration into data processing pipelines.
+Drawing from similar inspiration, many elucidate functions are also designed to accept a data object as the 1st argument and to return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package for easy integration into data processing pipelines. For convenience, the pipe operator is also imported when elucidate is loaded.
 
 ## Installation
 
