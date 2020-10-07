@@ -4,8 +4,14 @@
 \alias{recode_errors}
 \title{Recode a vector of erroneous values in a vector or data frame column(s).}
 \usage{
-recode_errors(data, errors, replacement = NA, rows = c(1:nrow(data)),
-  cols = c(1:ncol(data)), ind = c(1:length(data)))
+recode_errors(
+  data,
+  errors,
+  replacement = NA,
+  rows = c(1:nrow(data)),
+  cols = c(1:ncol(data)),
+  ind = c(1:length(data))
+)
 }
 \arguments{
 \item{data}{A vector, data frame, tibble, or matrix.}

@@ -30,9 +30,9 @@ use cases see \code{\link{describe}}.
 #using a numeric vector
 y <- c(1, 1, 2, 3, 4, 5, 6, 2, 3, 4, 2, 9, 5, 6, 7, 23, 5, 6, 7, 8, 3, 4, 5, 6)
 
-counts(y) #all unique values of y in order of descending frequency \\code{y}
-counts(y, n = 1) #the most common value of \\code{y}
-counts(y, n = 5) #the top 5 most common unique values of \\code{y}
+counts(y) #all unique values of y in order of descending frequency \code{y}
+counts(y, n = 1) #the most common value of \code{y}
+counts(y, n = 5) #the top 5 most common unique values of \code{y}
 
 }
 \seealso{

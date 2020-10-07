@@ -6,17 +6,21 @@
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under
+# the License.
 
 
 # global variable definitions ---------------------------------------------
 utils::globalVariables(c(".", "group", "measure", "variable", ".N", "tcvs",
-                         "skew_p", "kurt_p", "SW_W", "SW_p", "upper", "lower", "var",
+                         "skew_p", "kurt_p", "SW_W", "SW_p",
+                         "upper", "lower", "var",
                          "p50_LB", "p50_UB", "n", "normal",
                          "box", "hist", "par", "image", "col2rgb",
                          "text", "mtext", "dev.off", "windows",
                          ":=", "vars", "element_text", "CI_level",
                          "mean_LB", "mean_UB", "median_LB", "median_UB",
-                         "p50", "p25", "p75"))
+                         "p50", "p25", "p75",
+                         "n_copies", "copy_number", "dupe_count"))

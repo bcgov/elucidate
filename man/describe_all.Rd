@@ -4,8 +4,17 @@
 \alias{describe_all}
 \title{Obtain descriptive summaries for all variables in a data frame.}
 \usage{
-describe_all(data, ..., class = "all", digits = 3, order = "d",
-  n = 5, type = 2, na.rm = TRUE, output = "tibble")
+describe_all(
+  data,
+  ...,
+  class = "all",
+  digits = 3,
+  order = "d",
+  n = 5,
+  type = 2,
+  na.rm = TRUE,
+  output = "tibble"
+)
 }
 \arguments{
 \item{data}{A data frame or tibble.}

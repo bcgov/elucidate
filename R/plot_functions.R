@@ -2704,8 +2704,8 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   0.2.
 #'
 #' @param eb_alpha This adjusts the transparency/opacity of the graphical
-#'   components of the error bars, ranging from 0 = 100\% transparent to 1 =
-#'   100\% opaque.
+#'   components of the error bars, ranging from 0 = 100 percent transparent to 1
+#'   = 100% percent opaque.
 #'
 #' @param eb_linetype Controls the error bar line type. Default = 1 or "solid".
 #'
@@ -2723,8 +2723,8 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   variable, assign the chosen variable to line_group.
 #'
 #' @param line_alpha This adjusts the transparency/opacity of the lines
-#'   connecting each (groupwise) estimate, ranging from 0 = 100\% transparent to
-#'   1 = 100\% opaque.
+#'   connecting each (groupwise) estimate, ranging from 0 = 100 percent
+#'   transparent to 1 = 100 percent opaque.
 #'
 #' @param line_group Determines which variable to split the connecting lines on.
 #'   Only required if (2 different) variabes are already assigned to both
@@ -2793,8 +2793,9 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
 #'   online aesthetic options vignette.
 #'
-#' @param interactive Determines whether a static ggplot object or an interactive html
-#'   plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.
+#' @param interactive Determines whether a static ggplot object or an
+#'   interactive html plotly object is returned. See
+#'   \code{\link[plotly]{ggplotly}} for details.
 #'
 #' @param output Set to "p" if only want the ggplot or plotly object (depending
 #'   on whether interactive = T or F) to be returned. Set to "ps" if you would
@@ -2881,7 +2882,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   \code{\link[boot]{boot.ci}}, \code{\link{median_ci}},
 #'
 #' @export
-plot_stat_error <- function(data, y, x = NULL, geom = "bar",
+plot_stat_error <- function(data, y, x = NULL, geom = "point",
                             stat = "mean", error = "ci", ci_level = 0.95, ci_type = "perc",
                             replicates = 2000, parallel = FALSE, cores = NULL,
                             xlab = NULL, ylab = NULL, title = NULL, ...,

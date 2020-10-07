@@ -22,7 +22,7 @@
 #'
 #' @param y a numeric vector/variable.
 #'
-#' @param na.rm Should missing valued be removed before attempting to calculate
+#' @param na.rm Should missing values be removed before attempting to calculate
 #'   the standard error (TRUE/FALSE)?
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
@@ -313,6 +313,109 @@ counts_all <- function(data, n = "all", order = "d") {
   return(out)
 }
 
+
+# counts_tb: top and bottom n counts --------------------------------------
+#' @title
+#' Obtain the top and bottom "n" counts for unique values of a vector.
+#'
+#' @description \code{counts_tb} is a convenience extension of
+#'   \code{\link{counts}} that returns the most AND least common "n" unique
+#'   value(s) a vector. This is useful for identifying data entry errors or rare
+#'   cases. For complex use cases see \code{\link{describe}}.
+#'
+#' @importFrom tidyr separate
+#'
+#' @param y A vector.
+#'
+#' @param n The number of top & bottom unique values you want frequency counts
+#'   for. Default is 10 (fewer than "n" will be shown if there aren't "n" unique
+#'   values).
+#'
+#' @param na.rm Should missing values be omitted?
+#'
+#' @return A list of data frames of the top and bottom counts for each variable
+#'   of the input data frame. Return value columns are "top_v" = top value,
+#'   "top_n" = count of the top value in the same row of the adjacent top_v
+#'   column, "bot_v" = bottom value, & "bot_n" = count of the bottom value in
+#'   the same row of the adjacent bot_v column.
+#'
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
+#'
+#' @examples
+#' #using the mtcars data
+#' data(mtcars)
+#'
+#' counts_tb(mtcars$cyl) #top & bottom values
+#'
+#' @seealso \code{\link{counts_tb_all}}, \code{\link{counts_all}}, \code{\link{counts}}
+#'
+#' @export
+counts_tb <- function(y, n = 10, na.rm = T) {
+  top <- counts(y, n = n, order = "d")
+  bot <- counts(y, n = n, order = "a")
+  out <- data.frame(top, bot)
+  out <- tidyr::separate(out, col = "top", into = c("top_v", "top_n"), sep = "_")
+  out <- tidyr::separate(out, col = "bot", into = c("bot_v", "bot_n"), sep = "_")
+
+  if(na.rm == T) {
+    out <- na.omit(out)
+  }
+  return(out)
+}
+
+
+
+# counts_tb_all -----------------------------------------------------------
+#' @title
+#' Obtain the top and bottom "n" counts for unique values of all variables in a
+#' data frame.
+#'
+#' @description \code{counts_tb_all} is an extension of \code{\link{counts_tb}}
+#'   that returns the most or least common unique value(s) for each column
+#'   vector of a data frame. Also useful for identifying data entry errors or
+#'   rare cases. For complex use cases see \code{\link{describe_all}}.
+#'
+#' @importFrom purrr map
+#'
+#' @param data A data frame (required).
+#'
+#' @param n The number of top & bottom unique values you want frequency counts
+#'   for. Default is 10 (fewer than "n" will be shown if there aren't "n" unique
+#'   values).
+#'
+#' @param na.rm Should missing values be omitted?
+#'
+#' @return A list of data frames of the top and bottom counts for each variable
+#'   of the input data frame. Return value columns are "top_v" = top value,
+#'   "top_n" = count of the top value in the same row of the adjacent top_v
+#'   column, "bot_v" = bottom value, & "bot_n" = count of the bottom value in
+#'   the same row of the adjacent bot_v column.
+#'
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
+#'
+#' @examples
+#' #using the mtcars data
+#' df <- data(mtcars)
+#'
+#' counts_tb_all(df) #(up to) the top & bottom 10 values
+#'
+#' #the most & least common values of all variables in \code{data}
+#' counts_tb_all(df, n = 1)
+#'
+#' #the top 5 most & least common unique values for all variables in  \code{data}
+#' counts_tb_all(df, n = 5)
+#'
+#' @seealso \code{\link{counts_all}}, \code{\link{counts_tb}}, \code{\link{counts}}
+#'
+#' @export
+counts_tb_all <- function(data, n = 10, na.rm = T) {
+  out <- purrr::map(data,
+                    ~counts_tb(.x, n = n, na.rm = na.rm))
+  return(out)
+}
+
 # static_to_dynamic -------------------------------------------------------
 #' @title Convert a static data frame or ggplot object to a dynamic form.
 #'
@@ -449,8 +552,8 @@ static_to_dynamic <- function(static_object, caption = NULL){
 #' @param names_col If column_to_rownames = TRUE, this specifies the column
 #'   containing the names you want to assign to the rows of the data object.
 #'
-#' @return An updated version of the input vector that has been translated from
-#'   the old coding scheme to the new one.
+#' @return An updated version of the input data, modified according to the
+#'   chosen options.
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
@@ -500,14 +603,14 @@ wash_df <- function(data, clean_names = TRUE, case = "snake",
   if (parse == TRUE) {
     data <- data %>%
       purrr::map_dfc(~as.character(.x)) %>%
-      purrr::map_dfc(~readr::parse_guess(.x, na = na, guess_integer = guess_integer))
+      purrr::map_dfc(~readr::parse_guess(.x, na = na,
+                                         guess_integer = guess_integer))
   }
 
   if (column_to_rownames == TRUE) {
     data <- data %>%
       tibble::column_to_rownames(., var = names_col)
   }
-
   return(data)
 }
 
@@ -660,4 +763,54 @@ recode_errors <- function(data, errors, replacement = NA,
 "%ni%" <- function(x, y) {
   nm <- !(x %in% y)
   return(nm)
+}
+
+
+
+# consum: consecutive summation -------------------------------------------
+#' @title
+#' consecutive summation
+#'
+#' @description Calculate a rolling sum of consecutive TRUE values for a logical
+#'   vector or "1" values for a binary vector. The total will continue
+#'   increasing as it moves along the vector and encouters only 1/TRUE, then
+#'   will reset after encountering a 0/FALSE value. When working with monthly
+#'   service utilization data with rows organized by ID and month, this is
+#'   useful for estimating things like how many consecutive months someone used
+#'   a service.
+#'
+#' @importFrom data.table rowid
+#' @importFrom data.table rleid
+#'
+#' @param x the logical or binary vector to summed.
+#'
+#' @param skip_na Should consecutive counting resume or reset after encountering
+#'   a missing value (NA)? Default is FALSE.
+#'
+#' @return A numeric vector of the same length as x with the consecutive total.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
+#'
+#' @examples
+#'
+#' x <- c(rep(1, 8), rep(0, 5), rep(1, 4), rep(NA_real_, 2), rep(1, 6))
+#'
+#' consum(x)
+#'
+#' consum(x, skip_na = TRUE)
+#'
+#'
+#' @seealso \code{\link{match}}, \code{\link{Negate}}
+#'
+#' @export
+consum <- function(x, skip_na = FALSE) {
+  if(!is.logical(x) && all(x %in% c(0, 1, NA, NA_integer_, NA_real_)) == FALSE) {
+    stop("The x argument input must be a logical or binary vector.")
+  }
+  if(skip_na == TRUE) {
+    x[!is.na(x)] <- data.table::rowid(data.table::rleid(x[!is.na(x)]))*x[!is.na(x)]
+  } else {
+    x <- data.table::rowid(data.table::rleid(x))*x
+  }
+  return(x)
 }

@@ -4,8 +4,7 @@
 \alias{colour_options}
 \title{Display the base R colour options.}
 \usage{
-colour_options(print_to_pdf = FALSE,
-  pdf_name = "base_r_colour_options.pdf")
+colour_options(print_to_pdf = FALSE, pdf_name = "base_r_colour_options.pdf")
 }
 \arguments{
 \item{print_to_pdf}{IF TRUE, output is exported to a PDF in the working

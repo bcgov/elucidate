@@ -16,8 +16,8 @@ A logical vector of the same length as x which is FALSE for matching
 values of y and TRUE for non-matching values of y.
 }
 \description{
-"%ni%" is a convenience shortcut for the
-negation of the match function (i.e. the %in%" operator).
+"\%ni\%" is a convenience shortcut for the
+negation of the match function (i.e. the \%in\%" operator).
 }
 \examples{
 c(1:100) \%ni\% c(2, 3, 5, 10, 78:91)

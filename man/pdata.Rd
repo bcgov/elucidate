@@ -4,7 +4,8 @@
 \name{pdata}
 \alias{pdata}
 \title{practice data for package testing and development}
-\format{A data frame of 12,000 rows and 10 columns
+\format{
+A data frame of 12,000 rows and 10 columns
 \describe{
 \item{id}{a sequence of numbers from 1:1000 labeling the row id, repeats for each unique value of d}
 \item{d}{a sequence of dates (yyyy-mm-dd) ranging from 2008-01-01 to 2019-01-01 in 1 year increments}
@@ -16,7 +17,8 @@
 \item{x1}{random sample of values between 1-100}
 \item{x2}{random sample of values between 101-200}
 \item{x3}{random sample of values between 201-300}
-}}
+}
+}
 \source{
 "Randomly generated data"
 }

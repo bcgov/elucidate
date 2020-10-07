@@ -4,20 +4,45 @@
 \alias{plot_violin}
 \title{Generate a violin plot.}
 \usage{
-plot_violin(data, y, x = NULL, ..., fill_var = NULL,
-  colour_var = NULL, xlab = NULL, ylab = NULL, title = NULL,
-  fill_var_title = NULL, colour_var_title = NULL, ylim = c(NA, NA),
-  transform_y = FALSE, y_transformation = "log10",
-  x_var_order = NULL, x_var_labs = NULL, fill_var_order = NULL,
-  colour_var_order = NULL, fill_var_labs = NULL,
-  colour_var_labs = NULL, fill_var_values = NULL,
-  colour_var_values = NULL, alpha = 0.6, greyscale = FALSE,
-  theme = "classic", text_size = 14, font = "sans",
-  font_options = FALSE, facet_var = NULL, facet_var_order = NULL,
-  facet_var_labs = NULL, facet_var_strip_position = "top",
-  facet_var_text_bold = TRUE, legend_position = "right",
-  omit_legend = FALSE, interactive = FALSE,
-  aesthetic_options = FALSE)
+plot_violin(
+  data,
+  y,
+  x = NULL,
+  ...,
+  fill_var = NULL,
+  colour_var = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  fill_var_title = NULL,
+  colour_var_title = NULL,
+  ylim = c(NA, NA),
+  transform_y = FALSE,
+  y_transformation = "log10",
+  x_var_order = NULL,
+  x_var_labs = NULL,
+  fill_var_order = NULL,
+  colour_var_order = NULL,
+  fill_var_labs = NULL,
+  colour_var_labs = NULL,
+  fill_var_values = NULL,
+  colour_var_values = NULL,
+  alpha = 0.6,
+  greyscale = FALSE,
+  theme = "classic",
+  text_size = 14,
+  font = "sans",
+  font_options = FALSE,
+  facet_var = NULL,
+  facet_var_order = NULL,
+  facet_var_labs = NULL,
+  facet_var_strip_position = "top",
+  facet_var_text_bold = TRUE,
+  legend_position = "right",
+  omit_legend = FALSE,
+  interactive = FALSE,
+  aesthetic_options = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame or tibble containing the dependent measure "y" and
@@ -120,7 +145,7 @@ colour_var_values = c("blue", "red"). See
 options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
 \item{alpha}{This adjusts the transparency/opacity of the graphical
-components of the plot, ranging from 0 = 100% transparent to 1 = 100%
+components of the plot, ranging from 0 = 100\% transparent to 1 = 100\%
 opaque.}
 
 \item{greyscale}{Set to TRUE if you want the plot converted to greyscale.}
