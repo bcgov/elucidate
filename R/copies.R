@@ -166,17 +166,6 @@ copies <- function(data, ...,
     df <- unique(df, by = data.table::key(df), fromLast = FALSE)
   } else if(filter == "last"){
     df <- unique(df, by = data.table::key(df), fromLast = TRUE)
-  } else if(filter == "first") {
-    df[, copy_number := 1:.N,
-       by = eval(data.table::key(df))]
-    df <- df[copy_number == 1]
-    df[, copy_number := NULL]
-  } else if(filter == "last") {
-    df[, `:=` (copy_number = 1:.N,
-               n_copies = .N),
-       by = eval(data.table::key(df))]
-    df[, `:=`(copy_number = NULL, n_copies = NULL)]
-    df[, copy_number := NULL]
   } else if(filter == "unique") {
     df[, n_copies := .N,
        by = eval(data.table::key(df))]
