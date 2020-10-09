@@ -68,9 +68,9 @@
 #' @param na_last should rows of the specified columns with missing values be
 #'   listed below non-missing values (TRUE/FALSE)? Default is FALSE.
 #'
-#' @param output "tibble" for tibble or "dt" for data.table. Tibble is used as
-#'   the default output to facilitate subsequent use/modification of the output
-#'   with the tidyverse collection of packages.
+#' @param output "tibble" for tibble, "dt" for data.table, or "data.frame" for a
+#'   data frame. "same", the default option, returns the same format as the
+#'   input data.
 #'
 #' @return If `filter` argument is set to "all", returns a modified version of the
 #'   input data frame with two additional columns added to the end/right side:
@@ -123,11 +123,12 @@ copies <- function(data, ...,
                    sort_by_copies = FALSE,
                    order = c("d", "a", "i"),
                    na_last = FALSE,
-                   output = c("tibble", "dt")) {
+                   output = c("same", "tibble", "dt", "data.frame")) {
 
   filter <- match.arg(filter, several.ok = FALSE)
   order <-  match.arg(order, several.ok = FALSE)
   output <-  match.arg(output, several.ok = FALSE)
+
 
   if(!missing(...)) {
     g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
@@ -135,12 +136,21 @@ copies <- function(data, ...,
       data <- data[, g]
     }
   } else {
-    message("no column names specified - using all columns")
+    message("No column names specified - using all columns.")
     c_names <- names(data)
     g <- c_names
   }
 
-  data <- data.table::as.data.table(data)
+  .classes <- class(data)
+
+  if("data.frame" %ni% .classes) {
+    stop("Input data must be a data.table, tibble, or data.frame.")
+  }
+
+
+  if("data.table" %ni% .classes) {
+    data <- data.table::as.data.table(data)
+  }
 
   if(filter == "dupes") {
     data[, n_copies := .N,
@@ -178,10 +188,28 @@ copies <- function(data, ...,
   }
 
   if(sort_by_copies == FALSE) {
-    if(output == "tibble") {
+    if (output == "dt") {
+      return(data)
+
+    } else if(output == "tibble") {
       data <- tibble::as_tibble(data)
+      return(data)
+
+    } else if(output == "data.frame") {
+      data <- as.data.frame(data)
+      return(data)
+
+    } else if ("data.table" %in% .classes && output == "same") {
+      return(data)
+
+    } else if ("tbl" %in% .classes && output == "same") {
+      data <- tibble::as_tibble(data)
+      return(data)
+
+    } else if ("data.frame" %in% .classes) {
+      data <- as.data.frame(data)
+      return(data)
     }
-    return(data)
   } else if(sort_by_copies == TRUE && filter %in% c("all", "dupes")) {
     if(order == "d") {
       if(!missing(...)) {
@@ -203,8 +231,27 @@ copies <- function(data, ...,
       }
     }
   }
-  if(output == "tibble") {
+
+  if (output == "dt") {
+    return(data)
+
+  } else if(output == "tibble") {
     data <- tibble::as_tibble(data)
+    return(data)
+
+  } else if(output == "data.frame") {
+    data <- as.data.frame(data)
+    return(data)
+
+  } else if ("data.table" %in% .classes && output == "same") {
+    return(data)
+
+  } else if ("tbl" %in% .classes && output == "same") {
+    data <- tibble::as_tibble(data)
+    return(data)
+
+  } else if ("data.frame" %in% .classes) {
+    data <- as.data.frame(data)
+    return(data)
   }
-  return(data)
 }
