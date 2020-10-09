@@ -177,8 +177,6 @@ copies <- function(data, ...,
     data[, n_copies := NULL]
   }
 
-  data.table::setkey(data, NULL)
-
   if(sort_by_copies == FALSE) {
     if(output == "tibble") {
       data <- tibble::as_tibble(data)
