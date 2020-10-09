@@ -129,28 +129,24 @@ copies <- function(data, ...,
   order <-  match.arg(order, several.ok = FALSE)
   output <-  match.arg(output, several.ok = FALSE)
 
-  df <- data
-
   if(!missing(...)) {
     g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
     if(keep_all_cols == FALSE) {
-      df <- df[, g]
+      data <- data[, g]
     }
-  }
-
-  df <- data.table::as.data.table(df)
-
-  if(!missing(...)) {
-    data.table::setkeyv(df, cols = eval(g))
   } else {
     message("no column names specified - using all columns")
-    data.table::setkeyv(df, cols = names(data))
+    c_names <- names(data)
+    g <- c_names
   }
+
+  data <- data.table::as.data.table(data)
+
   if(filter == "dupes") {
-    df[, n_copies := .N,
-       by = eval(data.table::key(df))]
-    df <- df[n_copies > 1]
-    dupe_count <- nrow(df)
+    data[, n_copies := .N,
+         by = eval(g)]
+    data <- data[n_copies > 1]
+    dupe_count <- nrow(data)
     if(dupe_count != 0) {
       message(paste0("Duplicated rows detected! ",
                      dupe_count, " of ", nrow(data), " rows in the input data have multiple copies."))
@@ -159,46 +155,58 @@ copies <- function(data, ...,
     }
 
   } else if(filter == "all") {
-    df[, `:=` (copy_number = 1:.N,
-               n_copies = .N),
-       by = eval(data.table::key(df))]
+    data[, `:=` (copy_number = 1:.N,
+                 n_copies = .N),
+         by = eval(g)]
   } else if(filter == "first") {
-    df <- unique(df, by = data.table::key(df), fromLast = FALSE)
+    if(!missing(...)) {
+      data <- unique(data, by = eval(g), fromLast = FALSE)
+    } else {
+      data <- unique(data, fromLast = FALSE)
+    }
   } else if(filter == "last"){
-    df <- unique(df, by = data.table::key(df), fromLast = TRUE)
+    if(!missing(...)) {
+      data <- unique(data, by = eval(g), fromLast = TRUE)
+    } else {
+      data <- unique(data, fromLast = FALSE)
+    }
   } else if(filter == "unique") {
-    df[, n_copies := .N,
-       by = eval(data.table::key(df))]
-    df <- df[n_copies == 1]
-    df[, n_copies := NULL]
+    data[, n_copies := .N,
+         by = eval(g)]
+    data <- data[n_copies == 1]
+    data[, n_copies := NULL]
   }
 
-  data.table::setkey(df, NULL)
+  data.table::setkey(data, NULL)
 
-  if(sort_by_copies == TRUE && filter %in% c("all", "dupes")) {
-
+  if(sort_by_copies == FALSE) {
+    if(output == "tibble") {
+      data <- tibble::as_tibble(data)
+    }
+    return(data)
+  } else if(sort_by_copies == TRUE && filter %in% c("all", "dupes")) {
     if(order == "d") {
       if(!missing(...)) {
-        data.table::setorderv(df, c("n_copies", eval(g)),
+        data.table::setorderv(data, c("n_copies", eval(g)),
                               na.last = na_last,
                               order = -1)
       } else {
-        data.table::setorder(df, n_copies, na.last = na_last,
+        data.table::setorder(data, n_copies, na.last = na_last,
                              order = -1)
       }
     } else if (order %in% c("a", "i")) {
       if(!missing(...)) {
-        data.table::setorderv(df, c("n_copies", eval(g)),
+        data.table::setorderv(data, c("n_copies", eval(g)),
                               na.last = na_last,
                               order = 1)
       } else {
-        data.table::setorder(df, n_copies, na.last = na_last,
+        data.table::setorder(data, n_copies, na.last = na_last,
                              order = 1)
       }
     }
   }
   if(output == "tibble") {
-    df <- tibble::as_tibble(df)
+    data <- tibble::as_tibble(data)
   }
-  return(df)
+  return(data)
 }
