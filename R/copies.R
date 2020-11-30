@@ -217,7 +217,7 @@ copies <- function(data, ...,
                               na.last = na_last,
                               order = -1)
       } else {
-        data.table::setorder(data, n_copies, na.last = na_last,
+        data.table::setorderv(data, "n_copies", na.last = na_last,
                              order = -1)
       }
     } else if (order %in% c("a", "i")) {
@@ -226,7 +226,7 @@ copies <- function(data, ...,
                               na.last = na_last,
                               order = 1)
       } else {
-        data.table::setorder(data, n_copies, na.last = na_last,
+        data.table::setorderv(data, "n_copies", na.last = na_last,
                              order = 1)
       }
     }
