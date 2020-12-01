@@ -462,11 +462,8 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #' @importFrom tibble is_tibble
 #' @importFrom ggplot2 is.ggplot
 #' @importFrom htmlwidgets prependContent
-#' @importFrom shiny h2
-#' @importFrom reactable reactable
-#' @importFrom reactable reactableTheme
-#' @importFram grDevices rgb
-#' @importFram grDevices col2rgb
+#' @importFrom grDevices rgb
+#' @importFrom grDevices col2rgb
 #'
 #' @param static_object A data frame, tibble, or ggplot2 object.
 #'
@@ -540,9 +537,13 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #'
 #' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE)
 #'
-#' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE, group_by = "cyl")
+#' mtcars %>% static_to_dynamic(caption = "Table 1",
+#'                              reactable = TRUE, group_by = "cyl")
 #'
-#' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE, reactable_hightlight_colour = "lightgreen")
+#' mtcars %>%
+#'      static_to_dynamic(caption = "Table 1",
+#'                        reactable = TRUE,
+#'                        reactable_hightlight_colour = "lightgreen")
 #' }
 #'
 #' @seealso \code{\link[DT]{datatable}}, \code{\link[plotly]{ggplotly}}
@@ -665,8 +666,6 @@ static_to_dynamic <- function(static_object, caption = NULL,
     }
   }
 }
-
-pdata %>% static_to_dynamic(reactable_selected_colour = "pink")
 
 # wash_df --------------------------------------------------------------------
 #' @title clean up a data frame by parsing/updating column classes.
