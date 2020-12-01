@@ -122,7 +122,7 @@ tcv <- function(y, n = "all", order = "d") {
 #'   determines how many of the top unique values based on increasing or
 #'   decreasing frequency (as specified by the order argument) are
 #'   saved/printed. E.g. for just the most common value, set order = "d"
-#'   (default) and n = 1.
+#'   (default) and n = 1. Default = 5. To get all values, use "all".
 #'
 #' @param type For numeric and integer vectors this determines the type of
 #'   skewness and kurtosis calculations to perform. See
@@ -217,7 +217,7 @@ tcv <- function(y, n = "all", order = "d") {
 #'   \code{\link[stats]{quantile}}, \code{\link{skewness}}, \code{\link{kurtosis}}
 #'
 #' @export
-describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = "all", type = 2, na.rm = TRUE, output = "tibble"){
+describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type = 2, na.rm = TRUE, output = "tibble"){
   if((is.vector(data) || is.factor(data)) || lubridate::is.Date(data)) {
     if(is.numeric(data)){
       dt <- data.table::as.data.table(data)

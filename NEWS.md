@@ -1,0 +1,108 @@
+## elucidate 0.0.0.9013 - November 30th, 2020
+
+* Added a `NEWS.md` file to track changes to the package.
+
+* Fixed a bug in the `copies()` function where the "sort_by_copies" argument would not work when no conditioning variables were specified. 
+
+*	Updated `static_to_dynamic()` to use `reactable::reactable()` to render interactive versions of data frames instead of `DT::datatable()` when the number of rows in the input data frame are over 10,000. This allows you to still get a dynamic JavaScript-based version of the data frame for larger sample sizes where testing indicated that client-side/local processing would be very slow or fail using `DT::datatable()`. The new **"reactable"** argument also lets you render a `reactable` instead of a `datatable` for fewer than 10,000 rows if you prefer it to the `DT::datatable()` output, or if you find it the default `DT::datatable()` output loading too slowly on your machine (for <10,000 rows of data). The 10,000 row threshold is adjustable via the `reactable_threshold` argument. I am currently writing a  blog post to demonstrate the use of `static_to_dynamic()` and other elucidate package functions that will published at [craig.rbind.io](https://craig.rbind.io/post/) as soon as it is ready.
+
+* Renamed `mode_of_y()` to the more intuitive `mode()` and upgraded it to return the most common value (i.e. the mode) of a vector regardless of the input vector class (previously it only worked for numeric vectors). You can now also specify the number of "digits"" to use for rounding, omit missing values before calculation (consistent with other elucidate functions), and can use the "inv" argument to get the anti-mode instead (i.e. least common value). ***N.B.***  this function now conflicts with a base R function `mode()` with the same name that is a convenience shortcut used to specify the storage mode of an object. However, this conflict isn't anticipated to be much of an issue because that alternative function can still be accessed using the full function name = "`storage.mode()`". Moreover, in the 7+ years I've been working in R, I've never needed to use the `storage.mode()` function, but have often wanted an intuitive `mode()` function that gives the most common value, so I suspect most elucidate users would prefer `elucidate::mode()` the base R `mode()` that is just a redundant convenience shortcut to the `storage.mode()` function that they can still access without conflicts. 
+
+* changed the default value of the "n" argument to `describe()` to 5 instead of "all" (which is still an option) since this tends to lead to nicer output.
+
+## elucidate 0.0.0.9012 - October 6th, 2020
+
+*	Added the `copies()` function written primarily using data.table that combines functionality of `unique(DT)`/`distinct()` and `janitor::get_dupes()`. Performance is substantially better than `get_dupes()` based on benchmarking with a 10,000,000 row resampled version of `pdata`.
+
+*	Also added `consum()` for consecutive summation of binary or logical vectors and the `counts_tb()` and `counts_tb_all()` convenience function extensions for `counts()` and `counts_all()`.
+
+*	Changed the default geom of `plot_stat_error()` to point instead of bar so that users have to go out of their way to create dynamite plots.
+
+*	Corrected `wash_df()` documentation return description.
+
+## elucidate 0.0.0.9011 - March 5th, 2020 
+
+* Removed references to `grDevices::windowsFonts()` from the documentation to avoid linux compatibility issues.
+
+## elucidate 0.0.0.9010 - March 3rd, 2020
+
+*	Updated readme and made font options arg for plots available to Windows OS systems only
+
+*	Package approved for public release by SDPR administration and published: https://github.com/bcgov/elucidate
+
+*	Updated installation instructions to use `remotes::install_github(“bcgov/elucidate”)`
+
+## elucidate 0.0.0.9009 - Dec. 12th, 2019
+
+*	Updated licensing and other components to meet BG Gov R standards. 
+
+* Created a readme file.
+
+*	Updated pdata to make it a bit more realistic (e.g. 12 unique dates, y1 randomly sampled within g and d); 12,000 rows instead of 10,000.
+
+* Added unit tests
+
+*	Removed gapminder data package as a dependency
+
+## elucidate 0.0.0.9008 - Dec. 10th, 2019
+
+* Added the %ni% operator which returns the negative of the %in% operator, i.e. FALSE for matching values and TRUE for non-matching values instead of TRUE for matches and FALSE for non-matches
+
+## elucidate 0.0.0.9007 - Dec. 9th, 2019 
+
+* added `inv_quantile()` to calculate values of a vector `y` at different quantiles. Added convenience wrappers for calculating `skewness()` and `kurtosis()`.
+
+* added bootstrapping-based confidence interval convenience functions `mean_ci()`, `median_ci()`, `stat_ci()`, `describe_ci()`, and `describe_ci_all()`.
+
+* replaced `mcvals()` with `counts()`
+ 
+*	upgraded `describe()` and `describe_all()` to use `data.table` for their underlying calculations and added multiple output types for variable classes including dates, factors, logicals, character strings. Also removed the mode from the list of summary statistics returned because it slowed overall performance by too much. Use `counts()` to get the most and least common values instead.
+
+*	Direct interactive output option was removed for performance and since the plotly versions of boxplots and histograms didn’t seem to render without a commercial license when you have a large data set anyways. Interactive tables can still be generated from the outputs using `static_to_dynamic()`.
+
+*	Added a 10,000 row version of pdata (practice data) for testing purposes
+
+*	updated `plot_stat_error()` to use `data.table` for all error bars and `median_ci()` for median-derived confidence intervals
+
+*	Also updated all `plot_*` functions to use && and || instead of & or | for speed
+
+*	Removed simpleboot and glue as dependencies.
+
+## elucidate 0.0.0.9006 - Oct. 16th, 2019
+
+*	Made the function titles more concise.
+
+*	Fixed a typo in the x parameter description for `plot_stat_error()`.
+
+*	Removed the pop out window option from `colour_options()`.
+
+*	Added utility functions `wash_df()`, `translate()`, & `recode_errors()`. For`wash_df()`, benchmarking indicates that vroom parser is not faster than the readr parser used by `wash_df()`.
+
+  -	**Note:** `translate()` is similar to a left join but only for a vector pair. The results should be equivalent to left joins where the key (e.g. “by” arg) is a single column and only a single other column is added… therefore it can be viewed as a special case of a left join.
+
+## elucidate 0.0.0.9005 - Oct. 11th, 2019
+
+*	Fixed a `plot_scatter()` bug where splitting regression lines by colour_var didn't work, but spltting did work when variables were mapped to either shape or fill.
+
+*	Added `plot_stat_error()`, which plots a statistic and confidence intervals or other uncertainty metric as error bars. This initial version of the function only plots the mean and has several options for the error bars (standard deviation, standard error, confidence interval).
+
+## elucidate 0.0.0.9003 - Sept. 23rd, 2019
+
+* Updated documentation, dependencies, & fixed documentation typos.
+
+## elucidate 0.0.0.9002 - Sept. 19th, 2019
+
+* fixed an issue from version 0.0.0.9000 where `describe_all()` output incorrectly displayed grouping variable names.
+
+* Updated `describe()` and `describe_all()` to include the mode of y and interactive modes with `DT()` output. 
+
+* added `mode_of_y()`, which returns the mode of a numeric vector & convenience function `static_to_dynamic()` which converts data frames into interactive DataTables with `DT::datatable()` and ggplot2 graphs into interactive plotly graphs with `plotly::ggplotly()`.
+
+## elucidate 0.0.0.9001 - Sept. 16th, 2019
+
+* reformatted `mcvals()` & `mcvals_all()`, removed `lcvals()` & `lcvals_all()`. Fixed issue from version 0.0.0.9000 with `describe_ci()` failing for sample sizes over 3,000.
+
+## elucidate 0.0.0.9000 - July 16th, 2019
+
+*	package created locally with initial definitions for functions `se()`, `mcvals()`, `lcvals()`, `mcvals_all()`, `lcvals_all()`, `describe()`, `describe_all()`, `describe_ci()`, and  `describe_ci_all()`
+

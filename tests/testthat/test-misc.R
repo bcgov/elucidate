@@ -25,8 +25,8 @@ test_that("inv_quantile works", {
   expect_equal(inv_quantile(y = y, values = c(2, 25, 50, 75, 95), digits = 2), c(0.02, 0.25, 0.50, 0.75, 0.95), tolerance = 0.01)
 })
 
-test_that("mode_of_y works", {
-  expect_equal(mode_of_y(d$y1), 76.278, tolerance = 0.001)
+test_that("mode works", {
+  expect_equal(mode(d$y1), 76.278, tolerance = 0.001)
 })
 
 test_that("skewness type 1 works", {

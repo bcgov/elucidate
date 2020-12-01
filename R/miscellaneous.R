@@ -80,27 +80,55 @@ inv_quantile <- function(y, values, digits = NULL){
   return(out)
 }
 
-# mode of y ---------------------------------------------------------------
+# mode ------------------------------------------------------------------
 #' @title
-#' Obtain the mode of a numeric variable.
+#' Obtain the mode of a vector.
 #'
 #' @description
-#' \code{mode_of_y} returns the mode AKA most common value rounded to 3 decimal
-#' places. For additional unique values of y sorted by decreasing frequency, use
-#' mcvals instead
+#' \code{mode} returns the mode AKA most common value rounded to 3 decimal
+#' places if y is a numeric vector. If y is non-numeric the most common value is
+#' returned as a character string. For additional unique values of y sorted by
+#' decreasing frequency, use counts() instead. N.B. this function overwrites a
+#' base R function mode() with the same name that is a convenience shortcut used
+#' to specify the storage mode of an object. However, this conflict isn't much
+#' of an issue because that alternative function can still be accessed using the
+#' full function name = "storage.mode()".
 #'
 #' @param y a numeric vector/variable.
+#'
+#' @param digits This determines the number of digits used for rounding of
+#'   numeric outputs. Default = 3.
+#'
+#' @param inv This allows you to get the inverse or opposite of the mode, i.e.
+#'   the least common value or "anti-mode". Default is FALSE.
+#'
+#' @param na.rm This determines whether missing values (NAs) should be removed
+#'   before attempting to count values and extract the mode (or anti-mode).
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
 #' @examples
-#' y <- c(1:100)
-#' mode_of_y(y)
+#' y <- c(1:100, 2, 2, 4, 5, 6, 25, 50)
+#'
+#' mode(y) #returns the mode
+#'
+#' mode(y, inv = TRUE) #returns the anti-mode
+#
+#' @seealso \code{\link{counts}}
 #'
 #' @export
-mode_of_y <- function(y){
-  out <- names(sort(table(y), decreasing = T))[1]
-  out <- out %>% as.numeric(out) %>% round(3)
+mode <- function(y, digits = 3, inv = FALSE, na.rm = TRUE){
+  if(na.rm == TRUE) {
+    y <- na.omit(y)
+  }
+  if(inv == FALSE) {
+    out <- names(sort(table(y), decreasing = TRUE))[1]
+  } else if (inv == TRUE) {
+    out <- names(sort(table(y), decreasing = FALSE))[1]
+  }
+  if(is.numeric(y)) {
+  out <- round(as.numeric(out), digits)
+  }
   return(out)
 }
 
@@ -417,25 +445,85 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 }
 
 # static_to_dynamic -------------------------------------------------------
-#' @title Convert a static data frame or ggplot object to a dynamic form.
+#' @title Convert a static data frame or ggplot object to a dynamic form to
+#'   facilitate interactive data exploration.
 #'
 #' @description Uses \code{\link[plotly]{ggplotly}} or
 #'   \code{\link[DT]{datatable}} to convert a ggplot2 object or data
-#'   frame/tibble to a dynamic & interactive form.
+#'   frame/tibble to a dynamic & interactive form. The input object is a
+#'   dataframe with over 10,000 rows (by default, this threshold is adjustable),
+#'   \code{\link[reactable]{reactable}} will be used instead of
+#'   \code{\link[DT]{datatable}}, because the client-side version of
+#'   \code{\link[DT]{datatable}} (implemented here) doesn't perform well or may
+#'   crash your R studio session for larger datasets than this.
 #'
-#' @importFrom magrittr %>%
 #' @importFrom DT datatable
 #' @importFrom plotly ggplotly
 #' @importFrom tibble is_tibble
 #' @importFrom ggplot2 is.ggplot
+#' @importFrom htmlwidgets prependContent
+#' @importFrom shiny h2
+#' @importFrom reactable reactable
+#' @importFrom reactable reactableTheme
+#' @importFram grDevices rgb
+#' @importFram grDevices col2rgb
 #'
 #' @param static_object A data frame, tibble, or ggplot2 object.
 #'
 #' @param caption Add a caption/title to the dynamic table/figure.
 #'
+#' @param reactable Affects data frame inputs only. overrides the row-limit to
+#'   convert a dataframe to reactable() format instead of datatable() format
+#'   even when there are fewer rows than reactable_threshold. You might want to
+#'   do this to take advantage of custom highlighting/stripe colours or grouping
+#'   via the "group_by" argument. Alternatively, you could set
+#'   reactable_threshold to 0 and achieve the same effect.
+#'
+#' @param reactable_threshold Affects data frame inputs only. Determines the
+#'   threshold for the number of rows in a input data frame beyond which a
+#'   reactable() is generated as output instead of a datatable().
+#'
+#' @param group_by If the input is a data frame and reactable is TRUE and/or the
+#'   number of rows exceeds the reatable_threshold, this allows you to group the
+#'   reactable output by input columns, which can be specified using a character
+#'   vector.
+#'
+#' @param reactable_stripe_colour If the input is a data frame and reactable is
+#'   TRUE and/or the number of rows exceeds the reatable_threshold, this allows
+#'   you to change the row striping colour (specified using a hexcode or base R
+#'   colour name). Use `elucidate::colour_options()` to see which colour options
+#'   are available.
+#'
+#' @param reactable_highlight_colour If the input is a data frame and reactable is
+#'   TRUE and/or the number of rows exceeds the reatable_threshold, this allows
+#'   you to change the row highlight colour (specified using a hexcode or base R
+#'   colour name). Use `elucidate::colour_options()` to see which colour options
+#'   are available.
+#'
+#' @param reactable_selected_colour If the input is a data frame and reactable
+#'   is TRUE and/or the number of rows exceeds the reatable_threshold, this
+#'   allows you to change the background colour of selected rows (specified
+#'   using a hexcode or base R colour name). Use `elucidate::colour_options()`
+#'   to see which colour options are available.
+#'
 #' @return If a data frame or tibble was provided, the output will be a
-#'   datatables html widget. If a ggplot object was provided, the output will be
-#'   a plotly html widget.
+#'   DataTables or reactable html widget (according to criteria specified
+#'   above). If a ggplot object was provided, the output will be a plotly html
+#'   widget.
+#'
+#'  Unique features of the DataTable-derived output for data frames include
+#'  Excel-like cell editing and filling, the ability to rearrange and/or
+#'  selectively hide columns, and convenience buttons for printing or
+#'  downloading the table to Excel, csv, or PDF format. Unfortunately the
+#'  client-side version of DataTables doesn't perform well for larger datasets.
+#'  In such cases (>10,000 rows) a reactable() is returned instead, which also
+#'  has some nice unique functions including stripes that are more clearly
+#'  visible, row highlighting when hovering, the ability to selectively
+#'  highlight rows to facilitate visual comparisons, and options to modify the
+#'  highlight, stripe, and background colours. The reactable, but not datatable
+#'  version, also lets you group the output by variables of interest so they can
+#'  be selectively collapsed or expanded. Both output versions allow you to do
+#'  search-based filtering of rows for some or all of the columns.
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
@@ -449,49 +537,136 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #' p1 %>% static_to_dynamic(caption = "Figure 1")
 #'
 #' mtcars %>% static_to_dynamic(caption = "Table 1")
+#'
+#' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE)
+#'
+#' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE, group_by = "cyl")
+#'
+#' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE, reactable_hightlight_colour = "lightgreen")
 #' }
 #'
 #' @seealso \code{\link[DT]{datatable}}, \code{\link[plotly]{ggplotly}}
 #'
 #' @export
-static_to_dynamic <- function(static_object, caption = NULL){
-  if(tibble::is_tibble(static_object) || is.data.frame(static_object)){
-    dynamic_object <- static_object %>% DT::datatable(filter = "top",
-                                                      caption = htmltools::tags$caption(
-                                                        style = 'caption-side: top; text-align: left;',
-                                                        caption),
-                                                      editable = T,
-                                                      class = "display compact",
-                                                      extensions = c("AutoFill", "ColReorder", "Buttons",
-                                                                     "KeyTable", "RowReorder", "Select", "Scroller"),
-                                                      selection = "none",
-                                                      options = list(autoWidth = TRUE,
-                                                                     autoFill = TRUE,
-                                                                     colReorder = TRUE,
-                                                                     keys = TRUE,
-                                                                     rowReorder = TRUE,
-                                                                     select = list(style = 'os',
-                                                                                   items = 'cell'),
-                                                                     dom = 'Bfrtip',
-                                                                     buttons = list(I('colvis'), 'copy', 'print',
-                                                                                    list(extend = 'collection',
-                                                                                         buttons = c('csv', 'excel', 'pdf'),
-                                                                                         text = 'Download'))
-                                                      ))
+static_to_dynamic <- function(static_object, caption = NULL,
+                              reactable = FALSE,
+                              reactable_threshold = 10000,
+                              group_by = NULL, #group_by accepts multiple arguments as a character vector
+                              reactable_stripe_colour = "#e4e2e9",
+                              reactable_highlight_colour = "#a28adb",
+                              reactable_selected_colour = "#aaaadb") {
 
+  if (is.data.frame(static_object) && nrow(static_object) > reactable_threshold || reactable == TRUE) {
+    if (stringr::str_detect(reactable_stripe_colour, "^#", negate = TRUE)) {
+      #conversion of r colour name to hex code in 2 steps, equivalent to
+      #gplots::col2hex() function without requiring the extra dependency.
+      rgb_col <- grDevices::col2rgb(reactable_stripe_colour)
+      hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
+                                green = rgb_col[2,]/255,
+                                blue = rgb_col[3,]/255)
+      reactable_stripe_colour <- hex_col
+    }
+    if (stringr::str_detect(reactable_highlight_colour, "^#", negate = TRUE)) {
+      rgb_col <- grDevices::col2rgb(reactable_highlight_colour)
+      hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
+                                green = rgb_col[2,]/255,
+                                blue = rgb_col[3,]/255)
+      reactable_highlight_colour <- hex_col
+
+    }
+    if (stringr::str_detect(reactable_selected_colour, "^#", negate = TRUE)) {
+      rgb_col <- grDevices::col2rgb(reactable_selected_colour)
+      hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
+                                green = rgb_col[2,]/255,
+                                blue = rgb_col[3,]/255)
+      reactable_selected_colour <- hex_col
+    }
+    if(missing(group_by)) {
+      dynamic_object <- reactable::reactable(static_object,
+                                             filterable = TRUE,
+                                             compact = TRUE,
+                                             sortable = TRUE,
+                                             outlined = TRUE,
+                                             resizable = TRUE,
+                                             striped = TRUE,
+                                             searchable = TRUE,
+                                             highlight = TRUE,
+                                             paginationType = "jump",
+                                             selection = "multiple",
+                                             onClick = "select",
+                                             theme = reactable::reactableTheme(
+                                               rowSelectedStyle = list(backgroundColor = reactable_selected_colour,
+                                                                       boxShadow = "inset 2px 0 0 0 #000000"),
+                                               stripedColor = reactable_stripe_colour,
+                                               highlightColor = reactable_highlight_colour,
+                                               cellPadding = "8px 12px",
+                                               style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif"),
+                                               searchInputStyle = list(width = "100%")
+                                             ))
+    } else {
+      dynamic_object <- reactable::reactable(static_object,
+                                             filterable = TRUE,
+                                             compact = TRUE,
+                                             sortable = TRUE,
+                                             outlined = TRUE,
+                                             resizable = TRUE,
+                                             striped = TRUE,
+                                             searchable = TRUE,
+                                             highlight = TRUE,
+                                             paginationType = "jump",
+                                             groupBy = group_by,
+                                             selection = "multiple",
+                                             onClick = "select",
+                                             theme = reactable::reactableTheme(
+                                               rowSelectedStyle = list(backgroundColor = reactable_selected_colour, boxShadow = "inset 2px 0 0 0 #000000"),
+                                               stripedColor = reactable_stripe_colour,
+                                               highlightColor = reactable_highlight_colour,
+                                               cellPadding = "8px 12px",
+                                               style = list(fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif"),
+                                               searchInputStyle = list(width = "100%")
+                                             ))
+    }
+    if(!missing(caption)) {
+      dynamic_object <- htmlwidgets::prependContent(dynamic_object,
+                                                    shiny::h2(class = "title", caption))
+    }
+    return(dynamic_object)
+  } else if (is.data.frame(static_object) && nrow(static_object) <= reactable_threshold) {
+    dynamic_object <-  DT::datatable(static_object,
+                                     filter = "top",
+                                     caption = htmltools::tags$caption(
+                                       style = 'caption-side: top; text-align: left;',
+                                       caption),
+                                     editable = T,
+                                     class = "display compact",
+                                     extensions = c("ColReorder", "Buttons", "AutoFill",
+                                                    "KeyTable", "Select", "Scroller"),
+                                     selection = "none",
+                                     options = list(autoWidth = TRUE,
+                                                    searchHighlight = TRUE,
+                                                    search = TRUE,
+                                                    autoFill = TRUE, colReorder = TRUE, keys = TRUE,
+                                                    rowReorder = TRUE,
+                                                    select = list(style = "os", items = "cell"),
+                                                    dom = "Bfrtip", buttons = list(I("colvis"),
+                                                                                   "copy", "print",
+                                                                                   list(extend = "collection",
+                                                                                        buttons = c("csv", "excel", "pdf"),
+                                                                                        text = "Download"))))
     return(dynamic_object)
   } else if(ggplot2::is.ggplot(static_object)) {
     if(!missing(caption)){
       static_object <- static_object + ggplot2::ggtitle(caption)
-      dynamic_object <- static_object %>% plotly::ggplotly()
+      dynamic_object <- plotly::ggplotly(static_object)
       return(dynamic_object)
     } else if(missing(caption)) {
-      dynamic_object <- static_object %>% plotly::ggplotly()
+      dynamic_object <- plotly::ggplotly(static_object)
       return(dynamic_object)
     }
   }
 }
 
+pdata %>% static_to_dynamic(reactable_selected_colour = "pink")
 
 # wash_df --------------------------------------------------------------------
 #' @title clean up a data frame by parsing/updating column classes.

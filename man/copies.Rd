@@ -12,7 +12,7 @@ copies(
   sort_by_copies = FALSE,
   order = c("d", "a", "i"),
   na_last = FALSE,
-  output = c("tibble", "dt")
+  output = c("same", "tibble", "dt", "data.frame")
 )
 }
 \arguments{
@@ -51,9 +51,9 @@ ascending/increasing = "a" or "i" copy numbers.}
 \item{na_last}{should rows of the specified columns with missing values be
 listed below non-missing values (TRUE/FALSE)? Default is FALSE.}
 
-\item{output}{"tibble" for tibble or "dt" for data.table. Tibble is used as
-the default output to facilitate subsequent use/modification of the output
-with the tidyverse collection of packages.}
+\item{output}{"tibble" for tibble, "dt" for data.table, or "data.frame" for a
+data frame. "same", the default option, returns the same format as the
+input data.}
 }
 \value{
 If \code{filter} argument is set to "all", returns a modified version of the
