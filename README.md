@@ -3,11 +3,6 @@
 
 # elucidate <img src='man/figures/hex-elucidate.png' align="right" height="139" />
 
-<!-- badges: start -->
-
-<a id="devex-badge" rel="Exploration" href="https://github.com/BCDevExchange/assets/blob/master/README.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>
-<!-- badges: end -->
-
 ## Project Status
 
 This package is currently maintained by [Craig
@@ -44,10 +39,9 @@ researchers:
     `R`’s statistical computing & data science toolkit, e.g. functions
     which are easy for experienced users to write on the fly but are
     challenging for `R` novices or researchers without programming
-    experience to implement: the standard error of the mean (`se`), an
+    experience to implement: the standard error of the mean (`se()`), an
     operator that returns the values that do not match a vector (`%ni%`,
-    i.e. the opposite of `%in%`), the mode of a numeric variable
-    (`mode_of_y`), etc.
+    i.e. the opposite of `%in%`), the mode of a vector (`mode()`), etc.
 
 Inspired by tidyverse naming conventions, the core functions of
 `elucidate` are organized into sets that begin with a common root
@@ -61,6 +55,13 @@ with the pipe operator from the
 [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package
 for easy integration into data processing pipelines. For convenience,
 the pipe operator is also imported when elucidate is loaded.
+
+The `static_to_dynamic()` function converts a data frame into an
+interactive [datatable](https://rstudio.github.io/DT/) or
+[reactable](https://glin.github.io/reactable/articles/cookbook/cookbook.html)
+depending on sample size or preference. `static_to_dynamic()` also
+converts ggplot2 objects (including `plot_*` outputs) into interactive
+[plotly](https://plotly-r.com/) graphs.
 
 ## Installation
 
@@ -93,9 +94,9 @@ library(elucidate)
 #using a vector as input
 describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
-#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew
-#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
-#> 1  1000  1000     0     0  100.  4.90 0.155  85.4  96.9  100.  103.  115. -0.029
+#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100  skew
+#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1  1000  1000     0     0   100  5.09 0.161  82.9  96.4  100.  103.  115. 0.009
 #> # ... with 1 more variable: kurt <dbl>
 
 #using a data frame and specifying a variable in that data frame
@@ -133,14 +134,6 @@ describe(pdata, d) #date input class
 
 #obtain within-group summaries by adding grouping variables
 
-describe(pdata, y1, high_low) #one grouping variable
-#> # A tibble: 2 x 15
-#>   high_low cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75
-#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 high      6045  6045     0     0  154.  42.9 0.552  70.7  121.  145.  182.
-#> 2 low       5955  5955     0     0  154.  42.5 0.551  69.2  121.  145.  180.
-#> # ... with 3 more variables: p100 <dbl>, skew <dbl>, kurt <dbl>
-
 describe(pdata, y1, high_low, g) #two grouping variables
 #> # A tibble: 10 x 16
 #>    high_low g     cases     n    na  p_na  mean    sd    se    p0   p25   p50
@@ -156,8 +149,6 @@ describe(pdata, y1, high_low, g) #two grouping variables
 #>  9 high     d      1182  1182     0     0  174.  44.2 1.29   70.7  138.  178.
 #> 10 high     b      1258  1258     0     0  152.  38.0 1.07   74.4  118.  150.
 #> # ... with 4 more variables: p75 <dbl>, p100 <dbl>, skew <dbl>, kurt <dbl>
-
-description <- describe(pdata, y1, high_low, g, even) #three grouping variables
 ```
 
 To describe all variables in a data frame, use `describe_all()`:
@@ -238,65 +229,6 @@ pdata %>%
 #> 10: 145.085 179.503  288.781  0.758 -0.128
 #> 11: 106.867 111.612  142.181  0.996  0.862
 #> 12:  93.268  96.877   99.990 -1.055  1.125
-
-#numeric and logical summaries only, split by a grouping variable
-pdata %>%
- describe_all(high_low, output = "dt", class = c("n", "l"))
-#> $logical
-#>    variable high_low cases    n na p_na n_TRUE n_FALSE p_TRUE p_FALSE
-#> 1:     even     high  6045 6045  0    0   3014    3031  0.499   0.501
-#> 2:     even      low  5955 5955  0    0   2986    2969  0.501   0.499
-#> 
-#> $numeric
-#>     variable high_low cases    n na p_na    mean      sd    se      p0     p25
-#>  1:       id     high  6045 6045  0    0 494.339 288.067 3.705   1.000 245.000
-#>  2:       id      low  5955 5955  0    0 506.754 289.205 3.748   1.000 256.000
-#>  3:       x1     high  6045 6045  0    0  50.499  28.760 0.370   1.000  26.000
-#>  4:       x1      low  5955 5955  0    0  50.490  29.117 0.377   1.000  25.000
-#>  5:       x2     high  6045 6045  0    0 150.870  28.829 0.371 101.000 126.000
-#>  6:       x2      low  5955 5955  0    0 150.429  28.812 0.373 101.000 125.000
-#>  7:       x3     high  6045 6045  0    0 250.458  28.941 0.372 201.000 225.000
-#>  8:       x3      low  5955 5955  0    0 250.537  28.791 0.373 201.000 225.000
-#>  9:       y1     high  6045 6045  0    0 153.740  42.936 0.552  70.748 120.520
-#> 10:       y1      low  5955 5955  0    0 153.669  42.511 0.551  69.224 121.375
-#> 11:       y2     high  6045 6045  0    0 108.084   6.081 0.078 100.005 103.233
-#> 12:       y2      low  5955 5955  0    0  91.980   6.179 0.080  59.963  88.417
-#>         p50     p75     p100   skew   kurt
-#>  1: 489.000 743.000 1000.000  0.031 -1.203
-#>  2: 513.000 759.000 1000.000 -0.032 -1.194
-#>  3:  50.000  75.000  100.000  0.009 -1.199
-#>  4:  51.000  76.000  100.000  0.006 -1.217
-#>  5: 151.000 176.000  200.000  0.003 -1.213
-#>  6: 150.000 175.000  200.000  0.000 -1.206
-#>  7: 250.000 276.000  300.000  0.017 -1.214
-#>  8: 251.000 275.000  300.000 -0.004 -1.214
-#>  9: 144.509 182.297  289.235  0.721 -0.230
-#> 10: 145.085 179.503  288.781  0.758 -0.128
-#> 11: 106.867 111.612  142.181  0.996  0.862
-#> 12:  93.268  96.877   99.990 -1.055  1.125
-```
-
-If you want the counts for unique values of a variable, regardless of
-class, use `counts()` or `counts_all()`:
-
-``` r
-
-counts(pdata$high_low) #output stucture is value_count, sorted in descending order by default
-#> [1] "high_6045" "low_5955"
-
-#use the order argument to sort in ascending order instead
-counts(pdata$high_low, order = "a") 
-#> [1] "low_5955"  "high_6045"
-
-counts_all(pdata[, c("high_low", "even", "g")])
-#> $high_low
-#> [1] "high_6045" "low_5955" 
-#> 
-#> $even
-#> [1] "FALSE_6000" "TRUE_6000" 
-#> 
-#> $g
-#> [1] "a_2592" "b_2460" "d_2376" "e_2352" "c_2220"
 ```
 
 Calculate confidence intervals for a sample mean, median or other
@@ -304,22 +236,13 @@ summary statistic using `describe_ci()` & `describe_ci_all()`:
 
 ``` r
 
-#confidence intervals for the mean are calculated (by default) using a theoretical normal distribution...
+#confidence intervals for the mean are calculated (by default) using a
+#theoretical normal distribution...
 pdata[1:100, ] %>% describe_ci(y1, stat = mean)
 #> # A tibble: 1 x 3
 #>   lower  mean upper
 #>   <dbl> <dbl> <dbl>
-#> 1  96.5  98.4  100.
-
-pdata[1:100, ] %>% describe_ci(y1, g, stat = mean) #obtain CIs and means split by a grouping variable
-#> # A tibble: 5 x 4
-#>   g     lower  mean upper
-#>   <fct> <dbl> <dbl> <dbl>
-#> 1 a      94.2  97.1 100. 
-#> 2 b      96.6 101.  105. 
-#> 3 c      93.4  99.6 106. 
-#> 4 d      93.1  96.2  99.3
-#> 5 e      94.3  99.2 104.
+#> 1  96.6  98.4  100.
 
 #confidence intervals for other statistics are obtained using bootstrapping
 pdata[1:100, ] %>% 
@@ -334,7 +257,7 @@ pdata[1:100, ] %>%
 #> # A tibble: 1 x 3
 #>   lower    sd upper
 #>   <dbl> <dbl> <dbl>
-#> 1  8.04  9.24  10.4
+#> 1  7.94  9.24  10.3
 
 #describe_ci_all will return CIs for all numeric variables in a data frame
 
@@ -342,25 +265,14 @@ describe_ci_all(pdata[1:1000, ], stat = median) #bootstrapped CIs for the median
 #> # A tibble: 6 x 4
 #>   variable lower median upper
 #>   <chr>    <dbl>  <dbl> <dbl>
-#> 1 id       470.    500.  531 
+#> 1 id       469.    500.  530.
 #> 2 y1        99.8   101.  101.
 #> 3 y2        99.6   101.  101.
 #> 4 x1        47      51    53 
 #> 5 x2       145     148   151 
 #> 6 x3       249     253   256
 
-describe_ci_all(pdata, stat = mean) #the default
-#> # A tibble: 6 x 4
-#>   variable lower  mean upper
-#>   <chr>    <dbl> <dbl> <dbl>
-#> 1 id       495.  500.  506. 
-#> 2 y1       153.  154.  154. 
-#> 3 y2        99.9 100.  100. 
-#> 4 x1        50.0  50.5  51.0
-#> 5 x2       150.  151.  151. 
-#> 6 x3       250.  250.  251.
-
-describe_ci_all(pdata, high_low, stat = mean) #split by a grouping variable
+describe_ci_all(pdata, high_low, stat = mean) #mean CI split by a grouping variable
 #> # A tibble: 12 x 5
 #>    variable high_low lower  mean upper
 #>    <chr>    <chr>    <dbl> <dbl> <dbl>
@@ -384,19 +296,11 @@ visualizations:
 ``` r
 data(mtcars)
 
-#basic density plot
-plot_density(mtcars, x = mpg)
+#basic histogram
+plot_histogram(mtcars, x = mpg)
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
-
-``` r
-
-#histogram
-plot_histogram(mtcars, x = mpg, fill_var = cyl) #mapping of variables to aesthetics is accomplished using *_var arguments
-```
-
-<img src="man/figures/README-plot-2.png" width="100%" />
 
 ``` r
 
@@ -409,7 +313,7 @@ mtcars %>% plot_density(x = mpg,
                         colour_var_title = "# cylinders")
 ```
 
-<img src="man/figures/README-plot-3.png" width="100%" />
+<img src="man/figures/README-plot-2.png" width="100%" />
 
 ``` r
 
@@ -428,37 +332,31 @@ plot_box(data = mtcars, #data source
          theme = "bw") #specify the theme
 ```
 
-<img src="man/figures/README-plot-4.png" width="100%" />
+<img src="man/figures/README-plot-3.png" width="100%" />
 
 ``` r
 
 #violin plot with quantiles added
-mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
+mtcars %>% plot_violin(y = mpg, x = cyl, 
+                       fill = "blue", 
+                       draw_quantiles = c(0.25, 0.5, 0.75))
 ```
 
-<img src="man/figures/README-plot-5.png" width="100%" />
+<img src="man/figures/README-plot-4.png" width="100%" />
 
 ``` r
 
-#scatterplot with a regression lines
-mtcars %>% plot_scatter(y = mpg, x = hp, colour_var = cyl, 
-                        regression_line = T, 
-                        regression_method = "lm") #default is to fit lines using a generalized additive model
-#> `geom_smooth()` using formula 'y ~ x'
-```
-
-<img src="man/figures/README-plot-6.png" width="100%" />
-
-``` r
-
-#polynomial regression line can be added by specifying a model formula
+#scatterplot with a polynomial regression line that can be added by specifying a
+#model formula
 mtcars %>%
   plot_scatter(y = mpg, x = hp,
-               regression_line = T, regression_method = "lm", regression_se = T,
+               regression_line = T, 
+               regression_method = "lm", 
+               regression_se = T,
                regression_formula = y ~ poly(x, 2))
 ```
 
-<img src="man/figures/README-plot-7.png" width="100%" />
+<img src="man/figures/README-plot-5.png" width="100%" />
 
 ``` r
 
@@ -470,22 +368,7 @@ mtcars %>%
                   stat = "mean", error = "se")
 ```
 
-<img src="man/figures/README-plot-8.png" width="100%" />
-
-``` r
-
-
-#plot means with 95% confidence interval error bars 
-#using points instead of bars & customize fill colour
-mtcars %>% 
-  plot_stat_error(y = mpg, x = cyl, 
-                  geom = "point", 
-                  p_size = 3,
-                  fill = "darkorchid4", #default point shape is 21, which allows fill specification
-                  stat = "mean", error = "ci") 
-```
-
-<img src="man/figures/README-plot-9.png" width="100%" />
+<img src="man/figures/README-plot-6.png" width="100%" />
 
 ``` r
 
@@ -503,7 +386,7 @@ mtcars %>%
                   replicates = 5000) #controls the number of bootstrapped samples to use
 ```
 
-<img src="man/figures/README-plot-10.png" width="100%" />
+<img src="man/figures/README-plot-7.png" width="100%" />
 
 ``` r
 
@@ -516,73 +399,35 @@ gapminder %>%
    plot_stat_error(y = lifeExp, x = year, 
                    stat = "mean", error = "se", #mean +/- standard error, default error metric is a 95% CI
                    colour_var = continent, 
-                   geom = "point", #either "bar" or "point"
+                   geom = "point", #either "bar" or "point". default = "point"
                    p_size = 2, #adjust the size of the points
                    add_lines = T, #connect the points with lines. This is useful for repeated-measures data.
                    alpha = 0.6) #adjusts the transparency
 ```
 
-<img src="man/figures/README-plot-11.png" width="100%" />
-
-The `%ni%` operator (“ni” for “not in”) can help you subset your data
-like the `%in%` operator but returns an indicator for non-matches
-instead of matches. This is particularly useful if you want to specify
-exclusion criteria instead of inclusion criteria.
-
-``` r
-#subset data to extract rows with matching values using "%in%"
-subset(pdata, g %in% c("a", "e")) %>% 
-  head #only the 1st 6 rows are printed for space considerations
-#> # A tibble: 6 x 10
-#>      id d          g     high_low even     y1    y2    x1    x2    x3
-#>   <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>
-#> 1     1 2008-01-01 e     high     FALSE 106.  118.     59   116   248
-#> 2     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284
-#> 3     6 2008-01-01 a     high     TRUE  102.  114.     19   163   206
-#> 4     9 2008-01-01 e     low      FALSE  99.8  89.8    92   106   277
-#> 5    11 2008-01-01 a     high     FALSE  93.8 102.     56   142   285
-#> 6    12 2008-01-01 a     low      TRUE   96.5  92.4   100   111   277
-
-#subset data to extract rows with non-matching values using "%ni%"
-subset(pdata, g %ni% c("a", "e")) %>% head
-#> # A tibble: 6 x 10
-#>      id d          g     high_low even     y1    y2    x1    x2    x3
-#>   <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>
-#> 1     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238
-#> 2     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250
-#> 3     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287
-#> 4     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201
-#> 5     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249
-#> 6    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209
-
-#equivalent to subset function for tidyverse users
-dplyr::filter(pdata, g %ni% c("a", "e")) %>% head
-#> # A tibble: 6 x 10
-#>      id d          g     high_low even     y1    y2    x1    x2    x3
-#>   <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>
-#> 1     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238
-#> 2     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250
-#> 3     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287
-#> 4     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201
-#> 5     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249
-#> 6    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209
-```
+<img src="man/figures/README-plot-8.png" width="100%" />
 
 ## Development Notes
 
 `elucidate` is still in the formative stage of development and
 considerable changes may occur to it in the near future.
 
-## Getting Help or Reporting an Issue
+## Reporting an Issue
 
-To report bugs/issues/feature requests, please contact the package
-maintainer by [e-mail](mailto:Craig.Hutton@gov.bc.ca?subject=elucidate).
-After `elucidate` has been released publicly, a more formal method of
-reporting issues and requests will be implemented.
+To report bugs/issues or request feature changes, open an
+[issue](https://github.com/bcgov/elucidate/issues) for the package
+GitHub repo. If raising an issue, *please provide a reproducible
+example* ([reprex](https://www.tidyverse.org/help/)) of the problem
+you’re encountering.
+
+## Requesting Features/Changes
+
+To suggest changes or code improvements, please submit a [pull
+request](https://github.com/bcgov/elucidate/pulls).
 
 ## License
 
-Copyright 2019 Province of British Columbia
+Copyright 2020 Province of British Columbia
 
 Licensed under the Apache License, Version 2.0 (the “License”); you may
 not use this file except in compliance with the License. You may obtain
