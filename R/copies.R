@@ -155,11 +155,12 @@ copies <- function(data, ...,
   if(filter == "dupes") {
     data[, n_copies := .N,
          by = eval(g)]
+    orig_rows <- nrow(data)
     data <- data[n_copies > 1]
     dupe_count <- nrow(data)
     if(dupe_count != 0) {
       message(paste0("Duplicated rows detected! ",
-                     dupe_count, " of ", nrow(data), " rows in the input data have multiple copies."))
+                     dupe_count, " of ", orig_rows, " rows in the input data have multiple copies."))
     } else {
       message("No duplicates detected.")
     }
