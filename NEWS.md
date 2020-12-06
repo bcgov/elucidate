@@ -10,6 +10,8 @@
 
 * changed the default value of the "n" argument to `describe()` to 5 instead of "all" (which is still an option) since this tends to lead to nicer output.
 
+* Fixed a bug in recode_errors() that caused it to fail when trying to recode a factor with a non-NA replacement value. This now works for vector inputs but not (yet) when multiple columns are operated on for a data frame input. 
+
 ## elucidate 0.0.0.9012 - October 6th, 2020
 
 *	Added the `copies()` function written primarily using data.table that combines functionality of `unique(DT)`/`distinct()` and `janitor::get_dupes()`. Performance is substantially better than `get_dupes()` based on benchmarking with a 10,000,000 row resampled version of `pdata`.
