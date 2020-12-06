@@ -893,9 +893,23 @@ recode_errors <- function(data, errors, replacement = NA,
       data[rows, cols][data[rows, cols] == errors[i]] <- replacement
     }
     return(data)
+  } else if (is.factor(data) && !is.na(replacement) && length(ind) == length(data)) {
+    levels(data)[levels(data) %in% errors] <- replacement
+    return(data)
   } else {
     for (i in 1:length(errors)) {
-      data[ind][data[ind] %in% errors[i]] <- replacement
+      if(is.factor(data) && !is.na(replacement)) {
+          lvls <- as.character(levels(data))
+          levels(data)[levels(data) %in% errors] <- replacement
+          data <- as.character(data)
+          data[ind][data[ind] %in% errors[i]] <- replacement
+          data <- factor(data, levels = c(lvls, replacement))
+      } else { 
+        data[ind][data[ind] %in% errors[i]] <- replacement
+        if(is.factor(data)) {
+          data <- droplevels(data)
+        }
+      }
     }
     return(data)
   }
