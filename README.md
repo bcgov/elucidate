@@ -5,6 +5,8 @@
 
 ## Project Status
 
+[![img](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+
 This package is currently maintained by [Craig
 Hutton](https://craig.rbind.io/), a Data Scientist working with the
 Research Branch of the [British Columbia Ministry of Social Development
