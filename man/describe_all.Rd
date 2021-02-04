@@ -9,8 +9,6 @@ describe_all(
   ...,
   class = "all",
   digits = 3,
-  order = "d",
-  n = 5,
   type = 2,
   na.rm = TRUE,
   output = "tibble"
@@ -36,17 +34,6 @@ will be returned that the class argument needs to be respecified.}
 
 \item{digits}{This determines the number of digits used for rounding of
 numeric outputs.}
-
-\item{order}{For variables/vectors of class "character" or "factor" this
-determines if the unique values should be sorted in order of
-descending/decreasing = "d" or ascending/increasing = "a" or "i" frequency
-counts.}
-
-\item{n}{For variables/vectors of class "character" or "factor" this
-determines how many of the top unique values based on increasing or
-decreasing frequency (as specified by the order argument) are
-saved/printed. E.g. for just the most common value, set order = "d"
-(default) and n = 1.}
 
 \item{type}{For numeric and integer vectors this determines the type of
 skewness and kurtosis calculations to perform. See
@@ -82,7 +69,6 @@ In addition to part 1, these measures are provided for \strong{dates}:
 \item{n_unique}{the total number of unique values or levels of y. For dates this tells you how many time points there are}
 \item{start}{the earliest or minimum date in y}
 \item{end}{the latest or maximum date in y}
-\item{p_FALSE}{the proportion of y values that are FALSE}
 }
 
 In addition to part 1, these measures are provided for \strong{factors}:
@@ -90,14 +76,16 @@ In addition to part 1, these measures are provided for \strong{factors}:
 \describe{
 \item{n_unique}{the total number of unique values or levels of y}
 \item{ordered}{a logical indicating whether or not y is ordinal}
-\item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+\item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} or \code{\link{counts_tb}} instead.}
 }
 
 In addition to part 1, these measures are provided for \strong{character/string} vectors:
 
 \describe{
 \item{n_unique}{the total number of unique values or levels of y}
-\item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+\item{min_chars}{the minimum number of characters in the values of y}
+\item{max_chars}{the maximum number of characters in the values of y}
+\item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} or \code{\link{counts_tb}} instead.}
 }
 
 In addition to part 1, these measures are provided for \strong{logcial} vectors:
@@ -106,7 +94,6 @@ In addition to part 1, these measures are provided for \strong{logcial} vectors:
 \item{n_TRUE}{the total number of y values that are TRUE}
 \item{n_FALSE}{the total number of y values that are FALSE}
 \item{p_TRUE}{the proportion of y values that are TRUE}
-\item{p_FALSE}{the proportion of y values that are FALSE}
 }
 
 In addition to part 1, these measures are provided for \strong{numeric} variables:

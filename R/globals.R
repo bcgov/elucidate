@@ -1,4 +1,4 @@
-# Copyright 2019 Province of British Columbia
+# Copyright 2021 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 # global variable definitions ---------------------------------------------
 utils::globalVariables(c(".", "group", "measure", "variable", ".N", "tcvs",
                          "skew_p", "kurt_p", "SW_W", "SW_p",
-                         "upper", "lower", "var",
+                         "upper", "lower", "var", ".SD",
                          "p50_LB", "p50_UB", "n", "normal",
                          "box", "hist", "par", "image", "col2rgb",
                          "text", "mtext", "dev.off", "windows",

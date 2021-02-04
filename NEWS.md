@@ -1,3 +1,17 @@
+## elucidate 0.0.0.9020 - February 3rd, 2021
+
+* Upgraded `describe()`, `mode()`, and the `counts*` function set to use the more efficient `Rfast::Table()` instead of `base::table()` for counting the unique values of a vector. We are trying to avoid adding any more dependencies to `elucidate` but the substantial performance improvements of using `Rfast::Table()` made using it worth the added dependency on `Rfast`. 
+
+* Mean calculations in the the `skewness()` and `kurtosis()` functions now use the `sum()`/`length()` method of calculating the mean instead of `mean()` because for some reason (unknown to me) it runs slightly faster. 
+
+* `describe()` and `describe_all()` now provide the minimum and maximum number of characters for string vector inputs, similarly to the `skimr::skim()` package. Their descriptive outputs for both character and factor variables have also been modified to provide up to the two most common unique values and two least common values with associated counts combined as a single string (similar to `skimr::skim()`) under a column called "counts_tb", for consistency with the identically named `counts_tb()` function. Descriptions of logical vectors now only provide the proportion of values that are `TRUE` instead of also providing the proportion of `FALSE` values, since the latter can very easily be calculated afterwards from the `p_TRUE` column in the output should the user want to know the proportion of values that are `FALSE`. 
+
+* Upgraded `describe_all()` to use `.SD` in the `data.table` j argument to improve processing speed. 
+
+* All calls to `stringr` package functions have been replaced with their lower-level equivalents in the `stringi` package, and the package dependencies have been updated to require `stringi` instead of `stringr`.
+
+* Fixed a bug with `copies()` where the input data was being modified in the global environment when the filter argument was set to either "all" or "dupes". This was only happening in cases where the input data source was already a data.table due to the subsequent use of the `:=` operator. Now all modifications occur within the function execution environment as expected, regardless of the classes of the input data. 
+
 ## elucidate 0.0.0.9013 - November 30th, 2020
 
 * Added a `NEWS.md` file to track changes to the package.

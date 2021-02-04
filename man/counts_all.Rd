@@ -4,7 +4,7 @@
 \alias{counts_all}
 \title{Obtain the counts for unique values of all variables in a data frame.}
 \usage{
-counts_all(data, n = "all", order = "d")
+counts_all(data, n = "all", order = c("d", "a", "i"))
 }
 \arguments{
 \item{data}{A data frame (required).}

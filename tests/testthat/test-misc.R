@@ -14,19 +14,16 @@ library(elucidate)
 
 d <- pdata[1:100, ]
 
-y <- c(1:100)
-se(y)
-
 test_that("se works", {
-  expect_equal(se(y), 2.901149, tolerance = 0.00001)
+  expect_equal(se(d$y1), 0.92408, tolerance = 0.001)
 })
 
 test_that("inv_quantile works", {
-  expect_equal(inv_quantile(y = y, values = c(2, 25, 50, 75, 95), digits = 2), c(0.02, 0.25, 0.50, 0.75, 0.95), tolerance = 0.01)
+  expect_equal(inv_quantile(y = d$x1, values = c(2, 25, 50, 75, 95), digits = 2), c(0.00, 0.26, 0.50, 0.78, 0.94), tolerance = 0.1)
 })
 
 test_that("mode works", {
-  expect_equal(mode(d$y1), 76.278, tolerance = 0.001)
+  expect_equal(mode(d$g), "a", tolerance = 0.001)
 })
 
 test_that("skewness type 1 works", {

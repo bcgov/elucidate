@@ -1,4 +1,4 @@
-# Copyright 2020 Province of British Columbia
+# Copyright 2021 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -129,7 +129,6 @@ copies <- function(data, ...,
   order <-  match.arg(order, several.ok = FALSE)
   output <-  match.arg(output, several.ok = FALSE)
 
-
   if(!missing(...)) {
     g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
     if(keep_all_cols == FALSE) {
@@ -149,15 +148,20 @@ copies <- function(data, ...,
 
 
   if("data.table" %ni% .classes) {
-    data <- data.table::as.data.table(data)
+    .dt <- data.table::as.data.table(data)
+  } else {
+    .dt <- data.table::as.data.table(as.data.frame(data))
+    #this is conversion and reversal is necessary to prevent subsequent
+    #modification of the original data source in the global environment when the
+    #input is already a data.table due to the use of the := operator below.
   }
 
   if(filter == "dupes") {
-    data[, n_copies := .N,
-         by = eval(g)]
+    .dt[, n_copies := .N,
+        by = eval(g)]
     orig_rows <- nrow(data)
-    data <- data[n_copies > 1]
-    dupe_count <- nrow(data)
+    .dt <- .dt[n_copies > 1]
+    dupe_count <- nrow(.dt)
     if(dupe_count != 0) {
       message(paste0("Duplicated rows detected! ",
                      dupe_count, " of ", orig_rows, " rows in the input data have multiple copies."))
@@ -166,93 +170,93 @@ copies <- function(data, ...,
     }
 
   } else if(filter == "all") {
-    data[, `:=` (copy_number = 1:.N,
-                 n_copies = .N),
-         by = eval(g)]
+    .dt[, `:=` (copy_number = 1:.N,
+                n_copies = .N),
+        by = eval(g)]
   } else if(filter == "first") {
     if(!missing(...)) {
-      data <- unique(data, by = eval(g), fromLast = FALSE)
+      .dt <- unique(.dt, by = eval(g), fromLast = FALSE)
     } else {
-      data <- unique(data, fromLast = FALSE)
+      .dt <- unique(.dt, fromLast = FALSE)
     }
   } else if(filter == "last"){
     if(!missing(...)) {
-      data <- unique(data, by = eval(g), fromLast = TRUE)
+      .dt <- unique(.dt, by = eval(g), fromLast = TRUE)
     } else {
-      data <- unique(data, fromLast = FALSE)
+      .dt <- unique(.dt, fromLast = FALSE)
     }
   } else if(filter == "unique") {
-    data[, n_copies := .N,
-         by = eval(g)]
-    data <- data[n_copies == 1]
-    data[, n_copies := NULL]
+    .dt[, n_copies := .N,
+        by = eval(g)]
+    .dt <- .dt[n_copies == 1]
+    .dt[, n_copies := NULL]
   }
 
   if(sort_by_copies == FALSE) {
     if (output == "dt") {
-      return(data)
+      return(.dt[])
 
     } else if(output == "tibble") {
-      data <- tibble::as_tibble(data)
-      return(data)
+      .dt <- tibble::as_tibble(.dt)
+      return(.dt)
 
     } else if(output == "data.frame") {
-      data <- as.data.frame(data)
-      return(data)
+      .dt <- as.data.frame(.dt)
+      return(.dt)
 
     } else if ("data.table" %in% .classes && output == "same") {
-      return(data)
+      return(.dt[])
 
     } else if ("tbl" %in% .classes && output == "same") {
-      data <- tibble::as_tibble(data)
-      return(data)
+      .dt <- tibble::as_tibble(.dt)
+      return(.dt)
 
     } else if ("data.frame" %in% .classes) {
-      data <- as.data.frame(data)
-      return(data)
+      .dt <- as.data.frame(.dt)
+      return(.dt)
     }
   } else if(sort_by_copies == TRUE && filter %in% c("all", "dupes")) {
     if(order == "d") {
       if(!missing(...)) {
-        data.table::setorderv(data, c("n_copies", eval(g)),
+        data.table::setorderv(.dt, c("n_copies", eval(g)),
                               na.last = na_last,
                               order = -1)
       } else {
-        data.table::setorderv(data, "n_copies", na.last = na_last,
-                             order = -1)
+        data.table::setorderv(.dt, "n_copies", na.last = na_last,
+                              order = -1)
       }
     } else if (order %in% c("a", "i")) {
       if(!missing(...)) {
-        data.table::setorderv(data, c("n_copies", eval(g)),
+        data.table::setorderv(.dt, c("n_copies", eval(g)),
                               na.last = na_last,
                               order = 1)
       } else {
-        data.table::setorderv(data, "n_copies", na.last = na_last,
-                             order = 1)
+        data.table::setorderv(.dt, "n_copies", na.last = na_last,
+                              order = 1)
       }
     }
   }
 
   if (output == "dt") {
-    return(data)
+    return(.dt[])
 
   } else if(output == "tibble") {
-    data <- tibble::as_tibble(data)
-    return(data)
+    .dt <- tibble::as_tibble(.dt)
+    return(.dt)
 
   } else if(output == "data.frame") {
-    data <- as.data.frame(data)
-    return(data)
+    .dt <- as.data.frame(.dt)
+    return(.dt)
 
   } else if ("data.table" %in% .classes && output == "same") {
-    return(data)
+    return(.dt)
 
   } else if ("tbl" %in% .classes && output == "same") {
-    data <- tibble::as_tibble(data)
-    return(data)
+    .dt <- tibble::as_tibble(.dt)
+    return(.dt)
 
   } else if ("data.frame" %in% .classes) {
-    data <- as.data.frame(data)
-    return(data)
+    .dt <- as.data.frame(.dt)
+    return(.dt)
   }
 }

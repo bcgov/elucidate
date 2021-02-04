@@ -4,7 +4,7 @@
 \alias{counts}
 \title{Obtain the counts for unique values of a vector.}
 \usage{
-counts(y, n = "all", order = "d")
+counts(y, n = "all", order = c("d", "a", "i"))
 }
 \arguments{
 \item{y}{A vector/variable (required).}

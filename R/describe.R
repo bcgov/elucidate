@@ -1,4 +1,4 @@
-# Copyright 2019 Province of British Columbia
+# Copyright 2021 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -10,61 +10,41 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-# tcv (internal)---------------------------------------------------------------------
+# tbcvs (internal)-----------------------------------------------------------------
 #' @title
 #' elucidate package internal function
 #'
-#' @description \code{tcv} is an internal function that supports
+#' @description \code{tbcvs} is an internal function that supports
 #'   \code{\link{describe}}.
 #'
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_c
-#' @importFrom stringr str_length
-#' @importFrom stringr str_pad
+#' @importFrom stringi stri_c
+#' @importFrom stringi stri_flatten
 #'
 #'
 #' @param y A vector/variable (required).
 #'
-#' @param n The number of unique values you want frequency counts for. Default is "all".
-#'
-#' @param order "d" for descending/decreasing order. "a" or "i" for
-#'   ascending/increasing order.
-#'
 #' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #' @noRd
-tcv <- function(y, n = "all", order = "d") {
-  if(order == "d") {
-    tab <- sort(table(y), decreasing = TRUE)
-  } else if (order == "a" || order == "i") {
-    tab <- sort(table(y))
-  }
-  values <- names(tab)
-  counts <- as.character(tab)
+tbcvs <- function(y) {
+  tab <- sort(ftab(y), decreasing = TRUE)
+  len <- length(tab)
 
-  out <- stringr::str_c(values, counts, sep = "_")
+  if(len > 4) {
+    tab <- tab[c(1, 2, len-1, len)]
+    values <- names(tab)
+    counts <- as.character(tab)
+    out <- stringi::stri_c(values, "_", counts)
+    out <- c(out[1:2], "...", out[3:4])
+    out <- stringi::stri_flatten(out, collapse = ", ")
+  } else if (len <= 4) {
+    values <- names(tab)
+    counts <- as.character(tab)
+    out <- stringi::stri_c(values, "_", counts)
+    out <- stringi::stri_flatten(out, collapse = ", ")
+  }
 
-  if(n != "all") {
-    out <- out[1:n]
-  }
-  x <- c(1:length(out)) %>% as.character()
-  x_max_len <- max(stringr::str_length(x))
-  if(n != "all" && n > 9){
-    if(x_max_len <= 99) {
-      x <- stringr::str_pad(x, width = 2, side = "left", pad = "0")
-    } else if (x_max_len <= 999) {
-      x <- stringr::str_pad(x, width = 3, side = "left", pad = "0")
-    } else if (x_max_len <= 9999){
-      x <- stringr::str_pad(x, width = 4, side = "left", pad = "0")
-    } else if (x_max_len <= 99999){
-      x <- stringr::str_pad(x, width = 5, side = "left", pad = "0")
-    } else {
-      x <- stringr::str_pad(x, width = x_max_len, side = "left", pad = "0")
-    }
-  }
-  out <- stringr::str_c("v", x,"_n", "-", out)
   return(out)
 }
-
 
 # describe -------------------------------------------------------------
 #' @title
@@ -79,14 +59,11 @@ tcv <- function(y, n = "all", order = "d") {
 #'   other similar functions exist in other packages (e.g.
 #'   \code{\link[psych]{describeBy}} or \code{\link[skimr]{skim}}), this version
 #'   provides the some of the useful added outputs of the psych package (e.g.
-#'   skew and kurtosis for numeric variables) while at the same time offering
-#'   slightly more concise syntax than skim (e.g. no preceding group_by
-#'   operation is needed for group-wise calculations) and enhanced customization
-#'   options via clearly defined arguments than the alternatives (e.g. ascending
-#'   or descending sorting, modifying the number of unique values to return
-#'   counts for character/numeric vectors) while still achieving comparable
-#'   processing times to the alternatives. To obtain summaries for all variables
-#'   in a data frame use \code{\link{describe_all}} instead.
+#'   se, skew, and kurtosis for numeric variables) while at the same time
+#'   offering slightly more concise syntax than skim (e.g. no preceding group_by
+#'   operation is needed for group-wise calculations) while still achieving
+#'   comparable processing times to the alternatives. To obtain summaries for
+#'   all variables in a data frame use \code{\link{describe_all}} instead.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom data.table as.data.table
@@ -112,17 +89,6 @@ tcv <- function(y, n = "all", order = "d") {
 #'
 #' @param digits This determines the number of digits used for rounding of
 #'   numeric outputs.
-#'
-#' @param order For variables/vectors of class "character" or "factor" this
-#'   determines if the unique values should be sorted in order of
-#'   descending/decreasing = "d" or ascending/increasing = "a" or "i" frequency
-#'   counts.
-#'
-#' @param n For variables/vectors of class "character" or "factor" this
-#'   determines how many of the top unique values based on increasing or
-#'   decreasing frequency (as specified by the order argument) are
-#'   saved/printed. E.g. for just the most common value, set order = "d"
-#'   (default) and n = 1. Default = 5. To get all values, use "all".
 #'
 #' @param type For numeric and integer vectors this determines the type of
 #'   skewness and kurtosis calculations to perform. See
@@ -150,10 +116,9 @@ tcv <- function(y, n = "all", order = "d") {
 #'   In addition to part 1, these measures are provided for \strong{dates}:
 #'
 #'   \describe{
-#'    \item{n_unique}{the total number of unique values or levels of y. For dates this tells you how many time points there are}
+#'     \item{n_unique}{the total number of unique values or levels of y. For dates this tells you how many time points there are}
 #'     \item{start}{the earliest or minimum date in y}
 #'     \item{end}{the latest or maximum date in y}
-#'     \item{p_FALSE}{the proportion of y values that are FALSE}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{factors}:
@@ -161,14 +126,16 @@ tcv <- function(y, n = "all", order = "d") {
 #'   \describe{
 #'     \item{n_unique}{the total number of unique values or levels of y}
 #'     \item{ordered}{a logical indicating whether or not y is ordinal}
-#'     \item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+#'     \item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} instead.}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{character/string} vectors:
 #'
 #'   \describe{
 #'     \item{n_unique}{the total number of unique values or levels of y}
-#'     \item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+#'     \item{min_chars}{the minimum number of characters in the values of y}
+#'     \item{max_chars}{the maximum number of characters in the values of y}
+#'     \item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} instead.}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{logcial} vectors:
@@ -177,7 +144,6 @@ tcv <- function(y, n = "all", order = "d") {
 #'     \item{n_TRUE}{the total number of y values that are TRUE}
 #'     \item{n_FALSE}{the total number of y values that are FALSE}
 #'     \item{p_TRUE}{the proportion of y values that are TRUE}
-#'     \item{p_FALSE}{the proportion of y values that are FALSE}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{numeric} variables:
@@ -214,10 +180,14 @@ tcv <- function(y, n = "all", order = "d") {
 #' kurtosis. The Statistician, 47, 183-189.
 #'
 #' @seealso \code{\link[base]{mean}}, \code{\link[stats]{sd}}, \code{\link{se}},
-#'   \code{\link[stats]{quantile}}, \code{\link{skewness}}, \code{\link{kurtosis}}
+#'   \code{\link[stats]{quantile}}, \code{\link{skewness}}, \code{\link{kurtosis}},
+#'   \code{\link{counts}}, \code{\link{counts_tb}}
 #'
 #' @export
-describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type = 2, na.rm = TRUE, output = "tibble"){
+describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, output = c("tibble", "dt")){
+
+  output <- match.arg(output, several.ok = FALSE)
+
   if((is.vector(data) || is.factor(data)) || lubridate::is.Date(data)) {
     if(is.numeric(data)){
       dt <- data.table::as.data.table(data)
@@ -228,11 +198,11 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                             mean = round(sum(data, na.rm = na.rm)/length(na.omit(data)), digits),
                             sd = round(stats::sd(data, na.rm = na.rm), digits),
                             se = round(se(data, na.rm = na.rm), digits),
-                            p0 = round(stats::quantile(data, probs = 0, na.rm = na.rm), digits),
+                            p0 = round(as.double(min(data, na.rm = na.rm)), digits),
                             p25 = round(stats::quantile(data, probs = 0.25, na.rm = na.rm), digits),
-                            p50 = round(stats::quantile(data, probs = 0.50, na.rm = na.rm), digits),
+                            p50 = round(as.double(stats::median(data, na.rm = na.rm)), digits),
                             p75 = round(stats::quantile(data, probs = 0.75, na.rm = na.rm), digits),
-                            p100 = round(stats::quantile(data, probs = 1, na.rm = na.rm), digits),
+                            p100 = round(as.double(max(data, na.rm = na.rm)), digits),
                             skew = round(skewness(data, type = type, na.rm = na.rm), digits),
                             kurt = round(kurtosis(data, type = type, na.rm = na.rm), digits))]
 
@@ -244,8 +214,8 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                             p_na = round(sum(is.na(data))/length(data), digits),
                             n_TRUE = round(sum(data, na.rm = na.rm), digits),
                             n_FALSE = round(sum(data == 0, na.rm = na.rm), digits),
-                            p_TRUE = round(sum(data, na.rm = na.rm)/length(na.omit(data)), digits),
-                            p_FALSE = round(sum(data == 0, na.rm = na.rm)/length(na.omit(data)), digits))]
+                            p_TRUE = round(sum(data, na.rm = na.rm)/length(na.omit(data)), digits))]
+
     } else if (lubridate::is.Date(data)){
       dt <- data.table::as.data.table(data)
       description <- dt[, .(cases = .N,
@@ -254,7 +224,8 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                             p_na = round(sum(is.na(data))/length(data), digits),
                             n_unique = data.table::uniqueN(data),
                             start = min(data, na.rm = na.rm),
-                            end = max(data))]
+                            end = max(data, na.rm = na.rm))]
+
     } else if (is.factor(data)) {
       dt <- data.table::as.data.table(data)
       suppressMessages(
@@ -264,11 +235,9 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               p_na = round(sum(is.na(data))/length(data), digits),
                               n_unique = data.table::uniqueN(data),
                               ordered = is.ordered(data),
-                              tcvs = tcv(data, n = n, order = order))] %>%
-          tidyr::separate(tcvs, into = c("value", "count"), sep = "-")  %>% stats::na.omit() %>%
-          data.table::dcast(formula = ... ~ value, value.var = "count")
+                              counts_tb = tbcvs(data))]
       )
-    } else {
+    } else if (is.character(data)) {
       dt <- data.table::as.data.table(data)
       suppressMessages(
         description <- dt[, .(cases = .N,
@@ -276,10 +245,12 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               na = sum(is.na(data)),
                               p_na = round(sum(is.na(data))/length(data), digits),
                               n_unique = data.table::uniqueN(data),
-                              tcvs = tcv(data, n = n, order = order))] %>%
-          tidyr::separate(tcvs, into = c("value", "count"), sep = "-")  %>% stats::na.omit() %>%
-          data.table::dcast(formula = ... ~ value, value.var = "count")
+                              min_chars = as.integer(min(stringi::stri_length(data), na.rm = na.rm)),
+                              max_chars = as.integer(max(stringi::stri_length(data), na.rm = na.rm)),
+                              counts_tb = tbcvs(data))]
       )
+    } else {
+      stop("Input data class not currently supported.\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character")
     }
   } else {
     if(missing(y)){
@@ -298,11 +269,11 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits),
                               sd = round(stats::sd(get(y), na.rm = na.rm), digits),
                               se = round(se(get(y), na.rm = na.rm), digits),
-                              p0 = round(stats::quantile(get(y), probs = 0, na.rm = na.rm), digits),
+                              p0 = round(as.double(min(get(y), na.rm = na.rm)), digits),
                               p25 = round(stats::quantile(get(y), probs = 0.25, na.rm = na.rm), digits),
-                              p50 = round(stats::quantile(get(y), probs = 0.50, na.rm = na.rm), digits),
+                              p50 = round(as.double(stats::median(get(y), na.rm = na.rm)), digits),
                               p75 = round(stats::quantile(get(y), probs = 0.75, na.rm = na.rm), digits),
-                              p100 = round(stats::quantile(get(y), probs = 1, na.rm = na.rm), digits),
+                              p100 = round(as.double(max(get(y), na.rm = na.rm)), digits),
                               skew = round(skewness(get(y), type = type, na.rm = na.rm), digits),
                               kurt = round(kurtosis(get(y), type = type, na.rm = na.rm), digits)),
                           by = eval(g)]
@@ -314,11 +285,11 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits),
                               sd = round(stats::sd(get(y), na.rm = na.rm), digits),
                               se = round(se(get(y), na.rm = na.rm), digits),
-                              p0 = round(stats::quantile(get(y), probs = 0, na.rm = na.rm), digits),
+                              p0 = round(as.double(min(get(y), na.rm = na.rm)), digits),
                               p25 = round(stats::quantile(get(y), probs = 0.25, na.rm = na.rm), digits),
-                              p50 = round(stats::quantile(get(y), probs = 0.50, na.rm = na.rm), digits),
+                              p50 = round(as.double(stats::median(get(y), na.rm = na.rm)), digits),
                               p75 = round(stats::quantile(get(y), probs = 0.75, na.rm = na.rm), digits),
-                              p100 = round(stats::quantile(get(y), probs = 1, na.rm = na.rm), digits),
+                              p100 = round(as.double(max(get(y), na.rm = na.rm)), digits),
                               skew = round(skewness(get(y), type = type, na.rm = na.rm), digits),
                               kurt = round(kurtosis(get(y), type = type, na.rm = na.rm), digits))]
       }
@@ -330,8 +301,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                               n_TRUE = round(sum(get(y), na.rm = na.rm), digits),
                               n_FALSE = round(sum(get(y) == 0, na.rm = na.rm), digits),
-                              p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits),
-                              p_FALSE = round(sum(get(y) == 0, na.rm = na.rm)/length(na.omit(get(y))), digits)),
+                              p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits)),
                           by = eval(g)]
       } else {
         description <- dt[, .(cases = .N,
@@ -340,8 +310,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                               n_TRUE = round(sum(get(y), na.rm = na.rm), digits),
                               n_FALSE = round(sum(get(y) == 0, na.rm = na.rm), digits),
-                              p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits),
-                              p_FALSE = round(sum(get(y) == 0, na.rm = na.rm)/length(na.omit(get(y))), digits))]
+                              p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits))]
       }
     } else if (lubridate::is.Date(dt[[y]])) {
       if(!missing(...)){
@@ -351,7 +320,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                               n_unique = data.table::uniqueN(get(y)),
                               start = min(get(y), na.rm = na.rm),
-                              end = max(get(y))),
+                              end = max(get(y), na.rm = na.rm)),
                           by = eval(g)]
       } else {
         description <- dt[, .(cases = .N,
@@ -360,7 +329,7 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                               p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                               n_unique = data.table::uniqueN(get(y)),
                               start = min(get(y), na.rm = na.rm),
-                              end = max(get(y)))]
+                              end = max(get(y), na.rm = na.rm))]
       }
     } else if (is.factor(dt[[y]])) {
       if(!missing(...)){
@@ -370,11 +339,9 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                                 na = sum(is.na(get(y))),
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
-                                ordered = is.ordered(data),
-                                tcvs = tcv(get(y), n = n, order = order)),
-                            by = eval(g)] %>%
-            tidyr::separate(tcvs, into = c("value", "count"), sep = "-")  %>% stats::na.omit() %>%
-            data.table::dcast(formula = ... ~ value, value.var = "count")
+                                ordered = is.ordered(get(y)),
+                                counts_tb = tbcvs(get(y))),
+                            by = eval(g)]
         )
       } else {
         suppressMessages(
@@ -383,13 +350,11 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                                 na = sum(is.na(get(y))),
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
-                                ordered = is.ordered(data),
-                                tcvs = tcv(get(y), n = n, order = order))] %>%
-            tidyr::separate(tcvs, into = c("value", "count"), sep = "-")  %>% stats::na.omit() %>%
-            data.table::dcast(formula = ... ~ value, value.var = "count")
+                                ordered = is.ordered(get(y)),
+                                counts_tb = tbcvs(get(y)))]
         )
       }
-    } else {
+    } else if (is.character(dt[[y]])) {
       if(!missing(...)){
         suppressMessages(
           description <- dt[, .(cases = .N,
@@ -397,10 +362,10 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                                 na = sum(is.na(get(y))),
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
-                                tcvs = tcv(get(y), n = n, order = order)),
-                            by = eval(g)] %>%
-            tidyr::separate(tcvs, into = c("value", "count"), sep = "-")  %>% stats::na.omit() %>%
-            data.table::dcast(formula = ... ~ value, value.var = "count")
+                                min_chars = as.integer(min(stringi::stri_length(get(y)), na.rm = na.rm)),
+                                max_chars = as.integer(max(stringi::stri_length(get(y)), na.rm = na.rm)),
+                                counts_tb = tbcvs(get(y))),
+                            by = eval(g)]
         )
       } else {
         suppressMessages(
@@ -409,11 +374,13 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
                                 na = sum(is.na(get(y))),
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
-                                tcvs = tcv(get(y), n = n, order = order))] %>%
-            tidyr::separate(tcvs, into = c("value", "count"), sep = "-")  %>% stats::na.omit() %>%
-            data.table::dcast(formula = ... ~ value, value.var = "count")
+                                min_chars = as.integer(min(stringi::stri_length(get(y)), na.rm = na.rm)),
+                                max_chars = as.integer(max(stringi::stri_length(get(y)), na.rm = na.rm)),
+                                counts_tb = tbcvs(get(y)))]
         )
       }
+    } else {
+      stop("Input data class supplied to y argument not currently supported.\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character")
     }
   }
   if(output == "tibble") {
@@ -424,122 +391,6 @@ describe <- function(data, y = NULL, ..., digits = 3, order = "d", n = 5, type =
       return(description)
   }
 }
-# end of describe ---------------------------------------------------------
-
-
-
-# dscr_all (internal) -----------------------------------------------------
-#' @title
-#' elucidate package internal function
-#'
-#' @description \code{dscr_all} is an internal function that supports
-#'   \code{\link{describe_all}}.
-#'
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select_if
-#' @importFrom purrr map
-#' @importFrom data.table %chin%
-#' @importFrom data.table rbindlist
-#' @importFrom tibble as_tibble
-#'
-#' @param data input vector (required).
-#' @param class passed to \code{\link{describe}}
-#' @param n passed to \code{\link{describe}}
-#' @param digits passed to \code{\link{describe}}
-#' @param type passed to \code{\link{describe}}
-#' @param output passed to \code{\link{describe}}
-#' @param order passed to \code{\link{describe}}
-#' @param na.rm passed to \code{\link{describe}}
-#'
-#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
-#' @noRd
-dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = "dt", order = "d", na.rm = TRUE) {
-  ls <- list()
-
-  if(class == "all" || "d" %chin% class) {
-    date_data <- dplyr::select_if(data, lubridate::is.Date)
-  }
-  if(class == "all" || "f" %chin% class) {
-    fct_data <- dplyr::select_if(data, is.factor)
-  }
-  if(class == "all" || "c" %chin% class){
-    chr_data <- dplyr::select_if(data, is.character)
-  }
-  if(class == "all" || "l" %chin% class) {
-    lgl_data <- dplyr::select_if(data, is.logical)
-  }
-  if(class == "all" || "n" %chin% class) {
-    num_data <- dplyr::select_if(data, is.numeric)
-  }
-  if((class == "all" || "d" %chin% class) && ncol(date_data) != 0){
-    if(output == "tibble") {
-      ls[["date"]] <- date_data %>%
-        purrr::map(~describe(.x, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE) %>%
-        tibble::as_tibble()
-    } else {
-      ls[["date"]] <- date_data %>%
-        purrr::map(~describe(.x, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
-    }
-  }
-
-  if((class == "all" || "f" %chin% class) && ncol(fct_data) != 0){
-    if(output == "tibble") {
-      ls[["factor"]] <- fct_data %>%
-        purrr::map(~describe(.x, n = n, digits = digits, order = order, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE) %>%
-        tibble::as_tibble()
-    } else {
-      ls[["factor"]] <- fct_data %>%
-        purrr::map(~describe(.x, n = n, digits = digits, order = order, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
-    }
-  }
-  if((class == "all" || "c" %chin% class) && ncol(chr_data) != 0){
-    if(output == "tibble") {
-      ls[["character"]] <- chr_data %>%
-        purrr::map(~describe(.x, n = n, digits = digits, order = order, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE) %>%
-        tibble::as_tibble()
-    } else {
-      ls[["character"]] <- chr_data %>%
-        purrr::map(~describe(.x, n = n, digits = digits, order = order, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
-    }
-  }
-  if((class == "all" || "l" %chin% class) && ncol(lgl_data) != 0){
-    if(output == "tibble") {
-      ls[["logical"]] <- lgl_data %>%
-        purrr::map(~describe(.x, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE) %>%
-        tibble::as_tibble()
-    } else {
-      ls[["logical"]] <- lgl_data %>%
-        purrr::map(~describe(.x, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
-    }
-  }
-
-  if((class == "all" || "n" %chin% class) && ncol(num_data) != 0){
-    if(output == "tibble") {
-      ls[["numeric"]] <- num_data %>%
-        purrr::map(~describe(.x, digits = digits, type = type, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE) %>%
-        tibble::as_tibble()
-    } else {
-      ls[["numeric"]] <- num_data %>%
-        purrr::map(~describe(.x, digits = digits, type = type, output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
-    }
-  }
-
-  if(length(ls) == 1){
-    ls <- ls[[1]]
-  }
-  return(ls)
-}
-
 
 # describe_all ------------------------------------------------------------
 #' @title
@@ -586,17 +437,6 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #' @param digits This determines the number of digits used for rounding of
 #'   numeric outputs.
 #'
-#' @param order For variables/vectors of class "character" or "factor" this
-#'   determines if the unique values should be sorted in order of
-#'   descending/decreasing = "d" or ascending/increasing = "a" or "i" frequency
-#'   counts.
-#'
-#' @param n For variables/vectors of class "character" or "factor" this
-#'   determines how many of the top unique values based on increasing or
-#'   decreasing frequency (as specified by the order argument) are
-#'   saved/printed. E.g. for just the most common value, set order = "d"
-#'   (default) and n = 1.
-#'
 #' @param type For numeric and integer vectors this determines the type of
 #'   skewness and kurtosis calculations to perform. See
 #'   \code{\link[e1071]{skewness}} or \code{\link[psych]{skew}} and
@@ -627,10 +467,9 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #'   In addition to part 1, these measures are provided for \strong{dates}:
 #'
 #'   \describe{
-#'    \item{n_unique}{the total number of unique values or levels of y. For dates this tells you how many time points there are}
+#'     \item{n_unique}{the total number of unique values or levels of y. For dates this tells you how many time points there are}
 #'     \item{start}{the earliest or minimum date in y}
 #'     \item{end}{the latest or maximum date in y}
-#'     \item{p_FALSE}{the proportion of y values that are FALSE}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{factors}:
@@ -638,14 +477,16 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #'   \describe{
 #'     \item{n_unique}{the total number of unique values or levels of y}
 #'     \item{ordered}{a logical indicating whether or not y is ordinal}
-#'     \item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+#'     \item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} or \code{\link{counts_tb}} instead.}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{character/string} vectors:
 #'
 #'   \describe{
 #'     \item{n_unique}{the total number of unique values or levels of y}
-#'     \item{value_n}{a series of outputs for the top "n" or "all" unique values of y with their frequency counts following the format "value_count"}
+#'     \item{min_chars}{the minimum number of characters in the values of y}
+#'     \item{max_chars}{the maximum number of characters in the values of y}
+#'     \item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} or \code{\link{counts_tb}} instead.}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{logcial} vectors:
@@ -654,7 +495,6 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #'     \item{n_TRUE}{the total number of y values that are TRUE}
 #'     \item{n_FALSE}{the total number of y values that are FALSE}
 #'     \item{p_TRUE}{the proportion of y values that are TRUE}
-#'     \item{p_FALSE}{the proportion of y values that are FALSE}
 #'   }
 #'
 #'   In addition to part 1, these measures are provided for \strong{numeric} variables:
@@ -692,113 +532,128 @@ dscr_all <- function(data, class = "all", n = 5, digits = 3, type = 2, output = 
 #' @seealso \code{\link{describe}}
 #'
 #' @export
-describe_all <- function(data, ..., class = "all", digits = 3, order = "d", n = 5,
-                         type = 2, na.rm = TRUE, output = "tibble") {
-  if(!missing(...)) {
-    gdata <-  data %>% dplyr::group_by(...)
-    ndata <- gdata %>% tidyr::nest()
-    g_cols <-  gdata %>% dplyr::select(dplyr::group_cols()) %>% ncol()
+describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, output = "tibble") {
+  if(any(class %ni%  c("all", "d", "f", "c", "l", "n"))) {
+    stop('class argument should be either "all" or any combination of "d", "f", "c", "l", and/or "n" as a character vector')
+  }
 
-    if(class == "all" || "d" %chin% class) {
-      date_cols <- gdata %>% dplyr::select_if(lubridate::is.Date) %>% ncol()
-      date_cols <- date_cols - g_cols
+  if("data.frame" %ni% class(data)) {
+    stop("input data must be a data frame")
+  }
+
+  if(!missing(...)) {
+    g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+  }
+
+  if(class == "all" || "d" %chin% class) {
+    date_cols <- sapply(data, lubridate::is.Date)
+    if(!missing(...)) {
+      date_cols <- length(setdiff(names(data)[date_cols], g))
+    } else {
+      date_cols <- sum(date_cols)
     }
-    if(class == "all" || "f" %chin% class) {
-      fct_cols <- gdata %>% dplyr::select_if(is.factor) %>% ncol()
-      fct_cols <- fct_cols - g_cols
+  }
+  if(class == "all" || "f" %chin% class) {
+    fct_cols <- sapply(data, is.factor)
+    if(!missing(...)) {
+      fct_cols <- length(setdiff(names(data)[fct_cols], g))
+    } else {
+      fct_cols <- sum(fct_cols)
     }
-    if(class == "all" || "c" %chin% class){
-      chr_cols <- gdata %>% dplyr::select_if(is.character) %>% ncol()
-      chr_cols <- chr_cols - g_cols
+  }
+  if(class == "all" || "c" %chin% class){
+    chr_cols <- sapply(data, is.character)
+    if(!missing(...)) {
+      chr_cols <- length(setdiff(names(data)[chr_cols], g))
+    } else {
+      chr_cols <- sum(chr_cols)
     }
-    if(class == "all" || "l" %chin% class) {
-      lgl_cols <- gdata %>% dplyr::select_if(is.logical) %>% ncol()
-      lgl_cols <- lgl_cols - g_cols
+  }
+  if(class == "all" || "l" %chin% class) {
+    lgl_cols <- sapply(data, is.logical)
+    if(!missing(...)) {
+      lgl_cols <- length(setdiff(names(data)[lgl_cols], g))
+    } else {
+      lgl_cols <- sum(lgl_cols)
     }
-    if(class == "all" || "n" %chin% class) {
-      num_cols <- gdata %>% dplyr::select_if(is.numeric) %>% ncol()
-      num_cols <- num_cols - g_cols
+  }
+  if(class == "all" || "n" %chin% class) {
+    num_cols <- sapply(data, is.numeric)
+    if(!missing(...)) {
+      num_cols <- length(setdiff(names(data)[num_cols], g))
+    } else {
+      num_cols <- sum(num_cols)
     }
-    ls <- list()
+  }
+
+  data <- data.table::as.data.table(data)
+  ls <- list()
+
+  if(!missing(...)) {
     if((class == "all" || "d" %chin% class) && date_cols >= 1){
-      if(output == "tibble") {
-        ls[["date"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, class = "d"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>% dplyr::arrange(variable)
-      } else if (output == "dt"){
-        ls[["date"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, class = "d"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>% dplyr::arrange(variable) %>%
-          data.table::as.data.table()
-      }
+      ls[["date"]] <- data[,  purrr::map_dfr(.SD,
+                                             ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
+                                             .id = "variable"), by = eval(g), .SDcols = lubridate::is.Date]
     }
     if((class == "all" || "f" %chin% class) && fct_cols >= 1){
-      if(output == "tibble") {
-        ls[["factor"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, n = n, digits = digits, order = order, class = "f"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable)
-      } else if (output == "dt"){
-        ls[["factor"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, n = n, digits = digits, order = order, class = "f"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable) %>%
-          data.table::as.data.table()
-      }
+      ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
+                                               ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                               .id = "variable"), by = eval(g), .SDcols = is.factor]
     }
     if((class == "all" || "c" %chin% class) && chr_cols >= 1){
-      if(output == "tibble") {
-        ls[["character"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, n = n, digits = digits, order = order, class = "c"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable)
-      } else if (output == "dt"){
-        ls[["character"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, n = n, digits = digits, order = order, class = "c"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable) %>%
-          data.table::as.data.table()
-      }
+      ls[["character"]] <- data[,  purrr::map_dfr(.SD,
+                                                  ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                                  .id = "variable"), by = eval(g), .SDcols = is.character]
     }
     if((class == "all" || "l" %chin% class) && lgl_cols >= 1){
-      if(output == "tibble") {
-        ls[["logical"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, class = "l"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable)
-      } else if (output == "dt"){
-        ls[["logical"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, class = "l"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable) %>%
-          data.table::as.data.table()
-      }
+      ls[["logical"]] <- data[,  purrr::map_dfr(.SD,
+                                                ~describe(.x, na.rm = na.rm, output = output),
+                                                .id = "variable"), by = eval(g), .SDcols = is.logical]
     }
     if((class == "all" || "n" %chin% class) && num_cols >= 1){
-      if(output == "tibble") {
-        ls[["numeric"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, digits = digits, type = type, class = "n"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable)
-      } else if (output == "dt"){
-        ls[["numeric"]] <- ndata %>%
-          dplyr::mutate(data = purrr::map(data, ~dscr_all(.x, digits = digits, type = type, class = "n"))) %>%
-          tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-          dplyr::arrange(variable) %>%
-          data.table::as.data.table()
-      }
+      ls[["numeric"]] <- data[,  purrr::map_dfr(.SD,
+                                                ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
+                                                .id = "variable"), by = eval(g), .SDcols = is.numeric]
     }
-    if(length(ls) == 0){
-      stop("Data object contains no variables of the chosen class(es), respecify class argument!")
-    }
-    if(length(ls) == 1){
-      ls <- ls[[1]]
-    }
-    return(ls)
   } else {
-    out <- dscr_all(data, class = class, n = n, digits = digits, type = type,
-                    output = output, order = order, na.rm = na.rm)
-    return(out)
+    if((class == "all" || "d" %chin% class) && date_cols >= 1){
+      ls[["date"]] <- data[,  purrr::map_dfr(.SD,
+                                             ~describe(.x, output = output),
+                                             .id = "variable"), .SDcols = lubridate::is.Date]
+
+    }
+    if((class == "all" || "f" %chin% class) && fct_cols >= 1){
+      ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
+                                               ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                               .id = "variable"), .SDcols = is.factor]
+    }
+    if((class == "all" || "c" %chin% class) && chr_cols >= 1){
+      ls[["character"]] <- data[,  purrr::map_dfr(.SD,
+                                                  ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                                  .id = "variable"), .SDcols = is.character]
+    }
+    if((class == "all" || "l" %chin% class) && lgl_cols >= 1){
+      ls[["logical"]] <- data[,  purrr::map_dfr(.SD,
+                                                ~describe(.x, na.rm = na.rm, output = output),
+                                                .id = "variable"),.SDcols = is.logical]
+    }
+    if((class == "all" || "n" %chin% class) && num_cols >= 1){
+      ls[["numeric"]] <- data[,  purrr::map_dfr(.SD,
+                                                ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
+                                                .id = "variable"), .SDcols = is.numeric]
+    }
   }
+
+  if(output == "tibble") {
+    ls <- lapply(ls, tibble::as_tibble)
+  }
+
+  if(length(ls) == 0){
+    stop("Data object contains no variables of the chosen class(es), respecify class argument!")
+  }
+  if(length(ls) == 1){
+    ls <- ls[[1]]
+  }
+  return(ls)
 }
 

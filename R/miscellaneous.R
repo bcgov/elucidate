@@ -1,4 +1,4 @@
-# Copyright 2019 Province of British Columbia
+# Copyright 2021 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -122,15 +122,34 @@ mode <- function(y, digits = 3, inv = FALSE, na.rm = TRUE){
     y <- na.omit(y)
   }
   if(inv == FALSE) {
-    out <- names(sort(table(y), decreasing = TRUE))[1]
+    out <- names(sort(ftab(y), decreasing = TRUE))[1]
   } else if (inv == TRUE) {
-    out <- names(sort(table(y), decreasing = FALSE))[1]
+    out <- names(sort(ftab(y), decreasing = FALSE))[1]
   }
   if(is.numeric(y)) {
   out <- round(as.numeric(out), digits)
   }
   return(out)
 }
+
+# fmean (internal) ------------------------------------------------------------
+#' @title
+#' elucidate package internal wrapper function for the faster calculation of the
+#' mean of a numeric vector using the sum and length functions.
+#'
+#' @description \code{fmean} is an internal function that supports
+#'   \code{\link{skewness}} and \code{\link{kurtosis}}.
+#'
+#' @importFrom stats na.omit
+#'
+#' @param y A vector/variable (required).
+#'
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
+#' @noRd
+fmean <- function(y) {
+  sum(y)/length(y)
+}
+
 
 # skewness --------------------------------------------------------------------
 #' @title
@@ -174,14 +193,14 @@ skewness <- function (y, na.rm = TRUE, type = 2) {
   n <- length(y)
 
   if(type == 1){ #computed by moments::skewness
-    out <- (sum((y - mean(y))^3)/n)/
-      ((sum((y -  mean(y))^2)/n)^(3/2))
+    out <- (sum((y - fmean(y))^3)/n)/
+      ((sum((y -  fmean(y))^2)/n)^(3/2))
   } else if(type == 2){ #SPSS & SAS default
-    out <- (sum((y - mean(y))^3)/n)/
-      ((sum((y -  mean(y))^2)/n)^(3/2))
+    out <- (sum((y - fmean(y))^3)/n)/
+      ((sum((y -  fmean(y))^2)/n)^(3/2))
     out <- out*((sqrt(n*(n-1)))/(n-2))
   } else if(type == 3){ #e1071::skewness & psych::skew default
-    out <- (sum((y - mean(y))^3)/n)/
+    out <- (sum((y - fmean(y))^3)/n)/
       (sd(y)^3)
   }
   return(out)
@@ -228,8 +247,8 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
     y <- na.omit(y)
   }
   n <- length(y)
-  g2 <- ((sum((y - mean(y))^4)/n)/
-           ((sum((y - mean(y))^2)/n)^2))-3
+  g2 <- ((sum((y - fmean(y))^4)/n)/
+           ((sum((y - fmean(y))^2)/n)^2))-3
   if(type == 1) { #computed by moments::kurtosis
     out <- g2
   } else if(type == 2){ #computed by SPSS & SAS
@@ -238,6 +257,34 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
     out <- (g2 + 3)*(1- 1/n)^2 - 3
   }
   return(out)
+}
+
+# ftab (internal) --------------------------------------------------------------
+#' @title
+#' elucidate package internal wrapper function for the Rfast::Table() function
+#' that also tabulates factors
+#'
+#' @description \code{ftab} is an internal function that supports
+#'   \code{\link{describe}} and \code{\link{counts}}.
+#'
+#' @importFrom Rfast Table
+#' @importFrom stats na.omit
+#'
+#' @param y A vector/variable (required).
+#'
+#' @param na.rm This determines whether missing values (NAs) should be removed
+#'   before tabulation.
+#'
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
+#' @noRd
+ftab <- function(y, na.rm = TRUE) {
+  if(na.rm == TRUE) {
+    y <- na.omit(y)
+  }
+  if(!is.character(y) || !is.numeric(y)) {
+    y <- as.character(y)
+  }
+  Rfast::Table(y, names = TRUE)
 }
 
 #counts for unique values in a vector####
@@ -249,7 +296,7 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #'   Also useful for identifying data entry errors or rare cases. For complex
 #'   use cases see \code{\link{describe}}.
 #'
-#' @importFrom stringr str_c
+#' @importFrom stringi stri_c
 #'
 #' @param y A vector/variable (required).
 #'
@@ -277,16 +324,20 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #' @seealso \code{\link{table}}, \code{\link{sort}}
 #'
 #' @export
-counts <- function(y, n = "all", order = "d") {
+counts <- function(y, n = "all", order = c("d", "a", "i")) {
+  order <-  match.arg(order, several.ok = FALSE)
+  if(!is.character(y) || !is.numeric(y)) {
+    y <- as.character(y)
+  }
   if(order == "d") {
-    tab <- sort(table(y), decreasing = TRUE)
+    tab <- sort(ftab(y), decreasing = TRUE)
   } else if (order == "a" || order == "i") {
-    tab <- sort(table(y))
+    tab <- sort(ftab(y))
   }
   values <- names(tab)
   counts <- as.character(tab)
 
-  out <- stringr::str_c(values, counts, sep = "_")
+  out <- stringi::stri_c(values, counts, sep = "_")
   if(n != "all") {
     out <- out[1:n]
   }
@@ -336,7 +387,8 @@ counts <- function(y, n = "all", order = "d") {
 #' @seealso \code{\link{table}}, \code{\link{sort}}, \code{\link[purrr]{map}}
 #'
 #' @export
-counts_all <- function(data, n = "all", order = "d") {
+counts_all <- function(data, n = "all", order = c("d", "a", "i")) {
+  order <-  match.arg(order, several.ok = FALSE)
   out <- purrr::map(data, ~counts(.x, n = n, order = order))
   return(out)
 }
@@ -391,8 +443,6 @@ counts_tb <- function(y, n = 10, na.rm = T) {
   }
   return(out)
 }
-
-
 
 # counts_tb_all -----------------------------------------------------------
 #' @title
@@ -464,6 +514,7 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #' @importFrom htmlwidgets prependContent
 #' @importFrom grDevices rgb
 #' @importFrom grDevices col2rgb
+#' @importFrom stringi stri_detect
 #'
 #' @param static_object A data frame, tibble, or ggplot2 object.
 #'
@@ -558,7 +609,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
                               reactable_selected_colour = "#aaaadb") {
 
   if (is.data.frame(static_object) && nrow(static_object) > reactable_threshold || reactable == TRUE) {
-    if (stringr::str_detect(reactable_stripe_colour, "^#", negate = TRUE)) {
+    if (stringi::stri_detect(reactable_stripe_colour, regex = "^#", negate = TRUE)) {
       #conversion of r colour name to hex code in 2 steps, equivalent to
       #gplots::col2hex() function without requiring the extra dependency.
       rgb_col <- grDevices::col2rgb(reactable_stripe_colour)
@@ -567,7 +618,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
                                 blue = rgb_col[3,]/255)
       reactable_stripe_colour <- hex_col
     }
-    if (stringr::str_detect(reactable_highlight_colour, "^#", negate = TRUE)) {
+    if (stringi::stri_detect(reactable_highlight_colour, regex = "^#", negate = TRUE)) {
       rgb_col <- grDevices::col2rgb(reactable_highlight_colour)
       hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
                                 green = rgb_col[2,]/255,
@@ -575,7 +626,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
       reactable_highlight_colour <- hex_col
 
     }
-    if (stringr::str_detect(reactable_selected_colour, "^#", negate = TRUE)) {
+    if (stringi::stri_detect(reactable_selected_colour, regex = "^#", negate = TRUE)) {
       rgb_col <- grDevices::col2rgb(reactable_selected_colour)
       hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
                                 green = rgb_col[2,]/255,
@@ -904,7 +955,7 @@ recode_errors <- function(data, errors, replacement = NA,
           data <- as.character(data)
           data[ind][data[ind] %in% errors[i]] <- replacement
           data <- factor(data, levels = c(lvls, replacement))
-      } else { 
+      } else {
         data[ind][data[ind] %in% errors[i]] <- replacement
         if(is.factor(data)) {
           data <- droplevels(data)

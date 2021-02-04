@@ -54,19 +54,16 @@ res_f <- tibble::tibble("cases" = 50L,
                 "p_na" = as.numeric(0),
                 "n_unique" = 5L,
                 "ordered" = FALSE,
-                "v1_n" = "a_16",
-                "v2_n" = "d_10",
-                "v3_n" = "b_9",
-                "v4_n" = "c_8",
-                "v5_n" = "e_7")
+                "counts_tb" = "a_16, d_10, ..., c_8, e_7")
 
 res_c <- tibble::tibble("cases" = 50L,
                 "n" = 50L,
                 "na" = 0L,
                 "p_na" = as.numeric(0),
                 "n_unique" = 2L,
-                "v1_n" = "low_28",
-                "v2_n" = "high_22")
+                "min_chars" = 3L,
+                "max_chars" = 4L,
+                "counts_tb" = "low_28, high_22")
 
 res_d <- tibble::tibble("cases" = 50L,
                 "n" = 50L,
@@ -82,8 +79,7 @@ res_l <- tibble::tibble("cases" = 50L,
                 "p_na" = as.numeric(0),
                 "n_TRUE" = 25,
                 "n_FALSE" = 25,
-                "p_TRUE" = 0.5,
-                "p_FALSE" = 0.5)
+                "p_TRUE" = 0.5)
 
 test_that("describe works for numeric", {
   expect_equivalent(as.data.frame(describe(d, y1)), as.data.frame(res_num), tolerance = 0.1)

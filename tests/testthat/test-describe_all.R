@@ -11,9 +11,6 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 library(elucidate)
-library(tibble)
-
-set.seed(1234)
 
 d <- pdata[1:50,]
 
@@ -35,11 +32,7 @@ l[["factor"]] <- tibble::tibble("variable" = "g",
                                 "p_na" = as.numeric(0),
                                 "n_unique" = 5L,
                                 "ordered" = FALSE,
-                                "v1_n" = "a_16",
-                                "v2_n" = "d_10",
-                                "v3_n" = "b_9",
-                                "v4_n" = "c_8",
-                                "v5_n" = "e_7")
+                                "counts_tb" = "a_16, d_10, ..., c_8, e_7")
 
 l[["character"]] <- tibble::tibble("variable" = "high_low",
                                    "cases" = 50L,
@@ -47,8 +40,9 @@ l[["character"]] <- tibble::tibble("variable" = "high_low",
                                    "na" = 0L,
                                    "p_na" = as.numeric(0),
                                    "n_unique" = 2L,
-                                   "v1_n" = "low_28",
-                                   "v2_n" = "high_22")
+                                   "min_chars" = 3L,
+                                   "max_chars" = 4L,
+                                   "counts_tb" = "low_28, high_22")
 
 l[["logical"]] <- tibble::tibble("variable" = "even",
                                  "cases" = 50L,
@@ -57,8 +51,7 @@ l[["logical"]] <- tibble::tibble("variable" = "even",
                                  "p_na" = as.numeric(0),
                                  "n_TRUE" = 25,
                                  "n_FALSE" = 25,
-                                 "p_TRUE" = 0.5,
-                                 "p_FALSE" = 0.5)
+                                 "p_TRUE" = 0.5)
 
 l[["numeric"]] <- tibble::tibble("variable" = c("id", "y1", "y2", "x1", "x2", "x3"),
                                  "cases" = rep(50L, 6),
