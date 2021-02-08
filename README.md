@@ -71,15 +71,11 @@ we can set the filter argument to “dupes”.
 
 ``` r
 library(elucidate)
-#> 
-#> Attaching package: 'elucidate'
-#> The following object is masked from 'package:base':
-#> 
-#>     mode
+
+#list any number of variables to use when searching for duplicates after the
+#data argument
 
 copies(pdata,
-       #list any number of variables to use when searching for duplicates after
-       #the data argument
        d, #in this case we search for duplicated based on the "d" (date) column
        filter = "dupes") #return duplicated rows only
 #> Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.
@@ -99,8 +95,8 @@ copies(pdata,
 #> # ... with 11,990 more rows
 ```
 
-Use `describe()` to describe a single variable in a data frame of vector
-of values:
+Use `describe()` to describe a single variable in a data frame or a
+vector of values:
 
 ``` r
 #using a numeric vector as input

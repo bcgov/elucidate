@@ -58,15 +58,16 @@ The authors of `elucidate` acknowledge and express their gratitude to the author
 ```{r copies, cache = TRUE}
 library(elucidate)
 
+#list any number of variables to use when searching for duplicates after the
+#data argument
+
 copies(pdata,
-       #list any number of variables to use when searching for duplicates after
-       #the data argument
        d, #in this case we search for duplicated based on the "d" (date) column
        filter = "dupes") #return duplicated rows only
 
 ```
 
-Use `describe()` to describe a single variable in a data frame of vector of values:
+Use `describe()` to describe a single variable in a data frame or a vector of values:
 
 ```{r describe, cache = TRUE}
 #using a numeric vector as input
