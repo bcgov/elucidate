@@ -205,7 +205,7 @@ simplified customization interface for common modifications with static
 (ggplot) and interactive (plotly) output options. The static output is
 useful for producing static reports (e.g. for manuscripts) and is readily
 customized further using ggplot2 syntax. The interactive output is helpful
-for exploratoring the data and producing dynamic html reports.
+for exploring the data and producing dynamic html reports.
 }
 \examples{
 data(mtcars) #load the mtcars data

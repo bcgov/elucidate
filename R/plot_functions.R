@@ -82,7 +82,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   with static (ggplot) and interactive (plotly) output options. The static
 #'   output is useful for producing static reports (e.g. for manuscripts) and is
 #'   readily customized further using ggplot2 syntax. The interactive output is
-#'   helpful for exploratoring the data and producing dynamic html reports.
+#'   helpful for exploring the data and producing dynamic html reports.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -465,7 +465,7 @@ plot_density <- function(data, x, #essential parameters
 #'   with static (ggplot) and interactive (plotly) output options. The static
 #'   output is useful for producing static reports (e.g. for manuscripts) and is
 #'   readily customized further using ggplot2 syntax. The interactive output is
-#'   helpful for exploratoring the data and producing dynamic html reports.
+#'   helpful for exploring the data and producing dynamic html reports.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -859,7 +859,7 @@ plot_histogram <- function(data, x, #essential parameters
 #'   (ggplot) and interactive (plotly) output options. The static output is
 #'   useful for producing static reports (e.g. for manuscripts) and is readily
 #'   customized further using ggplot2 syntax. The interactive output is helpful
-#'   for exploratoring the data and producing dynamic html reports.
+#'   for exploring the data and producing dynamic html reports.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -1113,57 +1113,57 @@ plot_box <- function(data, y,#essential parameters
   #x-variable recoding
   if(!missing(x)){
     data <- data %>%
-      mutate({{x}} := as.character({{x}}))
+      dplyr::mutate({{x}} := as.character({{x}}))
   }
   if(!missing(x_var_order)){
     data <- data %>%
-      mutate({{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+      dplyr::mutate({{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
   }
   if(!missing(x_var_labs)){
     data <- data %>%
-      mutate({{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+      dplyr::mutate({{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
     data <- data %>%
-      mutate({{fill_var}} := as.character({{fill_var}}))
+      dplyr::mutate({{fill_var}} := as.character({{fill_var}}))
   }
   if(!missing(fill_var) & !missing(fill_var_order)){
     data <- data %>%
-      mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+      dplyr::mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
   if(!missing(fill_var) & !missing(fill_var_labs)){
     data <- data %>%
-      mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+      dplyr::mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
     data <- data %>%
-      mutate({{colour_var}} := as.character({{colour_var}}))
+      dplyr::mutate({{colour_var}} := as.character({{colour_var}}))
   }
   if(!missing(colour_var) & !missing(colour_var_order)){
     data <- data %>%
-      mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+      dplyr::mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
   if(!missing(colour_var) & !missing(colour_var_labs)){
     data <- data %>%
-      mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+      dplyr::mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
     data <- data %>%
-      mutate({{facet_var}} := as.character({{facet_var}}))
+      dplyr::mutate({{facet_var}} := as.character({{facet_var}}))
   }
   if(!missing(facet_var) & !missing(facet_var_order)){
     data <- data %>%
-      mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+      dplyr::mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
   if(!missing(facet_var) & !missing(facet_var_labs)){
     data <- data %>%
-      mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+      dplyr::mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
@@ -1289,7 +1289,7 @@ plot_box <- function(data, y,#essential parameters
 #'   interactive (plotly) output options. The static output is useful for
 #'   producing static reports (e.g. for manuscripts) and is readily customized
 #'   further using ggplot2 syntax. The interactive output is helpful for
-#'   exploratoring the data and producing dynamic html reports.
+#'   exploring the data and producing dynamic html reports.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -1548,57 +1548,57 @@ plot_violin <- function(data, y,#essential parameters
   #x-variable recoding
   if(!missing(x)){
     data <- data %>%
-      mutate({{x}} := as.character({{x}}))
+      dplyr::mutate({{x}} := as.character({{x}}))
   }
   if(!missing(x_var_order)){
     data <- data %>%
-      mutate({{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+      dplyr::mutate({{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
   }
   if(!missing(x_var_labs)){
     data <- data %>%
-      mutate({{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+      dplyr::mutate({{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
     data <- data %>%
-      mutate({{fill_var}} := as.character({{fill_var}}))
+      dplyr::mutate({{fill_var}} := as.character({{fill_var}}))
   }
   if(!missing(fill_var) & !missing(fill_var_order)){
     data <- data %>%
-      mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+      dplyr::mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
   if(!missing(fill_var) & !missing(fill_var_labs)){
     data <- data %>%
-      mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+      dplyr::mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
     data <- data %>%
-      mutate({{colour_var}} := as.character({{colour_var}}))
+      dplyr::mutate({{colour_var}} := as.character({{colour_var}}))
   }
   if(!missing(colour_var) & !missing(colour_var_order)){
     data <- data %>%
-      mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+      dplyr::mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
   if(!missing(colour_var) & !missing(colour_var_labs)){
     data <- data %>%
-      mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+      dplyr::mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
     data <- data %>%
-      mutate({{facet_var}} := as.character({{facet_var}}))
+      dplyr::mutate({{facet_var}} := as.character({{facet_var}}))
   }
   if(!missing(facet_var) & !missing(facet_var_order)){
     data <- data %>%
-      mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+      dplyr::mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
   if(!missing(facet_var) & !missing(facet_var_labs)){
     data <- data %>%
-      mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+      dplyr::mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
@@ -1724,7 +1724,7 @@ plot_violin <- function(data, y,#essential parameters
 #'   interactive (plotly) output options. The static output is useful for
 #'   producing static reports (e.g. for manuscripts) and is readily customized
 #'   further using ggplot2 syntax. The interactive output is helpful for
-#'   exploratoring the data and producing dynamic html reports.
+#'   exploring the data and producing dynamic html reports.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -2471,6 +2471,579 @@ plot_scatter <- function(data, y, x,#essential parameters
 }
 
 
+# start of plot_bar -------------------------------------------------------
+#' @title
+#'
+#' Generate a bar plot.
+#'
+#' @description Easily generate bar plots using ggplot2 with a simplified
+#'   customization interface for common modifications with static (ggplot) and
+#'   interactive (plotly) output options. The static output is useful for
+#'   producing static reports (e.g. for manuscripts) and is readily customized
+#'   further using ggplot2 syntax. The interactive output is helpful for
+#'   exploring the data and producing dynamic html reports. To plot a bar graph
+#'   of sample means or medians and error bars, see
+#'   \code{\link{plot_stat_error}} instead.
+#'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr mutate
+#' @importFrom forcats fct_relevel
+#' @importFrom forcats fct_recode
+#' @importFrom forcats fct_reorder
+#' @importFrom forcats fct_infreq
+#' @importFrom forcats fct_rev
+#' @importFrom rlang !!!
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_boxplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 scale_colour_manual
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_fill_grey
+#' @importFrom ggplot2 lims
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 ggtitle
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 theme_gray
+#' @importFrom ggplot2 theme_light
+#' @importFrom ggplot2 theme_dark
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 position_dodge2
+#' @importFrom plotly ggplotly
+#' @importFrom utils browseURL
+#'
+#' @param data A data frame or tibble containing at least one categorical
+#'   variable.
+#'
+#' @param x A categorical variable you want to obtain separate bar plots for. If
+#'   you want to plot all bars on top of each other (position = "fill" or
+#'   position = "stack") to form a single banded bar leave "x" blank and assign
+#'   a variable to either fill_var or colour_var instead. N.B. failing to assign
+#'   a variable to x will also remove x-axis ticks and labels.
+#'
+#' @param y A numeric variable containing the values you would like plotted on
+#'   the y-axis. If y is not specified, then the stat = "count" option will be
+#'   used for \code{\link[ggplot2]{geom_bar}} and the counts of the variable(s)
+#'   assigned to x, fill_var, and/or colour_var will be plotted on the y-axis.
+#'
+#' @param ... graphical parameters (not associated with variables) to be passed
+#'   to \code{\link[ggplot2]{geom_bar}}, e.g. colour or fill, to be applied
+#'   to all bars. To see some of the available options in a web browser, set the
+#'   aesthetic_options argument to TRUE.
+#'
+#' @param width Adjusts the width of the bars (default = 0.85).
+#'
+#' @param position Determines how bars are arranged relative to one another when
+#'   a grouping variable is assigned to either fill_var or colour_var. The
+#'   default, "dodge", uses \code{\link[ggplot2]{position_dodge2}} to arrange
+#'   bars side-by-side; "stack" places the bars on top of each other; "fill"
+#'   also stacks bars but additionally converts y-axis from counts to
+#'   proportions (assuming y argument is unspecified).
+#'
+#' @param dodge_padding If position = "dodge", this controls the gap width
+#'   between adjacent bars (default = 0.1). To eliminate the gap, set this to 0.
+#'   To overlay bars use a negative value e.g. -0.5. See
+#'   \code{\link[ggplot2]{position_dodge2}} for details.
+#'
+#' @param fill_var Use if you want to assign a variable to the bar fill colour,
+#'   e.g. fill_var = grouping_variable. Produces separate sets of bars for each
+#'   level of the fill variable. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param colour_var Use if you want to assign a variable to the bar outline
+#'   colour, e.g. colour_var = grouping_variable. Produces separate sets of
+#'   bars for each level of the colour variable. See \code{\link[ggplot2]{aes}}
+#'   for details.
+#'
+#' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
+#'   "x-axis label"
+#'
+#' @param ylab Specify/overwrite the y-axis label using a character string, e.g.
+#'   "y-axis label"
+#'
+#' @param title Add a main title to the plot using a character string, e.g.
+#'   "bar plots of y for each group of x"
+#'
+#' @param fill_var_title If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the variable label in the plot legend.
+#'
+#' @param colour_var_title If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the variable label in the plot
+#'   legend.
+#'
+#' @param ylim specify the y-axis limits, e.g. ylim = c(lower_limit,
+#'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
+#'   the default is ylim = c(NA, NA)
+#'
+#' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
+#'
+#' @param y_transformation If transform_y = TRUE, this determines the
+#'   transformation to be applied. Common choices include "log10" (the default),
+#'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
+#'   details.
+#'
+#' @param x_var_order_by_y If a variable has been assigned to x, this allows you
+#'   to sort the bars in order of increasing/ascending ("i" or "a") or
+#'   decreasing ("d") value of y. If no variable is assigned to y, then the
+#'   sorting occurs based on relative counts (position = "dodge" or position =
+#'   "stack") or proportions (position = "fill").
+#'
+#' @param x_var_order If a variable has been assigned to x, this allows you to
+#'   manually modify the order of the variable groups, e.g. x =
+#'   grouping_variable, x_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param fill_var_order_by_y If a variable has been assigned to fill_var, this
+#'   allows you to sort the bars in order of increasing/ascending ("i" or "a")
+#'   or decreasing ("d") value of y. If no variable is assigned to y, then the
+#'   sorting occurs based on relative counts (position = "dodge" or position =
+#'   "stack") or proportions (position = "fill").
+#'
+#' @param fill_var_order If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the order of the variable groups, e.g. fill_var =
+#'   grouping_variable, fill_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param colour_var_order_by_y If a variable has been assigned to colour_var,
+#'   this allows you to sort the bars in order of increasing/ascending ("i" or
+#'   "a") or decreasing ("d") value of y. If no variable is assigned to y, then
+#'   the sorting occurs based on relative counts (position = "dodge" or position
+#'   = "stack") or proportions (position = "fill").
+#'
+#' @param colour_var_order If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the order of the variable groups,
+#'   e.g. colour_var = grouping_variable, fill_var_order = c("group_2",
+#'   "group_1"). See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param x_var_labs If a variable has been assigned to x, this allows you to
+#'   modify the labels of the variable groups, e.g. x = grouping_variable,
+#'   x_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_labs If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the labels of the variable groups, e.g. fill_var
+#'   = grouping_variable, fill_var_labs = c("group_1_new_label" =
+#'   "group_1_old_label", "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param colour_var_labs If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the labels of the variable groups,
+#'   e.g. colour_var = grouping_variable, colour_var_labs =
+#'   c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
+#'   "group_2_old_label"). See \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_values If a variable has been assigned to fill using
+#'   fill_var, this allows you to modify the colours assigned to the fill of
+#'   each of the variable groups, e.g. fill_var = grouping_variable,
+#'   fill_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param colour_var_values If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the colours assigned to the outline
+#'   of each of the variable groups, e.g. colour_var = grouping_variable,
+#'   colour_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param alpha This adjusts the transparency/opacity of the graphical
+#'   components of the plot, ranging from 0 = 100% transparent to 1 = 100%
+#'   opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to greyscale.
+#'
+#' @param coord_flip Flips the x and y axes. See
+#'   \code{\link[ggplot2]{coord_flip}} for details.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans" (Arial).
+#'
+#' @param font_options Set to TRUE if you want the (3) available font options to
+#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
+#'   details.
+#'
+#' @param facet_var Use if you want separate plots for each level of a grouping
+#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
+#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'
+#' @param facet_var_order If a variable has been assigned for facetting using
+#'   facet_var, this allows you to modify the order of the variable groups, e.g.
+#'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
+#'   See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param facet_var_labs If a variable has been assigned for facetting using
+#'   facet_var, this allows you to modify the labels of the variable groups
+#'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
+#'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param facet_var_strip_position If a variable has been assigned for facetting
+#'   using facet_var, this allows you to modify the position of the facet strip
+#'   labels. Sensible options include "top" (the default) or "bottom".
+#'
+#' @param facet_var_text_bold If a variable has been assigned for facetting
+#'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
+#'   for the facet strip label text.
+#'
+#' @param legend_position This allows you to modify the legend position.
+#'   Options include "right" (the default), "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legends.
+#'
+#' @param interactive Determines whether a static ggplot object or an interactive html
+#'   plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.
+#'
+#' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
+#'   online aesthetic options vignette.
+#'
+#' @return A ggplot object or plotly object depending on whether static or
+#'   interactive output was requested.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' #plotting group counts
+#'
+#' plot_bar(pdata,
+#'          x = g,
+#'          xlab = "group",
+#'          x_var_order_by_y = "i", #order levels of x by increasing count
+#'          fill_var = high_low,
+#'          colour = "black",
+#'          fill_var_values = c("blue2", "red2"))
+#'
+#' #plotting specific values on the y-axis, e.g. a grouped summary statistic
+#'
+#' library(dplyr)
+#'
+#' grouped_y1_max <- pdata %>%
+#'    group_by(g) %>%
+#'    summarise(y1_max = max(y1), .groups = "drop")
+#'
+#' grouped_y1_max %>%
+#'   plot_bar(x = g, y = y1_max,
+#'            xlab = "group", ylab = "y1 maximum value",
+#'            x_var_order_by_y = "i", #order levels of x by increasing y value
+#'            fill = "blue2")
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
+#'   \code{\link{plot_stat_error}}
+#'
+#' @export
+plot_bar <- function(data, x = NULL,
+                     y = NULL, #required for stat = "identity"
+                     ..., #geom-specific customization see ?geom_bar for details
+                     width = 0.85,
+                     position = c("dodge", "fill", "stack"),
+                     dodge_padding = 0.1,
+                     fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
+                     xlab = NULL, ylab = NULL, title = NULL,
+                     fill_var_title = NULL, colour_var_title = NULL, #titles
+                     ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10", #control the y axis limits and scaling
+                     x_var_order_by_y = c(NULL, "d", "a", "i"), x_var_order = NULL,
+                     fill_var_order_by_y = c(NULL, "d", "a", "i"), fill_var_order = NULL,
+                     colour_var_order_by_y = c(NULL, "d", "a", "i"), colour_var_order = NULL, #modify grouping variable level order
+                     x_var_labs = NULL, fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
+                     fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
+                     alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
+                     coord_flip = FALSE,
+                     theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                     facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
+                     facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
+                     legend_position = "right", omit_legend = FALSE, #legend position
+                     interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  if(missing(x) && missing(y) && missing(fill_var) && missing(colour_var)) {
+    stop('At least one of "x", "y", "fill_var", or "colour_var" must be specified.')
+  }
+
+  x_var_order_by_y <- match.arg(x_var_order_by_y, several.ok = FALSE)
+  fill_var_order_by_y <- match.arg(fill_var_order_by_y, several.ok = FALSE)
+  colour_var_order_by_y <- match.arg(colour_var_order_by_y, several.ok = FALSE)
+  position <- match.arg(position, several.ok = FALSE)
+
+  #x-variable recoding
+  if(!missing(x)){
+    data <- data %>%
+      dplyr::mutate({{x}} := as.character({{x}}))
+  }
+  if(!missing(x) && !missing(x_var_order_by_y)) {
+    if(!missing(y)) {
+      if(x_var_order_by_y == "d") {
+        data <- data %>%
+          dplyr::mutate({{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = TRUE))
+      } else {
+        data <- data %>%
+          dplyr::mutate({{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = FALSE))
+      }
+    } else {
+      if(x_var_order_by_y == "d") {
+        data <- data %>%
+          dplyr::mutate({{x}} := forcats::fct_infreq({{x}}))
+      } else {
+        data <- data %>%
+          dplyr::mutate({{x}} := forcats::fct_rev(forcats::fct_infreq({{x}})))
+      }
+    }
+  }
+  if(!missing(x) && !missing(x_var_order)){
+    data <- data %>%
+      dplyr::mutate({{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+  }
+  if(!missing(x) && !missing(x_var_labs)){
+    data <- data %>%
+      dplyr::mutate({{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+  }
+
+  #fill variable recoding
+  if(!missing(fill_var)){
+    data <- data %>%
+      dplyr::mutate({{fill_var}} := as.character({{fill_var}}))
+  }
+  if(!missing(fill_var) && !missing(fill_var_order_by_y)) {
+    if(!missing(y)) {
+      if(fill_var_order_by_y == "d") {
+        data <- data %>%
+          dplyr::mutate({{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = TRUE))
+      } else {
+        data <- data %>%
+          dplyr::mutate({{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = FALSE))
+      }
+    } else {
+      if(fill_var_order_by_y == "d") {
+        data <- data %>%
+          dplyr::mutate({{fill_var}} := forcats::fct_infreq({{fill_var}}))
+      } else {
+        data <- data %>%
+          dplyr::mutate({{fill_var}} := forcats::fct_rev(forcats::fct_infreq({{fill_var}})))
+      }
+    }
+  }
+  if(!missing(fill_var) && !missing(fill_var_order)){
+    data <- data %>%
+      dplyr::mutate({{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+  }
+  if(!missing(fill_var) && !missing(fill_var_labs)){
+    data <- data %>%
+      dplyr::mutate({{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+  }
+
+  #colour variable recoding
+  if(!missing(colour_var)){
+    data <- data %>%
+      dplyr::mutate({{colour_var}} := as.character({{colour_var}}))
+  }
+  if(!missing(colour_var) && !missing(colour_var_order_by_y)) {
+    if(!missing(y)) {
+      if(colour_var_order_by_y == "d") {
+        data <- data %>%
+          dplyr::mutate({{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = TRUE))
+      } else {
+        data <- data %>%
+          dplyr::mutate({{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = FALSE))
+      }
+    } else {
+      if(colour_var_order_by_y == "d") {
+        data <- data %>%
+          dplyr::mutate({{colour_var}} := forcats::fct_infreq({{colour_var}}))
+      } else {
+        data <- data %>%
+          dplyr::mutate({{colour_var}} := forcats::fct_rev(forcats::fct_infreq({{colour_var}})))
+      }
+    }
+  }
+  if(!missing(colour_var) & !missing(colour_var_order)){
+    data <- data %>%
+      dplyr::mutate({{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+  }
+  if(!missing(colour_var) & !missing(colour_var_labs)){
+    data <- data %>%
+      dplyr::mutate({{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+  }
+
+  #facet label recoding
+  if(!missing(facet_var)){
+    data <- data %>%
+      dplyr::mutate({{facet_var}} := as.character({{facet_var}}))
+  }
+  if(!missing(facet_var) & !missing(facet_var_order)){
+    data <- data %>%
+      dplyr::mutate({{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+  }
+  if(!missing(facet_var) & !missing(facet_var_labs)){
+    data <- data %>%
+      dplyr::mutate({{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+  }
+
+  #setup foundational plotting object layer
+  if(!missing(y) && !missing(x)) {
+    p <- data %>%
+      ggplot2::ggplot(ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
+  } else if (!missing(x)) {
+    p <- data %>%
+      ggplot2::ggplot(ggplot2::aes(x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+  } else if (!missing(y) && missing(x)) {
+    p <- data %>%
+      ggplot2::ggplot(ggplot2::aes(y = {{y}}, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+  } else {
+    p <- data %>%
+      ggplot2::ggplot(ggplot2::aes(x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+  }
+
+  #add the geom layer
+  if(missing(y)) {
+    if(position == "dodge") {
+      p <- p +
+        ggplot2::geom_bar(alpha = alpha, stat = "count", width = width, position = ggplot2::position_dodge2(padding = dodge_padding), ...)
+    } else {
+      p <- p +
+        ggplot2::geom_bar(alpha = alpha, stat = "count", width = width,  position = position, ...)
+    }
+  } else {
+    if(position == "dodge") {
+      p <- p +
+        ggplot2::geom_bar(alpha = alpha, stat = "identity", width = width,  position = ggplot2::position_dodge2(padding = dodge_padding), ...)
+    } else {
+      p <- p +
+        ggplot2::geom_bar(alpha = alpha, stat = "identity", width = width,  position = position, ...)
+    }
+
+  }
+
+  #modification of the colour or fill values
+  if (!missing(fill_var) & missing(colour_var)){
+    if(!missing(fill_var_values)){
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values)
+    }
+  } else if(missing(fill_var) & !missing(colour_var)) {
+    if(!missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    }
+  } else if(!missing(fill_var) & !missing(colour_var)) {
+    if(!missing(fill_var_values) & missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values)
+    } else if(missing(fill_var_values) & !missing(colour_var_values)) {
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    } else if(!missing(fill_var_values) & !missing(colour_var_values)) {
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values) +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    }
+  }
+
+  #modification of y-axis limits & transformations
+  if(!missing(ylim) && transform_y == FALSE){
+    p <- p + ggplot2::lims(y = ylim)
+  } else if (!missing(ylim) && transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
+  } else if (!missing(ylim) && transform_y  == TRUE){
+    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  }
+
+  #modification of axis labels
+  if(!missing(xlab)){
+    p <- p + ggplot2::labs(x = xlab)
+  } else if(missing(x)) {
+    p <- p + ggplot2::labs(x = NULL)
+  }
+  if(missing(x)) {
+    p <- p + scale_x_continuous(breaks = NULL)
+  }
+  if(!missing(ylab)){
+    p <- p + ggplot2::labs(y = ylab)
+  } else if (missing(y) && position == "fill") {
+    p <- p + ggplot2::labs(y = "proportion of total count")
+  }
+  if(!missing(fill_var_title)){
+    p <- p + ggplot2::labs(fill = fill_var_title)
+  }
+  if(!missing(colour_var_title)){
+    p <- p + ggplot2::labs(color = colour_var_title)
+  }
+
+  if(coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip()
+  }
+
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+  if(!missing(title)){
+    p <- p + ggplot2::ggtitle(title)
+  }
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "b & w"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "black and white"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "black & white"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "gray"){
+    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+  if(omit_legend == TRUE){
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  if(legend_position != "right"){
+    p <- p + ggplot2::theme(legend.position = legend_position)
+  }
+  if(!missing(facet_var)){
+    p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
+  }
+  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+  }
+  if(font_options == TRUE){
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
+  }
+  if(aesthetic_options == TRUE){
+    utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
+  }
+  if(interactive == TRUE){
+    return(plotly::ggplotly(p))
+  }
+  if(interactive == FALSE){
+    return(p)
+  }
+}
+
+
 # start of plot_stat_error -------------------------------------------------------
 #' @title
 #'
@@ -2481,7 +3054,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   (ggplot) and interactive (plotly) output options. The static output is
 #'   useful for producing static reports (e.g. for manuscripts) and is readily
 #'   customized further using ggplot2 syntax. The interactive output is helpful
-#'   for exploratoring the data and producing dynamic html reports.
+#'   for exploring the data and producing dynamic html reports.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate

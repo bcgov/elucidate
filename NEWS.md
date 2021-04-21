@@ -1,3 +1,7 @@
+## elucidate 0.0.0.9021 - April 20th, 2021
+
+* Added `plot_bar()` for building bar plots using `ggplot2::geom_bar()`/`ggplot2::geom_col()` with options to allow easy sorting bars in order of decreasing or increasing counts (or proportions if position = "fill"), based on values of a y-axis variable if one is specified, or manually.
+
 ## elucidate 0.0.0.9020 - February 3rd, 2021
 
 * Upgraded `describe()`, `mode()`, and the `counts*` function set to use the more efficient `Rfast::Table()` instead of `base::table()` for counting the unique values of a vector. We are trying to avoid adding any more dependencies to `elucidate` but the substantial performance improvements of using `Rfast::Table()` made using it worth the added dependency on `Rfast`. 
