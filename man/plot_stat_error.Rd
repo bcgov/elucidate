@@ -55,7 +55,7 @@ plot_stat_error(
   text_size = 14,
   font = "sans",
   font_options = FALSE,
-  flip_coordinates = FALSE,
+  coord_flip = FALSE,
   omit_legend = FALSE,
   legend_position = "right",
   facet_var = NULL,
@@ -302,7 +302,7 @@ information.}
 be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
 details.}
 
-\item{flip_coordinates}{Set to TRUE (default = FALSE) if you want to swap the
+\item{coord_flip}{Set to TRUE (default = FALSE) if you want to swap the
 x and y axes. See \code{\link[ggplot2]{coord_flip}} for more information.}
 
 \item{omit_legend}{Set to TRUE if you want to remove/omit the legends.}
@@ -389,7 +389,7 @@ pdata \%>\%
                   alpha = 0.6)
 
 pdata \%>\%
- plot_stat_error(y = y1, x = g, flip_coordinates = T,
+ plot_stat_error(y = y1, x = g, coord_flip = T,
                  fill_var = g, geom = "point", eb_size = 0.6,
                  alpha = 0.6)
 

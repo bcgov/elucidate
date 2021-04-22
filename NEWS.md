@@ -1,3 +1,9 @@
+## elucidate 0.0.0.9022 - April 22nd, 2021
+
+* Added `plot_pie()` for building pie charts with `ggplot2::geom_bar()` & `ggplot2::coord_polar()`. Despite well founded criticisms of pie charts (e.g. https://www.data-to-viz.com/caveat/pie.html), sometimes our project stakeholders, bosses, clients, or graduate supervisors want to see them anyways, so `plot_pie()` aims to make producing them with ggplot2 a bit easier. To encourage limiting the number of slices users display in a pie chart, if the chosen fill variable (argument "fill_var") contains more than 5 unique values (leading to >5 pie slices), a warning is issued which urges the user to consider either lumping some slices together (via argument "lump_n") or using `plot_bar()` instead.
+
+* Minor `plot_bar()` bug fixes. Changed "flip_coordinates" argument to `plot_stat_error()` to "coord_flip" to align with the underlying `ggplot2::coord_flip()`.
+
 ## elucidate 0.0.0.9021 - April 20th, 2021
 
 * Added `plot_bar()` for building bar plots using `ggplot2::geom_bar()`/`ggplot2::geom_col()` with options to allow easy sorting bars in order of decreasing or increasing counts (or proportions if position = "fill"), based on values of a y-axis variable if one is specified, or manually.

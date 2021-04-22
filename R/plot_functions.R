@@ -2494,7 +2494,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom forcats fct_rev
 #' @importFrom rlang !!!
 #' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 geom_boxplot
+#' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
@@ -2757,9 +2757,9 @@ plot_bar <- function(data, x = NULL,
                      xlab = NULL, ylab = NULL, title = NULL,
                      fill_var_title = NULL, colour_var_title = NULL, #titles
                      ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10", #control the y axis limits and scaling
-                     x_var_order_by_y = c(NULL, "d", "a", "i"), x_var_order = NULL,
-                     fill_var_order_by_y = c(NULL, "d", "a", "i"), fill_var_order = NULL,
-                     colour_var_order_by_y = c(NULL, "d", "a", "i"), colour_var_order = NULL, #modify grouping variable level order
+                     x_var_order_by_y = NULL, x_var_order = NULL,
+                     fill_var_order_by_y = NULL, fill_var_order = NULL,
+                     colour_var_order_by_y = NULL, colour_var_order = NULL, #modify grouping variable level order
                      x_var_labs = NULL, fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                      fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                      alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
@@ -2773,9 +2773,17 @@ plot_bar <- function(data, x = NULL,
   if(missing(x) && missing(y) && missing(fill_var) && missing(colour_var)) {
     stop('At least one of "x", "y", "fill_var", or "colour_var" must be specified.')
   }
+  if(!missing(x_var_order_by_y)) {
+    x_var_order_by_n <- match.arg(x_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+  }
+  if(!missing(fill_var_order_by_y)) {
+    fill_var_order_by_n <- match.arg(fill_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+  }
+  if(!missing(colour_var_order_by_y)) {
+    colour_var_order_by_n <- match.arg(colour_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+  }
 
   x_var_order_by_y <- match.arg(x_var_order_by_y, several.ok = FALSE)
-  fill_var_order_by_y <- match.arg(fill_var_order_by_y, several.ok = FALSE)
   colour_var_order_by_y <- match.arg(colour_var_order_by_y, several.ok = FALSE)
   position <- match.arg(position, several.ok = FALSE)
 
@@ -3326,7 +3334,7 @@ plot_bar <- function(data, x = NULL,
 #'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
 #'   details.
 #'
-#' @param flip_coordinates Set to TRUE (default = FALSE) if you want to swap the
+#' @param coord_flip Set to TRUE (default = FALSE) if you want to swap the
 #'   x and y axes. See \code{\link[ggplot2]{coord_flip}} for more information.
 #'
 #' @param omit_legend Set to TRUE if you want to remove/omit the legends.
@@ -3406,7 +3414,7 @@ plot_bar <- function(data, x = NULL,
 #'                   alpha = 0.6)
 #'
 #' pdata %>%
-#'  plot_stat_error(y = y1, x = g, flip_coordinates = T,
+#'  plot_stat_error(y = y1, x = g, coord_flip = T,
 #'                  fill_var = g, geom = "point", eb_size = 0.6,
 #'                  alpha = 0.6)
 #'
@@ -3471,7 +3479,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
                             add_lines = F, line_alpha = 0.75, line_group = NULL,
                             line_colour = NULL, linetype = 1, line_size = 0.5,
                             theme = "classic", text_size = 14, font = "sans", font_options = FALSE,
-                            flip_coordinates = FALSE, omit_legend = FALSE, legend_position = "right",
+                            coord_flip = FALSE, omit_legend = FALSE, legend_position = "right",
                             facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL,
                             facet_var_strip_position = "top", facet_var_text_bold = TRUE,
                             print_stats = F, aesthetic_options = FALSE,
@@ -4112,13 +4120,13 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
     p <- p + ggplot2::scale_fill_grey()
   }
 
-  if(flip_coordinates == F){
+  if(coord_flip == F){
     if(missing(x)){
       p <- p + ggplot2::theme(axis.title.x = element_blank(),
                               axis.text.x = element_blank(),
                               axis.ticks.x = element_blank())
     }
-  } else if (flip_coordinates == T){
+  } else if (coord_flip == T){
     p <- p + ggplot2::coord_flip()
     if(missing(x)){
       p <- p + ggplot2::theme(axis.title.y = element_blank(),
@@ -4174,4 +4182,425 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
   } else {
     errorCondition("output argument must be set to either \"p\" for the plot only or \"ps\" for a list containing the plot and the stats used to produce it")
   }
+}
+
+
+# start of plot_pie -------------------------------------------------------
+#' @title
+#'
+#' Generate a pie chart.
+#'
+#' @description Easily generate pie charts, AKA bar charts with polar
+#'   coordinates, using ggplot2 with a simplified customization interface for
+#'   common modifications. Pie charts are rarely the most effective way of
+#'   visualizing data (especially when >5 groups are being compared), but that
+#'   doesn't mean there shouldn't be an easy way to build one with ggplot2 in
+#'   case your project stakeholders ask.
+#'
+#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr ungroup
+#' @importFrom dplyr count
+#' @importFrom dplyr arrange
+#' @importFrom dplyr summarise
+#' @importFrom forcats fct_relevel
+#' @importFrom forcats fct_recode
+#' @importFrom forcats fct_reorder
+#' @importFrom forcats fct_infreq
+#' @importFrom forcats fct_rev
+#' @importFrom forcats fct_lump_n
+#' @importFrom rlang !!!
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_bar
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 coord_polar
+#' @importFrom ggplot2 geom_text
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 scale_fill_grey
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 ggtitle
+#' @importFrom ggplot2 theme_void
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 facet_wrap
+#' @importFrom utils browseURL
+#' @importFrom data.table uniqueN
+#'
+#' @param data A data frame or tibble containing at least one categorical
+#'   variable.
+#'
+#' @param fill_var A categorical variable to assign to the slice fill colour,
+#'   e.g. fill_var = grouping_variable. Produces separate slices each
+#'   level of the fill variable. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param y A numeric variable containing values to be used for calculating pie
+#'   slice sizes. If y is not specified, then pie slice sizes will be based on
+#'   the relative frequency of fill_var categories. If y is specified, then the
+#'   slices will represent fractions of the sum of the y-variable under each
+#'   category of fill_var.
+#'
+#' @param ... graphical parameters (not associated with variables) to be passed
+#'   to \code{\link[ggplot2]{geom_bar}}, e.g. colour (affects slice outlines),
+#'   to be applied to all slices. To see some of the available options in a web
+#'   browser, set the aesthetic_options argument to TRUE.
+#'
+#' @param title Add a main title to the plot using a character string, e.g.
+#'   "pie chart title"
+#'
+#' @param title_alignment Left-to-right alignment of the main plot title.
+#'   Accepts values from 0 (far left) to 1 (far right). Default is 0.5 (centre).
+#'
+#' @param fill_var_order_by_y This allows you to sort the slices of the chart in
+#'   order of increasing/ascending ("i" or "a") or decreasing ("d") value of y.
+#'   If no variable is assigned to y, then the sorting occurs based on the
+#'   frequencies of the fill_var categories.
+#'
+#' @param fill_var_order This allows you to manually modify the order of the
+#'   fill variable groups, e.g. fill_var = grouping_variable, fill_var_order =
+#'   c("group_2", "group_1"). See \code{\link[forcats]{fct_relevel}} for
+#'   details.
+#'
+#' @param fill_var_labs This allows you to modify the labels of the fill
+#'   variable groups, e.g. fill_var = grouping_variable, fill_var_labs =
+#'   c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
+#'   "group_2_old_label"). See \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_values This allows you to modify the colours assigned to the
+#'   fill of each of the fill variable groups, e.g. fill_var =
+#'   grouping_variable, fill_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param fill_var_title this allows you to modify the fill variable label in
+#'   the plot legend.
+#'
+#' @param slice_text Adds text with slice percentages ("pct"), total
+#'   counts/values ("tot"), or fill_var group labels ("grp") to the middle of
+#'   each slice.
+#'
+#' @param slice_text_prefix Adds a prefix string to slice_text labels separated by a
+#'   single space, e.g. if your slices represent monetary totals (via a
+#'   y-variable), then you might set this to "$"
+#'
+#' @param slice_text_suffix Adds a suffix string to slice_text labels separated by a
+#'   single space, e.g. if your slices represent percentages (e.g. slice_text =
+#'   "pct"), then you may want to set this to "%"
+#'
+#' @param slice_text_colour Controls slice text font colour. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param slice_text_size Controls the slice text font size.
+#'
+#' @param slice_text_custom Use this to specify custom slice text labels instead
+#'   of using one of the convenience options provided by the slice_text
+#'   argument. Must be a character vector of length equal to the number of
+#'   slices (fill_var categories).
+#'
+#' @param round_n If slice_text = "pct" or "tot" this allows you to round the
+#'   values to n significant digits. See the \code{\link{round}} "n" argument
+#'   documentation for details.
+#'
+#' @param lump_n If there are so many fill_var categories that you find the plot
+#'   difficult to interpret, you can use this to lump/combine the least common
+#'   categories together into an "other" category. Simply specify the number of
+#'   categories you want to retain and the rest will be lumped together. See
+#'   \code{\link[forcats]{fct_lump_n}} for details. If "y" is specified, then
+#'   the relative proportions of the fill_var group totals for the y variable
+#'   will be used to determine which are the top n categories to retain (i.e.
+#'   largest slices).
+#'
+#' @param lump_lab If lump_n is used, this allows you to change the label of the
+#'   "other" category.
+#'
+#' @param facet_var Use if you want separate pie charts for each level of a
+#'   grouping variable (i.e. a facetted plot), e.g. facet_var =
+#'   grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for details.
+#'
+#' @param facet_var_order If a variable has been assigned for facetting using
+#'   facet_var, this allows you to modify the order of the variable groups, e.g.
+#'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
+#'   See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param facet_var_labs If a variable has been assigned for facetting using
+#'   facet_var, this allows you to modify the labels of the variable groups
+#'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
+#'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param facet_var_strip_position If a variable has been assigned for facetting
+#'   using facet_var, this allows you to modify the position of the facet strip
+#'   labels. Sensible options include "top" (the default) or "bottom".
+#'
+#' @param facet_var_text_bold If a variable has been assigned for facetting
+#'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
+#'   for the facet strip label text.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to greyscale.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans" (Arial).
+#'
+#' @param font_options Set to TRUE if you want the (3) available font options to
+#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
+#'   details.
+#'
+#' @param legend_position This allows you to modify the legend position.
+#'   Options include "right" (the default), "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legends.
+#'
+#' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
+#'   online aesthetic options vignette.
+#'
+#' @return A ggplot pie chart.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' plot_pie(gapminder::gapminder,
+#'          fill_var = continent, y = gdpPercap,
+#'          title = "continental distribution of GDP per capita",
+#'          slice_text = "pct",
+#'          slice_text_suffix = "%",
+#'          colour = "white",
+#'          lump_n = 3, round_n = 2)
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
+#'   \code{\link{plot_stat_error}}
+#'
+#' @export
+plot_pie <- function(data,
+                     fill_var,
+                     y = NULL,
+                     ..., #geom-specific customization see ?geom_bar for details
+                     title = NULL, title_alignment = 0.5,
+                     fill_var_order_by_y = NULL,
+                     fill_var_order = NULL,
+                     fill_var_labs = NULL,
+                     fill_var_values = NULL,
+                     fill_var_title = NULL,
+                     slice_text = NULL,
+                     slice_text_prefix = "",
+                     slice_text_suffix = "",
+                     slice_text_colour = "black",
+                     slice_text_size = 4,
+                     slice_text_custom = NULL,
+                     round_n = NULL,
+                     lump_n = NULL,
+                     lump_lab = NULL,
+                     facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL,
+                     facet_var_strip_position = "top", facet_var_text_bold = TRUE,
+                     greyscale = FALSE, #control transparency, convert to greyscale
+                     text_size = 14, font = "sans", font_options = FALSE, #theme options
+                     legend_position = "right", omit_legend = FALSE, #legend position
+                     aesthetic_options = FALSE) {#output format
+
+  if(!is.numeric(title_alignment)) {
+    stop('"title_alignment" must be a number between 0 (left) and 1 (right)')
+  }
+
+  if(!missing(fill_var_order_by_y)) {
+    fill_var_order_by_n <- match.arg(fill_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+  }
+
+  if(!missing(slice_text)) {
+    slice_text <- match.arg(slice_text, choices = c("pct", "tot", "grp"), several.ok = FALSE)
+  }
+
+  #fill variable recoding
+  if(!missing(fill_var)){
+    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+  } else {
+    stop("A categorical variable in the data frame source must be assigned to fill_var!")
+  }
+
+  if(!missing(lump_n)) {
+    if(!missing(y)) {
+      if(!missing(lump_lab)) {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, w = {{y}}, n = lump_n, other_level = lump_lab))
+      } else {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, w = {{y}}, n = lump_n, other_level = "other"))
+      }
+    } else {
+      if(!missing(lump_lab)) {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, n = lump_n, other_level = lump_lab))
+      } else {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, n = lump_n, other_level = "other"))
+      }
+    }
+  }
+
+  if(data.table::uniqueN(data[[deparse(substitute(fill_var))]]) > 5) {
+    warning('Pie charts tend to be difficult to read with more than 5 slices.\n  Consider lumping infrequent categories together with "lump_n" or using plot_bar() to visualize these data.')
+  }
+  if(!missing(fill_var_order_by_y)) {
+    if(!missing(y)) {
+      if(fill_var_order_by_y == "d") {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = TRUE))
+      } else {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = FALSE))
+      }
+    } else {
+      if(fill_var_order_by_y == "d") {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_infreq({{fill_var}}))
+      } else {
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_rev(forcats::fct_infreq({{fill_var}})))
+      }
+    }
+  }
+
+  if(!missing(fill_var_order)){
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+  }
+  if(!missing(fill_var_labs)){
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+  }
+
+  #facet label recoding
+  if(!missing(facet_var)){
+    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+  }
+  if(!missing(facet_var) && !missing(facet_var_order)){
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+  }
+  if(!missing(facet_var) && !missing(facet_var_labs)){
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+  }
+
+  #produce the descriptive stats & plot
+  if(missing(y)) {
+    if(missing(facet_var)) {
+      plot_data <- dplyr::group_by(data, {{fill_var}})
+      plot_data <- dplyr::count(plot_data, name = "n_")
+      plot_data <- dplyr::ungroup(plot_data)
+      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
+      plot_data <- dplyr::mutate(plot_data, p_ = n_/sum(n_), st_coords = cumsum(p_) - 0.5*p_)
+    } else {
+      plot_data <- dplyr::group_by(data, {{fill_var}}, {{facet_var}})
+      plot_data <- dplyr::count(plot_data, name = "n_")
+      plot_data <- dplyr::ungroup(plot_data)
+      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
+      plot_data <- dplyr::group_by(plot_data, {{facet_var}})
+      plot_data <- dplyr::mutate(plot_data, p_ = n_/sum(n_), st_coords = cumsum(p_) - 0.5*p_)
+      plot_data <- dplyr::ungroup(plot_data)
+    }
+  } else {
+    if(missing(facet_var)) {
+      plot_data <- dplyr::group_by(data, {{fill_var}})
+      plot_data <- dplyr::summarise(plot_data, ytot = sum({{y}}, na.rm = TRUE), .groups = "drop")
+      plot_data <- dplyr::ungroup(plot_data)
+      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
+      plot_data <- dplyr::mutate(plot_data, p_ = ytot/sum(ytot), st_coords = cumsum(p_) - 0.5*p_)
+    } else {
+      plot_data <- dplyr::group_by(data, {{fill_var}}, {{facet_var}})
+      plot_data <- dplyr::summarise(plot_data, ytot = sum({{y}}, na.rm = TRUE), .groups = "drop")
+      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
+      plot_data <- dplyr::group_by(plot_data, {{facet_var}})
+      plot_data <- dplyr::mutate(plot_data, p_ = ytot/sum(ytot), st_coords = cumsum(p_) - 0.5*p_)
+      plot_data <- dplyr::ungroup(plot_data)
+    }
+  }
+  p <- ggplot2::ggplot(plot_data, ggplot2::aes(y = p_, x = "", fill = {{fill_var}})) +
+    ggplot2::geom_bar(stat = "identity", position = "stack", width = 1, ...) +
+    ggplot2::coord_polar("y", start= 0)
+
+  if(!missing(slice_text) && !missing(slice_text_custom)) {
+    stop('only one of "slice_text" or "slice_text_custom" should be specified')
+  } else if(!missing(slice_text) && missing(slice_text_custom)) {
+    if(slice_text == "pct") {
+      if(!missing(round_n)) {
+        p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
+                                        label=paste(slice_text_prefix, round(p_*100, round_n), slice_text_suffix)),
+                                    colour = slice_text_colour, size = slice_text_size)
+      } else {
+        p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
+                                        label=paste(slice_text_prefix, p_*100, slice_text_suffix)),
+                                    colour = slice_text_colour, size = slice_text_size)
+      }
+    } else if (slice_text == "tot") {
+      if(missing(y)) {
+        if(!missing(round_n)) {
+          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
+                                          label=paste(slice_text_prefix, round(n_, round_n), slice_text_suffix)),
+                                      colour = slice_text_colour, size = slice_text_size)
+        } else {
+          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
+                                          label=paste(slice_text_prefix, n_), slice_text_suffix),
+                                      colour = slice_text_colour, size = slice_text_size)
+        }
+      } else {
+        if(!missing(round_n)) {
+          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
+                                          label=paste(slice_text_prefix, round(ytot, round_n), slice_text_suffix)),
+                                      colour = slice_text_colour, size = slice_text_size)
+        } else {
+          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
+                                          label=paste(slice_text_prefix, ytot, slice_text_suffix)),
+                                      colour = slice_text_colour, size = slice_text_size)
+        }
+      }
+    } else if (slice_text == "grp") {
+      p <- p + ggplot2::geom_text(aes(x=1, y = st_coords, label=unique(data[[deparse(substitute(fill_var))]])),
+                                  colour = slice_text_colour, size = slice_text_size)
+    }
+  } else if(missing(slice_text) && !missing(slice_text_custom)) {
+    if(length(slice_text_custom) != data.table::uniqueN(data[[deparse(substitute(fill_var))]])) {
+      stop('"slice_text_custom" must be a character vector with as many values as there are levels of "fill_var"')
+    }
+    p <- p + ggplot2::geom_text(aes(x=1, y = st_coords, label=slice_text_custom),
+                                colour = slice_text_colour, size = slice_text_size)
+  }
+
+  #apply theme
+  p <- p + ggplot2::theme_void(base_size = text_size, base_family = font)
+  p <- p + ggplot2::theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+
+  #legend options
+  if(omit_legend == TRUE){
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  if(legend_position != "right"){
+    p <- p + ggplot2::theme(legend.position = legend_position)
+  }
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+  #title
+  if(!missing(title)){
+    p <- p + ggplot2::ggtitle(title)
+    p <- p + ggplot2::theme(plot.title = element_text(hjust = title_alignment))
+  }
+  if(!missing(fill_var_title)){
+    p <- p + ggplot2::labs(fill = fill_var_title)
+  }
+  #customize fill colours
+  if (!missing(fill_var) && !missing(fill_var_values)){
+    p <- p +
+      ggplot2::scale_fill_manual(values = fill_var_values)
+  }
+  #facets
+  if(!missing(facet_var)){
+    p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
+  }
+  if(!missing(facet_var) && facet_var_text_bold == TRUE){
+    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+  }
+  #misc
+  if(font_options == TRUE){
+    if(Sys.info()['sysname'] == "Windows"){
+      print(grDevices::windowsFonts())
+    } else {
+      message("font options are currently only available for Windows systems")
+    }
+  }
+  if(aesthetic_options == TRUE){
+    utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
+  }
+  return(p)
 }
