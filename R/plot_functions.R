@@ -108,6 +108,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @importFrom ggplot2 theme_minimal
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 element_text
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -437,7 +438,7 @@ plot_density <- function(data, x, #essential parameters
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -485,6 +486,7 @@ plot_density <- function(data, x, #essential parameters
 #' @importFrom ggplot2 theme_minimal
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 element_text
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -827,7 +829,7 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -876,6 +878,7 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom ggplot2 theme_minimal
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 element_text
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -1252,7 +1255,7 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -1301,6 +1304,7 @@ plot_box <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme_minimal
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 element_text
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -1682,7 +1686,7 @@ plot_violin <- function(data, y,#essential parameters
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -1736,6 +1740,7 @@ plot_violin <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme_minimal
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 element_text
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -2433,7 +2438,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -2490,6 +2495,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 position_dodge2
+#' @importFrom ggplot2 element_text
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -3010,7 +3016,7 @@ plot_bar <- function(data, x = NULL,
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -3068,6 +3074,7 @@ plot_bar <- function(data, x = NULL,
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 position_dodge
 #' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_text
 #' @importFrom stats quantile
 #' @importFrom stats qnorm
 #' @importFrom stats var
@@ -4103,16 +4110,16 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 
   if(coord_flip == F){
     if(missing(x)){
-      p <- p + ggplot2::theme(axis.title.x = element_blank(),
-                              axis.text.x = element_blank(),
-                              axis.ticks.x = element_blank())
+      p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                              axis.text.x = ggplot2::element_blank(),
+                              axis.ticks.x = ggplot2::element_blank())
     }
   } else if (coord_flip == T){
     p <- p + ggplot2::coord_flip()
     if(missing(x)){
-      p <- p + ggplot2::theme(axis.title.y = element_blank(),
-                              axis.text.y = element_blank(),
-                              axis.ticks.y = element_blank())
+      p <- p + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                              axis.text.y = ggplot2::element_blank(),
+                              axis.ticks.y = ggplot2::element_blank())
     }
   }
   if(legend_position != "right"){
@@ -4132,7 +4139,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
 
   if(output == "p"){
@@ -4196,6 +4203,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 margin
+#' @importFrom ggplot2 element_text
 #' @importFrom utils browseURL
 #' @importFrom data.table uniqueN
 #'
@@ -4551,7 +4559,7 @@ plot_pie <- function(data,
   #title
   if(!missing(title)){
     p <- p + ggplot2::ggtitle(title)
-    p <- p + ggplot2::theme(plot.title = element_text(hjust = title_alignment))
+    p <- p + ggplot2::theme(plot.title = ggplot2::element_text(hjust = title_alignment))
   }
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
@@ -4566,7 +4574,7 @@ plot_pie <- function(data,
     p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   #misc
   if(aesthetic_options == TRUE){
