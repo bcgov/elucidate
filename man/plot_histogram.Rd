@@ -10,8 +10,8 @@ plot_histogram(
   ...,
   binwidth = 1,
   bins = NULL,
-  position = "identity",
-  stat = "bin",
+  position = c("identity", "stack", "dodge"),
+  stat = c("bin", "count"),
   na.rm = TRUE,
   fill_var = NULL,
   colour_var = NULL,
@@ -33,14 +33,13 @@ plot_histogram(
   greyscale = FALSE,
   theme = "classic",
   text_size = 14,
-  font = "sans",
-  font_options = FALSE,
+  font = c("sans", "serif", "mono"),
   facet_var = NULL,
   facet_var_order = NULL,
   facet_var_labs = NULL,
-  facet_var_strip_position = "top",
+  facet_var_strip_position = c("top", "bottom"),
   facet_var_text_bold = TRUE,
-  legend_position = "right",
+  legend_position = c("right", "left", "top", "bottom"),
   omit_legend = FALSE,
   interactive = FALSE,
   aesthetic_options = FALSE
@@ -65,8 +64,8 @@ a total number of bins to display. If you choose to do so, set binwidth =
 NULL.}
 
 \item{position}{Determines how bars are organized when a grouping variable is
-assigned to fill or colour. Valid opions include "identity" (the
-default),"stacked", and "dodge"}
+assigned to fill or colour. Valid options include "identity" (the
+default),"stack", and "dodge"}
 
 \item{stat}{Determines how the y-axis is constructed. Typically one would not
 change this from the default of "bin" for a histogram, although "count" is
@@ -163,11 +162,9 @@ information.}
 
 \item{text_size}{This controls the size of all plot text. Default = 14.}
 
-\item{font}{This controls the font of all plot text. Default = "sans" (Arial).}
-
-\item{font_options}{Set to TRUE if you want the (3) available font options to
-be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-details.}
+\item{font}{This controls the font of all plot text. Default = "sans"
+(Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+New).}
 
 \item{facet_var}{Use if you want separate plots for each level of a grouping
 variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See

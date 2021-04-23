@@ -2,7 +2,15 @@
 
 * Added `plot_pie()` for building pie charts with `ggplot2::geom_bar()` & `ggplot2::coord_polar()`. Despite well founded criticisms of pie charts (e.g. https://www.data-to-viz.com/caveat/pie.html), sometimes our project stakeholders, bosses, clients, or graduate supervisors want to see them anyways, so `plot_pie()` aims to make producing them with ggplot2 a bit easier. To encourage limiting the number of slices users display in a pie chart, if the chosen fill variable (argument "fill_var") contains more than 5 unique values (leading to >5 pie slices), a warning is issued which urges the user to consider either lumping some slices together (via argument "lump_n") or using `plot_bar()` instead.
 
-* Minor `plot_bar()` bug fixes. Changed "flip_coordinates" argument to `plot_stat_error()` to "coord_flip" to align with the underlying `ggplot2::coord_flip()`.
+* Minor `plot_bar()` bug fixes. Changed "flip_coordinates" argument to `plot_stat_error()` to "coord_flip" to align with the underlying `ggplot2::coord_flip()` and `plot_bar()`.
+
+* removed "font_options" argument from `plot_*` functions and replaced it with a constrained list of the three available options: "sans" = Arial, "serif" = Times New Roman, & "mono" = Courier New.
+
+* Additional argument option matching checks to limit invalid inputs for arguments with only a few options via `match.arg()`.
+
+* Corrected a bug where `recode_errors()` was not working when applied to `data.table` objects.
+
+* Moved packages `htmltools` and `htmlwidgets` from "Imports" section to "Suggests" section of Description file.
 
 ## elucidate 0.0.0.9021 - April 20th, 2021
 

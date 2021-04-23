@@ -511,7 +511,6 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #' @importFrom plotly ggplotly
 #' @importFrom tibble is_tibble
 #' @importFrom ggplot2 is.ggplot
-#' @importFrom htmlwidgets prependContent
 #' @importFrom grDevices rgb
 #' @importFrom grDevices col2rgb
 #' @importFrom stringi stri_detect
@@ -582,18 +581,16 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #' library(ggplot2)
 #'
 #' p1 <- ggplot(mtcars, aes(x = mpg)) + geom_histogram(binwidth = 1)
-#' p1 %>% static_to_dynamic(caption = "Figure 1")
+#' p1 %>% static_to_dynamic()
 #'
-#' mtcars %>% static_to_dynamic(caption = "Table 1")
+#' mtcars %>% static_to_dynamic()
 #'
-#' mtcars %>% static_to_dynamic(caption = "Table 1", reactable = TRUE)
+#' mtcars %>% static_to_dynamic(reactable = TRUE)
 #'
-#' mtcars %>% static_to_dynamic(caption = "Table 1",
-#'                              reactable = TRUE, group_by = "cyl")
+#' mtcars %>% static_to_dynamic(reactable = TRUE, group_by = "cyl")
 #'
 #' mtcars %>%
-#'      static_to_dynamic(caption = "Table 1",
-#'                        reactable = TRUE,
+#'      static_to_dynamic(reactable = TRUE,
 #'                        reactable_hightlight_colour = "lightgreen")
 #' }
 #'
@@ -684,6 +681,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
     }
     return(dynamic_object)
   } else if (is.data.frame(static_object) && nrow(static_object) <= reactable_threshold) {
+    if(!missing(caption)){
     dynamic_object <-  DT::datatable(static_object,
                                      filter = "top",
                                      caption = htmltools::tags$caption(
@@ -704,6 +702,25 @@ static_to_dynamic <- function(static_object, caption = NULL,
                                                                                    list(extend = "collection",
                                                                                         buttons = c("csv", "excel", "pdf"),
                                                                                         text = "Download"))))
+    } else {
+      dynamic_object <-  DT::datatable(static_object,
+                                       filter = "top",
+                                       editable = T,
+                                       class = "display compact",
+                                       extensions = c("ColReorder", "Buttons", "AutoFill",
+                                                      "KeyTable", "Select", "Scroller"),
+                                       selection = "none",
+                                       options = list(autoWidth = TRUE,
+                                                      searchHighlight = TRUE,
+                                                      autoFill = TRUE, colReorder = TRUE, keys = TRUE,
+                                                      rowReorder = TRUE,
+                                                      select = list(style = "os", items = "cell"),
+                                                      dom = "Bfrtip", buttons = list(I("colvis"),
+                                                                                     "copy", "print",
+                                                                                     list(extend = "collection",
+                                                                                          buttons = c("csv", "excel", "pdf"),
+                                                                                          text = "Download"))))
+    }
     return(dynamic_object)
   } else if(ggplot2::is.ggplot(static_object)) {
     if(!missing(caption)){
@@ -901,6 +918,8 @@ translate <- function(y, old, new) {
 #' to \code{\link[dplyr]{na_if}} but is more flexible, e.g. it can operate on
 #' multiple columns/rows (for data frames), or value indices (for vectors).
 #'
+#' @importFrom data.table as.data.table
+#'
 #' @param data A vector, data frame, tibble, or matrix.
 #'
 #' @param errors A vector of erroneous values to be recoded.
@@ -939,6 +958,10 @@ recode_errors <- function(data, errors, replacement = NA,
                           rows = c(1:nrow(data)),
                           cols = c(1:ncol(data)),
                           ind = c(1:length(data))) {
+  .classes <- class(data)
+  if("data.table" %in% .classes){
+    data <- as.data.frame(data)
+  }
   if(is.data.frame(data) == TRUE | is_tibble(data) == TRUE | is.matrix(data) == TRUE){
     for (i in 1:length(errors)) {
       data[rows, cols][data[rows, cols] == errors[i]] <- replacement
@@ -961,6 +984,9 @@ recode_errors <- function(data, errors, replacement = NA,
           data <- droplevels(data)
         }
       }
+    }
+    if("data.table" %in% .classes){
+      data <- data.table::as.data.table(data)
     }
     return(data)
   }

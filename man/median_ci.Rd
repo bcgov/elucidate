@@ -8,7 +8,7 @@ median_ci(
   y,
   replicates = 2000,
   ci_level = 0.95,
-  ci_type = "bca",
+  ci_type = c("bca", "perc", "basic", "norm"),
   parallel = FALSE,
   cores = NULL,
   na.rm = TRUE

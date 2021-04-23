@@ -125,9 +125,10 @@
 #'
 #' @export
 describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
-                        ci_level = 0.95, ci_type = "perc", parallel = FALSE, cores = NULL,
-                        na.rm = TRUE, output = "tibble") {
-
+                        ci_level = 0.95, ci_type = c("perc", "bca", "basic", "norm"), parallel = FALSE, cores = NULL,
+                        na.rm = TRUE, output = c("tibble", "dt")) {
+  ci_type <- match.arg(ci_type)
+  output <- match.arg(output)
   st <- deparse(substitute(stat))
   y <- deparse(substitute(y))
   dt <- data.table::as.data.table(data)
@@ -311,8 +312,12 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 #'
 #' @export
 describe_ci_all <- function(data, ..., stat = mean, replicates = 2000,
-                            ci_level = 0.95, ci_type = "perc", parallel = FALSE, cores = NULL,
-                            na.rm = TRUE, output = "tibble") {
+                            ci_level = 0.95, ci_type = c("perc", "bca", "basic", "norm"),
+                            parallel = FALSE, cores = NULL,
+                            na.rm = TRUE, output = c("tibble", "dt")) {
+
+  ci_type <- match.arg(ci_type)
+  output <- match.arg(output)
 
   st <- deparse(substitute(stat))
   dscr_ci_all <- function(data, stat = mean, replicates = 2000,

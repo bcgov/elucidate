@@ -28,13 +28,12 @@ plot_pie(
   facet_var = NULL,
   facet_var_order = NULL,
   facet_var_labs = NULL,
-  facet_var_strip_position = "top",
+  facet_var_strip_position = c("top", "bottom"),
   facet_var_text_bold = TRUE,
   greyscale = FALSE,
   text_size = 14,
-  font = "sans",
-  font_options = FALSE,
-  legend_position = "right",
+  font = c("sans", "serif", "mono"),
+  legend_position = c("right", "left", "bottom", "top"),
   omit_legend = FALSE,
   aesthetic_options = FALSE
 )
@@ -154,11 +153,9 @@ for the facet strip label text.}
 
 \item{text_size}{This controls the size of all plot text. Default = 14.}
 
-\item{font}{This controls the font of all plot text. Default = "sans" (Arial).}
-
-\item{font_options}{Set to TRUE if you want the (3) available font options to
-be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-details.}
+\item{font}{This controls the font of all plot text. Default = "sans"
+(Arial). Other options include "serif" (Times New Roman) and "mono"
+(Courier New).}
 
 \item{legend_position}{This allows you to modify the legend position.
 Options include "right" (the default), "left", "top", & "bottom".}
@@ -181,13 +178,12 @@ case your project stakeholders ask.
 }
 \examples{
 
-plot_pie(gapminder::gapminder,
-         fill_var = continent, y = gdpPercap,
-         title = "continental distribution of GDP per capita",
+plot_pie(mtcars,
+         fill_var = cyl,
          slice_text = "pct",
          slice_text_suffix = "\%",
          colour = "white",
-         lump_n = 3, round_n = 2)
+         round_n = 2)
 
 }
 \references{

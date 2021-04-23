@@ -11,11 +11,11 @@ describe_ci_all(
   stat = mean,
   replicates = 2000,
   ci_level = 0.95,
-  ci_type = "perc",
+  ci_type = c("perc", "bca", "basic", "norm"),
   parallel = FALSE,
   cores = NULL,
   na.rm = TRUE,
-  output = "tibble"
+  output = c("tibble", "dt")
 )
 }
 \arguments{

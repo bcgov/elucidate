@@ -186,7 +186,7 @@ tbcvs <- function(y) {
 #' @export
 describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, output = c("tibble", "dt")){
 
-  output <- match.arg(output, several.ok = FALSE)
+  output <- match.arg(output)
 
   if((is.vector(data) || is.factor(data)) || lubridate::is.Date(data)) {
     if(is.numeric(data)){
@@ -532,7 +532,9 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
 #' @seealso \code{\link{describe}}
 #'
 #' @export
-describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, output = "tibble") {
+describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, output = c("tibble", "dt")) {
+  output <- match.arg(output)
+
   if(any(class %ni%  c("all", "d", "f", "c", "l", "n"))) {
     stop('class argument should be either "all" or any combination of "d", "f", "c", "l", and/or "n" as a character vector')
   }

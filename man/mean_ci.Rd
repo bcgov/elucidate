@@ -8,7 +8,7 @@ mean_ci(
   y,
   replicates = 2000,
   ci_level = 0.95,
-  ci_type = "norm",
+  ci_type = c("norm", "perc", "bca", "basic"),
   parallel = FALSE,
   cores = NULL,
   na.rm = TRUE

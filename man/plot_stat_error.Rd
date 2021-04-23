@@ -8,11 +8,11 @@ plot_stat_error(
   data,
   y,
   x = NULL,
-  geom = "point",
-  stat = "mean",
-  error = "ci",
+  geom = c("point", "bar"),
+  stat = c("mean", "median"),
+  error = c("ci", "sd", "var", "quartile"),
   ci_level = 0.95,
-  ci_type = "perc",
+  ci_type = c("perc", "bca", "norm", "basic"),
   replicates = 2000,
   parallel = FALSE,
   cores = NULL,
@@ -53,15 +53,14 @@ plot_stat_error(
   line_size = 0.5,
   theme = "classic",
   text_size = 14,
-  font = "sans",
-  font_options = FALSE,
+  font = c("sans", "serif", "mono"),
   coord_flip = FALSE,
   omit_legend = FALSE,
-  legend_position = "right",
+  legend_position = c("right", "left", "bottom", "top"),
   facet_var = NULL,
   facet_var_order = NULL,
   facet_var_labs = NULL,
-  facet_var_strip_position = "top",
+  facet_var_strip_position = c("top", "bottom"),
   facet_var_text_bold = TRUE,
   print_stats = F,
   aesthetic_options = FALSE,
@@ -296,11 +295,9 @@ information.}
 
 \item{text_size}{This controls the size of all plot text. Default = 14.}
 
-\item{font}{This controls the font of all plot text. Default = "sans" (Arial).}
-
-\item{font_options}{Set to TRUE if you want the (3) available font options to
-be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-details.}
+\item{font}{This controls the font of all plot text. Default = "sans"
+(Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+New).}
 
 \item{coord_flip}{Set to TRUE (default = FALSE) if you want to swap the
 x and y axes. See \code{\link[ggplot2]{coord_flip}} for more information.}

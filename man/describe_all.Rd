@@ -11,7 +11,7 @@ describe_all(
   digits = 3,
   type = 2,
   na.rm = TRUE,
-  output = "tibble"
+  output = c("tibble", "dt")
 )
 }
 \arguments{

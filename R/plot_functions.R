@@ -208,11 +208,9 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
 #'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
@@ -312,11 +310,14 @@ plot_density <- function(data, x, #essential parameters
                          fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                          fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                          alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                         theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                         theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),#theme options
                          facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
-                         facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
-                         legend_position = "right", omit_legend = FALSE, #legend position
+                         facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                         legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                          interactive = FALSE, aesthetic_options = FALSE) {#output format
+  font <- match.arg(font)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  legend_position <- match.arg(legend_position)
 
   #fill variable recoding
   if(!missing(fill_var)){
@@ -438,13 +439,6 @@ plot_density <- function(data, x, #essential parameters
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
-  }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
   }
@@ -512,8 +506,8 @@ plot_density <- function(data, x, #essential parameters
 #'   NULL.
 #'
 #' @param position Determines how bars are organized when a grouping variable is
-#'   assigned to fill or colour. Valid opions include "identity" (the
-#'   default),"stacked", and "dodge"
+#'   assigned to fill or colour. Valid options include "identity" (the
+#'   default),"stack", and "dodge"
 #'
 #' @param stat Determines how the y-axis is constructed. Typically one would not
 #'   change this from the default of "bin" for a histogram, although "count" is
@@ -610,11 +604,9 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
 #'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
@@ -695,8 +687,8 @@ plot_density <- function(data, x, #essential parameters
 plot_histogram <- function(data, x, #essential parameters
                            ..., #non-variable aestheic specification
                            binwidth = 1, bins = NULL, #geom specific customization params
-                           position = "identity", #useful positions include "identity", "stacked", and "dodge"
-                           stat = "bin", na.rm = TRUE, #geom specific customization params.
+                           position = c("identity", "stack", "dodge"),
+                           stat = c("bin", "count"), na.rm = TRUE, #geom specific customization params.
                            fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
                            xlab = NULL, ylab = NULL, title = NULL, fill_var_title = NULL, colour_var_title = NULL, #titles
                            xlim = c(NA, NA), transform_x = FALSE, x_transformation = "log10",#control the x axis limits and scaling
@@ -704,11 +696,17 @@ plot_histogram <- function(data, x, #essential parameters
                            fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                            fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                            alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                           theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                           theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),#theme options
                            facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
-                           facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
-                           legend_position = "right", omit_legend = FALSE, #legend position
+                           facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                           legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                            interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  position <- match.arg(position)
+  stat <- match.arg(stat)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
 
   #fill variable recoding
   if(!missing(fill_var)){
@@ -802,7 +800,7 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
   } else if (theme == "bw"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b && w"){
+  } else if (theme == "b & w"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
   } else if (theme == "black and white"){
     p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
@@ -830,13 +828,6 @@ plot_histogram <- function(data, x, #essential parameters
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
-  }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -997,11 +988,9 @@ plot_histogram <- function(data, x, #essential parameters
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
 #'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
@@ -1104,11 +1093,15 @@ plot_box <- function(data, y,#essential parameters
                      fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                      fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                      alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                     theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                     theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
-                     facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
-                     legend_position = "right", omit_legend = FALSE, #legend position
+                     facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                     legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                      interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
 
   #x-variable recoding
   if(!missing(x)){
@@ -1260,13 +1253,6 @@ plot_box <- function(data, y,#essential parameters
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
-  }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -1431,11 +1417,9 @@ plot_box <- function(data, y,#essential parameters
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
 #'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
@@ -1539,11 +1523,15 @@ plot_violin <- function(data, y,#essential parameters
                         fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                         fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                         alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                        theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                        theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),#theme options
                         facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
-                        facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
-                        legend_position = "right", omit_legend = FALSE, #legend position
+                        facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                        legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                         interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
 
   #x-variable recoding
   if(!missing(x)){
@@ -1695,13 +1683,6 @@ plot_violin <- function(data, y,#essential parameters
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
-  }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -1965,11 +1946,9 @@ plot_violin <- function(data, y,#essential parameters
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
 #'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
@@ -2197,11 +2176,15 @@ plot_scatter <- function(data, y, x,#essential parameters
                          regression_method_args = NULL, loess_span = 0.75,
 
                          alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                         theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                         theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
                          facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
-                         facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
-                         legend_position = "right", omit_legend = FALSE, #legend position
+                         facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                         legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                          interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
 
   #fill variable recoding
   if(!missing(fill_var)){
@@ -2452,13 +2435,6 @@ plot_scatter <- function(data, y, x,#essential parameters
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
-  }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
   }
@@ -2668,11 +2644,9 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
 #'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
@@ -2721,7 +2695,6 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' plot_bar(pdata,
 #'          x = g,
 #'          xlab = "group",
-#'          x_var_order_by_y = "i", #order levels of x by increasing count
 #'          fill_var = high_low,
 #'          colour = "black",
 #'          fill_var_values = c("blue2", "red2"))
@@ -2764,28 +2737,34 @@ plot_bar <- function(data, x = NULL,
                      fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                      alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
                      coord_flip = FALSE,
-                     theme = "classic", text_size = 14, font = "sans", font_options = FALSE, #theme options
+                     theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
-                     facet_var_strip_position = "top", facet_var_text_bold = TRUE, #facet aesthetic customization
-                     legend_position = "right", omit_legend = FALSE, #legend position
+                     facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                     legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                      interactive = FALSE, aesthetic_options = FALSE) {#output format
 
   if(missing(x) && missing(y) && missing(fill_var) && missing(colour_var)) {
     stop('At least one of "x", "y", "fill_var", or "colour_var" must be specified.')
   }
   if(!missing(x_var_order_by_y)) {
-    x_var_order_by_n <- match.arg(x_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+   if(x_var_order_by_y != "d" && x_var_order_by_y != "a" && x_var_order_by_y != "i"){
+     stop('"x_var_order_by_y" should be one of "d", "a", or "i"')
+   }
   }
   if(!missing(fill_var_order_by_y)) {
-    fill_var_order_by_n <- match.arg(fill_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+    if(fill_var_order_by_y != "d" && fill_var_order_by_y != "a" && fill_var_order_by_y != "i"){
+      stop('"fill_var_order_by_y" should be one of "d", "a", or "i"')
+    }
   }
   if(!missing(colour_var_order_by_y)) {
-    colour_var_order_by_n <- match.arg(colour_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+    if(colour_var_order_by_y != "d" && colour_var_order_by_y != "a" && colour_var_order_by_y != "i"){
+      stop('"colour_var_order_by_y" should be one of "d", "a", or "i"')
+    }
   }
-
-  x_var_order_by_y <- match.arg(x_var_order_by_y, several.ok = FALSE)
-  colour_var_order_by_y <- match.arg(colour_var_order_by_y, several.ok = FALSE)
-  position <- match.arg(position, several.ok = FALSE)
+  position <- match.arg(position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
 
   #x-variable recoding
   if(!missing(x)){
@@ -3032,13 +3011,6 @@ plot_bar <- function(data, x = NULL,
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
-  }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -3328,11 +3300,9 @@ plot_bar <- function(data, x = NULL,
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
 #'
 #' @param coord_flip Set to TRUE (default = FALSE) if you want to swap the
 #'   x and y axes. See \code{\link[ggplot2]{coord_flip}} for more information.
@@ -3463,8 +3433,9 @@ plot_bar <- function(data, x = NULL,
 #'   \code{\link[boot]{boot.ci}}, \code{\link{median_ci}},
 #'
 #' @export
-plot_stat_error <- function(data, y, x = NULL, geom = "point",
-                            stat = "mean", error = "ci", ci_level = 0.95, ci_type = "perc",
+plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = c("mean", "median"),
+                            error = c("ci", "sd", "var", "quartile"),
+                            ci_level = 0.95, ci_type = c("perc","bca", "norm", "basic"),
                             replicates = 2000, parallel = FALSE, cores = NULL,
                             xlab = NULL, ylab = NULL, title = NULL, ...,
                             ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10",
@@ -3478,12 +3449,22 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
                             eb_linetype = 1, eb_colour = NULL,
                             add_lines = F, line_alpha = 0.75, line_group = NULL,
                             line_colour = NULL, linetype = 1, line_size = 0.5,
-                            theme = "classic", text_size = 14, font = "sans", font_options = FALSE,
-                            coord_flip = FALSE, omit_legend = FALSE, legend_position = "right",
+                            theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),
+                            coord_flip = FALSE, omit_legend = FALSE,
+                            legend_position = c("right", "left", "bottom", "top"),
                             facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL,
-                            facet_var_strip_position = "top", facet_var_text_bold = TRUE,
+                            facet_var_strip_position = c("top", "bottom"),
+                            facet_var_text_bold = TRUE,
                             print_stats = F, aesthetic_options = FALSE,
                             output = "p", interactive = FALSE, na.rm = TRUE){
+
+  geom <- match.arg(geom)
+  stat <- match.arg(stat)
+  error <- match.arg(error)
+  ci_type <- match.arg(ci_type)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
 
   #x-variable recoding
   if(!missing(x)){
@@ -4134,14 +4115,6 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
                               axis.ticks.y = element_blank())
     }
   }
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
-  }
-
   if(legend_position != "right"){
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
@@ -4222,6 +4195,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
 #' @importFrom ggplot2 theme_void
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 margin
 #' @importFrom utils browseURL
 #' @importFrom data.table uniqueN
 #'
@@ -4339,11 +4313,9 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
 #'
-#' @param font This controls the font of all plot text. Default = "sans" (Arial).
-#'
-#' @param font_options Set to TRUE if you want the (3) available font options to
-#'   be printed to the console. See \code{\link[grDevices]{windowsFonts}} for
-#'   details.
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono"
+#'   (Courier New).
 #'
 #' @param legend_position This allows you to modify the legend position.
 #'   Options include "right" (the default), "left", "top", & "bottom".
@@ -4359,13 +4331,12 @@ plot_stat_error <- function(data, y, x = NULL, geom = "point",
 #'
 #' @examples
 #'
-#' plot_pie(gapminder::gapminder,
-#'          fill_var = continent, y = gdpPercap,
-#'          title = "continental distribution of GDP per capita",
+#' plot_pie(mtcars,
+#'          fill_var = cyl,
 #'          slice_text = "pct",
 #'          slice_text_suffix = "%",
 #'          colour = "white",
-#'          lump_n = 3, round_n = 2)
+#'          round_n = 2)
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
@@ -4394,10 +4365,10 @@ plot_pie <- function(data,
                      lump_n = NULL,
                      lump_lab = NULL,
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL,
-                     facet_var_strip_position = "top", facet_var_text_bold = TRUE,
+                     facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE,
                      greyscale = FALSE, #control transparency, convert to greyscale
-                     text_size = 14, font = "sans", font_options = FALSE, #theme options
-                     legend_position = "right", omit_legend = FALSE, #legend position
+                     text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                     legend_position = c("right", "left", "bottom", "top"), omit_legend = FALSE, #legend position
                      aesthetic_options = FALSE) {#output format
 
   if(!is.numeric(title_alignment)) {
@@ -4405,12 +4376,18 @@ plot_pie <- function(data,
   }
 
   if(!missing(fill_var_order_by_y)) {
-    fill_var_order_by_n <- match.arg(fill_var_order_by_y, choices = c("d", "a", "i"), several.ok = FALSE)
+    if(fill_var_order_by_y != "d" && fill_var_order_by_y != "a" && fill_var_order_by_y != "i"){
+      stop('"fill_var_order_by_y" should be one of "d", "a", or "i"')
+    }
   }
-
   if(!missing(slice_text)) {
-    slice_text <- match.arg(slice_text, choices = c("pct", "tot", "grp"), several.ok = FALSE)
+    if(slice_text != "pct" && slice_text != "tot" && slice_text != "grp"){
+      stop('"slice_text" should be one of "pct", "tot", or "grp"')
+    }
   }
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  legend_position <- match.arg(legend_position)
+  font <- match.arg(font)
 
   #fill variable recoding
   if(!missing(fill_var)){
@@ -4558,7 +4535,7 @@ plot_pie <- function(data,
 
   #apply theme
   p <- p + ggplot2::theme_void(base_size = text_size, base_family = font)
-  p <- p + ggplot2::theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+  p <- p + ggplot2::theme(plot.margin = ggplot2::margin(0.5, 0.5, 0.5, 0.5, "cm"))
 
   #legend options
   if(omit_legend == TRUE){
@@ -4592,13 +4569,6 @@ plot_pie <- function(data,
     p <- p + ggplot2::theme(strip.text = element_text(face = "bold"))
   }
   #misc
-  if(font_options == TRUE){
-    if(Sys.info()['sysname'] == "Windows"){
-      print(grDevices::windowsFonts())
-    } else {
-      message("font options are currently only available for Windows systems")
-    }
-  }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
   }

@@ -102,7 +102,10 @@
 #'   \code{\link{describe_ci_all}}
 #'
 #' @export
-mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", parallel = FALSE, cores = NULL, na.rm = TRUE){
+mean_ci <- function(y, replicates = 2000,
+                    ci_level = 0.95, ci_type = c("norm", "perc", "bca", "basic"),
+                    parallel = FALSE, cores = NULL, na.rm = TRUE){
+  ci_type <- match.arg(ci_type)
   if(na.rm == TRUE) {
     y <- na.omit(y)
   }
@@ -250,7 +253,12 @@ mean_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "norm", par
 #'   \code{\link{describe_ci_all}}
 #'
 #' @export
-median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE){
+median_ci <- function(y, replicates = 2000,
+                      ci_level = 0.95, ci_type = c("bca", "perc", "basic", "norm"),
+                      parallel = FALSE, cores = NULL, na.rm = TRUE){
+
+  ci_type <- match.arg(ci_type)
+
   if(na.rm == TRUE) {
     y <- na.omit(y)
   }
@@ -399,10 +407,16 @@ median_ci <- function(y, replicates = 2000, ci_level = 0.95, ci_type = "bca", pa
 #'   \code{\link{describe_ci_all}}
 #'
 #' @export
-stat_ci <- function(y, stat, ..., replicates = 2000, ci_level = 0.95, ci_type = "bca", parallel = FALSE, cores = NULL, na.rm = TRUE){
+stat_ci <- function(y, stat, ..., replicates = 2000,
+                    ci_level = 0.95, ci_type = c("bca", "perc", "basic", "norm"),
+                    parallel = FALSE, cores = NULL, na.rm = TRUE){
+
+  ci_type <- match.arg(ci_type)
+
   if(na.rm == TRUE) {
     y <- na.omit(y)
   }
+
   bstat <- function(y, i) {
     return(stat(y[i], ...))
   }

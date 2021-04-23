@@ -125,9 +125,9 @@ copies <- function(data, ...,
                    na_last = FALSE,
                    output = c("same", "tibble", "dt", "data.frame")) {
 
-  filter <- match.arg(filter, several.ok = FALSE)
-  order <-  match.arg(order, several.ok = FALSE)
-  output <-  match.arg(output, several.ok = FALSE)
+  filter <- match.arg(filter)
+  order <-  match.arg(order)
+  output <-  match.arg(output)
 
   if(!missing(...)) {
     g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
