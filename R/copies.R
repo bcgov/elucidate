@@ -23,12 +23,10 @@
 #'   \code{\link[janitor]{get_dupes}}) & \code{\link[dplyr]{distinct}}), while
 #'   at the same time providing greater flexibility through a larger array of
 #'   output options and competitive performance by using `data.table` as a
-#'   backend.
+#'   backend. \code{\link{dupes}} is also available as a convenience shortcut
+#'   for `copies(filter = "dupes", sort_by_copies = TRUE)`.
 #'
 #' @importFrom data.table as.data.table
-#' @importFrom data.table setkeyv
-#' @importFrom data.table setkey
-#' @importFrom data.table key
 #' @importFrom data.table setorderv
 #' @importFrom data.table setorder
 #' @importFrom tibble as_tibble
@@ -114,7 +112,7 @@
 #'
 #' @seealso \code{\link[data.table]{duplicated}},
 #'   \code{\link[janitor]{get_dupes}}, \code{\link[dplyr]{distinct}},
-#'   \code{\link{unique}}
+#'   \code{\link{unique}}, \code{\link{dupes}}
 #'
 #' @export
 copies <- function(data, ...,
@@ -216,6 +214,190 @@ copies <- function(data, ...,
       return(.dt)
     }
   } else if(sort_by_copies == TRUE && filter %in% c("all", "dupes")) {
+    if(order == "d") {
+      if(!missing(...)) {
+        data.table::setorderv(.dt, c("n_copies", eval(g)),
+                              na.last = na_last,
+                              order = -1)
+      } else {
+        data.table::setorderv(.dt, "n_copies", na.last = na_last,
+                              order = -1)
+      }
+    } else if (order %in% c("a", "i")) {
+      if(!missing(...)) {
+        data.table::setorderv(.dt, c("n_copies", eval(g)),
+                              na.last = na_last,
+                              order = 1)
+      } else {
+        data.table::setorderv(.dt, "n_copies", na.last = na_last,
+                              order = 1)
+      }
+    }
+  }
+
+  if (output == "dt") {
+    return(.dt[])
+
+  } else if(output == "tibble") {
+    .dt <- tibble::as_tibble(.dt)
+    return(.dt)
+
+  } else if(output == "data.frame") {
+    .dt <- as.data.frame(.dt)
+    return(.dt)
+
+  } else if ("data.table" %in% .classes && output == "same") {
+    return(.dt)
+
+  } else if ("tbl" %in% .classes && output == "same") {
+    .dt <- tibble::as_tibble(.dt)
+    return(.dt)
+
+  } else if ("data.frame" %in% .classes) {
+    .dt <- as.data.frame(.dt)
+    return(.dt)
+  }
+}
+
+# dupes ------------------------------------------------------------------
+#' @title
+#' Check the number of duplicated rows in a data frame.
+#'
+#' @description Checks a data frame for duplicated rows based on specified
+#'   variables to use for checking (via `...`) or all columns (if
+#'   unspecified).`dupes` is a convenience shortcut for \code{\link{copies}}
+#'   with the "filter" argument set to "dupes" and the "sort_by_copies" argument
+#'   set to TRUE by default. For greater flexibility in checking row copy
+#'   numbers or filtering for distinct rows, use \code{\link{copies}} instead.
+#'   `dupes` behaves similarly to \code{\link[janitor]{get_dupes}}) but is
+#'   substantially faster due to the use of `data.table` as a backend.
+#'
+#' @importFrom data.table as.data.table
+#' @importFrom data.table setorderv
+#' @importFrom data.table setorder
+#' @importFrom tibble as_tibble
+#'
+#' @param data a data frame, tibble, or data.table.
+#'
+#' @param ... This special argument accepts any number of unquoted column names
+#'   (also present in the data source) to use when searching for duplicates. If
+#'   no column names are specified, all columns will be used.
+#'
+#' @param keep_all_cols If column names are specified using `...`, this allows
+#'   you to drop unspecified columns, similarly to the `.keep_all` argument for
+#'   `dplyr::distinct()``
+#'
+#' @param sort_by_copies If TRUE (the default), sorts the results by the number
+#'   of copies, in order specified by the `order` argument.
+#'
+#' @param order If sort_by_copies is set to TRUE, this controls whether the
+#'   results should be sorted in order of descending/decreasing = "d" (the
+#'   default) or ascending/increasing = "a" or "i" copy numbers.
+#'
+#' @param na_last should rows of the specified columns with missing values be
+#'   listed below non-missing values (TRUE/FALSE)? Default is FALSE.
+#'
+#' @param output "tibble" for tibble, "dt" for data.table, or "data.frame" for a
+#'   data frame. "same", the default option, returns the same format as the
+#'   input data.
+#'
+#' @return A subset of the input data frame consisting of duplicated rows that were
+#'   detected based on specified variables used to condition the search. A
+#'   message will also be printed to the console indicating whether or not
+#'   duplicates were detected. An `n_copies` column is appended specifying the
+#'   total number of copies of each row that were detected.
+#'
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' # check for duplicates based on one variable, "g" in this case
+#' dupes(pdata, g)
+#'
+#' \dontrun{
+#' dupes(pdata, high_low, g) #check based on 2 variables
+#'
+#' # check based on all variables, i.e. fully duplicated rows
+#' dupes(pdata)
+#' }
+#'
+#' @seealso \code{\link{copies}}, \code{\link[janitor]{get_dupes}}
+#'
+#' @export
+dupes <- function(data, ...,
+                  keep_all_cols = TRUE,
+                  sort_by_copies = TRUE,
+                  order = c("d", "a", "i"),
+                  na_last = FALSE,
+                  output = c("same", "tibble", "dt", "data.frame")) {
+
+  order <-  match.arg(order)
+  output <-  match.arg(output)
+
+  if(!missing(...)) {
+    g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+    if(keep_all_cols == FALSE) {
+      data <- data[, g]
+    }
+  } else {
+    message("No column names specified - using all columns.")
+    c_names <- names(data)
+    g <- c_names
+  }
+
+  .classes <- class(data)
+
+  if("data.frame" %ni% .classes) {
+    stop("Input data must be a data.table, tibble, or data.frame.")
+  }
+
+
+  if("data.table" %ni% .classes) {
+    .dt <- data.table::as.data.table(data)
+  } else {
+    .dt <- data.table::as.data.table(as.data.frame(data))
+    #this is conversion and reversal is necessary to prevent subsequent
+    #modification of the original data source in the global environment when the
+    #input is already a data.table due to the use of the := operator below.
+  }
+
+  .dt[, n_copies := .N, by = eval(g)]
+  orig_rows <- nrow(data)
+  .dt <- .dt[n_copies > 1]
+  dupe_count <- nrow(.dt)
+
+  if(dupe_count != 0) {
+    message(paste0("Duplicated rows detected! ",
+                   dupe_count, " of ", orig_rows, " rows in the input data have multiple copies."))
+  } else {
+    message("No duplicates detected.")
+  }
+
+
+  if(sort_by_copies == FALSE) {
+    if (output == "dt") {
+      return(.dt[])
+
+    } else if(output == "tibble") {
+      .dt <- tibble::as_tibble(.dt)
+      return(.dt)
+
+    } else if(output == "data.frame") {
+      .dt <- as.data.frame(.dt)
+      return(.dt)
+
+    } else if ("data.table" %in% .classes && output == "same") {
+      return(.dt[])
+
+    } else if ("tbl" %in% .classes && output == "same") {
+      .dt <- tibble::as_tibble(.dt)
+      return(.dt)
+
+    } else if ("data.frame" %in% .classes) {
+      .dt <- as.data.frame(.dt)
+      return(.dt)
+    }
+  } else if(sort_by_copies == TRUE) {
     if(order == "d") {
       if(!missing(...)) {
         data.table::setorderv(.dt, c("n_copies", eval(g)),

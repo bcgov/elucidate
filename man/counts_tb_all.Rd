@@ -5,7 +5,7 @@
 \title{Obtain the top and bottom "n" counts for unique values of all variables in a
 data frame.}
 \usage{
-counts_tb_all(data, n = 10, na.rm = T)
+counts_tb_all(data, n = 10, sep = "_", na.rm = TRUE)
 }
 \arguments{
 \item{data}{A data frame (required).}
@@ -14,7 +14,11 @@ counts_tb_all(data, n = 10, na.rm = T)
 for. Default is 10 (fewer than "n" will be shown if there aren't "n" unique
 values).}
 
-\item{na.rm}{Should missing values be omitted?}
+\item{sep}{This only needs to be modified if some values to be counted
+contain an underscore, in which case you should change it to a character
+string that is not present in any of the values in the data source.}
+
+\item{na.rm}{Should missing values be omitted (TRUE/FALSE)?}
 }
 \value{
 A list of data frames of the top and bottom counts for each variable

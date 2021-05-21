@@ -122,9 +122,17 @@ mode <- function(y, digits = 3, inv = FALSE, na.rm = TRUE){
     y <- na.omit(y)
   }
   if(inv == FALSE) {
-    out <- names(sort(ftab(y), decreasing = TRUE))[1]
+    if(na.rm == TRUE) {
+      out <- names(sort(table(y, useNA = "no"), decreasing = TRUE))[1]
+    } else {
+      out <- names(sort(table(y, useNA = "ifany"), decreasing = TRUE))[1]
+    }
   } else if (inv == TRUE) {
-    out <- names(sort(ftab(y), decreasing = FALSE))[1]
+    if(na.rm == TRUE) {
+      out <- names(sort(table(y, useNA = "no"), decreasing = FALSE))[1]
+    } else {
+      out <- names(sort(table(y, useNA = "ifany"), decreasing = FALSE))[1]
+    }
   }
   if(is.numeric(y)) {
   out <- round(as.numeric(out), digits)
@@ -139,8 +147,6 @@ mode <- function(y, digits = 3, inv = FALSE, na.rm = TRUE){
 #'
 #' @description \code{fmean} is an internal function that supports
 #'   \code{\link{skewness}} and \code{\link{kurtosis}}.
-#'
-#' @importFrom stats na.omit
 #'
 #' @param y A vector/variable (required).
 #'
@@ -259,34 +265,6 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
   return(out)
 }
 
-# ftab (internal) --------------------------------------------------------------
-#' @title
-#' elucidate package internal wrapper function for the Rfast::Table() function
-#' that also tabulates factors
-#'
-#' @description \code{ftab} is an internal function that supports
-#'   \code{\link{describe}} and \code{\link{counts}}.
-#'
-#' @importFrom Rfast Table
-#' @importFrom stats na.omit
-#'
-#' @param y A vector/variable (required).
-#'
-#' @param na.rm This determines whether missing values (NAs) should be removed
-#'   before tabulation.
-#'
-#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
-#' @noRd
-ftab <- function(y, na.rm = TRUE) {
-  if(na.rm == TRUE) {
-    y <- na.omit(y)
-  }
-  if(!is.character(y) || !is.numeric(y)) {
-    y <- as.character(y)
-  }
-  Rfast::Table(y, names = TRUE)
-}
-
 #counts for unique values in a vector####
 #' @title
 #' Obtain the counts for unique values of a vector.
@@ -296,8 +274,6 @@ ftab <- function(y, na.rm = TRUE) {
 #'   Also useful for identifying data entry errors or rare cases. For complex
 #'   use cases see \code{\link{describe}}.
 #'
-#' @importFrom stringi stri_c
-#'
 #' @param y A vector/variable (required).
 #'
 #' @param n The number of unique values you want frequency counts for. Default is "all".
@@ -305,10 +281,16 @@ ftab <- function(y, na.rm = TRUE) {
 #' @param order "d" for descending/decreasing order. "a" or "i" for
 #'   ascending/increasing order.
 #'
+#' @param sep A charater string to use to separate unique values from their counts
+#'   ("_" by default).
+#'
+#' @param na.rm Should missing values be omitted (TRUE/FALSE)?
+#'
 #' @return A character vector of the unique value frequency counts from the
 #'   input vector sorted in the chosen order. Return values are structured as
-#'   "value_count". Returning a character vector makes subsequent manipulation
-#'   with stringr and other tidyverse tools fairly easily.
+#'   "value_count", where the "_" portion takes on the value of the sep
+#'   argument. Returning a character vector makes subsequent manipulation with
+#'   stringr and other tidyverse tools fairly easily.
 #'
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
@@ -324,20 +306,28 @@ ftab <- function(y, na.rm = TRUE) {
 #' @seealso \code{\link{table}}, \code{\link{sort}}
 #'
 #' @export
-counts <- function(y, n = "all", order = c("d", "a", "i")) {
+counts <- function(y, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TRUE) {
   order <-  match.arg(order, several.ok = FALSE)
   if(!is.character(y) || !is.numeric(y)) {
     y <- as.character(y)
   }
   if(order == "d") {
-    tab <- sort(ftab(y), decreasing = TRUE)
+    if(na.rm == TRUE) {
+      tab <- sort(table(y, useNA = "no"), decreasing = TRUE)
+    } else {
+      tab <- sort(table(y, useNA = "ifany"), decreasing = TRUE)
+    }
   } else if (order == "a" || order == "i") {
-    tab <- sort(ftab(y))
+    if(na.rm == TRUE) {
+      tab <- sort(table(y, useNA = "no"))
+    } else {
+      tab <- sort(table(y, useNA = "ifany"))
+    }
   }
   values <- names(tab)
   counts <- as.character(tab)
 
-  out <- stringi::stri_c(values, counts, sep = "_")
+  out <- paste0(values, sep, counts)
   if(n != "all") {
     out <- out[1:n]
   }
@@ -362,11 +352,16 @@ counts <- function(y, n = "all", order = c("d", "a", "i")) {
 #' @param order "d" for descending/decreasing order. "a" or "i" for
 #'   ascending/increasing order.
 #'
+#' @param sep A charater string to use to separate unique values from their counts
+#'   ("_" by default).
+#'
+#' @param na.rm Should missing values be omitted (TRUE/FALSE)?
+#'
 #' @return A list of character vectors of the unique value frequency counts for
 #'   each variable of the input data frame sorted in the chosen order. Return
-#'   values are structured as "value_count". Returning a character vector makes
-#'   subsequent manipulation with stringr and other tidyverse tools fairly
-#'   easily.
+#'   values are structured as "value_count", where the "_" portion takes on the
+#'   value of the sep argument. Returning a character vector makes subsequent
+#'   manipulation with stringr and other tidyverse tools fairly easily.
 #'
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
@@ -387,9 +382,9 @@ counts <- function(y, n = "all", order = c("d", "a", "i")) {
 #' @seealso \code{\link{table}}, \code{\link{sort}}, \code{\link[purrr]{map}}
 #'
 #' @export
-counts_all <- function(data, n = "all", order = c("d", "a", "i")) {
+counts_all <- function(data, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TRUE) {
   order <-  match.arg(order, several.ok = FALSE)
-  out <- purrr::map(data, ~counts(.x, n = n, order = order))
+  out <- purrr::map(data, ~counts(.x, n = n, order = order, sep = sep, na.rm = na.rm))
   return(out)
 }
 
@@ -411,14 +406,17 @@ counts_all <- function(data, n = "all", order = c("d", "a", "i")) {
 #'   for. Default is 10 (fewer than "n" will be shown if there aren't "n" unique
 #'   values).
 #'
-#' @param na.rm Should missing values be omitted?
+#' @param sep This only needs to be modified if some values to be counted
+#'   contain an underscore, in which case you should change it to a character
+#'   string that is not present in any of the values of y.
+#'
+#' @param na.rm Should missing values be omitted (TRUE/FALSE)?
 #'
 #' @return A list of data frames of the top and bottom counts for each variable
 #'   of the input data frame. Return value columns are "top_v" = top value,
 #'   "top_n" = count of the top value in the same row of the adjacent top_v
 #'   column, "bot_v" = bottom value, & "bot_n" = count of the bottom value in
 #'   the same row of the adjacent bot_v column.
-#'
 #'
 #' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
 #'
@@ -431,16 +429,12 @@ counts_all <- function(data, n = "all", order = c("d", "a", "i")) {
 #' @seealso \code{\link{counts_tb_all}}, \code{\link{counts_all}}, \code{\link{counts}}
 #'
 #' @export
-counts_tb <- function(y, n = 10, na.rm = T) {
-  top <- counts(y, n = n, order = "d")
-  bot <- counts(y, n = n, order = "a")
+counts_tb <- function(y, n = 10, sep = "_", na.rm = TRUE) {
+  top <- counts(y, n = n, order = "d", sep = sep, na.rm = na.rm)
+  bot <- counts(y, n = n, order = "a", sep = sep, na.rm = na.rm)
   out <- data.frame(top, bot)
-  out <- tidyr::separate(out, col = "top", into = c("top_v", "top_n"), sep = "_")
-  out <- tidyr::separate(out, col = "bot", into = c("bot_v", "bot_n"), sep = "_")
-
-  if(na.rm == T) {
-    out <- na.omit(out)
-  }
+  out <- tidyr::separate(out, col = "top", into = c("top_v", "top_n"), sep = sep)
+  out <- tidyr::separate(out, col = "bot", into = c("bot_v", "bot_n"), sep = sep)
   return(out)
 }
 
@@ -462,7 +456,11 @@ counts_tb <- function(y, n = 10, na.rm = T) {
 #'   for. Default is 10 (fewer than "n" will be shown if there aren't "n" unique
 #'   values).
 #'
-#' @param na.rm Should missing values be omitted?
+#' @param sep This only needs to be modified if some values to be counted
+#'   contain an underscore, in which case you should change it to a character
+#'   string that is not present in any of the values in the data source.
+#'
+#' @param na.rm Should missing values be omitted (TRUE/FALSE)?
 #'
 #' @return A list of data frames of the top and bottom counts for each variable
 #'   of the input data frame. Return value columns are "top_v" = top value,
@@ -488,9 +486,9 @@ counts_tb <- function(y, n = 10, na.rm = T) {
 #' @seealso \code{\link{counts_all}}, \code{\link{counts_tb}}, \code{\link{counts}}
 #'
 #' @export
-counts_tb_all <- function(data, n = 10, na.rm = T) {
+counts_tb_all <- function(data, n = 10, sep = "_", na.rm = TRUE) {
   out <- purrr::map(data,
-                    ~counts_tb(.x, n = n, na.rm = na.rm))
+                    ~counts_tb(.x, n = n, sep = sep, na.rm = na.rm))
   return(out)
 }
 
@@ -513,7 +511,6 @@ counts_tb_all <- function(data, n = 10, na.rm = T) {
 #' @importFrom ggplot2 is.ggplot
 #' @importFrom grDevices rgb
 #' @importFrom grDevices col2rgb
-#' @importFrom stringi stri_detect
 #'
 #' @param static_object A data frame, tibble, or ggplot2 object.
 #'
@@ -606,7 +603,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
                               reactable_selected_colour = "#aaaadb") {
 
   if (is.data.frame(static_object) && nrow(static_object) > reactable_threshold || reactable == TRUE) {
-    if (stringi::stri_detect(reactable_stripe_colour, regex = "^#", negate = TRUE)) {
+    if (!grepl("^#", reactable_stripe_colour)) {
       #conversion of r colour name to hex code in 2 steps, equivalent to
       #gplots::col2hex() function without requiring the extra dependency.
       rgb_col <- grDevices::col2rgb(reactable_stripe_colour)
@@ -615,7 +612,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
                                 blue = rgb_col[3,]/255)
       reactable_stripe_colour <- hex_col
     }
-    if (stringi::stri_detect(reactable_highlight_colour, regex = "^#", negate = TRUE)) {
+    if (!grepl("^#", reactable_highlight_colour)) {
       rgb_col <- grDevices::col2rgb(reactable_highlight_colour)
       hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
                                 green = rgb_col[2,]/255,
@@ -623,7 +620,7 @@ static_to_dynamic <- function(static_object, caption = NULL,
       reactable_highlight_colour <- hex_col
 
     }
-    if (stringi::stri_detect(reactable_selected_colour, regex = "^#", negate = TRUE)) {
+    if (!grepl("^#", reactable_selected_colour)) {
       rgb_col <- grDevices::col2rgb(reactable_selected_colour)
       hex_col <- grDevices::rgb(red = rgb_col[1,]/255,
                                 green = rgb_col[2,]/255,
@@ -919,6 +916,7 @@ translate <- function(y, old, new) {
 #' multiple columns/rows (for data frames), or value indices (for vectors).
 #'
 #' @importFrom data.table as.data.table
+#' @importFrom tibble is_tibble
 #'
 #' @param data A vector, data frame, tibble, or matrix.
 #'
@@ -973,11 +971,11 @@ recode_errors <- function(data, errors, replacement = NA,
   } else {
     for (i in 1:length(errors)) {
       if(is.factor(data) && !is.na(replacement)) {
-          lvls <- as.character(levels(data))
-          levels(data)[levels(data) %in% errors] <- replacement
-          data <- as.character(data)
-          data[ind][data[ind] %in% errors[i]] <- replacement
-          data <- factor(data, levels = c(lvls, replacement))
+        lvls <- as.character(levels(data))
+        levels(data)[levels(data) %in% errors] <- replacement
+        data <- as.character(data)
+        data[ind][data[ind] %in% errors[i]] <- replacement
+        data <- factor(data, levels = c(lvls, replacement))
       } else {
         data[ind][data[ind] %in% errors[i]] <- replacement
         if(is.factor(data)) {
@@ -991,6 +989,7 @@ recode_errors <- function(data, errors, replacement = NA,
     return(data)
   }
 }
+
 
 
 # "%ni%"-------------------------------------------------------------

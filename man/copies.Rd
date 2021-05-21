@@ -77,7 +77,8 @@ records. This flexibility makes \code{copies} similar to both
 \code{\link[janitor]{get_dupes}}) & \code{\link[dplyr]{distinct}}), while
 at the same time providing greater flexibility through a larger array of
 output options and competitive performance by using \code{data.table} as a
-backend.
+backend. \code{\link{dupes}} is also available as a convenience shortcut
+for \code{copies(filter = "dupes", sort_by_copies = TRUE)}.
 }
 \examples{
 
@@ -108,7 +109,7 @@ copies(pdata) #check based on all columns
 \seealso{
 \code{\link[data.table]{duplicated}},
 \code{\link[janitor]{get_dupes}}, \code{\link[dplyr]{distinct}},
-\code{\link{unique}}
+\code{\link{unique}}, \code{\link{dupes}}
 }
 \author{
 Craig P. Hutton, \email{craig.hutton@gov.bc.ca}

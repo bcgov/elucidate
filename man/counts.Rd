@@ -4,7 +4,7 @@
 \alias{counts}
 \title{Obtain the counts for unique values of a vector.}
 \usage{
-counts(y, n = "all", order = c("d", "a", "i"))
+counts(y, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TRUE)
 }
 \arguments{
 \item{y}{A vector/variable (required).}
@@ -13,12 +13,18 @@ counts(y, n = "all", order = c("d", "a", "i"))
 
 \item{order}{"d" for descending/decreasing order. "a" or "i" for
 ascending/increasing order.}
+
+\item{sep}{A charater string to use to separate unique values from their counts
+("_" by default).}
+
+\item{na.rm}{Should missing values be omitted (TRUE/FALSE)?}
 }
 \value{
 A character vector of the unique value frequency counts from the
 input vector sorted in the chosen order. Return values are structured as
-"value_count". Returning a character vector makes subsequent manipulation
-with stringr and other tidyverse tools fairly easily.
+"value_count", where the "_" portion takes on the value of the sep
+argument. Returning a character vector makes subsequent manipulation with
+stringr and other tidyverse tools fairly easily.
 }
 \description{
 \code{counts} returns the most or least common unique value(s)

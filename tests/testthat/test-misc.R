@@ -19,7 +19,7 @@ test_that("se works", {
 })
 
 test_that("inv_quantile works", {
-  expect_equal(inv_quantile(y = d$x1, values = c(2, 25, 50, 75, 95), digits = 2), c(0.00, 0.26, 0.50, 0.78, 0.94), tolerance = 0.1)
+  expect_equal(inv_quantile(y = d$x1, values = c(2, 25, 50, 75, 95), digits = 2), c(0.00, 0.26, 0.50, 0.79, 0.91), tolerance = 0.1)
 })
 
 test_that("mode works", {
@@ -51,7 +51,7 @@ test_that("kurtosis type 3 works", {
 })
 
 test_that("counts works with defaults", {
-  expect_equal(counts(d$g), c("a_24", "b_23", "d_23", "c_15", "e_15"))
+  expect_equal(counts(d$g, na.rm = TRUE), c("a_24", "b_23", "d_23", "c_15", "e_15"))
 })
 
 test_that("counts works with ascending order", {

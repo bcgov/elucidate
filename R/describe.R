@@ -17,30 +17,32 @@
 #' @description \code{tbcvs} is an internal function that supports
 #'   \code{\link{describe}}.
 #'
-#' @importFrom stringi stri_c
-#' @importFrom stringi stri_flatten
-#'
-#'
 #' @param y A vector/variable (required).
+#'
+#' @param sep A charater string to use to separate unique values from their
+#'   counts ("_" by default).
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #' @noRd
-tbcvs <- function(y) {
-  tab <- sort(ftab(y), decreasing = TRUE)
+tbcvs <- function(y, sep = "_") {
+  if(!is.character(sep) || length(sep) > 1) {
+    stop('Argument "sep" must be a single character string.')
+  }
+  tab <- sort(table(y, useNA = "no"), decreasing = TRUE)
   len <- length(tab)
 
   if(len > 4) {
     tab <- tab[c(1, 2, len-1, len)]
     values <- names(tab)
     counts <- as.character(tab)
-    out <- stringi::stri_c(values, "_", counts)
+    out <- paste(values, counts, sep = sep)
     out <- c(out[1:2], "...", out[3:4])
-    out <- stringi::stri_flatten(out, collapse = ", ")
+    out <- paste0(out, collapse = ", ")
   } else if (len <= 4) {
     values <- names(tab)
     counts <- as.character(tab)
-    out <- stringi::stri_c(values, "_", counts)
-    out <- stringi::stri_flatten(out, collapse = ", ")
+    out <- paste(values, counts, sep = sep)
+    out <- paste0(out, collapse = ", ")
   }
 
   return(out)
@@ -97,6 +99,9 @@ tbcvs <- function(y) {
 #'
 #' @param na.rm This determines whether missing values (NAs) should be removed
 #'   before attempting to calculate summary statistics.
+#'
+#' @param sep A charater string to use to separate unique values from their
+#'   counts ("_" by default). Only applicable to factors and character vectors.
 #'
 #' @param output "tibble" for tibble or "dt" for data.table. Tibble is used as
 #'   the default output to facilitate subsequent use/modification of the output
@@ -184,7 +189,7 @@ tbcvs <- function(y) {
 #'   \code{\link{counts}}, \code{\link{counts_tb}}
 #'
 #' @export
-describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, output = c("tibble", "dt")){
+describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, sep = "_",  output = c("tibble", "dt")){
 
   output <- match.arg(output)
 
@@ -235,7 +240,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
                               p_na = round(sum(is.na(data))/length(data), digits),
                               n_unique = data.table::uniqueN(data),
                               ordered = is.ordered(data),
-                              counts_tb = tbcvs(data))]
+                              counts_tb = tbcvs(data, sep = sep))]
       )
     } else if (is.character(data)) {
       dt <- data.table::as.data.table(data)
@@ -245,9 +250,9 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
                               na = sum(is.na(data)),
                               p_na = round(sum(is.na(data))/length(data), digits),
                               n_unique = data.table::uniqueN(data),
-                              min_chars = as.integer(min(stringi::stri_length(data), na.rm = na.rm)),
-                              max_chars = as.integer(max(stringi::stri_length(data), na.rm = na.rm)),
-                              counts_tb = tbcvs(data))]
+                              min_chars = as.integer(min(nchar(data), na.rm = na.rm)),
+                              max_chars = as.integer(max(nchar(data), na.rm = na.rm)),
+                              counts_tb = tbcvs(data, sep = sep))]
       )
     } else {
       stop("Input data class not currently supported.\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character")
@@ -340,7 +345,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
                                 ordered = is.ordered(get(y)),
-                                counts_tb = tbcvs(get(y))),
+                                counts_tb = tbcvs(get(y), sep = sep)),
                             by = eval(g)]
         )
       } else {
@@ -351,7 +356,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
                                 ordered = is.ordered(get(y)),
-                                counts_tb = tbcvs(get(y)))]
+                                counts_tb = tbcvs(get(y), sep = sep))]
         )
       }
     } else if (is.character(dt[[y]])) {
@@ -362,9 +367,9 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
                                 na = sum(is.na(get(y))),
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
-                                min_chars = as.integer(min(stringi::stri_length(get(y)), na.rm = na.rm)),
-                                max_chars = as.integer(max(stringi::stri_length(get(y)), na.rm = na.rm)),
-                                counts_tb = tbcvs(get(y))),
+                                min_chars = as.integer(min(nchar(get(y)), na.rm = na.rm)),
+                                max_chars = as.integer(max(nchar(get(y)), na.rm = na.rm)),
+                                counts_tb = tbcvs(get(y), sep = sep)),
                             by = eval(g)]
         )
       } else {
@@ -374,9 +379,9 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
                                 na = sum(is.na(get(y))),
                                 p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
                                 n_unique = data.table::uniqueN(get(y)),
-                                min_chars = as.integer(min(stringi::stri_length(get(y)), na.rm = na.rm)),
-                                max_chars = as.integer(max(stringi::stri_length(get(y)), na.rm = na.rm)),
-                                counts_tb = tbcvs(get(y)))]
+                                min_chars = as.integer(min(nchar(get(y)), na.rm = na.rm)),
+                                max_chars = as.integer(max(nchar(get(y)), na.rm = na.rm)),
+                                counts_tb = tbcvs(get(y), sep = sep))]
         )
       }
     } else {
@@ -444,6 +449,9 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
 #'
 #' @param na.rm This determines whether missing values (NAs) should be removed
 #'   before attempting to calculate summary statistics.
+#'
+#' @param sep A charater string to use to separate unique values from their
+#'   counts ("_" by default). Only applicable to factors and character vectors.
 #'
 #' @param output Output type for each class of variables. "tibble" for tibble or
 #'   "dt" for data.table. Tibble is used as the default output to facilitate
@@ -532,7 +540,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, ou
 #' @seealso \code{\link{describe}}
 #'
 #' @export
-describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, output = c("tibble", "dt")) {
+describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, sep = "_", output = c("tibble", "dt")) {
   output <- match.arg(output)
 
   if(any(class %ni%  c("all", "d", "f", "c", "l", "n"))) {
@@ -599,12 +607,12 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     }
     if((class == "all" || "f" %chin% class) && fct_cols >= 1){
       ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
-                                               ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                               ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
                                                .id = "variable"), by = eval(g), .SDcols = is.factor]
     }
     if((class == "all" || "c" %chin% class) && chr_cols >= 1){
       ls[["character"]] <- data[,  purrr::map_dfr(.SD,
-                                                  ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                                  ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
                                                   .id = "variable"), by = eval(g), .SDcols = is.character]
     }
     if((class == "all" || "l" %chin% class) && lgl_cols >= 1){
@@ -626,12 +634,12 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     }
     if((class == "all" || "f" %chin% class) && fct_cols >= 1){
       ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
-                                               ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                               ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
                                                .id = "variable"), .SDcols = is.factor]
     }
     if((class == "all" || "c" %chin% class) && chr_cols >= 1){
       ls[["character"]] <- data[,  purrr::map_dfr(.SD,
-                                                  ~describe(.x, digits = digits, order = order, na.rm = na.rm, output = output),
+                                                  ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
                                                   .id = "variable"), .SDcols = is.character]
     }
     if((class == "all" || "l" %chin% class) && lgl_cols >= 1){

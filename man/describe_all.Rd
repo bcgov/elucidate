@@ -11,6 +11,7 @@ describe_all(
   digits = 3,
   type = 2,
   na.rm = TRUE,
+  sep = "_",
   output = c("tibble", "dt")
 )
 }
@@ -42,6 +43,9 @@ skewness and kurtosis calculations to perform. See
 
 \item{na.rm}{This determines whether missing values (NAs) should be removed
 before attempting to calculate summary statistics.}
+
+\item{sep}{A charater string to use to separate unique values from their
+counts ("_" by default). Only applicable to factors and character vectors.}
 
 \item{output}{Output type for each class of variables. "tibble" for tibble or
 "dt" for data.table. Tibble is used as the default output to facilitate

@@ -1,3 +1,13 @@
+## elucidate 0.0.0.9023 - May 20th, 2021
+
+* Added a convenience shortcut for `copies(filter = "dupes", sort_by_copies = TRUE)` as a new function, `dupes()`, which makes checking data frames for duplicated rows even easier. 
+
+* Reverted `describe()`, `describe_all()`, `mode()`, and the `counts*` function set to using `base::table()` instead of the faster `Rfast::Table()` because of an [ongoing incompatibility issue](https://github.com/RfastOfficial/Rfast/issues/26) between `Rfast` and `dplyr` that appears to [cause R studio to hang](https://github.com/RfastOfficial/Rfast/issues/16) for extended periods. We may switch back to `Rfast::Table()` after the issue has been resolved by the `Rfast` developers. 
+
+* Added a "sep" argument to the `counts_*` function set, `describe()`, and `describe_all()` that allows the user to change the separator string pasted between unique values and their counts in the output. The ability to change the separator string also enables the user to obtain the intended results from `counts_tb()` or `counts_tb_all()` in cases where the input data has values containing an underscore by allowing them to change it to a string that is not already present in the data. 
+
+* The `stringi` package has been removed as a dependency.
+
 ## elucidate 0.0.0.9022 - April 22nd, 2021
 
 * Added `plot_pie()` for building pie charts with `ggplot2::geom_bar()` & `ggplot2::coord_polar()`. Despite well founded criticisms of pie charts (e.g. https://www.data-to-viz.com/caveat/pie.html), sometimes our project stakeholders, bosses, clients, or graduate supervisors want to see them anyways, so `plot_pie()` aims to make producing them with ggplot2 a bit easier. To encourage limiting the number of slices users display in a pie chart, if the chosen fill variable (argument "fill_var") contains more than 5 unique values (leading to >5 pie slices), a warning is issued which urges the user to consider either lumping some slices together (via argument "lump_n") or using `plot_bar()` instead.

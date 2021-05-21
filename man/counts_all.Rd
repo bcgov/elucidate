@@ -4,7 +4,7 @@
 \alias{counts_all}
 \title{Obtain the counts for unique values of all variables in a data frame.}
 \usage{
-counts_all(data, n = "all", order = c("d", "a", "i"))
+counts_all(data, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TRUE)
 }
 \arguments{
 \item{data}{A data frame (required).}
@@ -13,13 +13,18 @@ counts_all(data, n = "all", order = c("d", "a", "i"))
 
 \item{order}{"d" for descending/decreasing order. "a" or "i" for
 ascending/increasing order.}
+
+\item{sep}{A charater string to use to separate unique values from their counts
+("_" by default).}
+
+\item{na.rm}{Should missing values be omitted (TRUE/FALSE)?}
 }
 \value{
 A list of character vectors of the unique value frequency counts for
 each variable of the input data frame sorted in the chosen order. Return
-values are structured as "value_count". Returning a character vector makes
-subsequent manipulation with stringr and other tidyverse tools fairly
-easily.
+values are structured as "value_count", where the "_" portion takes on the
+value of the sep argument. Returning a character vector makes subsequent
+manipulation with stringr and other tidyverse tools fairly easily.
 }
 \description{
 \code{counts_all} is an extension of \code{\link{counts}} that
