@@ -3441,7 +3441,7 @@ plot_bar <- function(data, x = NULL,
 #'
 #' @export
 plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = c("mean", "median"),
-                            error = c("ci", "sd", "var", "quartile"),
+                            error = c("ci", "sd", "se", "var", "quartile"),
                             ci_level = 0.95, ci_type = c("perc","bca", "norm", "basic"),
                             replicates = 2000, parallel = FALSE, cores = NULL,
                             xlab = NULL, ylab = NULL, title = NULL, ...,

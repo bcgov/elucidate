@@ -20,7 +20,7 @@ exploratory data analysis in R easier and more accessible for
 researchers to:
 
   - Interrogate data in search of row duplications and anomalous values
-    with `copies()` and the `counts*` set of functions.
+    with `dupes()`, `copies()`, and the `counts*` set of functions.
 
   - Describe data with the `describe*` set of functions for obtaining
     summary statistics, bootstrapping confidence intervals, and
@@ -67,32 +67,51 @@ mostly have remained a collection of ideas instead of functions.
 
 `copies()` can tell you how many rows are duplicated based on one or
 more variables (default is all of them). To return duplicated rows only
-we can set the filter argument to “dupes”.
+we can set the filter argument to “dupes”. To sort the results by the
+number of copies that are detected we can set the “sort\_by\_copies”
+argument to `TRUE`.
 
 ``` r
 library(elucidate)
+#> 
+#> Attaching package: 'elucidate'
+#> The following object is masked from 'package:base':
+#> 
+#>     mode
 
 #list any number of variables to use when searching for duplicates after the
 #data argument
-
 copies(pdata,
        d, #in this case we search for duplicated based on the "d" (date) column
-       filter = "dupes") #return duplicated rows only
+       filter = "dupes",#return duplicated rows only
+       sort_by_copies = TRUE) 
 #> Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.
 #> # A tibble: 12,000 x 11
 #>       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies
 #>    <int> <date>     <fct> <chr>    <lgl> <dbl> <dbl> <int> <int> <int>    <int>
-#>  1     1 2008-01-01 e     high     FALSE 106.  118.     59   116   248     1000
-#>  2     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238     1000
-#>  3     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250     1000
-#>  4     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287     1000
-#>  5     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284     1000
-#>  6     6 2008-01-01 a     high     TRUE  102.  114.     19   163   206     1000
-#>  7     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201     1000
-#>  8     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249     1000
-#>  9     9 2008-01-01 e     low      FALSE  99.8  89.8    92   106   277     1000
-#> 10    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209     1000
+#>  1     1 2019-01-01 e     high     FALSE  144. 112.     86   199   261     1000
+#>  2     2 2019-01-01 c     low      TRUE   262.  91.8    88   104   224     1000
+#>  3     3 2019-01-01 d     high     FALSE  224. 120.     29   192   224     1000
+#>  4     4 2019-01-01 c     high     TRUE   262. 102.     77   151   254     1000
+#>  5     5 2019-01-01 a     low      FALSE  167.  91.6    75   186   258     1000
+#>  6     6 2019-01-01 a     low      TRUE   163.  83.6    39   152   293     1000
+#>  7     7 2019-01-01 d     low      FALSE  247.  98.9    88   177   202     1000
+#>  8     8 2019-01-01 b     high     TRUE   189. 102.     79   163   217     1000
+#>  9     9 2019-01-01 e     high     FALSE  156. 110.      4   136   220     1000
+#> 10    10 2019-01-01 c     low      TRUE   248.  95.9    63   113   213     1000
 #> # ... with 11,990 more rows
+```
+
+Since this is the by far the most common way of using `copies()`,
+version 0.0.0.9023 of `elucidate` also introduced a convenience wrapper
+called `dupes()` for the above:
+
+``` r
+copies_result <- copies(pdata, d, filter = "dupes", sort_by_copies = TRUE)
+dupes_result <- dupes(pdata, d)
+
+identical(copies_result, dupes_result)
+#> [1] TRUE
 ```
 
 Use `describe()` to describe a single variable in a data frame or a
@@ -102,9 +121,9 @@ vector of values:
 #using a numeric vector as input
 describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
-#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100  skew
-#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1  1000  1000     0     0  100.  4.99 0.158  84.4  97.0  100.  104.  117.  0.11
+#>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew
+#>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
+#> 1  1000  1000     0     0  100.  5.05  0.16  85.1  96.7  100.  104.  116. -0.026
 #> # ... with 1 more variable: kurt <dbl>
 ```
 

@@ -26,7 +26,7 @@ This package is currently maintained by [Craig Hutton](https://craig.rbind.io/),
 
 `elucidate` provides a collection of convenience functions to make exploratory data analysis in R easier and more accessible for researchers to:
 
-  * Interrogate data in search of row duplications and anomalous values with `copies()` and the `counts*` set of functions.
+  * Interrogate data in search of row duplications and anomalous values with `dupes()`, `copies()`, and the `counts*` set of functions.
 
   * Describe data with the `describe*` set of functions for obtaining summary statistics, bootstrapping confidence intervals, and detecting missing values.
 
@@ -53,18 +53,27 @@ The authors of `elucidate` acknowledge and express their gratitude to the author
 
 ## Usage
 
-`copies()` can tell you how many rows are duplicated based on one or more variables (default is all of them). To return duplicated rows only we can set the filter argument to "dupes".
+`copies()` can tell you how many rows are duplicated based on one or more variables (default is all of them). To return duplicated rows only we can set the filter argument to "dupes". To sort the results by the number of copies that are detected we can set the "sort_by_copies" argument to `TRUE`.
 
 ```{r copies, cache = TRUE}
 library(elucidate)
 
 #list any number of variables to use when searching for duplicates after the
 #data argument
-
 copies(pdata,
        d, #in this case we search for duplicated based on the "d" (date) column
-       filter = "dupes") #return duplicated rows only
+       filter = "dupes",#return duplicated rows only
+       sort_by_copies = TRUE) 
 
+```
+
+Since this is the by far the most common way of using `copies()`, version 0.0.0.9023 of `elucidate` also introduced a convenience wrapper called `dupes()` for the above:
+
+```{r, cache = TRUE, message = FALSE}
+copies_result <- copies(pdata, d, filter = "dupes", sort_by_copies = TRUE)
+dupes_result <- dupes(pdata, d)
+
+identical(copies_result, dupes_result)
 ```
 
 Use `describe()` to describe a single variable in a data frame or a vector of values:
