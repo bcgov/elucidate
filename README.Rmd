@@ -67,7 +67,7 @@ copies(pdata,
 
 ```
 
-Since this is the by far the most common way of using `copies()`, version 0.0.0.9023 of `elucidate` also introduced a convenience wrapper called `dupes()` for the above:
+Since this is by far the most common way of using `copies()`, version 0.0.0.9023 of `elucidate` also introduced a convenience wrapper called `dupes()` for the above:
 
 ```{r, cache = TRUE, message = FALSE}
 copies_result <- copies(pdata, d, filter = "dupes", sort_by_copies = TRUE)

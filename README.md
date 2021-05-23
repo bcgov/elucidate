@@ -102,9 +102,9 @@ copies(pdata,
 #> # ... with 11,990 more rows
 ```
 
-Since this is the by far the most common way of using `copies()`,
-version 0.0.0.9023 of `elucidate` also introduced a convenience wrapper
-called `dupes()` for the above:
+Since this is by far the most common way of using `copies()`, version
+0.0.0.9023 of `elucidate` also introduced a convenience wrapper called
+`dupes()` for the above:
 
 ``` r
 copies_result <- copies(pdata, d, filter = "dupes", sort_by_copies = TRUE)
@@ -123,7 +123,7 @@ describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
 #>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew
 #>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
-#> 1  1000  1000     0     0  100.  5.05  0.16  85.1  96.7  100.  104.  116. -0.026
+#> 1  1000  1000     0     0  100.  5.10 0.161  83.5  96.6  100.  104.  116. -0.063
 #> # ... with 1 more variable: kurt <dbl>
 ```
 
