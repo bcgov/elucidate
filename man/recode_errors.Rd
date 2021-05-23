@@ -8,9 +8,9 @@ recode_errors(
   data,
   errors,
   replacement = NA,
-  rows = c(1:nrow(data)),
-  cols = c(1:ncol(data)),
-  ind = c(1:length(data))
+  rows = NULL,
+  cols = NULL,
+  ind = NULL
 )
 }
 \arguments{

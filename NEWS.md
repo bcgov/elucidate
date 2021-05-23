@@ -1,3 +1,9 @@
+## elucidate 0.0.0.9024 - May 22nd, 2021
+
+* Fixed a bug that was causing `recode_errors()` to fail when a non-date/POSIX.ct value was passed to the "errors" argument and checked against a vector of dates. Now you can re-code erroneous values in date columns or vectors by simply specifying the erroneous values as character strings or numbers. For example, if a vector of dates named "date_vector" contains an erroneous value of "2099-01-01" that should be "2009-01-01", you can now fix it via `recode_errors(date_vector, errors = "2099-01-01", replacement = "2009-01-01")` instead of the previously required `recode_errors(date_vector, errors = as.Date("2099-01-01"), replacement = as.Date("2009-01-01"))`. If you are instead trying to re-code values of "." (or other arbitrary sting) as `NA` throughout a data frame, "df", via `recode_errors(df, errors = c(9999, "."))`, and the data frame happens to include a date column, the function will no longer fail with the error: "character string is not in a standard unambiguous format". 
+
+* In the process of debugging `recode_errors()`, some inefficient for loops were also replaced with `lapply` and `data.table::.SD`, which should considerably reduce execution times and memory utilization when re-coding long vectors or large data frames. For example, benchmarking the new version of `recode_errors()` against the old version to re-code 3 erroneous values of mixed classes as `NA` using a resampled version of `pdata` with one million rows by nine columns suggests that the new changes led to over a three-fold reduction in execution time and memory utilization. 
+
 ## elucidate 0.0.0.9023 - May 20th, 2021
 
 * Added a convenience shortcut for `copies(filter = "dupes", sort_by_copies = TRUE)` as a new function, `dupes()`, which makes checking data frames for duplicated rows even easier. 

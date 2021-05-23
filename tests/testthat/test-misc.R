@@ -1,4 +1,4 @@
-# Copyright 2019 Province of British Columbia
+# Copyright 2021 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,7 +94,6 @@ test_that("wash_df works", {
   expect_equal(wash_df(x), tibble::as_tibble(mtcars))
 })
 
-
 old_values <- c(1:10)
 
 new_values <- c("one", "two", "three", "four", "five",
@@ -106,12 +105,21 @@ test_that("translate works", {
 })
 
 
-test_that("recode_errors works", {
+test_that("recode_errors works with factors", {
   expect_equivalent(recode_errors(d$g[1:10], errors = c("e", "c")),
-               factor(c(NA, NA, "d", NA, "a", "a", "d", "b", NA, NA),
-                      levels = letters[1:5]))
+                    factor(c(NA, NA, "d", NA, "a", "a", "d", "b", NA, NA),
+                           levels = letters[1:5]))
 })
 
+re_test_df <- d
+re_test_df$d[re_test_df$d == as.Date("2008-01-01")] <- NA
+re_test_df$high_low[re_test_df$high_low == "high"] <- NA
+re_test_df$g[re_test_df$g == "a"] <- NA
+re_test_df$x3[re_test_df$x3 %in% c(248, 250)] <- NA
+
+test_that("recode_errors works for data frames", {
+  expect_equivalent(recode_errors(d, errors = c("2008-01-01", "high", "a", 248, 250)), re_test_df)
+})
 
 test_that("grapes-ni-grapes works", {
   expect_equivalent((d$g[1:10] %ni% c("a", "e")),

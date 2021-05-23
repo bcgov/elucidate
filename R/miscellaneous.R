@@ -135,7 +135,7 @@ mode <- function(y, digits = 3, inv = FALSE, na.rm = TRUE){
     }
   }
   if(is.numeric(y)) {
-  out <- round(as.numeric(out), digits)
+    out <- round(as.numeric(out), digits)
   }
   return(out)
 }
@@ -679,26 +679,26 @@ static_to_dynamic <- function(static_object, caption = NULL,
     return(dynamic_object)
   } else if (is.data.frame(static_object) && nrow(static_object) <= reactable_threshold) {
     if(!missing(caption)){
-    dynamic_object <-  DT::datatable(static_object,
-                                     filter = "top",
-                                     caption = htmltools::tags$caption(
-                                       style = 'caption-side: top; text-align: left;',
-                                       caption),
-                                     editable = T,
-                                     class = "display compact",
-                                     extensions = c("ColReorder", "Buttons", "AutoFill",
-                                                    "KeyTable", "Select", "Scroller"),
-                                     selection = "none",
-                                     options = list(autoWidth = TRUE,
-                                                    searchHighlight = TRUE,
-                                                    autoFill = TRUE, colReorder = TRUE, keys = TRUE,
-                                                    rowReorder = TRUE,
-                                                    select = list(style = "os", items = "cell"),
-                                                    dom = "Bfrtip", buttons = list(I("colvis"),
-                                                                                   "copy", "print",
-                                                                                   list(extend = "collection",
-                                                                                        buttons = c("csv", "excel", "pdf"),
-                                                                                        text = "Download"))))
+      dynamic_object <-  DT::datatable(static_object,
+                                       filter = "top",
+                                       caption = htmltools::tags$caption(
+                                         style = 'caption-side: top; text-align: left;',
+                                         caption),
+                                       editable = T,
+                                       class = "display compact",
+                                       extensions = c("ColReorder", "Buttons", "AutoFill",
+                                                      "KeyTable", "Select", "Scroller"),
+                                       selection = "none",
+                                       options = list(autoWidth = TRUE,
+                                                      searchHighlight = TRUE,
+                                                      autoFill = TRUE, colReorder = TRUE, keys = TRUE,
+                                                      rowReorder = TRUE,
+                                                      select = list(style = "os", items = "cell"),
+                                                      dom = "Bfrtip", buttons = list(I("colvis"),
+                                                                                     "copy", "print",
+                                                                                     list(extend = "collection",
+                                                                                          buttons = c("csv", "excel", "pdf"),
+                                                                                          text = "Download"))))
     } else {
       dynamic_object <-  DT::datatable(static_object,
                                        filter = "top",
@@ -818,10 +818,10 @@ static_to_dynamic <- function(static_object, caption = NULL,
 #'
 #' @export
 wash_df <- function(data, clean_names = TRUE, case = "snake",
-                 remove_empty = TRUE, remove_which = c("rows", "cols"),
-                 parse = TRUE, guess_integer = FALSE, na = c("", "NA"),
-                 rownames_to_column = FALSE, col_name = "rowname",
-                 column_to_rownames = FALSE, names_col = "rowname"){
+                    remove_empty = TRUE, remove_which = c("rows", "cols"),
+                    parse = TRUE, guess_integer = FALSE, na = c("", "NA"),
+                    rownames_to_column = FALSE, col_name = "rowname",
+                    column_to_rownames = FALSE, names_col = "rowname"){
 
   if (remove_empty == TRUE) {
     data <- data %>%
@@ -905,6 +905,67 @@ translate <- function(y, old, new) {
   return(out)
 }
 
+
+
+# recode_errors_vec (internal) --------------------------------------------
+#' @title elucidate package internal function used by
+#'   \code{\link{recode_errors}}.
+#'
+#' @description elucidate package internal function used by
+#' \code{\link{recode_errors}} to re-code erroneous values of column vectors
+#' when the input data is a data.frame.
+#'
+#' @importFrom lubridate is.Date
+#'
+#' @param data A vector/variable (required).
+#'
+#' @param errors vector of erroneous values to be recoded.
+#'
+#' @param replacement The value you wish to replace all errors with. Default =
+#'   NA.
+#'
+#' @param ind An optional vector specifying the indices the data object for
+#'   which to replace erroneous values. Default is all indices in data.
+#'
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
+#' @noRd
+recode_errors_vec <- function(data, errors, replacement = NA, ind = NULL) {
+  if(lubridate::is.Date(data)) {
+    data <- as.character(data)
+    if(!missing(ind)) {
+      data[ind][data[ind] %in% errors] <- replacement
+    } else {
+      data[data %in% errors] <- replacement
+    }
+    data <- as.Date(data)
+  } else if (is.factor(data) && !is.na(replacement) && missing(ind)) {
+    levels(data)[levels(data) %in% errors] <- replacement
+    data <- droplevels(data)
+  } else {
+    if(is.factor(data) && !is.na(replacement) && !missing(ind)) {
+      lvls <- as.character(levels(data))
+      levels(data)[levels(data) %in% errors] <- replacement
+      data <- as.character(data)
+      if(!missing(ind)) {
+        data[ind][data[ind] %in% errors] <- replacement
+      } else {
+        data[data %in% errors] <- replacement
+      }
+      data <- factor(data, levels = c(lvls, replacement))
+    } else {
+      if(!missing(ind)) {
+        data[ind][data[ind] %in% errors] <- replacement
+      } else {
+        data[data %in% errors] <- replacement
+      }
+      if(is.factor(data)) {
+        data <- droplevels(data)
+      }
+    }
+  }
+  return(data)
+}
+
 # recode_errors --------------------------------------------------------
 #' @title
 #' Recode a vector of erroneous values in a vector or data frame column(s).
@@ -916,6 +977,7 @@ translate <- function(y, old, new) {
 #' multiple columns/rows (for data frames), or value indices (for vectors).
 #'
 #' @importFrom data.table as.data.table
+#' @importFrom data.table is.data.table
 #' @importFrom tibble is_tibble
 #'
 #' @param data A vector, data frame, tibble, or matrix.
@@ -952,45 +1014,72 @@ translate <- function(y, old, new) {
 #'   errors = c(0, 8))
 #'
 #' @export
-recode_errors <- function(data, errors, replacement = NA,
-                          rows = c(1:nrow(data)),
-                          cols = c(1:ncol(data)),
-                          ind = c(1:length(data))) {
+recode_errors <- function(data, errors, replacement = NA, rows = NULL, cols = NULL, ind = NULL) {
   .classes <- class(data)
-  if("data.table" %in% .classes){
-    data <- as.data.frame(data)
-  }
-  if(is.data.frame(data) == TRUE | is_tibble(data) == TRUE | is.matrix(data) == TRUE){
-    for (i in 1:length(errors)) {
-      data[rows, cols][data[rows, cols] == errors[i]] <- replacement
+  if("data.table" %in% .classes) {
+    if(!missing(cols)) {
+      data <- as.data.frame(data)
     }
-    return(data)
-  } else if (is.factor(data) && !is.na(replacement) && length(ind) == length(data)) {
-    levels(data)[levels(data) %in% errors] <- replacement
-    return(data)
+  }
+  if(is.data.frame(data) || is.matrix(data)){
+    if(!data.table::is.data.table(data)){
+      data <- data.table::as.data.table(data)
+    }
+    if(missing(cols) && missing(rows)) {
+      data <- data[, lapply(.SD, recode_errors_vec, errors = errors, replacement = replacement)]
+    } else if (missing(cols) && !missing(rows)) {
+      data <- data[, lapply(.SD, recode_errors_vec, errors = errors, replacement = replacement, ind = rows)]
+    } else if (!missing(cols) && !missing(rows)) {
+      data <- data[, (cols) := lapply(.SD, recode_errors_vec, errors = errors, replacement = replacement, ind = rows), .SDcols = cols]
+    } else if (!missing(cols) && missing(rows)) {
+      data <- data[, (cols) := lapply(.SD, recode_errors_vec, errors = errors, replacement = replacement), .SDcols = cols]
+    }
+    if("data.table" %in% .classes){
+      return(data[])
+    } else if ("tbl_df" %in% .classes) {
+      return(tibble::as_tibble(data))
+    } else if ("data.frame" %in% .classes) {
+      return(as.data.frame(data))
+    } else if ("matrix "%in% .classes) {
+      return(as.matrix(data))
+    }
   } else {
-    for (i in 1:length(errors)) {
-      if(is.factor(data) && !is.na(replacement)) {
+    if(lubridate::is.Date(data)) {
+      data <- as.character(data)
+      if(!missing(ind)) {
+        data[ind][data[ind] %in% errors] <- replacement
+      } else {
+        data[data %in% errors] <- replacement
+      }
+      data <- as.Date(data)
+    } else if (is.factor(data) && !is.na(replacement) && missing(ind)) {
+      levels(data)[levels(data) %in% errors] <- replacement
+      data <- droplevels(data)
+    } else {
+      if(is.factor(data) && !is.na(replacement) && !missing(ind)) {
         lvls <- as.character(levels(data))
         levels(data)[levels(data) %in% errors] <- replacement
         data <- as.character(data)
-        data[ind][data[ind] %in% errors[i]] <- replacement
+        if(!missing(ind)) {
+          data[ind][data[ind] %in% errors] <- replacement
+        } else {
+          data[data %in% errors] <- replacement
+        }
         data <- factor(data, levels = c(lvls, replacement))
       } else {
-        data[ind][data[ind] %in% errors[i]] <- replacement
+        if(!missing(ind)) {
+          data[ind][data[ind] %in% errors] <- replacement
+        } else {
+          data[data %in% errors] <- replacement
+        }
         if(is.factor(data)) {
           data <- droplevels(data)
         }
       }
     }
-    if("data.table" %in% .classes){
-      data <- data.table::as.data.table(data)
-    }
     return(data)
   }
 }
-
-
 
 # "%ni%"-------------------------------------------------------------
 #' @title
@@ -1027,8 +1116,6 @@ recode_errors <- function(data, errors, replacement = NA,
   nm <- !(x %in% y)
   return(nm)
 }
-
-
 
 # consum: consecutive summation -------------------------------------------
 #' @title
