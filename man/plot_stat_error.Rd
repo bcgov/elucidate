@@ -35,6 +35,11 @@ plot_stat_error(
   colour_var_values = NULL,
   colour_var_labs = NULL,
   colour_var_title = NULL,
+  palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
+    "E"),
+  palette_direction = c("d2l", "l2d"),
+  palette_begin = 0,
+  palette_end = 1,
   greyscale = FALSE,
   b_width = 0.75,
   p_size = 2,
@@ -43,13 +48,13 @@ plot_stat_error(
   eb_size = 0.3,
   eb_width = 0.2,
   eb_alpha = 1,
-  eb_linetype = 1,
+  eb_line_type = 1,
   eb_colour = NULL,
   add_lines = F,
   line_alpha = 0.75,
   line_group = NULL,
   line_colour = NULL,
-  linetype = 1,
+  line_type = 1,
   line_size = 0.5,
   theme = "classic",
   text_size = 14,
@@ -230,6 +235,26 @@ c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
 colour_var, this allows you to modify the variable label in the plot
 legend.}
 
+\item{palette}{If a variable is assigned to fill_var or colour_var, this
+determines which
+\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+   link} for examples. You can override these colour palettes with
+fill_var_values or colour_var_values.}
+
+\item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
+for light to dark.}
+
+\item{palette_begin}{Value between 0 and 1 that determines where along the
+full range of the chosen colour palette's spectrum to begin sampling
+colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
+\item{palette_end}{Value between 0 and 1 that determines where along the full
+range of the chosen colour palette's spectrum to end sampling colours. See
+\code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
 \item{greyscale}{Set to TRUE if you want the plot converted to greyscale.}
 
 \item{b_width}{The width of the bars when geom = "bar". Affects the spacing
@@ -255,7 +280,7 @@ jittering set this to 0.}
 components of the error bars, ranging from 0 = 100 percent transparent to 1
 = 100\% percent opaque.}
 
-\item{eb_linetype}{Controls the error bar line type. Default = 1 or "solid".}
+\item{eb_line_type}{Controls the error bar line type. Default = 1 or "solid".}
 
 \item{eb_colour}{Controls the colour of error bar lines. If unspecified,
 will either be "black" for all lines, or differ by groups if colour_var is
@@ -282,7 +307,7 @@ fill_var and colour_var.}
 will either be "black" for all lines, or differ by groups if colour_var is
 specified.}
 
-\item{linetype}{Controls the connection line type. Default = 1 or "solid".}
+\item{line_type}{Controls the connection line type. Default = 1 or "solid".}
 
 \item{line_size}{Controls the thickness of the connection lines. Default =
 0.5.}
@@ -365,7 +390,9 @@ using ggplot2 with a simplified customization interface with static
 (ggplot) and interactive (plotly) output options. The static output is
 useful for producing static reports (e.g. for manuscripts) and is readily
 customized further using ggplot2 syntax. The interactive output is helpful
-for exploring the data and producing dynamic html reports.
+for exploring the data and producing dynamic html reports. See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+  blog post} for an introduction to ggplot2.
 }
 \examples{
 data(mtcars) #load the mtcars data

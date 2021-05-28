@@ -74,3 +74,15 @@ test_that("plot_stat_error works for the mean", {
 test_that("plot_stat_error works for the median", {
   expect_is(plot_stat_error(mtcars, y = mpg, x = cyl, stat = "median", replicates = 500), "gg")
 })
+
+test_that("plot_pie works", {
+  expect_is(plot_pie(mtcars, fill_var = cyl), "gg")
+})
+
+test_that("plot_bar works", {
+  expect_is(plot_bar(mtcars, x = cyl), "gg")
+})
+
+test_that("plot_raincloud works", {
+  expect_is(plot_raincloud(mtcars, y = mpg), "gg")
+})

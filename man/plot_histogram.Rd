@@ -29,8 +29,22 @@ plot_histogram(
   colour_var_labs = NULL,
   fill_var_values = NULL,
   colour_var_values = NULL,
+  palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
+    "E"),
+  palette_direction = c("d2l", "l2d"),
+  palette_begin = 0,
+  palette_end = 1,
   alpha = 0.6,
   greyscale = FALSE,
+  line_size = 1,
+  rug = FALSE,
+  rug_colour = "black",
+  dnorm = FALSE,
+  dnorm_colour = "black",
+  dnorm_line_type = c("dashed", "solid", "dotted", "dotdash", "longdash", "twodash"),
+  dnorm_line_size = 1.1,
+  dnorm_alpha = 0.6,
+  dnorm_y_axis = TRUE,
   theme = "classic",
   text_size = 14,
   font = c("sans", "serif", "mono"),
@@ -148,11 +162,55 @@ colour_var_values = c("blue", "red"). See
 \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
 options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
+\item{palette}{If a variable is assigned to fill_var or colour_var, this
+determines which
+\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+   link} for examples. You can override these colour palettes with
+fill_var_values or colour_var_values.}
+
+\item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
+for light to dark.}
+
+\item{palette_begin}{Value between 0 and 1 that determines where along the
+full range of the chosen colour palette's spectrum to begin sampling
+colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
+\item{palette_end}{Value between 0 and 1 that determines where along the full
+range of the chosen colour palette's spectrum to end sampling colours. See
+\code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
 \item{alpha}{This adjusts the transparency/opacity of the graphical
 components of the plot, ranging from 0 = 100\% transparent to 1 = 100\%
 opaque.}
 
 \item{greyscale}{Set to TRUE if you want the plot converted to greyscale.}
+
+\item{line_size}{THis modifies the thickness of the histogram bar outlines.}
+
+\item{rug}{Set this to TRUE to add rug lines to the bottom of the plot.}
+
+\item{rug_colour}{Determines the colour of the rug lines.}
+
+\item{dnorm}{Set this to TRUE to add a normal/Gaussian density curve to the plot.}
+
+\item{dnorm_colour}{Determines the colour of the normal density curve (if dnorm = TRUE).}
+
+\item{dnorm_line_type}{The type of line to use to draw the normal density
+curve (if dnorm = TRUE). Options include "dashed" (default), "solid",
+"dotted", "dotdash", "longdash", and "twodash".}
+
+\item{dnorm_line_size}{Adjusts the thickness of the normal density curve (if
+dnorm = TRUE).}
+
+\item{dnorm_alpha}{This adjusts the transparency/opacity of the normal
+density curve (if dnorm = TRUE) with valid values ranging from 0 = 100\%
+transparent to 1 = 100\% opaque.}
+
+\item{dnorm_y_axis}{Set this to FALSE to omit the secondary y-axis that is
+drawn if dnorm = TRUE to show the scale for the normal density curve.}
 
 \item{theme}{Adjusts the theme using 1 of 6 predefined "complete" theme
 templates provided by ggplot2. Currenlty supported options are: "classic"
@@ -211,7 +269,9 @@ ggplot2 with a simplified customization interface for common modifications
 with static (ggplot) and interactive (plotly) output options. The static
 output is useful for producing static reports (e.g. for manuscripts) and is
 readily customized further using ggplot2 syntax. The interactive output is
-helpful for exploring the data and producing dynamic html reports.
+helpful for exploring the data and producing dynamic html reports. See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+  blog post} for an introduction to ggplot2.
 }
 \examples{
 data(mtcars) #load the mtcars data

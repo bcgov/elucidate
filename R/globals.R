@@ -23,5 +23,5 @@ utils::globalVariables(c(".", "group", "measure", "variable", ".N", "tcvs",
                          ":=", "vars", "element_text", "CI_level",
                          "mean_LB", "mean_UB", "median_LB", "median_UB",
                          "p50", "p25", "p75", "n_", "p_",
-                         "ytot", "st_coords", "margin",
+                         "ytot", "st_coords", "margin", "dnorm_y",
                          "n_copies", "copy_number", "dupe_count"))

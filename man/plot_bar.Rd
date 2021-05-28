@@ -33,8 +33,14 @@ plot_bar(
   colour_var_labs = NULL,
   fill_var_values = NULL,
   colour_var_values = NULL,
+  palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
+    "E"),
+  palette_direction = c("d2l", "l2d"),
+  palette_begin = 0,
+  palette_end = 1,
   alpha = 0.6,
   greyscale = FALSE,
+  line_size = 1,
   coord_flip = FALSE,
   theme = "classic",
   text_size = 14,
@@ -185,11 +191,33 @@ colour_var_values = c("blue", "red"). See
 \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
 options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
+\item{palette}{If a variable is assigned to fill_var or colour_var, this
+determines which
+\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+   link} for examples. You can override these colour palettes with
+fill_var_values or colour_var_values.}
+
+\item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
+for light to dark.}
+
+\item{palette_begin}{Value between 0 and 1 that determines where along the
+full range of the chosen colour palette's spectrum to begin sampling
+colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
+\item{palette_end}{Value between 0 and 1 that determines where along the full
+range of the chosen colour palette's spectrum to end sampling colours. See
+\code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
 \item{alpha}{This adjusts the transparency/opacity of the graphical
 components of the plot, ranging from 0 = 100\% transparent to 1 = 100\%
 opaque.}
 
 \item{greyscale}{Set to TRUE if you want the plot converted to greyscale.}
+
+\item{line_size}{Controls the thickness of the bar outlines.}
 
 \item{coord_flip}{Flips the x and y axes. See
 \code{\link[ggplot2]{coord_flip}} for details.}
@@ -253,7 +281,9 @@ producing static reports (e.g. for manuscripts) and is readily customized
 further using ggplot2 syntax. The interactive output is helpful for
 exploring the data and producing dynamic html reports. To plot a bar graph
 of sample means or medians and error bars, see
-\code{\link{plot_stat_error}} instead.
+\code{\link{plot_stat_error}} instead.  See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+  blog post} for an introduction to ggplot2.
 }
 \examples{
 

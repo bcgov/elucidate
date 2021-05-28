@@ -15,6 +15,11 @@ plot_pie(
   fill_var_order = NULL,
   fill_var_labs = NULL,
   fill_var_values = NULL,
+  palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
+    "E"),
+  palette_direction = c("d2l", "l2d"),
+  palette_begin = 0,
+  palette_end = 1,
   fill_var_title = NULL,
   slice_text = NULL,
   slice_text_prefix = "",
@@ -22,6 +27,7 @@ plot_pie(
   slice_text_colour = "black",
   slice_text_size = 4,
   slice_text_custom = NULL,
+  line_size = 1,
   round_n = NULL,
   lump_n = NULL,
   lump_lab = NULL,
@@ -84,6 +90,25 @@ grouping_variable, fill_var_values = c("blue", "red"). See
 \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
 options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
+\item{palette}{If a variable is assigned to fill_var, this determines which
+\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+   link} for examples. You can override these colour palettes with
+fill_var_values.}
+
+\item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
+for light to dark.}
+
+\item{palette_begin}{Value between 0 and 1 that determines where along the
+full range of the chosen colour palette's spectrum to begin sampling
+colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
+\item{palette_end}{Value between 0 and 1 that determines where along the full
+range of the chosen colour palette's spectrum to end sampling colours. See
+\code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
 \item{fill_var_title}{this allows you to modify the fill variable label in
 the plot legend.}
 
@@ -108,6 +133,9 @@ options available in base R, see \code{\link[elucidate]{colour_options}}.}
 of using one of the convenience options provided by the slice_text
 argument. Must be a character vector of length equal to the number of
 slices (fill_var categories).}
+
+\item{line_size}{Controls the slice outline thickness if a colour is
+specified (e.g. colour = "black").}
 
 \item{round_n}{If slice_text = "pct" or "tot" this allows you to round the
 values to n significant digits. See the \code{\link{round}} "n" argument
@@ -174,7 +202,9 @@ coordinates, using ggplot2 with a simplified customization interface for
 common modifications. Pie charts are rarely the most effective way of
 visualizing data (especially when >5 groups are being compared), but that
 doesn't mean there shouldn't be an easy way to build one with ggplot2 in
-case your project stakeholders ask.
+case your project stakeholders ask. See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+  blog post} for an introduction to ggplot2.
 }
 \examples{
 

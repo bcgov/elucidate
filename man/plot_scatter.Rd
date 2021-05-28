@@ -39,6 +39,11 @@ plot_scatter(
   fill_var_values = NULL,
   colour_var_values = NULL,
   shape_var_values = NULL,
+  palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
+    "E"),
+  palette_direction = c("d2l", "l2d"),
+  palette_begin = 0,
+  palette_end = 1,
   regression_line = FALSE,
   regression_method = "gam",
   regression_formula = NULL,
@@ -215,6 +220,26 @@ variable groups, e.g. colour_var = grouping_variable, shape_var_values =
 c(1, 2). See \code{\link[ggplot2]{scale_shape_manual}} for details.
 For the available shape options, set aesthetic_options = TRUE.}
 
+\item{palette}{If a variable is assigned to fill_var or colour_var, this
+determines which
+\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+   link} for examples. You can override these colour palettes with
+fill_var_values or colour_var_values.}
+
+\item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
+for light to dark.}
+
+\item{palette_begin}{Value between 0 and 1 that determines where along the
+full range of the chosen colour palette's spectrum to begin sampling
+colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
+\item{palette_end}{Value between 0 and 1 that determines where along the full
+range of the chosen colour palette's spectrum to end sampling colours. See
+\code{\link[ggplot2]{scale_fill_viridis_d}} for details.}
+
 \item{regression_line}{Set to TRUE if you want to add a regression line to
 the plot.}
 
@@ -249,7 +274,7 @@ Default is 0.95.}
 \item{regression_alpha}{Adjusts the transparency of the regression confidence
 envelope.}
 
-\item{regression_line_type}{Adjusts the linetype of regression lines, e.g.
+\item{regression_line_type}{Adjusts the line type of regression lines, e.g.
 "solid", "dashed", etc.}
 
 \item{regression_line_full_range}{Set to TRUE if you want regression lines to
@@ -325,7 +350,9 @@ customization interface for common modifications with static (ggplot) and
 interactive (plotly) output options. The static output is useful for
 producing static reports (e.g. for manuscripts) and is readily customized
 further using ggplot2 syntax. The interactive output is helpful for
-exploring the data and producing dynamic html reports.
+exploring the data and producing dynamic html reports. See
+\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+  blog post} for an introduction to ggplot2.
 }
 \examples{
 data(mtcars) #load the mtcars data
