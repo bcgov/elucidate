@@ -238,8 +238,10 @@ mean_ci <- function(y, replicates = 2000,
 #' #using a single core (sequential processing)
 #' median_ci(y1, ci_type = "perc")
 #'
+#' \dontrun{
 #' #using multiple cores (parallel processing)
 #' median_ci(y1, parallel = TRUE, cores = 2, ci_type = "perc")
+#' }
 #'
 #' @references
 #' Efron, B. (1987). Better bootstrap confidence intervals. Journal of the
@@ -392,8 +394,10 @@ median_ci <- function(y, replicates = 2000,
 #' #using a single core (sequential processing)
 #' stat_ci(y1, stat = sd, ci_type = "perc")
 #'
+#' \dontrun{
 #' #using multiple cores (parallel processing)
 #' stat_ci(y1, stat = sd, parallel = TRUE, cores = 2, ci_type = "perc")
+#' }
 #'
 #' @references
 #' Efron, B. (1987). Better bootstrap confidence intervals. Journal of the

@@ -84,8 +84,10 @@ y1 <- rnorm(1:10000, 100, 10)
 #using a single core (sequential processing)
 stat_ci(y1, stat = sd, ci_type = "perc")
 
+\dontrun{
 #using multiple cores (parallel processing)
 stat_ci(y1, stat = sd, parallel = TRUE, cores = 2, ci_type = "perc")
+}
 
 }
 \references{

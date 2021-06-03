@@ -21,8 +21,10 @@ plot_histogram(
   fill_var_title = NULL,
   colour_var_title = NULL,
   xlim = c(NA, NA),
+  xbreaks = ggplot2::waiver(),
   transform_x = FALSE,
   x_transformation = "log10",
+  x_var_labs = ggplot2::waiver(),
   fill_var_order = NULL,
   colour_var_order = NULL,
   fill_var_labs = NULL,
@@ -115,9 +117,14 @@ this allows you to modify the variable label in the plot legend.}
 colour_var, this allows you to modify the variable label in the plot
 legend.}
 
-\item{xlim}{specify the x-axis limits, e.g. xlim = c(lower_limit,
+\item{xlim}{Specify the x-axis limits, e.g. xlim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
-the default is xlim = c(NA, NA)}
+the default is xlim = c(NA, NA).}
+
+\item{xbreaks}{This allows you to change the break points to use for tick marks
+via a numeric vector. \code{\link{seq}} is particularly useful here. See
+\code{\link[ggplot2]{scale_x_continuous}} for details. If xbreaks is
+specified, then xlim should be also.}
 
 \item{transform_x}{Would you like to transform the x axis? (TRUE or FALSE)}
 
@@ -125,6 +132,9 @@ the default is xlim = c(NA, NA)}
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 details.}
+
+\item{x_var_labs}{Allows you to modify the labels displayed with the x-axis
+tick marks. See \code{\link[ggplot2]{scale_x_continuous}} for details.}
 
 \item{fill_var_order}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the order of the variable groups, e.g. fill_var =
@@ -164,11 +174,11 @@ options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
 \item{palette}{If a variable is assigned to fill_var or colour_var, this
 determines which
-\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
-   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+\href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+colour palette} to use. Options include "plasma" or "C" (default), "magma"
 or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
-   link} for examples. You can override these colour palettes with
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+link} for examples. You can override these colour palettes with
 fill_var_values or colour_var_values.}
 
 \item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
@@ -264,14 +274,14 @@ A ggplot object or plotly object depending on whether static or
 interactive output was requested.
 }
 \description{
-Easily generate a histogram of a variable using
-ggplot2 with a simplified customization interface for common modifications
-with static (ggplot) and interactive (plotly) output options. The static
-output is useful for producing static reports (e.g. for manuscripts) and is
-readily customized further using ggplot2 syntax. The interactive output is
-helpful for exploring the data and producing dynamic html reports. See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-  blog post} for an introduction to ggplot2.
+Easily generate a histogram of a variable using ggplot2 with a
+simplified customization interface for common modifications with static
+(ggplot) and interactive (plotly) output options. The static output is
+useful for producing static reports (e.g. for manuscripts) and is readily
+customized further using ggplot2 syntax. The interactive output is helpful
+for exploring the data and producing dynamic html reports. See
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+blog post} for an introduction to ggplot2.
 }
 \examples{
 data(mtcars) #load the mtcars data

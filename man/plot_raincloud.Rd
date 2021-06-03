@@ -46,8 +46,10 @@ plot_raincloud(
   title = NULL,
   fill_var_title = NULL,
   ylim = c(NA, NA),
+  ybreaks = ggplot2::waiver(),
   transform_y = FALSE,
   y_transformation = "log10",
+  y_var_labs = ggplot2::waiver(),
   x_var_order = NULL,
   x_var_labs = NULL,
   fill_var_order = NULL,
@@ -146,7 +148,7 @@ opaque.}
 
 \item{point_position}{This typically does not need to be modified in a rain
 cloud plot. See the "position adjustment" section of the
-\url{https://ggplot2.tidyverse.org/reference/}{ggplot2 reference page} for
+\href{https://ggplot2.tidyverse.org/reference/}{ggplot2 reference page} for
 options and detailed information.}
 
 \item{box_plot}{Set this to TRUE to add a box plot of y to the rain cloud
@@ -232,12 +234,20 @@ this allows you to modify the variable label in the plot legend.}
 upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 the default is ylim = c(NA, NA)}
 
+\item{ybreaks}{This allows you to change the break points to use for tick
+marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+\code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+specified, then ylim should be also.}
+
 \item{transform_y}{Would you like to transform the y axis? (TRUE or FALSE)}
 
 \item{y_transformation}{If transform_y = TRUE, this determines the
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 details.}
+
+\item{y_var_labs}{Allows you to modify the labels displayed with the y-axis
+tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.}
 
 \item{x_var_order}{If a variable has been assigned to x, this allows you to
 modify the order of the variable groups, e.g. x = grouping_variable,
@@ -269,11 +279,11 @@ fill_var_values = c("blue", "red"). See
 options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
 \item{palette}{If a variable is assigned to fill_var, this determines which
-\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
-   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+\href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+colour palette} to use. Options include "plasma" or "C" (default), "magma"
 or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
-   link} for examples. You can override these colour palettes with
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+link} for examples. You can override these colour palettes with
 fill_var_values.}
 
 \item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
@@ -348,12 +358,10 @@ cloud plots", with or without overlaid box plots, using ggplot2 and
 gghalves. Like other plot_* functions, plot_raincloud() provides a
 simplified argument-based customization interface for common modifications
 and yields plots that can be further modified with ggplot2 syntax. See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-  blog post} for an introduction to ggplot2.
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+blog post} for an introduction to ggplot2.
 }
 \examples{
-
-
 
 data(mtcars) #load the mtcars data
 

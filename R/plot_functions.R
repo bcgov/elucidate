@@ -44,7 +44,7 @@
 #' colour_options(print_to_pdf = TRUE) #print to a single page PDF file in your working directory.
 #'}
 #' @references
-#' Code was adapted from http://bc.bojanorama.pl/2013/04/r-color-reference-sheet/
+#' Code was adapted from \url{http://bc.bojanorama.pl/2013/04/r-color-reference-sheet/}
 #'
 #' @export
 colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_options.pdf") {
@@ -83,7 +83,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   output is useful for producing static reports (e.g. for manuscripts) and is
 #'   readily customized further using ggplot2 syntax. The interactive output is
 #'   helpful for exploring the data and producing dynamic html reports. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
 #'   blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
@@ -109,6 +109,8 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -120,7 +122,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_density}}, e.g. colour or fill, to be applied
 #'   to all curves. See the ggplot2 aesthetic specifications
-#'   \url{https://ggplot2.tidyverse.org/articles/ggplot2-specs.html}{vignette}
+#'   \href{https://ggplot2.tidyverse.org/articles/ggplot2-specs.html}{vignette}
 #'   for options.
 #'
 #' @param fill_var Use if you want to assign a variable to the density curve
@@ -149,9 +151,14 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   colour_var, this allows you to modify the variable label in the plot
 #'   legend.
 #'
-#' @param xlim specify the x-axis limits, e.g. xlim = c(lower_limit,
+#' @param xlim Specify the x-axis limits, e.g. xlim = c(lower_limit,
 #'   upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
-#'   the default is xlim = c(NA, NA)
+#'   the default is xlim = c(NA, NA).
+#'
+#' @param xbreaks This allows you to change the break points to use for tick marks
+#'   via a numeric vector. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_x_continuous}} for details. If xbreaks is
+#'   specified, then xlim should be also.
 #'
 #' @param transform_x Would you like to transform the x axis? (TRUE or FALSE)
 #'
@@ -159,6 +166,9 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param x_var_labs Allows you to modify the labels displayed with the x-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_x_continuous}} for details.
 #'
 #' @param fill_var_order If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the order of the variable groups, e.g. fill_var =
@@ -198,10 +208,10 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -348,7 +358,8 @@ plot_density <- function(data, x, #essential parameters
                          ..., #non-variable aesthetic specification
                          fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
                          xlab = NULL, ylab = NULL, title = NULL, fill_var_title = NULL, colour_var_title = NULL, #titles
-                         xlim = c(NA, NA), transform_x = FALSE, x_transformation = "log10",#control the x axis limits and scaling
+                         xlim = c(NA, NA), xbreaks = ggplot2::waiver(), #control the x axis limits and scaling
+                         transform_x = FALSE, x_transformation = "log10", x_var_labs = ggplot2::waiver(),
                          fill_var_order = NULL, colour_var_order = NULL, #modify grouping variable level order
                          fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                          fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
@@ -371,6 +382,13 @@ plot_density <- function(data, x, #essential parameters
   palette <- match.arg(palette)
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+
+  .classes <- class(data)
+  x_var_class <- class(data[[deparse(substitute(x))]])
+
+  if("data.frame" %ni% .classes) {
+    stop("Input data must be a data.table, tibble, or data.frame.")
+  }
 
   #fill variable recoding
   if(!missing(fill_var)){
@@ -509,13 +527,17 @@ plot_density <- function(data, x, #essential parameters
     }
   }
 
-  #modification of x-axis limits
-  if(!missing(xlim) && transform_x == FALSE){
-    p <- p + ggplot2::lims(x = xlim)
-  } else if (missing(xlim) && transform_x == TRUE){
-    p <- p + ggplot2::scale_x_continuous(limits = c(NA, NA), trans = x_transformation)
-  } else if (!missing(xlim) && transform_x  == TRUE){
-    p <- p + ggplot2::scale_x_continuous(limits = c(xlim[1], xlim[2]), trans = x_transformation)
+  #modification of the x-axis limits, breaks, and transformations
+  if(!missing(xlim)) {
+    p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
+  }
+
+  if(class(x_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_x_continuous(labels = x_var_labs)
+  } else if(transform_x == FALSE && class(xbreaks) != "waiver"){
+    p <- p + ggplot2::scale_x_continuous(breaks = xbreaks, labels = x_var_labs)
+  } else if (transform_x == TRUE){
+    p <- p + ggplot2::scale_x_continuous(trans = x_transformation, breaks = xbreaks, labels = x_var_labs)
   }
 
   if(!missing(xlab)){
@@ -585,14 +607,14 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' Generate a histogram.
 #'
-#' @description Easily generate a histogram of a variable using
-#'   ggplot2 with a simplified customization interface for common modifications
-#'   with static (ggplot) and interactive (plotly) output options. The static
-#'   output is useful for producing static reports (e.g. for manuscripts) and is
-#'   readily customized further using ggplot2 syntax. The interactive output is
-#'   helpful for exploring the data and producing dynamic html reports. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#' @description Easily generate a histogram of a variable using ggplot2 with a
+#'   simplified customization interface for common modifications with static
+#'   (ggplot) and interactive (plotly) output options. The static output is
+#'   useful for producing static reports (e.g. for manuscripts) and is readily
+#'   customized further using ggplot2 syntax. The interactive output is helpful
+#'   for exploring the data and producing dynamic html reports. See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
@@ -618,6 +640,8 @@ plot_density <- function(data, x, #essential parameters
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 sec_axis
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -676,9 +700,14 @@ plot_density <- function(data, x, #essential parameters
 #'   colour_var, this allows you to modify the variable label in the plot
 #'   legend.
 #'
-#' @param xlim specify the x-axis limits, e.g. xlim = c(lower_limit,
+#' @param xlim Specify the x-axis limits, e.g. xlim = c(lower_limit,
 #'   upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
-#'   the default is xlim = c(NA, NA)
+#'   the default is xlim = c(NA, NA).
+#'
+#' @param xbreaks This allows you to change the break points to use for tick marks
+#'   via a numeric vector. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_x_continuous}} for details. If xbreaks is
+#'   specified, then xlim should be also.
 #'
 #' @param transform_x Would you like to transform the x axis? (TRUE or FALSE)
 #'
@@ -686,6 +715,9 @@ plot_density <- function(data, x, #essential parameters
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param x_var_labs Allows you to modify the labels displayed with the x-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_x_continuous}} for details.
 #'
 #' @param fill_var_order If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the order of the variable groups, e.g. fill_var =
@@ -725,10 +757,10 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -868,7 +900,8 @@ plot_histogram <- function(data, x, #essential parameters
                            stat = c("bin", "count"), na.rm = TRUE, #geom specific customization params.
                            fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
                            xlab = NULL, ylab = NULL, title = NULL, fill_var_title = NULL, colour_var_title = NULL, #titles
-                           xlim = c(NA, NA), transform_x = FALSE, x_transformation = "log10",#control the x axis limits and scaling
+                           xlim = c(NA, NA), xbreaks = ggplot2::waiver(), #control the x axis limits and scaling
+                           transform_x = FALSE, x_transformation = "log10", x_var_labs = ggplot2::waiver(),
                            fill_var_order = NULL, colour_var_order = NULL, #modify grouping variable level order
                            fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                            fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
@@ -1050,13 +1083,17 @@ plot_histogram <- function(data, x, #essential parameters
   }
 
   #modification of x-axis limits
-  if(!missing(xlim) && transform_x == FALSE){
-    p <- p + ggplot2::lims(x = xlim)
-  } else if (missing(xlim) && transform_x == TRUE){
-    p <- p + ggplot2::scale_x_continuous(limits = c(NA, NA), trans = x_transformation)
-  } else if (!missing(xlim) && transform_x  == TRUE){
-    p <- p + ggplot2::scale_x_continuous(limits = c(xlim[1], xlim[2]), trans = x_transformation)
+  if(!missing(xlim)) {
+    p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
   }
+  if(class(x_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_x_continuous(labels = x_var_labs)
+  } else if(transform_x == FALSE && class(xbreaks) != "waiver"){
+    p <- p + ggplot2::scale_x_continuous(breaks = xbreaks, labels = x_var_labs)
+  } else if (transform_x == TRUE){
+    p <- p + ggplot2::scale_x_continuous(trans = x_transformation, breaks = xbreaks, labels = x_var_labs)
+  }
+
 
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
@@ -1145,8 +1182,8 @@ plot_histogram <- function(data, x, #essential parameters
 #'   useful for producing static reports (e.g. for manuscripts) and is readily
 #'   customized further using ggplot2 syntax. The interactive output is helpful
 #'   for exploring the data and producing dynamic html reports. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
@@ -1171,6 +1208,8 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -1213,7 +1252,12 @@ plot_histogram <- function(data, x, #essential parameters
 #'
 #' @param ylim specify the y-axis limits, e.g. ylim = c(lower_limit,
 #'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
-#'   the default is ylim = c(NA, NA)
+#'   the default is ylim = c(NA, NA).
+#'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
 #'
 #' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
 #'
@@ -1221,6 +1265,9 @@ plot_histogram <- function(data, x, #essential parameters
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
 #'
 #' @param x_var_order If a variable has been assigned to x, this allows you to
 #'   modify the order of the variable groups, e.g. x = grouping_variable,
@@ -1271,10 +1318,10 @@ plot_histogram <- function(data, x, #essential parameters
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -1404,7 +1451,8 @@ plot_box <- function(data, y,#essential parameters
                      fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
                      xlab = NULL, ylab = NULL, title = NULL,
                      fill_var_title = NULL, colour_var_title = NULL, #titles
-                     ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10", #control the y axis limits and scaling
+                     ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                     transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
                      x_var_order = NULL, x_var_labs = NULL,
                      fill_var_order = NULL, colour_var_order = NULL, #modify grouping variable level order
                      fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
@@ -1441,10 +1489,10 @@ plot_box <- function(data, y,#essential parameters
   if(!missing(fill_var)){
     data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
 
@@ -1452,10 +1500,10 @@ plot_box <- function(data, y,#essential parameters
   if(!missing(colour_var)){
     data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
 
@@ -1463,10 +1511,10 @@ plot_box <- function(data, y,#essential parameters
   if(!missing(facet_var)){
     data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
@@ -1521,12 +1569,15 @@ plot_box <- function(data, y,#essential parameters
   }
 
   #modification of y-axis limits & transformations
-  if(!missing(ylim) & transform_y == FALSE){
-    p <- p + ggplot2::lims(y = ylim)
-  } else if (missing(ylim) & transform_y == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
-  } else if (!missing(ylim) & transform_y  == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  if(!missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  }
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
   #modification of axis labels
@@ -1604,8 +1655,8 @@ plot_box <- function(data, y,#essential parameters
 #'   producing static reports (e.g. for manuscripts) and is readily customized
 #'   further using ggplot2 syntax. The interactive output is helpful for
 #'   exploring the data and producing dynamic html reports. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
@@ -1630,6 +1681,7 @@ plot_box <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -1678,12 +1730,20 @@ plot_box <- function(data, y,#essential parameters
 #'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 #'   the default is ylim = c(NA, NA)
 #'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
 #' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
 #'
 #' @param y_transformation If transform_y = TRUE, this determines the
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
 #'
 #' @param x_var_order If a variable has been assigned to x, this allows you to
 #'   modify the order of the variable groups, e.g. x = grouping_variable,
@@ -1734,10 +1794,10 @@ plot_box <- function(data, y,#essential parameters
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -1868,7 +1928,8 @@ plot_violin <- function(data, y,#essential parameters
                         fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
                         xlab = NULL, ylab = NULL, title = NULL,
                         fill_var_title = NULL, colour_var_title = NULL, #titles
-                        ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10", #control the y axis limits and scaling
+                        ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                        transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
                         x_var_order = NULL, x_var_labs = NULL,
                         fill_var_order = NULL, colour_var_order = NULL, #modify grouping variable level order
                         fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
@@ -1905,10 +1966,10 @@ plot_violin <- function(data, y,#essential parameters
   if(!missing(fill_var)){
     data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
 
@@ -1916,10 +1977,10 @@ plot_violin <- function(data, y,#essential parameters
   if(!missing(colour_var)){
     data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
 
@@ -1927,10 +1988,10 @@ plot_violin <- function(data, y,#essential parameters
   if(!missing(facet_var)){
     data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
@@ -1984,12 +2045,15 @@ plot_violin <- function(data, y,#essential parameters
   }
 
   #modification of y-axis limits & transformations
-  if(!missing(ylim) & transform_y == FALSE){
-    p <- p + ggplot2::lims(y = ylim)
-  } else if (missing(ylim) & transform_y == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
-  } else if (!missing(ylim) & transform_y  == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  if(!missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  }
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
   #modification of axis labels
@@ -2067,8 +2131,8 @@ plot_violin <- function(data, y,#essential parameters
 #'   producing static reports (e.g. for manuscripts) and is readily customized
 #'   further using ggplot2 syntax. The interactive output is helpful for
 #'   exploring the data and producing dynamic html reports. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
@@ -2098,6 +2162,7 @@ plot_violin <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -2163,7 +2228,12 @@ plot_violin <- function(data, y,#essential parameters
 #'
 #' @param ylim specify the y-axis limits, e.g. ylim = c(lower_limit,
 #'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
-#'   the default is ylim = c(NA, NA)
+#'   the default is ylim = c(NA, NA).
+#'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
 #'
 #' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
 #'
@@ -2172,9 +2242,17 @@ plot_violin <- function(data, y,#essential parameters
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
 #'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
+#'
 #' @param xlim specify the x-axis limits, e.g. xlim = c(lower_limit,
 #'   upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
 #'   the default is xlim = c(NA, NA)
+#'
+#' @param xbreaks This allows you to change the break points to use for tick
+#'   marks on the x-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_x_continuous}} for details. If xbreaks is
+#'   specified, then xlim should be also.
 #'
 #' @param transform_x Would you like to transform the x axis? (TRUE or FALSE)
 #'
@@ -2182,6 +2260,9 @@ plot_violin <- function(data, y,#essential parameters
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param x_var_labs Allows you to modify the labels displayed with the x-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
 #'
 #' @param size_lim specify the size scale limits, e.g. size_lim = c(lower_limit,
 #'   upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
@@ -2249,10 +2330,10 @@ plot_violin <- function(data, y,#essential parameters
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -2541,8 +2622,10 @@ plot_scatter <- function(data, y, x,#essential parameters
                          shape_var_title = NULL, size_var_title = NULL, #titles
 
                          #axis scale limits and transformations
-                         ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10",
-                         xlim = c(NA, NA), transform_x = FALSE, x_transformation = "log10",
+                         ylim = c(NA, NA), ybreaks = ggplot2::waiver(),
+                         transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
+                         xlim = c(NA, NA), xbreaks = ggplot2::waiver(),
+                         transform_x = FALSE, x_transformation = "log10", x_var_labs = ggplot2::waiver(),
                          size_lim = c(NA, NA), transform_size = FALSE, size_transformation = "log10",
 
                          #aesthetic variable mapping customization options
@@ -2577,10 +2660,10 @@ plot_scatter <- function(data, y, x,#essential parameters
   if(!missing(fill_var)){
     data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
 
@@ -2588,10 +2671,10 @@ plot_scatter <- function(data, y, x,#essential parameters
   if(!missing(colour_var)){
     data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
 
@@ -2599,10 +2682,10 @@ plot_scatter <- function(data, y, x,#essential parameters
   if(!missing(shape_var)){
     data <- dplyr::mutate(data, {{shape_var}} := as.character({{shape_var}}))
   }
-  if(!missing(shape_var) & !missing(shape_var_order)){
+  if(!missing(shape_var) && !missing(shape_var_order)){
     data <- dplyr::mutate(data, {{shape_var}} := forcats::fct_relevel({{shape_var}}, levels = !!!shape_var_order))
   }
-  if(!missing(shape_var) & !missing(shape_var_labs)){
+  if(!missing(shape_var) && !missing(shape_var_labs)){
     data <- dplyr::mutate(data, {{shape_var}} := forcats::fct_recode({{shape_var}}, !!!shape_var_labs))
   }
 
@@ -2610,10 +2693,10 @@ plot_scatter <- function(data, y, x,#essential parameters
   if(!missing(facet_var)){
     data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
@@ -2677,7 +2760,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                       option = palette, direction = palette_direction)
     }
   }
-  if (!missing(shape_var) & !missing(shape_var_values)){
+  if (!missing(shape_var) && !missing(shape_var_values)){
     p <- p +
       ggplot2::scale_shape_manual(values = shape_var_values)
     if(interactive == FALSE){
@@ -2687,7 +2770,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 
   #regression line options
   if(!missing(regression_line_colour)){
-    if(regression_line == TRUE & missing(regression_formula)){
+    if(regression_line == TRUE && missing(regression_formula)){
       if(regression_method != "gam"){
         p <- p +
           ggplot2::stat_smooth(method = regression_method,
@@ -2705,7 +2788,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                geom = regression_geom, level = CI_level, span = loess_span,
                                method.args = regression_method_args)
       }
-    } else if(regression_line == TRUE & !missing(regression_formula)){
+    } else if(regression_line == TRUE && !missing(regression_formula)){
       p <- p +
         ggplot2::stat_smooth(method = regression_method, formula = regression_formula,
                              se = regression_se, alpha = regression_alpha,
@@ -2715,7 +2798,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                              method.args = regression_method_args)
     }
   } else if (missing(regression_line_colour)){
-    if(regression_line == TRUE & missing(regression_formula)){
+    if(regression_line == TRUE && missing(regression_formula)){
       if(regression_method != "gam"){
         p <- p +
           ggplot2::stat_smooth(method = regression_method,
@@ -2733,7 +2816,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                geom = regression_geom, level = ci_level, span = loess_span,
                                method.args = regression_method_args)
       }
-    } else if(regression_line == TRUE & !missing(regression_formula)){
+    } else if(regression_line == TRUE && !missing(regression_formula)){
       p <- p +
         ggplot2::stat_smooth(method = regression_method, formula = regression_formula,
                              se = regression_se, alpha = regression_alpha,
@@ -2743,38 +2826,46 @@ plot_scatter <- function(data, y, x,#essential parameters
                              method.args = regression_method_args)
     }
   }
-  #modification of x-axis limits & transformations
-  if(!missing(xlim) & transform_x == FALSE){
-    p <- p + ggplot2::lims(x = xlim)
-  } else if (missing(xlim) & transform_x == TRUE){
-    p <- p + ggplot2::scale_x_continuous(limits = c(NA, NA), trans = x_transformation)
-  } else if (!missing(xlim) & transform_x  == TRUE){
-    p <- p + ggplot2::scale_x_continuous(limits = c(xlim[1], xlim[2]), trans = x_transformation)
-  }
 
-  #modification of y-axis limits & transformations
-  if(!missing(ylim) & transform_y == FALSE){
-    p <- p + ggplot2::lims(y = ylim)
-  } else if (missing(ylim) & transform_y == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
-  } else if (!missing(ylim) & transform_y  == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  #modification of x/y-axis limits & transformations
+  if(!missing(xlim) && missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
+  } else if (missing(xlim) && !missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (!missing(xlim) && !missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]), ylim = c(ylim[1], ylim[2]))
+  }
+  #x
+  if(class(x_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_x_continuous(labels = x_var_labs)
+  } else if(transform_x == FALSE && class(xbreaks) != "waiver"){
+    p <- p + ggplot2::scale_x_continuous(breaks = xbreaks, labels = x_var_labs)
+  } else if (transform_x == TRUE){
+    p <- p + ggplot2::scale_x_continuous(trans = x_transformation, breaks = xbreaks, labels = x_var_labs)
+  }
+  #y
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
   #modification of (continuous) size variable limits & transformations
-  if(!missing(size_var) & !missing(size_lim) & transform_size == FALSE){
+  if(!missing(size_var) && !missing(size_lim) && transform_size == FALSE){
     if(is.numeric(size_var)){
       p <- p + ggplot2::scale_size_continuous(limits = c(size_lim[1], size_lim[2]))
     } else {
       message("size variable must be of numeric class to modify limits or apply transformations")
     }
-  } else if (!missing(size_var) & missing(size_lim) & transform_size == TRUE){
+  } else if (!missing(size_var) && missing(size_lim) && transform_size == TRUE){
     if(is.numeric(size_var)){
       p <- p + ggplot2::scale_size_continuous(limits = c(NA, NA), trans = size_transformation)
     } else {
       message("size variable must be of numeric class to modify limits or apply transformations")
     }
-  } else if (!missing(size_var) & !missing(size_lim) & transform_size  == TRUE){
+  } else if (!missing(size_var) && !missing(size_lim) && transform_size  == TRUE){
     if(is.numeric(size_var)){
       p <- p + ggplot2::scale_size_continuous(limits = c(size_lim[1], size_lim[2]), trans = size_transformation)
     } else {
@@ -2866,8 +2957,8 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   exploring the data and producing dynamic html reports. To plot a bar graph
 #'   of sample means or medians and error bars, see
 #'   \code{\link{plot_stat_error}} instead.  See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
@@ -2897,6 +2988,8 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 position_dodge2
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -2962,12 +3055,20 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 #'   the default is ylim = c(NA, NA)
 #'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
 #' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
 #'
 #' @param y_transformation If transform_y = TRUE, this determines the
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
 #'
 #' @param x_var_order_by_y If a variable has been assigned to x, this allows you
 #'   to sort the bars in order of increasing/ascending ("i" or "a") or
@@ -3036,10 +3137,10 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -3158,7 +3259,8 @@ plot_bar <- function(data, x = NULL,
                      fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
                      xlab = NULL, ylab = NULL, title = NULL,
                      fill_var_title = NULL, colour_var_title = NULL, #titles
-                     ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10", #control the y axis limits and scaling
+                     ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                     transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
                      x_var_order_by_y = NULL, x_var_order = NULL,
                      fill_var_order_by_y = NULL, fill_var_order = NULL,
                      colour_var_order_by_y = NULL, colour_var_order = NULL, #modify grouping variable level order
@@ -3179,9 +3281,9 @@ plot_bar <- function(data, x = NULL,
     stop('At least one of "x", "y", "fill_var", or "colour_var" must be specified.')
   }
   if(!missing(x_var_order_by_y)) {
-   if(x_var_order_by_y != "d" && x_var_order_by_y != "a" && x_var_order_by_y != "i"){
-     stop('"x_var_order_by_y" should be one of "d", "a", or "i"')
-   }
+    if(x_var_order_by_y != "d" && x_var_order_by_y != "a" && x_var_order_by_y != "i"){
+      stop('"x_var_order_by_y" should be one of "d", "a", or "i"')
+    }
   }
   if(!missing(fill_var_order_by_y)) {
     if(fill_var_order_by_y != "d" && fill_var_order_by_y != "a" && fill_var_order_by_y != "i"){
@@ -3272,10 +3374,10 @@ plot_bar <- function(data, x = NULL,
       }
     }
   }
-  if(!missing(colour_var) & !missing(colour_var_order)){
+  if(!missing(colour_var) && !missing(colour_var_order)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
   }
-  if(!missing(colour_var) & !missing(colour_var_labs)){
+  if(!missing(colour_var) && !missing(colour_var_labs)){
     data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
   }
 
@@ -3283,10 +3385,10 @@ plot_bar <- function(data, x = NULL,
   if(!missing(facet_var)){
     data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
@@ -3367,12 +3469,15 @@ plot_bar <- function(data, x = NULL,
   }
 
   #modification of y-axis limits & transformations
-  if(!missing(ylim) && transform_y == FALSE){
-    p <- p + ggplot2::lims(y = ylim)
-  } else if (!missing(ylim) && transform_y == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
-  } else if (!missing(ylim) && transform_y  == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  if(!missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  }
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
   #modification of axis labels
@@ -3450,7 +3555,6 @@ plot_bar <- function(data, x = NULL,
   }
 }
 
-
 # start of plot_stat_error -------------------------------------------------------
 #' @title
 #'
@@ -3462,8 +3566,8 @@ plot_bar <- function(data, x = NULL,
 #'   useful for producing static reports (e.g. for manuscripts) and is readily
 #'   customized further using ggplot2 syntax. The interactive output is helpful
 #'   for exploring the data and producing dynamic html reports. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
@@ -3496,6 +3600,8 @@ plot_bar <- function(data, x = NULL,
 #' @importFrom ggplot2 position_dodge
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom stats quantile
 #' @importFrom stats qnorm
 #' @importFrom stats var
@@ -3590,12 +3696,20 @@ plot_bar <- function(data, x = NULL,
 #'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 #'   the default is ylim = c(NA, NA)
 #'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
 #' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
 #'
 #' @param y_transformation If transform_y = TRUE, this determines the
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
 #'
 #' @param x_var_order If a variable has been assigned to x, this allows you to
 #'   modify the order of the variable groups, e.g. x = grouping_variable,
@@ -3665,10 +3779,10 @@ plot_bar <- function(data, x = NULL,
 #'
 #' @param palette If a variable is assigned to fill_var or colour_var, this
 #'   determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values or colour_var_values.
 #'
@@ -3886,7 +4000,8 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                             ci_level = 0.95, ci_type = c("perc","bca", "norm", "basic"),
                             replicates = 2000, parallel = FALSE, cores = NULL,
                             xlab = NULL, ylab = NULL, title = NULL, ...,
-                            ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10",
+                            ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                            transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
                             x_var_order = NULL, x_var_labs = NULL,
                             fill_var = NULL, fill_var_order = NULL, fill_var_values = NULL,
                             fill_var_labs = NULL, fill_var_title = NULL,
@@ -4005,7 +4120,6 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
   }
 
   #produce the descriptive stats & plot
-
   if(stat == "mean" && error == "se"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
@@ -4201,7 +4315,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
       p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 s\u00B2"))
     }
 
-  } else if(stat == "mean" & error == "ci"){
+  } else if(stat == "mean" && error == "ci"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
                      n = sum(!is.na(get(Y))),
@@ -4330,7 +4444,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     } else if(missing(ylab)){
       p <- p + ggplot2::labs(y = paste0("median ", Y, " \u00B1 quartile"))
     }
-  } else if(stat == "median" & error == "ci"){
+  } else if(stat == "median" && error == "ci"){
     if(!missing(x) || !missing(fill_var) || !missing(colour_var) || !missing(facet_var)){
       desc1 <- DT[, .(cases = .N,
                       n = sum(!is.na(get(Y))),
@@ -4552,12 +4666,15 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
   }
 
   #modification of y-axis limits & transformations
-  if(!missing(ylim) & transform_y == FALSE){
-    p <- p + ggplot2::lims(y = ylim)
-  } else if (missing(ylim) & transform_y == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
-  } else if (!missing(ylim) & transform_y  == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  if(!missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  }
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
   #misc
@@ -4633,8 +4750,8 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #'   visualizing data (especially when >5 groups are being compared), but that
 #'   doesn't mean there shouldn't be an easy way to build one with ggplot2 in
 #'   case your project stakeholders ask. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
@@ -4711,10 +4828,10 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #'   options available in base R, see \code{\link[elucidate]{colour_options}}.
 #'
 #' @param palette If a variable is assigned to fill_var, this determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values.
 #'
@@ -5086,8 +5203,8 @@ plot_pie <- function(data,
 #'   gghalves. Like other plot_* functions, plot_raincloud() provides a
 #'   simplified argument-based customization interface for common modifications
 #'   and yields plots that can be further modified with ggplot2 syntax. See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
@@ -5112,6 +5229,8 @@ plot_pie <- function(data,
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 waiver
 #' @importFrom gghalves geom_half_violin
 #' @importFrom gghalves geom_half_point
 #' @importFrom gghalves geom_half_boxplot
@@ -5191,7 +5310,7 @@ plot_pie <- function(data,
 #'
 #' @param point_position This typically does not need to be modified in a rain
 #'   cloud plot. See the "position adjustment" section of the
-#'   \url{https://ggplot2.tidyverse.org/reference/}{ggplot2 reference page} for
+#'   \href{https://ggplot2.tidyverse.org/reference/}{ggplot2 reference page} for
 #'   options and detailed information.
 #'
 #' @param box_plot Set this to TRUE to add a box plot of y to the rain cloud
@@ -5277,12 +5396,20 @@ plot_pie <- function(data,
 #'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 #'   the default is ylim = c(NA, NA)
 #'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
 #' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
 #'
 #' @param y_transformation If transform_y = TRUE, this determines the
 #'   transformation to be applied. Common choices include "log10" (the default),
 #'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 #'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
 #'
 #' @param x_var_order If a variable has been assigned to x, this allows you to
 #'   modify the order of the variable groups, e.g. x = grouping_variable,
@@ -5314,10 +5441,10 @@ plot_pie <- function(data,
 #'   options available in base R, see \code{\link[elucidate]{colour_options}}.
 #'
 #' @param palette If a variable is assigned to fill_var, this determines which
-#'   \url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
 #'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
 #'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-#'   \url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
 #'    link} for examples. You can override these colour palettes with
 #'   fill_var_values.
 #'
@@ -5390,8 +5517,6 @@ plot_pie <- function(data,
 #'
 #' @examples
 #'
-#'
-#'
 #' data(mtcars) #load the mtcars data
 #'
 #' library(magrittr)
@@ -5448,7 +5573,8 @@ plot_raincloud <- function(data, y,#essential parameters
                            #general parameters
                            xlab = NULL, ylab = NULL, title = NULL,
                            fill_var_title = NULL,
-                           ylim = c(NA, NA), transform_y = FALSE, y_transformation = "log10", #control the y axis limits and scaling
+                           ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                           transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
                            x_var_order = NULL, x_var_labs = NULL,
                            fill_var_order = NULL,  #modify grouping variable level order
                            fill_var_labs = NULL, #modify grouping variable labels
@@ -5497,10 +5623,10 @@ plot_raincloud <- function(data, y,#essential parameters
   if(!missing(fill_var)){
     data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
   }
-  if(!missing(fill_var) & !missing(fill_var_order)){
+  if(!missing(fill_var) && !missing(fill_var_order)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
   }
-  if(!missing(fill_var) & !missing(fill_var_labs)){
+  if(!missing(fill_var) && !missing(fill_var_labs)){
     data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
   }
 
@@ -5508,10 +5634,10 @@ plot_raincloud <- function(data, y,#essential parameters
   if(!missing(facet_var)){
     data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
   }
-  if(!missing(facet_var) & !missing(facet_var_order)){
+  if(!missing(facet_var) && !missing(facet_var_order)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
   }
-  if(!missing(facet_var) & !missing(facet_var_labs)){
+  if(!missing(facet_var) && !missing(facet_var_labs)){
     data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
   }
 
@@ -5612,12 +5738,15 @@ plot_raincloud <- function(data, y,#essential parameters
   }
 
   #modification of y-axis limits & transformations
-  if(!missing(ylim) & transform_y == FALSE){
-    p <- p + ggplot2::lims(y = ylim)
-  } else if (missing(ylim) & transform_y == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(NA, NA), trans = y_transformation)
-  } else if (!missing(ylim) & transform_y  == TRUE){
-    p <- p + ggplot2::scale_y_continuous(limits = c(ylim[1], ylim[2]), trans = y_transformation)
+  if(!missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  }
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
   #modification of axis labels
@@ -5678,4 +5807,735 @@ plot_raincloud <- function(data, y,#essential parameters
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
   }
   return(p)
+}
+
+# start of plot_line ------------------------------------------------------
+#' @title
+#'
+#' Generate a line graph.
+#'
+#' @description Easily generate line graphs using ggplot2 with a simplified
+#'   customization interface for common modifications with static (ggplot) and
+#'   interactive (plotly) output options. Unlike
+#'   \code{\link[ggplot2]{geom_line}}, plot_line() will automatically check if
+#'   there are multiple values of the y-axis variable for each level of the
+#'   x-axis variable and/or other grouping variables (e.g. used for facetting)
+#'   and will aggregate values for you using a summary statistic specified via
+#'   the "stat" argument (default is the mean). This effectively produces a
+#'   single line per group level combination and should make your line graphs
+#'   easier to read. If such aggregation is necessary, a message explaining what
+#'   is being done and the number of rows affected will be printed to the
+#'   console. If your main goal is to plot sample group means or medians and
+#'   error bars, see \code{\link{plot_stat_error}} instead. The static output is
+#'   useful for producing static reports (e.g. for manuscripts) and is readily
+#'   customized further using ggplot2 syntax. The interactive output is helpful
+#'   for exploring the data and producing dynamic html reports. Line graphs are
+#'   commonly used to show changes over time e.g. in time-series analysis. See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
+#'
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom dplyr filter
+#' @importFrom dplyr summarise
+#' @importFrom dplyr group_by
+#' @importFrom dplyr ungroup
+#' @importFrom dplyr across
+#' @importFrom dplyr bind_rows
+#' @importFrom data.table as.data.table
+#' @importFrom forcats fct_relevel
+#' @importFrom forcats fct_recode
+#' @importFrom forcats fct_reorder
+#' @importFrom forcats fct_infreq
+#' @importFrom forcats fct_rev
+#' @importFrom rlang !!!
+#' @importFrom tibble as_tibble
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 scale_linetype_manual
+#' @importFrom ggplot2 scale_colour_manual
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_x_date
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom ggplot2 scale_x_date
+#' @importFrom ggplot2 scale_colour_grey
+#' @importFrom ggplot2 lims
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 theme_gray
+#' @importFrom ggplot2 theme_light
+#' @importFrom ggplot2 theme_dark
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 position_dodge2
+#' @importFrom ggplot2 element_text
+#' @importFrom plotly ggplotly
+#' @importFrom utils browseURL
+#'
+#' @param data A data frame or tibble containing at least one categorical
+#'   variable.
+#'
+#' @param y A numeric variable containing the values you would like plotted on
+#'   the y-axis.
+#'
+#' @param x Typically a numeric or date/POSIX.ct variable to use for the x-axis.
+#'   If you assign a variable of a different class to x, it will be converted to
+#'   a factor and arranged in order of factor levels (left to right), unless it
+#'   is already a factor. The ordering of such variables can be modified with
+#'   x_var_order* arguments.
+#'
+#' @param ... Other graphical parameters (not associated with variables) to be
+#'   passed to \code{\link[ggplot2]{geom_line}} to be applied to all lines can
+#'   be specified as well, e.g. "colour", "linejoin" or "lineend". To see some
+#'   of the available options in a web browser, set the aesthetic_options
+#'   argument to TRUE. For colour options, see \code{\link{colour_options}}.
+#'
+#' @param colour_var Use if you want to assign a categorical variable to line
+#'   colour, e.g. colour_var = grouping_variable. Produces separate lines
+#'   for each level of the colour variable. See \code{\link[ggplot2]{aes}} for
+#'   details.
+#'
+#' @param line_type_var Use if you want to assign a categorical variable to the
+#'   line type, e.g. line_type_var = grouping_variable. Produces separate lines
+#'   for each level of the fill variable. See \code{\link[ggplot2]{aes}} for
+#'   details.
+#'
+#' @param stat If multiple values of the y-variable are detected for at least
+#'   one grouping variable level combination based on variables assigned to any
+#'   of the "x", "colour_var", "line_type_var", or "facet_var" arguments, the
+#'   specified summary "stat" is used to aggregate the data such that a single
+#'   line per group/x level combination is plotted. Options include "mean" (the
+#'   default), "quantile", "sum", and "count". This argument supports partial
+#'   matching, so "q" would be read as "quantile" for example. If "quantile" is
+#'   chosen, then the probability value to use to extract a quantile can be
+#'   specified with the "qprob" argument.
+#'
+#' @param qprob Probability value to pass to \code{\link[stats]{quantile}} if
+#'   stat = "quantile". Default is 0.5 to get the median.
+#'
+#' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
+#'   "x-axis label"
+#'
+#' @param ylab Specify/overwrite the y-axis label using a character string, e.g.
+#'   "y-axis label". Note that in cases wehre a summary statistic was used to
+#'   aggregate some of the y-variable values (see "stat" argument description),
+#'   the y-axis label will automatically be updated to specify which summary
+#'   statistic was used by default.
+#'
+#' @param title Add a main title to the plot using a character string, e.g.
+#'   "bar plots of y for each group of x"
+#'
+#' @param colour_var_title If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the variable label in the plot
+#'   legend.
+#'
+#' @param line_type_var_title If a variable has been assigned to line type using
+#'   line_type_var, this allows you to modify the variable label in the plot
+#'   legend.
+#'
+#' @param ylim specify the y-axis limits, e.g. ylim = c(lower_limit,
+#'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
+#'   the default is ylim = c(NA, NA).
+#'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
+#' @param transform_y Would you like to transform the y axis (TRUE or FALSE)?
+#'
+#' @param y_transformation If transform_y = TRUE, this determines the
+#'   transformation to be applied. Common choices include "log10" (the default),
+#'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_y_continuous}} for
+#'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
+#'
+#' @param xlim If x is a numeric or date variable, this allows you to specify
+#'   the x-axis limits, e.g. xlim = c(lower_limit, upper_limit). Use NA for the
+#'   existing minimum or maximum value of y, e.g. the default is ylim = c(NA,
+#'   NA). See \code{\link[ggplot2]{scale_x_continuous}} if x is a numeric
+#'   variable and \code{\link[ggplot2]{scale_x_date}} if x is a date variable
+#'   for details.
+#'
+#' @param xbreaks If x is a numeric variable, this allows you to change the
+#'   break points to use for tick marks via a numeric vector. \code{\link{seq}}
+#'   is particularly useful here. See \code{\link[ggplot2]{scale_x_continuous}}
+#'   for details. If x is a date variable, you can instead specify the break
+#'   interval to use with a string, e.g. "2 years" to use a 2-year break point
+#'   interval. See the "date_breaks" argument documentation under
+#'   \code{\link[ggplot2]{scale_x_date}} for details. If xbreaks is
+#'   specified for a numeric variable, then xlim should be also.
+#'
+#' @param transform_x Would you like to transform the x-axis (TRUE or FALSE)?
+#'   Only works for numeric variables.
+#'
+#' @param x_transformation If transform_x = TRUE, this determines the
+#'   transformation to be applied. Common choices include "log10" (the default),
+#'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
+#'   details. Only works for numeric variables.
+#'
+#' @param x_var_labs Allows you to modify the labels displayed with the x-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_x_continuous}} if x is a numeric
+#'   variable, \code{\link[ggplot2]{scale_x_date}} if x is a date variable, or
+#'   \code{\link[forcats]{fct_recode}} if x is a character variable/factor for
+#'   details.
+#'
+#' @param x_var_order_by_y If a non-numeric/non-date variable has been assigned
+#'   to x, this allows you to sort the points used to draw lines in order of
+#'   increasing/ascending ("i" or "a") or decreasing ("d") value of y.
+#'
+#' @param x_var_order If a non-numeric/non-date variable has been assigned to x,
+#'   this allows you to manually modify the order of the variable groups, e.g. x
+#'   = grouping_variable, x_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param colour_var_order_by_y If a variable has been assigned to colour_var,
+#'   this allows you to sort the lines in order of increasing/ascending ("i" or
+#'   "a") or decreasing ("d") value of y.
+#'
+#' @param colour_var_order If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the order of the variable
+#'   groups, e.g. colour_var = grouping_variable, colour_var_order =
+#'   c("group_2", "group_1"). See \code{\link[forcats]{fct_relevel}} for
+#'   details.
+#'
+#' @param line_type_var_order_by_y If a variable has been assigned to
+#'   line_type_var, this allows you to sort the lines in order of
+#'   increasing/ascending ("i" or "a") or decreasing ("d") value of y.
+#'
+#' @param line_type_var_order If a variable has been assigned to line type using
+#'   line_type_var, this allows you to modify the order of the variable groups,
+#'   e.g. line_type_var = grouping_variable, line_type_var_order = c("group_2",
+#'   "group_1"). See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param colour_var_labs If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the labels of the variable groups,
+#'   e.g. colour_var = grouping_variable, colour_var_labs =
+#'   c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
+#'   "group_2_old_label"). See \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param line_type_var_labs If a variable has been assigned to line type using
+#'   line_type_var, this allows you to modify the labels of the variable groups,
+#'   e.g. line_type_var = grouping_variable, line_type_var_labs =
+#'   c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
+#'   "group_2_old_label"). See \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param colour_var_values If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the colours assigned to the outline
+#'   of each of the variable groups, e.g. colour_var = grouping_variable,
+#'   colour_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param line_type_var_values If a variable has been assigned to line type
+#'   using line_type_var, this allows you to modify the line types assigned to
+#'   each of the variable groups, e.g. line_type_var = grouping_variable,
+#'   fill_var_values = c("solid", "dashed"). See
+#'   \code{\link[ggplot2]{scale_linetype_manual}} for details. Options are the
+#'   same as those listed under the "line_type" argument.
+#'
+#' @param palette If a variable is assigned to colour_var, this determines which
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
+#'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'    link} for examples. You can override these colour palettes with
+#'   colour_var_values.
+#'
+#' @param palette_direction Choose "d2l" for dark to light (default) or "l2d"
+#'   for light to dark.
+#'
+#' @param palette_begin Value between 0 and 1 that determines where along the
+#'   full range of the chosen colour palette's spectrum to begin sampling
+#'   colours. See \code{\link[ggplot2]{scale_colour_viridis_d}} for details.
+#'
+#' @param palette_end Value between 0 and 1 that determines where along the full
+#'   range of the chosen colour palette's spectrum to end sampling colours. See
+#'   \code{\link[ggplot2]{scale_colour_viridis_d}} for details.
+#'
+#' @param alpha This adjusts the transparency/opacity of the lines on the plot,
+#'   ranging from 0 = 100% transparent to 1 = 100% opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to greyscale.
+#'
+#' @param line_size Controls the thickness of the lines.
+#'
+#' @param line_type Use this to modify the type of lines used by
+#'   \code{\link[ggplot2]{geom_line}} if line_type_var is unspecified. Options
+#'   are: "solid", "dashed", "dotted", "dotdash", "longdash", and "twodash".
+#'
+#' @param points Would you like to add points to the plot with a
+#'   \code{\link[ggplot2]{geom_point}} layer (TRUE or FALSE)? Default is FALSE.
+#'
+#' @param point_colour If points = TRUE and no variable has been assigned to
+#'   colour_var, this determines the colour to use for points.
+#'
+#' @param point_fill If points = TRUE and point_shape is one of the options that
+#'   have a fill aesthetic (see below), this controls the fill colour of the
+#'   points.
+#'
+#' @param point_alpha If points = TRUE, this controls the transparency of the
+#'   points.
+#'
+#' @param point_shape Point shape to use if points = TRUE. Only shapes 21-25
+#'   have both fill and colour aesthetic parameters; the others only use colour.
+#'   To see the options you can view the ggplot2 aesthetic options web page by
+#'   setting the aesthetic_options argument to TRUE.
+#'
+#' @param point_size If points = TRUE, this controls the size of the points.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
+#'
+#' @param facet_var Use if you want separate plots for each level of a grouping
+#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
+#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'
+#' @param facet_var_order If a variable has been assigned for facetting using
+#'   facet_var, this allows you to modify the order of the variable groups, e.g.
+#'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
+#'   See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param facet_var_labs If a variable has been assigned for facetting using
+#'   facet_var, this allows you to modify the labels of the variable groups
+#'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
+#'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param facet_var_strip_position If a variable has been assigned for facetting
+#'   using facet_var, this allows you to modify the position of the facet strip
+#'   labels. Sensible options include "top" (the default) or "bottom".
+#'
+#' @param facet_var_text_bold If a variable has been assigned for facetting
+#'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
+#'   for the facet strip label text.
+#'
+#' @param legend_position This allows you to modify the legend position.
+#'   Options include "right" (the default), "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legends.
+#'
+#' @param interactive Determines whether a static ggplot object or an interactive html
+#'   plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.
+#'
+#' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
+#'   online aesthetic options vignette.
+#'
+#' @param verbose Set this to FALSE to prevent a message from being printed to
+#'   the console if some of the data need to be aggregated to display a single
+#'   line per group level combination.
+#'
+#' @return A ggplot object or plotly object depending on whether static or
+#'   interactive output was requested.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' #basic line graph split by a grouping variable that has been assigned to line
+#' #colour
+#'
+#' plot_line(pdata, y = y1, x = d, colour_var = g)
+#'
+#' #add points with "points = TRUE"
+#' #disable the message that data needed to be aggregated to show a single line
+#' #for each level of the x-variable "d" and colour-variable "g" by setting
+#' #"verbose = FALSE"
+#'
+#' plot_line(pdata, y = y1, x = d, colour_var = g, points = TRUE, verbose = FALSE)
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
+#'   \code{\link{plot_stat_error}}
+#'
+#' @export
+plot_line <- function(data, y, x, ...,
+                      colour_var = NULL, line_type_var = NULL, #grouping variable aesthetic mappings
+                      stat = c("mean", "quantile", "sum", "count"),
+                      qprob = 0.5, #probability to use if stat = "quantile"
+                      xlab = NULL, ylab = NULL, title = NULL,
+                      colour_var_title = NULL, line_type_var_title = NULL, #titles
+                      ylim = c(NA, NA), ybreaks = ggplot2::waiver(),
+                      transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(), #control the y axis limits and scaling
+                      xlim = c(NA, NA), xbreaks = ggplot2::waiver(),
+                      transform_x = FALSE, x_transformation = "log10", x_var_labs = ggplot2::waiver(), #control the x axis limits and scaling
+                      x_var_order_by_y = NULL, x_var_order = NULL,
+                      colour_var_order_by_y = NULL, colour_var_order = NULL, #modify grouping variable level order
+                      line_type_var_order_by_y = NULL, line_type_var_order = NULL,
+                      colour_var_labs = NULL, line_type_var_labs = NULL, #modify grouping variable labels
+                      colour_var_values = NULL, line_type_var_values = NULL, #manual colour specification
+                      palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
+                      palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8, #viridis colour palette options
+                      alpha = 1, greyscale = FALSE, #control transparency, convert to greyscale
+                      line_size = 1.1, line_type = c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash"),
+                      points = FALSE,
+                      point_colour = "black", point_fill = "black", point_alpha = 1,
+                      point_shape = "circle", point_size = 3,
+                      theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
+                      facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                      legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
+                      interactive = FALSE, aesthetic_options = FALSE, verbose = TRUE) {#output format
+
+  if(!is.numeric(qprob) || length(qprob) > 1 || qprob > 1 || qprob < 0){
+    stop('Quantile probability argument "qprob" must be a single number between 0 and 1.')
+  }
+
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+  line_type <- match.arg(line_type)
+  stat <- match.arg(stat)
+
+  .classes <- class(data)
+  x_var_class <- class(data[[deparse(substitute(x))]])
+
+  if("data.frame" %ni% .classes) {
+    stop("Input data must be a data.table, tibble, or data.frame.")
+  }
+  if(missing(x) || missing(y)) {
+    stop('x and y must be specified.')
+  }
+  if(!is.numeric(data[[deparse(substitute(y))]]) && !is.integer(data[[deparse(substitute(y))]])){
+    stop("y must be a numeric column of a data frame")
+  }
+
+  #aggregate data if needed
+  if("data.table" %ni% .classes) {
+    data <- data.table::as.data.table(data)
+  } else {
+    data <- data.table::as.data.table(as.data.frame(data))
+    #this is conversion and reversal is necessary to prevent subsequent
+    #modification of the original data source in the global environment when the
+    #input is already a data.table due to the use of the := operator below.
+  }
+
+  #grouping options
+  if (missing(colour_var) && missing(line_type_var) && missing(facet_var)) {
+    G <- deparse(substitute(x))
+  } else if (!missing(line_type_var) && missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(line_type_var)))
+  } else if (missing(line_type_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)))
+  } else if (missing(line_type_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(facet_var)))
+  } else if (!missing(line_type_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(deparse(substitute(line_type_var)), deparse(substitute(colour_var)))
+  } else if (!missing(line_type_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(line_type_var)), deparse(substitute(facet_var)))
+  } else if (missing(line_type_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+  } else if (!missing(x) && !missing(line_type_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(line_type_var)), deparse(substitute(facet_var)))
+  }
+  G <- unique(G) #eliminate duplicates if the same variable is mapped to more than one aesthetic parameter
+  data[, n_copies := .N, by = eval(G)]
+
+  data <- tibble::as_tibble(data)
+
+  df_unique <- dplyr::filter(data, n_copies == 1)
+  df_dupes <- dplyr::filter(data, n_copies > 1)
+
+  orig_rows <- nrow(data)
+  unique_count <- nrow(df_unique)
+  dupe_count <- nrow(df_dupes)
+
+
+  if(dupe_count > 0) {
+    if(verbose == TRUE) {
+      message(paste0(dupe_count, ' of ', orig_rows,
+                     ' rows in the input data contain multiple values of the y-axis variable\nfor one or more levels of the grouping variables assigned to arguments:\n "x", "colour_var", "line_type_var", and/or "facet_var".\nAggregating values with the chosen summary statistic = "', stat, '"'))
+    }
+    df_dupes <- dplyr::select(df_dupes, {{x}}, {{colour_var}}, {{line_type_var}}, {{facet_var}}, {{y}})
+    df_dupes <- dplyr::group_by(df_dupes, dplyr::across(-{{y}}))
+
+    if(stat == "mean") {
+      df_dupes <- dplyr::summarise(df_dupes, {{y}} := as.double(mean({{y}}, na.rm = TRUE)), .groups = "drop")
+    } else if (stat == "quantile") {
+      df_dupes <- dplyr::summarise(df_dupes,
+                                   {{y}} := as.double(quantile({{y}}, probs = qprob, na.rm = TRUE)),
+                                   .groups = "drop")
+    } else if (stat == "sum") {
+      df_dupes <- dplyr::summarise(df_dupes, {{y}} := as.double(sum({{y}}, na.rm = TRUE)), .groups = "drop")
+    } else if (stat == "count") {
+      message('When argument "stat" is set to "count" the y variable will be converted to a value of 1 for non-duplicated rows.')
+      df_dupes <- dplyr::ungroup(dplyr::select(df_dupes, {{y}} := n_copies))
+      if (unique_count > 0) {
+        df_unique <- dplyr::select(df_unique, {{x}}, {{colour_var}}, {{line_type_var}}, {{facet_var}}, {{y}} := n_copies)
+      }
+    }
+    if (unique_count > 0) {
+      df_unique <- dplyr::select(df_unique, {{y}})
+      data <- dplyr::bind_rows(df_unique, df_dupes)
+    } else {
+      data <- df_dupes
+    }
+  } else {
+    if (stat == "count") {
+      message('When argument "stat" is set to "count" the y variable will be converted to a value of 1 for non-duplicated rows.')
+      df_unique <- dplyr::select(df_unique, {{x}}, {{colour_var}}, {{line_type_var}}, {{facet_var}}, {{y}} := n_copies)
+    } else {
+      df_unique <- dplyr::select(df_unique, {{x}}, {{colour_var}}, {{line_type_var}}, {{facet_var}}, {{y}})
+    }
+    data <- df_unique
+  }
+
+  #x-variable recoding
+  if(x_var_class %in% c("character", "factor")) {
+    data <- dplyr::mutate(data, {{x}} := as.factor({{x}}))
+
+    if(!missing(x_var_order_by_y)) {
+      if(x_var_order_by_y == "d") {
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = TRUE))
+      } else {
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = FALSE))
+      }
+    }
+
+    if(!missing(x_var_order)){
+      data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+    }
+    if(class(x_var_labs) != "waiver"){
+      data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+    }
+    #geom_line expects the x-axis to be numeric
+    xlabels <- as.character(levels(data[[deparse(substitute(x))]]))
+    data <- dplyr::mutate(data, {{x}} := as.numeric({{x}}))
+  }
+
+  #colour variable recoding
+  if(!missing(colour_var)){
+    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+  }
+  if(!missing(colour_var) && !missing(colour_var_order_by_y)) {
+    if(colour_var_order_by_y == "d") {
+      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = TRUE))
+    } else {
+      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = FALSE))
+    }
+  }
+
+  if(!missing(colour_var) && !missing(colour_var_order)){
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+  }
+  if(!missing(colour_var) && !missing(colour_var_labs)){
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+  }
+
+  #linetype variable recoding
+  if(!missing(line_type_var)){
+    data <- dplyr::mutate(data, {{line_type_var}} := as.character({{line_type_var}}))
+  }
+  if(!missing(line_type_var) && !missing(line_type_var_order_by_y)) {
+    if(line_type_var_order_by_y == "d") {
+      data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_reorder({{line_type_var}}, {{y}}, .desc = TRUE))
+    } else {
+      data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_reorder({{line_type_var}}, {{y}}, .desc = FALSE))
+    }
+  }
+  if(!missing(line_type_var) && !missing(line_type_var_order)){
+    data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_relevel({{line_type_var}}, levels = !!!line_type_var_order))
+  }
+  if(!missing(line_type_var) && !missing(line_type_var_labs)){
+    data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_recode({{line_type_var}}, !!!line_type_var_labs))
+  }
+
+  #facet label recoding
+  if(!missing(facet_var)){
+    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+  }
+  if(!missing(facet_var) && !missing(facet_var_order)){
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+  }
+  if(!missing(facet_var) && !missing(facet_var_labs)){
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+  }
+
+  #setup foundational plotting object layer
+  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, linetype = {{line_type_var}}, colour = {{colour_var}}))
+
+  #add the geom_line layer
+  if(!missing(colour_var)) {
+    if(!missing(line_type_var)) {
+      p <- p + ggplot2::geom_line(alpha = alpha, size = line_size, ...)
+    } else {
+      p <- p + ggplot2::geom_line(alpha = alpha, size = line_size, linetype = line_type, ...)
+    }
+  } else {
+    if(!missing(line_type_var)) {
+      p <- p + ggplot2::geom_line(alpha = alpha, size = line_size, ...)
+    } else {
+      p <- p + ggplot2::geom_line(alpha = alpha, size = line_size, linetype = line_type, ...)
+    }
+  }
+
+  #add points optionally
+  if(points == TRUE) {
+    if(!missing(colour_var)) {
+      p <- p + ggplot2::geom_point(fill = point_fill, size = point_size,
+                                   shape = point_shape, alpha = alpha, stroke = line_size)
+    } else {
+      p <- p + ggplot2::geom_point(colour = point_colour, fill = point_fill, size = point_size,
+                                   shape = point_shape, alpha = alpha, stroke = line_size)
+
+    }
+  }
+
+  #modification of the colour_var values
+  if(!missing(colour_var)) {
+    if(!missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+    }
+  }
+
+  #modification of line_type_var values
+  if(!missing(line_type_var) && !missing(line_type_var_values)) {
+    p <- p + ggplot2::scale_linetype_manual(values = line_type_var_values)
+  }
+
+  #modification of x/y-axis limits & transformations
+  if(!missing(xlim) && missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
+  } else if (missing(xlim) && !missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (!missing(xlim) && !missing(ylim)) {
+    p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]), ylim = c(ylim[1], ylim[2]))
+  }
+  #y
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
+  }
+  #x
+  if(x_var_class %in% c("numeric", "integer")) {
+    if(class(x_var_labs) != "waiver") {
+      p <- p + ggplot2::scale_x_continuous(labels = x_var_labs)
+    }
+    if(transform_x == FALSE){
+      p <- p + ggplot2::scale_x_continuous(breaks = xbreaks, labels = x_var_labs)
+    } else if (transform_x == TRUE){
+      p <- p + ggplot2::scale_x_continuous(trans = x_transformation, breaks = xbreaks, labels = x_var_labs)
+    }
+  } else if (x_var_class == "Date") {
+    if(class(xbreaks) == "waiver" && class(x_var_labs) != "waiver") {
+      p <- p + ggplot2::scale_x_date(labels = x_var_labs)
+    } else if (class(xbreaks) != "waiver" && class(x_var_labs) == "waiver") {
+      p <- p + ggplot2::scale_x_date(date_breaks = xbreaks)
+    } else if (class(xbreaks) != "waiver" && class(xbreaks) != "waiver") {
+      p <- p + ggplot2::scale_x_date(date_breaks = xbreaks, labels = x_var_labs)
+    }
+  }
+
+  #modification of axis labels
+  if(!missing(ylab)){
+    p <- p + ggplot2::labs(y = ylab)
+  } else if (dupe_count > 0 && stat == "mean") {
+    p <- p + ggplot2::labs(y = paste("mean", deparse(substitute(y))))
+  } else if (dupe_count > 0 && stat == "quantile" && qprob == 0.5) {
+    p <- p + ggplot2::labs(y = paste("median", deparse(substitute(y))))
+  } else if (dupe_count > 0 && stat == "quantile" && qprob == 0) {
+    p <- p + ggplot2::labs(y = paste("minimum", deparse(substitute(y))))
+  } else if (dupe_count > 0 && stat == "quantile" && qprob == 1) {
+    p <- p + ggplot2::labs(y = paste("maximum", deparse(substitute(y))))
+  } else if (dupe_count > 0 && stat == "quantile" && qprob %ni% c(0, 0.5, 1)) {
+    p <- p + ggplot2::labs(y = paste0(round(qprob*100), "th percentile of ", deparse(substitute(y))))
+  } else if (dupe_count > 0 && stat == "sum") {
+    p <- p + ggplot2::labs(y = paste("total", deparse(substitute(y))))
+  } else if (dupe_count > 0 && stat == "count") {
+    p <- p + ggplot2::labs(y = paste("count of unique", deparse(substitute(y)), "values"))
+  } else {
+    p <- p + ggplot2::labs(y = deparse(substitute(y)))
+  }
+
+  if(!missing(xlab)){
+    p <- p + ggplot2::labs(x = xlab)
+  }
+
+  if(!missing(colour_var_title)){
+    p <- p + ggplot2::labs(color = colour_var_title)
+  }
+  if(!missing(line_type_var_title)){
+    p <- p + ggplot2::labs(linetype = line_type_var_title)
+  }
+
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_colour_grey()
+  }
+  if(!missing(title)){
+    p <- p + ggplot2::labs(title = title)
+  }
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "b & w"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "black and white"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "black & white"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "gray"){
+    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+  if(omit_legend == TRUE){
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  if(legend_position != "right"){
+    p <- p + ggplot2::theme(legend.position = legend_position)
+  }
+  if(!missing(facet_var)){
+    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+  }
+  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
+  }
+  if(aesthetic_options == TRUE){
+    utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
+  }
+  if(interactive == TRUE){
+    return(plotly::ggplotly(p))
+  }
+  if(interactive == FALSE){
+    return(p)
+  }
 }

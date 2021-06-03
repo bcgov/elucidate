@@ -22,11 +22,15 @@ plot_scatter(
   shape_var_title = NULL,
   size_var_title = NULL,
   ylim = c(NA, NA),
+  ybreaks = ggplot2::waiver(),
   transform_y = FALSE,
   y_transformation = "log10",
+  y_var_labs = ggplot2::waiver(),
   xlim = c(NA, NA),
+  xbreaks = ggplot2::waiver(),
   transform_x = FALSE,
   x_transformation = "log10",
+  x_var_labs = ggplot2::waiver(),
   size_lim = c(NA, NA),
   transform_size = FALSE,
   size_transformation = "log10",
@@ -136,7 +140,12 @@ legend.}
 
 \item{ylim}{specify the y-axis limits, e.g. ylim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
-the default is ylim = c(NA, NA)}
+the default is ylim = c(NA, NA).}
+
+\item{ybreaks}{This allows you to change the break points to use for tick
+marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+\code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+specified, then ylim should be also.}
 
 \item{transform_y}{Would you like to transform the y axis? (TRUE or FALSE)}
 
@@ -145,9 +154,17 @@ transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 details.}
 
+\item{y_var_labs}{Allows you to modify the labels displayed with the y-axis
+tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.}
+
 \item{xlim}{specify the x-axis limits, e.g. xlim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
 the default is xlim = c(NA, NA)}
+
+\item{xbreaks}{This allows you to change the break points to use for tick
+marks on the x-axis. \code{\link{seq}} is particularly useful here. See
+\code{\link[ggplot2]{scale_x_continuous}} for details. If xbreaks is
+specified, then xlim should be also.}
 
 \item{transform_x}{Would you like to transform the x axis? (TRUE or FALSE)}
 
@@ -155,6 +172,9 @@ the default is xlim = c(NA, NA)}
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 details.}
+
+\item{x_var_labs}{Allows you to modify the labels displayed with the x-axis
+tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.}
 
 \item{size_lim}{specify the size scale limits, e.g. size_lim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of x, e.g.
@@ -222,11 +242,11 @@ For the available shape options, set aesthetic_options = TRUE.}
 
 \item{palette}{If a variable is assigned to fill_var or colour_var, this
 determines which
-\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
-   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+\href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+colour palette} to use. Options include "plasma" or "C" (default), "magma"
 or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
-   link} for examples. You can override these colour palettes with
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+link} for examples. You can override these colour palettes with
 fill_var_values or colour_var_values.}
 
 \item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
@@ -351,8 +371,8 @@ interactive (plotly) output options. The static output is useful for
 producing static reports (e.g. for manuscripts) and is readily customized
 further using ggplot2 syntax. The interactive output is helpful for
 exploring the data and producing dynamic html reports. See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-  blog post} for an introduction to ggplot2.
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+blog post} for an introduction to ggplot2.
 }
 \examples{
 data(mtcars) #load the mtcars data

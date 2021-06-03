@@ -17,8 +17,10 @@ plot_box(
   fill_var_title = NULL,
   colour_var_title = NULL,
   ylim = c(NA, NA),
+  ybreaks = ggplot2::waiver(),
   transform_y = FALSE,
   y_transformation = "log10",
+  y_var_labs = ggplot2::waiver(),
   x_var_order = NULL,
   x_var_labs = NULL,
   fill_var_order = NULL,
@@ -89,7 +91,12 @@ legend.}
 
 \item{ylim}{specify the y-axis limits, e.g. ylim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
-the default is ylim = c(NA, NA)}
+the default is ylim = c(NA, NA).}
+
+\item{ybreaks}{This allows you to change the break points to use for tick
+marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+\code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+specified, then ylim should be also.}
 
 \item{transform_y}{Would you like to transform the y axis? (TRUE or FALSE)}
 
@@ -97,6 +104,9 @@ the default is ylim = c(NA, NA)}
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
 details.}
+
+\item{y_var_labs}{Allows you to modify the labels displayed with the y-axis
+tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.}
 
 \item{x_var_order}{If a variable has been assigned to x, this allows you to
 modify the order of the variable groups, e.g. x = grouping_variable,
@@ -147,11 +157,11 @@ options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
 \item{palette}{If a variable is assigned to fill_var or colour_var, this
 determines which
-\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
-   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+\href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+colour palette} to use. Options include "plasma" or "C" (default), "magma"
 or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
-   link} for examples. You can override these colour palettes with
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+link} for examples. You can override these colour palettes with
 fill_var_values or colour_var_values.}
 
 \item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
@@ -231,8 +241,8 @@ simplified customization interface for common modifications with static
 useful for producing static reports (e.g. for manuscripts) and is readily
 customized further using ggplot2 syntax. The interactive output is helpful
 for exploring the data and producing dynamic html reports. See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-  blog post} for an introduction to ggplot2.
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+blog post} for an introduction to ggplot2.
 }
 \examples{
 data(mtcars) #load the mtcars data

@@ -91,11 +91,11 @@ grouping_variable, fill_var_values = c("blue", "red"). See
 options available in base R, see \code{\link[elucidate]{colour_options}}.}
 
 \item{palette}{If a variable is assigned to fill_var, this determines which
-\url{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
-   colour palette} to use. Options include "plasma" or "C" (default), "magma"
+\href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+colour palette} to use. Options include "plasma" or "C" (default), "magma"
 or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
-   link} for examples. You can override these colour palettes with
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+link} for examples. You can override these colour palettes with
 fill_var_values.}
 
 \item{palette_direction}{Choose "d2l" for dark to light (default) or "l2d"
@@ -203,8 +203,8 @@ common modifications. Pie charts are rarely the most effective way of
 visualizing data (especially when >5 groups are being compared), but that
 doesn't mean there shouldn't be an easy way to build one with ggplot2 in
 case your project stakeholders ask. See
-\url{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-  blog post} for an introduction to ggplot2.
+\href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+blog post} for an introduction to ggplot2.
 }
 \examples{
 

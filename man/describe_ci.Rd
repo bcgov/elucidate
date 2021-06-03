@@ -98,13 +98,14 @@ variables in a data frame, use \code{\link{describe_ci_all}} instead.
 }
 \examples{
 
-#using a single core (sequential processing)
-describe_ci(pdata[1:1000, ], y1, stat = median) #bootstrapped CIs for the median
 describe_ci(pdata, y1, stat = mean) #the default
 \dontrun{
+#using a single core (sequential processing)
+describe_ci(pdata[1:1000, ], y1, stat = median) #bootstrapped CIs for the median
+
 describe_ci(pdata, y1, high_low, stat = mean) #split by a grouping variable
-}
-\dontrun{
+
+
 #using multiple cores (parallel processing)
 describe_ci(pdata[1:1000, ], y1, stat = sd, parallel = TRUE, cores = 2)
 }

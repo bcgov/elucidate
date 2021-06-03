@@ -75,8 +75,10 @@ y1 <- rnorm(1:10000, 100, 10)
 #using a single core (sequential processing)
 median_ci(y1, ci_type = "perc")
 
+\dontrun{
 #using multiple cores (parallel processing)
 median_ci(y1, parallel = TRUE, cores = 2, ci_type = "perc")
+}
 
 }
 \references{
