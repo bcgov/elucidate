@@ -1208,6 +1208,7 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
@@ -1568,7 +1569,7 @@ plot_box <- function(data, y,#essential parameters
     }
   }
 
-  #modification of y-axis limits & transformations
+  #modification of axis limits & transformations
   if(!missing(ylim)) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
   }
@@ -1580,6 +1581,11 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
+  if(missing(x)){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  }
   #modification of axis labels
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
@@ -1681,6 +1687,7 @@ plot_box <- function(data, y,#essential parameters
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
@@ -2060,6 +2067,13 @@ plot_violin <- function(data, y,#essential parameters
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
+
+  if(missing(x)){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  }
+
   if(!missing(ylab)){
     p <- p + ggplot2::labs(y = ylab)
   }
@@ -3469,8 +3483,12 @@ plot_bar <- function(data, x = NULL,
   }
 
   #modification of y-axis limits & transformations
-  if(!missing(ylim)) {
+  if(!missing(ylim) && coord_flip == FALSE) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (!missing(ylim) && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip(ylim = c(ylim[1], ylim[2]))
+  } else if (missing(ylim) && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip()
   }
   if(class(y_var_labs) != "waiver") {
     p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
@@ -3499,10 +3517,6 @@ plot_bar <- function(data, x = NULL,
   }
   if(!missing(colour_var_title)){
     p <- p + ggplot2::labs(color = colour_var_title)
-  }
-
-  if(coord_flip == TRUE) {
-    p <- p + ggplot2::coord_flip()
   }
 
   if(greyscale == TRUE){
@@ -4576,6 +4590,11 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     }
   }
   #modification of axis labels
+  if(missing(x)){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  }
   y_name <- names(dplyr::select(data, {{y}}))
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
@@ -4664,10 +4683,18 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
       errorCondition("When variables are assigned to both fill and colour, specify which to use for splitting lines using line_group")
     }
   }
-
+  if(missing(x)){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  }
   #modification of y-axis limits & transformations
-  if(!missing(ylim)) {
+  if(!missing(ylim) && coord_flip == FALSE) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (missing(ylim) && coord_flip == TRUE){
+    p <- p + ggplot2::coord_flip()
+  } else if (!missing(ylim) && coord_flip == TRUE){
+    p <- p + ggplot2::coord_flip(ylim = c(ylim[1], ylim[2]))
   }
   if(class(y_var_labs) != "waiver") {
     p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
@@ -4682,20 +4709,6 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     p <- p + ggplot2::scale_fill_grey()
   }
 
-  if(coord_flip == F){
-    if(missing(x)){
-      p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                              axis.text.x = ggplot2::element_blank(),
-                              axis.ticks.x = ggplot2::element_blank())
-    }
-  } else if (coord_flip == T){
-    p <- p + ggplot2::coord_flip()
-    if(missing(x)){
-      p <- p + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
-                              axis.text.y = ggplot2::element_blank(),
-                              axis.ticks.y = ggplot2::element_blank())
-    }
-  }
   if(legend_position != "right"){
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
@@ -5228,6 +5241,7 @@ plot_pie <- function(data,
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 coord_cartesian
 #' @importFrom ggplot2 waiver
@@ -5737,9 +5751,19 @@ plot_raincloud <- function(data, y,#essential parameters
     }
   }
 
+  if(missing(x)){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  }
+
   #modification of y-axis limits & transformations
-  if(!missing(ylim)) {
+  if(!missing(ylim) && coord_flip == FALSE) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (missing(ylim) && coord_flip == TRUE){
+    p <- p + ggplot2::coord_flip()
+  } else if (!missing(ylim) && coord_flip == TRUE){
+    p <- p + ggplot2::coord_flip(ylim = c(ylim[1], ylim[2]))
   }
   if(class(y_var_labs) != "waiver") {
     p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
@@ -5758,10 +5782,6 @@ plot_raincloud <- function(data, y,#essential parameters
   }
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
-  }
-
-  if(coord_flip == TRUE) {
-    p <- p + ggplot2::coord_flip()
   }
 
   if(greyscale == TRUE){
