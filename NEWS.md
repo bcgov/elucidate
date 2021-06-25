@@ -1,4 +1,4 @@
-## elucidate 0.1.0.9000 - June 30th, 2021
+## elucidate 0.1.0.9000 - June 25th, 2021
 
 ### major update
 
