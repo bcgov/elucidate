@@ -131,8 +131,14 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
   ci_type <- match.arg(ci_type)
   output <- match.arg(output)
   st <- deparse(substitute(stat))
-  y <- deparse(substitute(y))
   dt <- data.table::as.data.table(data)
+
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
 
   if(is.numeric(data)){
     if(st == "mean") {
@@ -154,7 +160,7 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
       stop("y must be a numeric vector or column of a data frame")
     }
     if(!missing(...)){
-      g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+      g <- group_parser(data, ...)
 
       if(st == "mean") {
         description <- dt[,
@@ -218,6 +224,8 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 #' @importFrom dplyr arrange
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
+#' @importFrom dplyr across
+#' @importFrom dplyr all_of
 #' @importFrom tidyr nest
 #' @importFrom tidyr unnest
 #' @importFrom purrr map
@@ -359,8 +367,10 @@ describe_ci_all <- function(data, ..., stat = mean, replicates = 2000,
   }
 
   if(!missing(...)){
+    g <- group_parser(data, ...)
+
     description <- data %>%
-      dplyr::group_by(...) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(g))) %>%
       tidyr::nest() %>%
       dplyr::mutate(data = purrr::map(data, ~dscr_ci_all(data = .x, stat = stat, replicates = replicates,
                                                          ci_level = ci_level, ci_type = ci_type,

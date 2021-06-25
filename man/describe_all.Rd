@@ -20,7 +20,10 @@ describe_all(
 
 \item{...}{This special argument accepts any number of unquoted grouping
 variable names (also present in the data source) to use for subsetting,
-separated by commas (e.g. \code{group_var1, group_var2})}
+separated by commas, e.g. \verb{group_var1, group_var2}. Also accepts a
+character vector of column names or index numbers, e.g. c("group_var1",
+"group_var2") or c(1, 2), but not a mixture of formats in the same call. If
+no column names are specified, all columns will be used.}
 
 \item{class}{The variable classes in data that you would like summaries for.
 Either "all" for all classes, or a character vector indicating which

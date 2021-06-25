@@ -83,7 +83,10 @@ dataframe with over 10,000 rows (by default, this threshold is adjustable),
 \code{\link[reactable]{reactable}} will be used instead of
 \code{\link[DT]{datatable}}, because the client-side version of
 \code{\link[DT]{datatable}} (implemented here) doesn't perform well or may
-crash your R studio session for larger datasets than this.
+crash your R studio session for larger datasets than this. Note that
+\code{ggplot2} graphs rendered by \code{plot_raincloud()} and \code{plot_pie()} currently
+cannot be properly converted to plotly format because of incompatibility
+with \code{\link[plotly]{ggplotly}}.
 }
 \examples{
 

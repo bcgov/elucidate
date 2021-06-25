@@ -10,7 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-
 # copies ------------------------------------------------------------------
 #' @title
 #' Check the number of copies/duplicated rows in a data frame.
@@ -34,8 +33,11 @@
 #' @param data a data frame, tibble, or data.table.
 #'
 #' @param ... This special argument accepts any number of unquoted column names
-#'   (also present in the data source) to use when searching for duplicates. If
-#'   no column names are specified, all columns will be used.
+#'   (also present in the data source) to use when searching for duplicates,
+#'   e.g. `x, y, z`. Also accepts a character vector of column names or index
+#'   numbers, e.g. c("x", "y", "z") or c(1, 2, 3), but not a mixture of formats
+#'   in the same call. If no column names are specified, all columns will be
+#'   used.
 #'
 #' @param filter Shortcuts for filtering (retaining a subset of) the rows of the
 #'   output based on the number of copies detected. Options include: `"all"` =
@@ -128,14 +130,11 @@ copies <- function(data, ...,
   output <-  match.arg(output)
 
   if(!missing(...)) {
-    g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
-    if(keep_all_cols == FALSE) {
-      data <- data[, g]
-    }
+    g <- group_parser(data, ...)
   } else {
     message("No column names specified - using all columns.")
-    c_names <- names(data)
-    g <- c_names
+    .cols <- names(data)
+    g <- .cols
   }
 
   .classes <- class(data)
@@ -280,8 +279,11 @@ copies <- function(data, ...,
 #' @param data a data frame, tibble, or data.table.
 #'
 #' @param ... This special argument accepts any number of unquoted column names
-#'   (also present in the data source) to use when searching for duplicates. If
-#'   no column names are specified, all columns will be used.
+#'   (also present in the data source) to use when searching for duplicates,
+#'   e.g. `x, y, z`. Also accepts a character vector of column names or index
+#'   numbers, e.g. c("x", "y", "z") or c(1, 2, 3), but not a mixture of formats
+#'   in the same call. If no column names are specified, all columns will be
+#'   used.
 #'
 #' @param keep_all_cols If column names are specified using `...`, this allows
 #'   you to drop unspecified columns, similarly to the `.keep_all` argument for
@@ -335,14 +337,11 @@ dupes <- function(data, ...,
   output <-  match.arg(output)
 
   if(!missing(...)) {
-    g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
-    if(keep_all_cols == FALSE) {
-      data <- data[, g]
-    }
+    g <- group_parser(data, ...)
   } else {
     message("No column names specified - using all columns.")
-    c_names <- names(data)
-    g <- c_names
+    .cols <- names(data)
+    g <- .cols
   }
 
   .classes <- class(data)

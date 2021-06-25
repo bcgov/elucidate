@@ -20,12 +20,15 @@ describe(
 vector ("y") to be summarized and any grouping variables.}
 
 \item{y}{If the data object is a data.frame, this is the variable for which
-you wish to obtain a descriptive summary}
+you wish to obtain a descriptive summary. You can use either the quoted or
+unquoted name of the variable, e.g. "y_var" or y_var.}
 
 \item{...}{If the data object is a data.frame, this special argument accepts
-any number of unquoted grouping variable names (also present in the data source)
-to use for subsetting, separated by commas (e.g. \code{group_var1,
-  group_var2})}
+any number of unquoted grouping variable names (also present in the data
+source) to use for subsetting, separated by commas, e.g. \verb{group_var1, group_var2}. Also accepts a character vector of column names or index
+numbers, e.g. c("group_var1", "group_var2") or c(1, 2), but not a mixture
+of formats in the same call. If no column names are specified, all columns
+will be used.}
 
 \item{digits}{This determines the number of digits used for rounding of
 numeric outputs.}

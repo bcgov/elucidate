@@ -8,9 +8,8 @@
 #
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and limitations under the License.
+# See the License for the specific language governing permissions and limitations under the License
 
-# plot functions ------------------------------------------------------------
 # colour options --------------------------------------------------------
 #' @title
 #' Display the base R colour options.
@@ -72,7 +71,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
   }
 }
 
-# plot_density -------------------------------------------------------
+# plot_density --------------------------------------------------------
 #' @title
 #'
 #' Generate a density plot.
@@ -84,15 +83,16 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   readily customized further using ggplot2 syntax. The interactive output is
 #'   helpful for exploring the data and producing dynamic html reports. See
 #'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
-#'   blog post} for an introduction to ggplot2.
+#'    blog post} for an introduction to ggplot2.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom forcats fct_relevel
 #' @importFrom forcats fct_recode
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_density
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
 #' @importFrom ggplot2 scale_x_continuous
@@ -117,7 +117,8 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @param data A data frame or tibble containing the dependent measure "x" and
 #'   any grouping variables.
 #'
-#' @param x The numeric variable you want a density plot of.
+#' @param x The name of a numeric variable you want a density plot of (quoted or
+#'   unquoted), e.g. x = "variable" or x = variable.
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_density}}, e.g. colour or fill, to be applied
@@ -126,14 +127,14 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   for options.
 #'
 #' @param fill_var Use if you want to assign a variable to the density curve
-#'   fill colour, e.g. fill_var = grouping_variable. Produces separate curves
-#'   for each level of the fill variable. See \code{\link[ggplot2]{aes}} for
-#'   details.
+#'   fill colour, e.g. fill_var = "grouping_variable" or fill_var =
+#'   grouping_variable. Produces separate curves for each level of the fill
+#'   variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param colour_var Use if you want to assign a variable to the density curve
-#'   outline colour, e.g. colour_var = grouping_variable. Produces separate
-#'   curves for each level of the colour variable. See
-#'   \code{\link[ggplot2]{aes}} for details.
+#'   outline colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate curves for each level of the colour
+#'   variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
 #'   "x-axis label"
@@ -226,8 +227,8 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   range of the chosen colour palette's spectrum to end sampling colours. See
 #'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
 #'
-#' @param alpha This adjusts the transparency/opacity of most of the graphical
-#'   components of the plot, ranging from 0 = 100% transparent to 1 = 100%
+#' @param alpha This adjusts the transparency/opacity of the density plot(s),
+#'   with acceptable values ranging from 0 = 100% transparent to 1 = 100%
 #'   opaque.
 #'
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
@@ -236,9 +237,14 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' @param rug Set this to TRUE to add rug lines to the bottom of the plot.
 #'
-#' @param rug_colour Determines the colour of the rug lines.
+#' @param rug_colour Determines the colour of the rug lines (if rug = TRUE).
 #'
-#' @param dnorm Set this to TRUE to add a normal/Gaussian density curve to the plot.
+#' @param rug_alpha This adjusts the transparency/opacity of the rug lines (if
+#'   rug = TRUE) with valid values ranging from 0 = 100% transparent to 1 = 100%
+#'   opaque.
+#'
+#' @param dnorm Set this to TRUE to add a normal/Gaussian density curve to the
+#'   plot. Ignored if x is a date vector or "transform_x" = TRUE.
 #'
 #' @param dnorm_colour Determines the colour of the normal density curve (if dnorm = TRUE).
 #'
@@ -254,7 +260,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   transparent to 1 = 100% opaque.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -266,8 +272,9 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -312,20 +319,20 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' mtcars %>% plot_density(x = mpg)
 #'
-#' \dontrun{
+#' \donttest{
 #' mtcars %>%
-#'   plot_density(x = mpg, transform_x = T, x_transformation = "log2")
+#'   plot_density(x = mpg, transform_x = TRUE, x_transformation = "log2")
 #'
 #' mtcars %>%
-#'   plot_density(x = mpg, transform_x = T, x_transformation = "log10") #default transformation
+#'   plot_density(x = mpg, transform_x = TRUE, x_transformation = "log10") #default transformation
 #'
 #' mtcars %>%
-#'   plot_density(x = mpg, transform_x = T, x_transformation = "sqrt") #default transformation
+#'   plot_density(x = mpg, transform_x = TRUE, x_transformation = "sqrt") #default transformation
 #'
 #' mtcars %>% plot_density(x = mpg, fill_var = cyl, fill_var_labs = c("four" = "4"))
 #'
 #' mtcars %>% plot_density(x = mpg, fill_var = cyl, fill_var_title = "# cyl",
-#'                         interactive = T)
+#'                         interactive = TRUE)
 #'
 #' mtcars %>% plot_density(x = mpg,
 #'                         fill_var = am,
@@ -344,14 +351,16 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' #interactive version
 #'
-#' mtcars %>% describe(mpg, fill_var = cyl, interactive = T)
+#' mtcars %>% plot_density(mpg, fill_var = cyl, interactive = TRUE)
 #' }
 #'
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
 #'
-#' @seealso \code{\link[ggplot2]{geom_density}}, \code{\link[plotly]{ggplotly}}
+#' @seealso \code{\link[ggplot2]{geom_density}}, \code{\link[stats]{dnorm}},
+#'   \code{\link[ggplot2]{geom_line}}, \code{\link[ggplot2]{geom_rug}},
+#'   \code{\link[plotly]{ggplotly}}
 #'
 #' @export
 plot_density <- function(data, x, #essential parameters
@@ -366,15 +375,18 @@ plot_density <- function(data, x, #essential parameters
                          palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
                          palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                          alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                         line_size = 1, rug = FALSE, rug_colour = "black",
+                         line_size = 1.1, rug = FALSE, rug_colour = "black", rug_alpha = 0.8,
                          dnorm = FALSE, dnorm_colour = "black",
                          dnorm_line_type = c("dashed", "solid", "dotted", "dotdash", "longdash", "twodash"),
                          dnorm_line_size = 1.1, dnorm_alpha = 0.6,
-                         theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),#theme options
+                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                         text_size = 14, font = c("sans", "serif", "mono"),#theme options
                          facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                          facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                          legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                          interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  theme <- match.arg(theme)
   font <- match.arg(font)
   facet_var_strip_position <- match.arg(facet_var_strip_position)
   legend_position <- match.arg(legend_position)
@@ -384,47 +396,76 @@ plot_density <- function(data, x, #essential parameters
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
   .classes <- class(data)
-  x_var_class <- class(data[[deparse(substitute(x))]])
-
   if("data.frame" %ni% .classes) {
     stop("Input data must be a data.table, tibble, or data.frame.")
   }
 
+  if(is.error(class(data[[x]]))) {
+    x <- deparse(substitute(x))
+  } else if(!is.character(x) || length(x) > 1){
+    stop('If specified, `x` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #normal density curves
-  if(dnorm == TRUE) {
+  if(dnorm == TRUE && class(data[[x]]) != "Date" && transform_x == FALSE) {
     if("data.table" %ni% class(data)) {
       data <- data.table::as.data.table(data)
     } else {
@@ -433,58 +474,60 @@ plot_density <- function(data, x, #essential parameters
       #modification of the original data source in the global environment when the
       #input is already a data.table due to the use of the := operator below.
     }
-    X <- deparse(substitute(x))
-
-    if(!is.numeric(data[[X]])){
+    if(!is.numeric(data[[x]])){
       stop("x must be a numeric vector or column of a data frame to calculate normal density curve")
     }
 
     #grouping options
     if (!missing(fill_var) && missing(colour_var) && missing(facet_var)) {
-      G <- deparse(substitute(fill_var))
+      G <- fill_var
     } else if (missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-      G <- deparse(substitute(colour_var))
+      G <- colour_var
     } else if (missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-      G <- deparse(substitute(facet_var))
+      G <- facet_var
     } else if (!missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-      G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)))
+      G <- c(fill_var, colour_var)
     } else if (!missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-      G <- c(deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+      G <- c(fill_var, facet_var)
     } else if (missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-      G <- c(deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+      G <- c(colour_var, facet_var)
     } else if (!missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-      G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+      G <- c(fill_var, colour_var, facet_var)
     }
 
     #calculate the normal density curves
     if(!missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
-      data[, dnorm_y := dnorm(get(X), mean = mean(get(X), na.rm = TRUE), sd = sd(get(X), na.rm = TRUE)),
-         by = eval(G)]
+      data[, dnorm_y := dnorm(get(x), mean = mean(get(x), na.rm = TRUE), sd = sd(get(x), na.rm = TRUE)),
+           by = eval(G)]
       data <- tibble::as_tibble(data)
 
     } else {
-      data <- data[, dnorm_y := dnorm(get(X), mean = mean(get(X), na.rm = TRUE), sd = sd(get(X), na.rm = TRUE))]
+      data[, dnorm_y := dnorm(get(x), mean = mean(get(x), na.rm = TRUE), sd = sd(get(x), na.rm = TRUE))]
       data <- tibble::as_tibble(data)
     }
   }
 
   #setup foundational plotting object layer
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+  p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, fill = fill_var, colour = colour_var))
 
   #add the geom layers
   p <- p + ggplot2::geom_density(alpha = alpha, size = line_size, ...)
 
   if(rug == TRUE) {
-    p <- p + ggplot2::geom_rug(colour = rug_colour)
+    if(missing(colour_var)) {
+      p <- p + ggplot2::geom_rug(colour = rug_colour, alpha = rug_alpha)
+    } else {
+      p <- p + ggplot2::geom_rug(alpha = rug_alpha)
+    }
   }
 
-  if(dnorm == TRUE) {
+  if(dnorm == TRUE && class(data[[x]]) != "Date" && transform_x == FALSE) {
     if(!missing(colour_var)) {
-      p <- p + ggplot2::geom_line(ggplot2::aes(y = dnorm_y),
+      p <- p + ggplot2::geom_line(ggplot2::aes_string(y = "dnorm_y"),
                                   linetype = dnorm_line_type, size = dnorm_line_size, alpha = dnorm_alpha)
     } else {
-      p <- p + ggplot2::geom_line(ggplot2::aes(y = dnorm_y),
-                                    linetype = dnorm_line_type, size = dnorm_line_size, colour = dnorm_colour, alpha = dnorm_alpha)
+      p <- p + ggplot2::geom_line(ggplot2::aes_string(y = "dnorm_y"),
+                                  linetype = dnorm_line_type, size = dnorm_line_size, colour = dnorm_colour, alpha = dnorm_alpha)
     }
   }
 
@@ -494,14 +537,14 @@ plot_density <- function(data, x, #essential parameters
       p <- p + ggplot2::scale_fill_manual(values = fill_var_values)
     } else {
       p <- p + ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
-                                      option = palette, direction = palette_direction)
+                                             option = palette, direction = palette_direction)
     }
   } else if(missing(fill_var) && !missing(colour_var)) {
     if(!missing(colour_var_values)){
       p <- p + ggplot2::scale_colour_manual(values = colour_var_values)
     } else {
       p <- p + ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
-                                        option = palette, direction = palette_direction)
+                                               option = palette, direction = palette_direction)
     }
   } else if(!missing(fill_var) && !missing(colour_var)) {
     if(!missing(fill_var_values) && missing(colour_var_values)){
@@ -527,6 +570,26 @@ plot_density <- function(data, x, #essential parameters
     }
   }
 
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
   #modification of the x-axis limits, breaks, and transformations
   if(!missing(xlim)) {
     p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
@@ -540,6 +603,7 @@ plot_density <- function(data, x, #essential parameters
     p <- p + ggplot2::scale_x_continuous(trans = x_transformation, breaks = xbreaks, labels = x_var_labs)
   }
 
+  #labels
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
@@ -552,33 +616,11 @@ plot_density <- function(data, x, #essential parameters
   if(!missing(colour_var_title)){
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -586,7 +628,7 @@ plot_density <- function(data, x, #essential parameters
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -602,7 +644,7 @@ plot_density <- function(data, x, #essential parameters
   }
 }
 
-# plot_histogram -----------------------------------------------------
+# plot_histogram ----------------------------------------------------------
 #' @title
 #'
 #' Generate a histogram.
@@ -620,9 +662,10 @@ plot_density <- function(data, x, #essential parameters
 #' @importFrom forcats fct_relevel
 #' @importFrom forcats fct_recode
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_histogram
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
 #' @importFrom ggplot2 scale_x_continuous
@@ -648,7 +691,8 @@ plot_density <- function(data, x, #essential parameters
 #' @param data A data frame or tibble containing the dependent measure "x" and
 #'   any grouping variables.
 #'
-#' @param x The numeric variable you want a histogram of.
+#' @param x The name of a numeric variable you want a histogram of (quoted or
+#'   unquoted), e.g. x = "variable" or x = variable.
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_histogram}}, e.g. colour or fill, to be applied
@@ -675,14 +719,14 @@ plot_density <- function(data, x, #essential parameters
 #'   before plotting.
 #'
 #' @param fill_var Use if you want to assign a variable to the histogram bar
-#'   fill colour, e.g. fill_var = grouping_variable. Produces separate sets of
-#'   bars for each level of the fill variable. See \code{\link[ggplot2]{aes}}
-#'   for details.
+#'   fill colour, e.g. fill_var = "grouping_variable" or fill_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   fill variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param colour_var Use if you want to assign a variable to the histogram bar
-#'   outline colour, e.g. colour_var = grouping_variable. Produces separate sets
-#'   of bars for each level of the colour variable. See
-#'   \code{\link[ggplot2]{aes}} for details.
+#'   outline colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
 #'   "x-axis label"
@@ -775,9 +819,8 @@ plot_density <- function(data, x, #essential parameters
 #'   range of the chosen colour palette's spectrum to end sampling colours. See
 #'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
 #'
-#' @param alpha This adjusts the transparency/opacity of the graphical
-#'   components of the plot, ranging from 0 = 100% transparent to 1 = 100%
-#'   opaque.
+#' @param alpha This adjusts the transparency/opacity of the histogram(s),
+#'   ranging from 0 = 100% transparent to 1 = 100% opaque.
 #'
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
 #'
@@ -785,9 +828,14 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' @param rug Set this to TRUE to add rug lines to the bottom of the plot.
 #'
-#' @param rug_colour Determines the colour of the rug lines.
+#' @param rug_colour Determines the colour of the rug lines (if rug = TRUE).
 #'
-#' @param dnorm Set this to TRUE to add a normal/Gaussian density curve to the plot.
+#' @param rug_alpha This adjusts the transparency/opacity of the rug lines (if
+#'   rug = TRUE) with valid values ranging from 0 = 100% transparent to 1 = 100%
+#'   opaque.
+#'
+#' @param dnorm Set this to TRUE to add a normal/Gaussian density curve to the
+#'   plot. Ignored if x is a date vector or "transform_x" = TRUE.
 #'
 #' @param dnorm_colour Determines the colour of the normal density curve (if dnorm = TRUE).
 #'
@@ -806,7 +854,7 @@ plot_density <- function(data, x, #essential parameters
 #'   drawn if dnorm = TRUE to show the scale for the normal density curve.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -818,8 +866,9 @@ plot_density <- function(data, x, #essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -864,7 +913,7 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' mtcars %>% plot_histogram(x = mpg, fill = "blue")
 #'
-#' \dontrun{
+#' \donttest{
 #' mtcars %>% plot_histogram(x = mpg, fill = "blue")
 #'
 #' mtcars %>% plot_histogram(x = mpg, fill = "blue", colour = "black")
@@ -881,21 +930,21 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' mtcars %>% plot_histogram(x = mpg, fill = "blue", binwidth = NULL, bins = 30) #default in ggplot2
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue", interactive = T)
+#' mtcars %>% plot_histogram(x = mpg, fill = "blue", interactive = TRUE)
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill_var = cyl, binwidth = 5, interactive = T)
+#' mtcars %>% plot_histogram(x = mpg, fill_var = cyl, binwidth = 5, interactive = TRUE)
 #' }
-#'
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
 #'
-#' @seealso \code{\link[ggplot2]{geom_histogram}}, \code{\link[plotly]{ggplotly}}
+#' @seealso \code{\link[ggplot2]{geom_histogram}}, \code{\link[stats]{dnorm}},
+#'   \code{\link[ggplot2]{geom_line}}, \code{\link[plotly]{ggplotly}}
 #'
 #' @export
 plot_histogram <- function(data, x, #essential parameters
                            ..., #non-variable aestheic specification
-                           binwidth = 1, bins = NULL, #geom specific customization params
+                           binwidth = NULL, bins = 30, #geom specific customization params
                            position = c("identity", "stack", "dodge"),
                            stat = c("bin", "count"), na.rm = TRUE, #geom specific customization params.
                            fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
@@ -908,16 +957,18 @@ plot_histogram <- function(data, x, #essential parameters
                            palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                            alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                           line_size = 1, rug = FALSE, rug_colour = "black",
+                           line_size = 1.1, rug = FALSE, rug_colour = "black", rug_alpha = 0.8,
                            dnorm = FALSE, dnorm_colour = "black",
                            dnorm_line_type = c("dashed", "solid", "dotted", "dotdash", "longdash", "twodash"),
                            dnorm_line_size = 1.1, dnorm_alpha = 0.6, dnorm_y_axis = TRUE,
-                           theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),#theme options
+                           theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                           text_size = 14, font = c("sans", "serif", "mono"),#theme options
                            facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                            facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                            legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                            interactive = FALSE, aesthetic_options = FALSE) {#output format
 
+  theme <- match.arg(theme)
   position <- match.arg(position)
   stat <- match.arg(stat)
   font <- match.arg(font)
@@ -928,42 +979,73 @@ plot_histogram <- function(data, x, #essential parameters
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
+  if(is.error(class(data[[x]]))) {
+    x <- deparse(substitute(x))
+  } else if(!is.character(x) || length(x) > 1){
+    stop('If specified, `x` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #normal density curves
-  if(dnorm == TRUE) {
-    if(!missing(bins)) {
+  if(dnorm == TRUE && class(data[[x]]) != "Date" && transform_x == FALSE) {
+    if(!missing(bins) || missing(binwidth)) {
       stop('plot_histogram() dnorm curve drawing functionality is currently incompatible with the "bins" argument, use "binwidth" to adjust bin sizes instead.')
     }
     if("data.table" %ni% class(data)) {
@@ -974,67 +1056,73 @@ plot_histogram <- function(data, x, #essential parameters
       #modification of the original data source in the global environment when the
       #input is already a data.table due to the use of the := operator below.
     }
-    X <- deparse(substitute(x))
 
-    if(!is.numeric(data[[X]])){
+    if(!is.numeric(data[[x]])){
       stop("x must be a numeric vector or column of a data frame to calculate normal density curve")
     }
 
     #grouping options
     if (!missing(fill_var) && missing(colour_var) && missing(facet_var)) {
-      G <- deparse(substitute(fill_var))
+      G <- fill_var
     } else if (missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-      G <- deparse(substitute(colour_var))
+      G <- colour_var
     } else if (missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-      G <- deparse(substitute(facet_var))
+      G <- facet_var
     } else if (!missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-      G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)))
+      G <- c(fill_var, colour_var)
     } else if (!missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-      G <- c(deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+      G <- c(fill_var, facet_var)
     } else if (missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-      G <- c(deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+      G <- c(colour_var, facet_var)
     } else if (!missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-      G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+      G <- c(fill_var, colour_var, facet_var)
     }
 
     bw <- binwidth #define bin width to be used in the histogram
-    n_obs <- sum(!is.na(data[[X]])) #count of non-missing observations
-
+    if(!missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+      n_obs <- mean(data[, .(n = sum(!is.na(get(x)))), by = eval(G)][["n"]], na.rm = TRUE)
+    } else {
+      n_obs <- sum(!is.na(data[[x]])) #count of non-missing observations
+    }
     #define a function that returns the normal density curve scaled by the bin width
     #and number of observations
     scaled_dnorm <- function(x) {
       dnorm(x, mean = mean(x), sd = sd(x)) * (bw * n_obs)
     }
-
     #calculate the normal density curves
     if(!missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
-      data[, dnorm_y := scaled_dnorm(get(X)),
+      data[, dnorm_y := scaled_dnorm(get(x)),
            by = eval(G)]
       data <- tibble::as_tibble(data)
 
     } else {
-      data <- data[, dnorm_y := scaled_dnorm(get(X))]
+      data <- data[, dnorm_y := scaled_dnorm(get(x))]
       data <- tibble::as_tibble(data)
     }
   }
 
   #setup foundational plotting object layer
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+  p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, fill = fill_var, colour = colour_var))
 
   #add the geom layers
   p <- p +
     ggplot2::geom_histogram(alpha = alpha, binwidth = binwidth, bins = bins,
                             position = position, stat = stat, na.rm = na.rm, size = line_size, ...)
+
   if(rug == TRUE) {
-    p <- p + ggplot2::geom_rug(colour = rug_colour)
+    if(missing(colour_var)) {
+      p <- p + ggplot2::geom_rug(colour = rug_colour, alpha = rug_alpha)
+    } else {
+      p <- p + ggplot2::geom_rug(alpha = rug_alpha)
+    }
   }
 
-  if(dnorm == TRUE) {
+  if(dnorm == TRUE && class(data[[x]]) != "Date" && transform_x == FALSE) {
     if(!missing(colour_var)) {
-      p <- p + ggplot2::geom_line(aes(y = dnorm_y),
+      p <- p + ggplot2::geom_line(aes_string(y = "dnorm_y"),
                                   linetype = dnorm_line_type, size = dnorm_line_size, alpha = dnorm_alpha)
     } else {
-      p <- p + ggplot2::geom_line(aes(y = dnorm_y),
+      p <- p + ggplot2::geom_line(aes_string(y = "dnorm_y"),
                                   linetype = dnorm_line_type, size = dnorm_line_size, colour = dnorm_colour, alpha = dnorm_alpha)
     }
   }
@@ -1082,6 +1170,26 @@ plot_histogram <- function(data, x, #essential parameters
     }
   }
 
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
   #modification of x-axis limits
   if(!missing(xlim)) {
     p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
@@ -1094,7 +1202,7 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::scale_x_continuous(trans = x_transformation, breaks = xbreaks, labels = x_var_labs)
   }
 
-
+  #labels
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
@@ -1107,33 +1215,11 @@ plot_histogram <- function(data, x, #essential parameters
   if(!missing(colour_var_title)){
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black && white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -1155,7 +1241,7 @@ plot_histogram <- function(data, x, #essential parameters
   }
 
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -1171,7 +1257,7 @@ plot_histogram <- function(data, x, #essential parameters
   }
 }
 
-# start of plot_box ----------------------------------------------------------------
+# plot_box ------------------------------------------------------------
 #' @title
 #'
 #' Generate a box-and-whisker plot.
@@ -1189,9 +1275,10 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom forcats fct_relevel
 #' @importFrom forcats fct_recode
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_boxplot
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
 #' @importFrom ggplot2 scale_x_continuous
@@ -1212,14 +1299,17 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
 #' @importFrom plotly ggplotly
+#' @importFrom plotly layout
 #' @importFrom utils browseURL
 #'
 #' @param data A data frame or tibble containing the dependent measure "y" and
 #'   any grouping variables.
 #'
-#' @param y A numeric variable you want to obtain boxplots for.
+#' @param y The name of a numeric variable you want boxplots for (quoted or
+#'   unquoted), e.g. y = "variable" or y = variable.
 #'
-#' @param x A categorical variable you want to obtain separate boxplots of y for.
+#' @param x A categorical variable you want to obtain separate boxplots of y
+#'   for, e.g. x = "grouping_variable" or x = grouping_variable.
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_boxplot}}, e.g. colour or fill, to be applied
@@ -1227,13 +1317,14 @@ plot_histogram <- function(data, x, #essential parameters
 #'   aesthetic_options argument to TRUE.
 #'
 #' @param fill_var Use if you want to assign a variable to the box fill colour,
-#'   e.g. fill_var = grouping_variable. Produces separate sets of boxes for each
-#'   level of the fill variable. See \code{\link[ggplot2]{aes}} for details.
+#'   e.g. fill_var = "grouping_variable" or fill_var = grouping_variable.
+#'   Produces separate sets of boxes for each level of the fill variable. See
+#'   \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param colour_var Use if you want to assign a variable to the box outline
-#'   colour, e.g. colour_var = grouping_variable. Produces separate sets of
-#'   boxes for each level of the colour variable. See \code{\link[ggplot2]{aes}}
-#'   for details.
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of boxes for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
 #'   "x-axis label"
@@ -1337,16 +1428,28 @@ plot_histogram <- function(data, x, #essential parameters
 #'   range of the chosen colour palette's spectrum to end sampling colours. See
 #'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
 #'
-#' @param alpha This adjusts the transparency/opacity of the graphical
-#'   components of the plot, ranging from 0 = 100% transparent to 1 = 100%
-#'   opaque.
+#' @param alpha This adjusts the transparency/opacity of the box-and-whisker
+#'   plots(s), ranging from 0 = 100% transparent to 1 = 100% opaque.
 #'
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
 #'
 #' @param line_size Controls the thickness of the box plot lines.
 #'
+#' @param dots Set to TRUE if you want to add a dotplot layer over the
+#'   box-and-whisker plot(s).
+#'
+#' @param dots_colour Controls the colour of the dots in the dotplot layer.
+#'   Ignored if "dots" = FALSE or if a variable is assigned to "colour_var".
+#'
+#' @param dots_alpha This adjusts the transparency/opacity of the graphical
+#'   components of the dotplot layer if "dots" = TRUE, with acceptable values
+#'   ranging from 0 = 100% transparent to 1 = 100% opaque.
+#'
+#' @param dots_binwidth Controls the binwidth to use for the dotplot layer if
+#'   dots = TRUE. See \code{\link[ggplot2]{geom_dotplot}} for details.
+#'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -1358,8 +1461,9 @@ plot_histogram <- function(data, x, #essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -1386,8 +1490,15 @@ plot_histogram <- function(data, x, #essential parameters
 #'
 #' @param omit_legend Set to TRUE if you want to remove/omit the legends.
 #'
-#' @param interactive Determines whether a static ggplot object or an interactive html
-#'   plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.
+#' @param interactive Determines whether a static ggplot object or an
+#'   interactive html plotly object is returned. See
+#'   \code{\link[plotly]{ggplotly}} for details. Note that if a variable is
+#'   assigned to "fill_var" or "colour_var", activating interactive/plotly mode
+#'   will cause a spurious warning message about 'layout' objects not having a
+#'   'boxmode' attribute to be printed to the console. This is a
+#'   \href{https://github.com/ropensci/plotly/issues/994}{documented bug} with
+#'   plotly that can be safely ignored, although unfortunately the message
+#'   cannot be suppressed.
 #'
 #' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
 #'   online aesthetic options vignette.
@@ -1404,7 +1515,7 @@ plot_histogram <- function(data, x, #essential parameters
 #'
 #' mtcars %>% plot_box(y = mpg, x = cyl, fill = "blue")
 #'
-#' \dontrun{
+#' \donttest{
 #' mtcars %>%
 #'  plot_box(x = cyl, y = hp,
 #'           xlab = "# of cylinders",
@@ -1425,7 +1536,7 @@ plot_histogram <- function(data, x, #essential parameters
 #'           fill_var_labs = c("manual" = "0", "automatic" = "1"),
 #'           fill_var_values = c("blue", "red"),
 #'           theme = "bw",
-#'           interactive = T)
+#'           interactive = TRUE)
 #'
 #' #using colour works better for the interactive version
 #' mtcars %>%
@@ -1436,14 +1547,14 @@ plot_histogram <- function(data, x, #essential parameters
 #'           colour_var_title = "transmission",
 #'           colour_var_labs = c("manual" = "0", "automatic" = "1"),
 #'           colour_var_values = c("blue", "red"),
-#'           theme = "bw", interactive = T)
+#'           theme = "bw", interactive = TRUE)
 #' }
 #'
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
 #'
-#' @seealso \code{\link[ggplot2]{geom_boxplot}}, \code{\link[plotly]{ggplotly}}
+#' @seealso \code{\link[ggplot2]{geom_boxplot}}, \code{\link[ggplot2]{geom_dotplot}}, \code{\link[plotly]{ggplotly}}
 #'
 #' @export
 plot_box <- function(data, y,#essential parameters
@@ -1461,13 +1572,15 @@ plot_box <- function(data, y,#essential parameters
                      palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
                      palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                      alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                     line_size = 1,
-                     theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                     line_size = 1, dots = FALSE, dots_colour = "black", dots_alpha = 0.4, dots_binwidth = 0.9,
+                     theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                     text_size = 14, font = c("sans", "serif", "mono"), #theme options
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                      facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                      legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                      interactive = FALSE, aesthetic_options = FALSE) {#output format
 
+  theme <- match.arg(theme)
   font <- match.arg(font)
   legend_position <- match.arg(legend_position)
   facet_var_strip_position <- match.arg(facet_var_strip_position)
@@ -1475,56 +1588,105 @@ plot_box <- function(data, y,#essential parameters
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(x)) {
+    if(is.error(class(data[[x]]))) {
+      x <- deparse(substitute(x))
+    } else if(!is.character(x) || length(x) > 1){
+      stop('If specified, `x` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #x-variable recoding
   if(!missing(x)){
-    data <- dplyr::mutate(data, {{x}} := as.character({{x}}))
+    data <- dplyr::mutate(data, {{x}} := as.character(.data[[x]]))
   }
   if(!missing(x_var_order)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel(.data[[x]], levels = !!!x_var_order))
   }
   if(!missing(x_var_labs)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode(.data[[x]], !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
+  p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, fill = fill_var, colour = colour_var))
 
   #add the geom layer
-  p <- p +
-    ggplot2::geom_boxplot(alpha = alpha, size = line_size, ...)
+  p <- p + ggplot2::geom_boxplot(alpha = alpha, size = line_size, ...)
+
+  #add a dotplot layer if enabled
+  if(dots == TRUE) {
+    if(missing(colour_var)) {
+      p <- p + ggplot2::geom_dotplot(binaxis='y', stackdir='center',
+                                     alpha = dots_alpha, binwidth = dots_binwidth)
+    } else {
+      p <- p + ggplot2::geom_dotplot(binaxis='y', stackdir='center',
+                                     colour = dots_colour, alpha = dots_alpha, binwidth = dots_binwidth)
+    }
+  }
 
   #modification of the colour or fill values
   if (!missing(fill_var) && missing(colour_var)){
@@ -1569,6 +1731,26 @@ plot_box <- function(data, y,#essential parameters
     }
   }
 
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
   #modification of axis limits & transformations
   if(!missing(ylim)) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
@@ -1581,12 +1763,7 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
-  if(missing(x)){
-    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                            axis.text.x = ggplot2::element_blank(),
-                            axis.ticks.x = ggplot2::element_blank())
-  }
-  #modification of axis labels
+  #labels
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
@@ -1599,34 +1776,16 @@ plot_box <- function(data, y,#essential parameters
   if(!missing(colour_var_title)){
     p <- p + ggplot2::labs(color = colour_var_title)
   }
-
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  if(missing(x)){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
   }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -1634,7 +1793,7 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -1643,14 +1802,20 @@ plot_box <- function(data, y,#essential parameters
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
   }
   if(interactive == TRUE){
-    return(plotly::ggplotly(p))
+    if(missing(fill_var) && missing(colour_var)) {
+      p <- plotly::ggplotly(p)
+    } else {
+      p <- plotly::ggplotly(p)
+      p <- plotly::layout(p, boxmode = "group")
+    }
+    return(p)
   }
   if(interactive == FALSE){
     return(p)
   }
 }
 
-# start of plot_violin -------------------------------------------------------
+# plot_violin -------------------------------------------------------------
 #' @title
 #'
 #' Generate a violin plot.
@@ -1668,9 +1833,10 @@ plot_box <- function(data, y,#essential parameters
 #' @importFrom forcats fct_relevel
 #' @importFrom forcats fct_recode
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_violin
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
 #' @importFrom ggplot2 scale_x_continuous
@@ -1695,9 +1861,11 @@ plot_box <- function(data, y,#essential parameters
 #' @param data A data frame or tibble containing the dependent measure "y" and
 #'   any grouping variables.
 #'
-#' @param y A numeric variable you want to obtain violin plots for.
+#' @param y A numeric variable you want to obtain violin plots for (quoted or
+#'   unquoted), e.g. y = "variable" or y = variable.
 #'
-#' @param x A categorical variable you want to obtain separate violin plots of y for.
+#' @param x A categorical variable you want to obtain separate violin plots of y
+#'   for (quoted or unquoted), e.g. x = "variable" or x = variable.
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_violin}}, e.g. colour or fill, to be applied
@@ -1708,14 +1876,14 @@ plot_box <- function(data, y,#essential parameters
 #'   50th, and 75th percentiles (similar to a boxplot).
 #'
 #' @param fill_var Use if you want to assign a variable to the violin fill
-#'   colour, e.g. fill_var = grouping_variable. Produces separate sets of bars
-#'   for each level of the fill variable. See \code{\link[ggplot2]{aes}} for
-#'   details.
+#'   colour, e.g. fill_var = "grouping_variable" or fill_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   fill variable. See \code{\link[ggplot2]{aes}} for details.
 #'
-#' @param colour_var Use if you want to assign a variable to the violin
-#'   outline colour, e.g. colour_var = grouping_variable. Produces separate sets
-#'   of bars for each level of the colour variable. See
-#'   \code{\link[ggplot2]{aes}} for details.
+#' @param colour_var Use if you want to assign a variable to the violin outline
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
 #'   "x-axis label"
@@ -1828,7 +1996,7 @@ plot_box <- function(data, y,#essential parameters
 #' @param line_size Controls the thickness of the violin outlines.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -1840,8 +2008,9 @@ plot_box <- function(data, y,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -1887,7 +2056,7 @@ plot_box <- function(data, y,#essential parameters
 #' mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue")
 #' mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
 #'
-#' \dontrun{
+#' \donttest{
 #' mtcars %>%
 #'  plot_violin(x = cyl, y = hp,
 #'           xlab = "# of cylinders",
@@ -1908,7 +2077,7 @@ plot_box <- function(data, y,#essential parameters
 #'           fill_var_labs = c("manual" = "0", "automatic" = "1"),
 #'           fill_var_values = c("blue", "red"),
 #'           theme = "bw",
-#'           interactive = T)
+#'           interactive = TRUE)
 #'
 #' #using colour works better for the interactive version
 #' mtcars %>%
@@ -1919,7 +2088,7 @@ plot_box <- function(data, y,#essential parameters
 #'           colour_var_title = "transmission",
 #'           colour_var_labs = c("manual" = "0", "automatic" = "1"),
 #'           colour_var_values = c("blue", "red"),
-#'           theme = "bw", interactive = T)
+#'           theme = "bw", interactive = TRUE)
 #' }
 #'
 #'
@@ -1929,7 +2098,7 @@ plot_box <- function(data, y,#essential parameters
 #' @seealso \code{\link[ggplot2]{geom_violin}}, \code{\link[plotly]{ggplotly}}
 #'
 #' @export
-plot_violin <- function(data, y,#essential parameters
+plot_violin <- function(data, y, #essential parameters
                         x = NULL,
                         ..., #geom-specific customization see ?geom_violin for details
                         fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
@@ -1945,12 +2114,14 @@ plot_violin <- function(data, y,#essential parameters
                         palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                         alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
                         line_size = 1,
-                        theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),#theme options
+                        theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                        text_size = 14, font = c("sans", "serif", "mono"),#theme options
                         facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                         facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                         legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                         interactive = FALSE, aesthetic_options = FALSE) {#output format
 
+  theme <- match.arg(theme)
   font <- match.arg(font)
   legend_position <- match.arg(legend_position)
   facet_var_strip_position <- match.arg(facet_var_strip_position)
@@ -1958,52 +2129,96 @@ plot_violin <- function(data, y,#essential parameters
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(x)) {
+    if(is.error(class(data[[x]]))) {
+      x <- deparse(substitute(x))
+    } else if(!is.character(x) || length(x) > 1){
+      stop('If specified, `x` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #x-variable recoding
   if(!missing(x)){
-    data <- dplyr::mutate(data, {{x}} := as.character({{x}}))
+    data <- dplyr::mutate(data, {{x}} := as.character(.data[[x]]))
   }
   if(!missing(x_var_order)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel(.data[[x]], levels = !!!x_var_order))
   }
   if(!missing(x_var_labs)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode(.data[[x]], !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
+  if(missing(x)) {
+    data <- dplyr::mutate(data, .x = 0)
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(y = y, x = ".x", fill = fill_var, colour = colour_var))
+  } else {
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(y = y, x = x, fill = fill_var, colour = colour_var))
+  }
 
   #add the geom layer
   p <- p + ggplot2::geom_violin(alpha = alpha, size = line_size, ...)
@@ -2051,6 +2266,26 @@ plot_violin <- function(data, y,#essential parameters
     }
   }
 
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
   #modification of y-axis limits & transformations
   if(!missing(ylim)) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
@@ -2063,17 +2298,15 @@ plot_violin <- function(data, y,#essential parameters
     p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
   }
 
-  #modification of axis labels
+  #labels
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
-
   if(missing(x)){
     p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
                             axis.text.x = ggplot2::element_blank(),
                             axis.ticks.x = ggplot2::element_blank())
   }
-
   if(!missing(ylab)){
     p <- p + ggplot2::labs(y = ylab)
   }
@@ -2083,34 +2316,11 @@ plot_violin <- function(data, y,#essential parameters
   if(!missing(colour_var_title)){
     p <- p + ggplot2::labs(color = colour_var_title)
   }
-
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -2118,7 +2328,7 @@ plot_violin <- function(data, y,#essential parameters
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -2134,7 +2344,7 @@ plot_violin <- function(data, y,#essential parameters
   }
 }
 
-# start of plot_scatter ------------------------------------------------------------
+# plot_scatter -------------------------------------------------------
 #' @title
 #'
 #' Generate a scatterplot.
@@ -2152,13 +2362,18 @@ plot_violin <- function(data, y,#essential parameters
 #' @importFrom forcats fct_relevel
 #' @importFrom forcats fct_recode
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 geom_jitter
 #' @importFrom ggplot2 stat_smooth
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 scale_fill_viridis_c
+#' @importFrom ggplot2 scale_fill_viridis_d
 #' @importFrom ggplot2 scale_colour_manual
+#' @importFrom ggplot2 scale_colour_viridis_c
+#' @importFrom ggplot2 scale_colour_viridis_d
 #' @importFrom ggplot2 scale_shape_manual
 #' @importFrom ggplot2 scale_x_continuous
 #' @importFrom ggplot2 scale_y_continuous
@@ -2183,9 +2398,11 @@ plot_violin <- function(data, y,#essential parameters
 #' @param data A data frame or tibble containing the dependent measure "y", the
 #'   independent measure "x", and any grouping variables or covariates.
 #'
-#' @param y A numeric variable you want to plot against x.
+#' @param y A numeric variable you want to plot against x (quoted or
+#'   unquoted), e.g. y = "variable" or y = variable.
 #'
-#' @param x A numeric variable you want to plot against y.
+#' @param x A numeric variable you want to plot against y (quoted or
+#'   unquoted), e.g. x = "variable" or x = variable.
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_point}}, e.g. colour or fill, to be applied
@@ -2196,25 +2413,27 @@ plot_violin <- function(data, y,#essential parameters
 #'   directions. See \code{\link[ggplot2]{geom_jitter}} for details.
 #'
 #' @param fill_var Use if you want to assign a variable to the point fill
-#'   colour, e.g. fill_var = grouping_variable. Produces separate sets of points
-#'   for each level of the fill variable. See \code{\link[ggplot2]{aes}} for
-#'   details. Note: for geom_point, fill_var and fill only affect shapes 21-24.
-#'   To split the data by a variable based on colour, it is therefore easier to
-#'   use colour_var for this particular plot geometry.
+#'   colour, e.g. fill_var = "grouping_variable" or fill_var =
+#'   grouping_variable. Produces separate sets of points for each level of the
+#'   fill variable. See \code{\link[ggplot2]{aes}} for details. Note: for
+#'   geom_point, fill_var and fill only affect shapes 21-24. To split the data
+#'   by a variable based on colour, it is therefore easier to use colour_var for
+#'   this particular plot geometry. Also works with continuous variables.
 #'
 #' @param colour_var Use if you want to assign a variable to the point outline
-#'   colour, e.g. colour_var = grouping_variable. Produces separate sets of
-#'   points for each level of the colour variable. See
-#'   \code{\link[ggplot2]{aes}} for details.
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of points for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param shape_var Use if you want to assign a variable to the point shape,
-#'   e.g. shape_var = grouping_variable. Produces separate sets of points for
-#'   each level of the shape variable. See \code{\link[ggplot2]{aes}} for
-#'   details.
+#'   e.g. shape_var = "grouping_variable" or shape_var = grouping_variable.
+#'   Produces separate sets of points for each level of the shape variable. See
+#'   \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param size_var Use if you want to assign a continuous variable to the point
-#'   size, e.g. size_var = covariate. Adjusts point sizes according to the value
-#'   of the covariate. See \code{\link[ggplot2]{aes}} for details.
+#'   size, e.g. size_var = "covariate" or size_var = covariate. Adjusts point
+#'   sizes according to the value of the covariate. See
+#'   \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param ylab Specify/overwrite the y-axis label using a character string, e.g.
 #'   "y-axis label"
@@ -2416,7 +2635,7 @@ plot_violin <- function(data, y,#essential parameters
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -2428,8 +2647,9 @@ plot_violin <- function(data, y,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -2474,7 +2694,7 @@ plot_violin <- function(data, y,#essential parameters
 #'
 #' mtcars %>% plot_scatter(y = mpg, x = hp, colour = "blue")
 #'
-#' \dontrun{
+#' \donttest{
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp)
 #'
@@ -2493,7 +2713,6 @@ plot_violin <- function(data, y,#essential parameters
 #'                shape_var = am, theme = "bw")
 #'
 #' #map colour, shape, and size to different variables
-#' windows()
 #'
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
@@ -2511,48 +2730,48 @@ plot_violin <- function(data, y,#essential parameters
 #' #linear
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_method = "lm")
+#'                regression_line = TRUE, regression_method = "lm")
 #'
 #' #change the regression line colour
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_method = "lm",
+#'                regression_line = TRUE, regression_method = "lm",
 #'                regression_line_colour = "green")
 #'
 #' #add standard error envelope
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_method = "lm", regression_se = T)
+#'                regression_line = TRUE, regression_method = "lm", regression_se = TRUE)
 #'
 #' #adjust standard error envelope transparency
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_method = "lm", regression_se = T,
+#'                regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
 #'                regression_alpha = 0.8) #default is 0.5
 #'
 #'
 #' #split by a grouping variable
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp, colour_var = cyl,
-#'                regression_line = T, regression_method = "lm")
+#'                regression_line = TRUE, regression_method = "lm")
 #'
 #'
 #' #fit a polynomial regression line by specifying a regression_formula = formula()
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_method = "lm", regression_se = T,
+#'                regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
 #'                regression_formula = y ~ poly(x, 2))
 #'
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl,
-#'                regression_line = T, regression_method = "lm",
+#'                regression_line = TRUE, regression_method = "lm",
 #'                regression_formula = y ~ poly(x, 3))
 #'
 #'
 #' #fit a non-linear regression line using locally(-weighted) scatterplot smoothing (loess)
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_se = T,
+#'                regression_line = TRUE, regression_se = TRUE,
 #'                regression_method = "loess")
 #'
 #'
@@ -2562,59 +2781,57 @@ plot_violin <- function(data, y,#essential parameters
 #'
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_se = T,
+#'                regression_line = TRUE, regression_se = TRUE,
 #'                regression_method = "loess", loess_span = 0.3)
 #'
 #' #fit a non-linear regression line using a generalized additive model (gam), the default
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_se = T,
+#'                regression_line = TRUE, regression_se = TRUE,
 #'                regression_method = "gam")
 #'
 #' #use a dashed regression line instead
 #' mtcars %>%
 #'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = T, regression_se = T, regression_line_type = "dashed")
+#'                regression_line = TRUE, regression_se = TRUE, regression_line_type = "dashed")
 #'
 #' #more complex example with overplotting
 #' pdata %>%
 #'   plot_scatter(y = y1, x = d, colour_var = g,
-#'                regression_line = T)
+#'                regression_line = TRUE)
 #'
 #' #option 1 for dealing with overplotting: add jittering to offset overlappping points
 #'  pdata %>%
 #'  plot_scatter(y = y1, x = d, colour_var = g,
-#'                jitter = T,
-#'                regression_line = T)
+#'                jitter = TRUE,
+#'                regression_line = TRUE)
 #'
 #' #option 2: make overlapping values more transparent
 #'  pdata %>%
 #'   plot_scatter(y = y1, x = d, colour_var = g,
 #'                alpha = 0.2,
-#'                regression_line = T)
+#'                regression_line = TRUE)
 #'
 #' #option 3: do both and make it interactive
 #' pdata %>%
 #'  plot_scatter(y = y1, x = d, colour_var = g,
-#'               jitter = T, alpha = 0.2,
-#'               regression_line = T, interactive = TRUE)
+#'               jitter = TRUE, alpha = 0.2,
+#'               regression_line = TRUE, interactive = TRUE)
 #'
 #' #add a faceting variable
-#' windows()
 #' pdata %>%
 #'  plot_scatter(y = y1, x = d,
 #'               colour = "black", shape = 21, fill = "green4",
-#'               jitter = T, size = 4, alpha = 0.1,
-#'               regression_line = T, regression_se = T,
+#'               jitter = TRUE, size = 4, alpha = 0.1,
+#'               regression_line = TRUE, regression_se = TRUE,
 #'               facet_var = g,
 #'               ylab = "outcome",
 #'               theme = "bw")
 #'
 #' #open a web page with details on the aesthetic options for ggplot2
 #' mtcars %>%
-#'  plot_scatter(y = mpg, x = hp, aesthetic_options = T)
+#'  plot_scatter(y = mpg, x = hp, aesthetic_options = TRUE)
 #' }
-#'
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
@@ -2647,7 +2864,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                          fill_var_labs = NULL, colour_var_labs = NULL, shape_var_labs = NULL,
                          fill_var_values = NULL, colour_var_values = NULL, shape_var_values = NULL,
                          palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
-                         palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
+                         palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = .8, #viridis colour palette options
 
                          #regression line options
                          regression_line = FALSE, regression_method = "gam",
@@ -2657,12 +2874,14 @@ plot_scatter <- function(data, y, x,#essential parameters
                          regression_method_args = NULL, loess_span = 0.75,
 
                          alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                         theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                         text_size = 14, font = c("sans", "serif", "mono"), #theme options
                          facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                          facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                          legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                          interactive = FALSE, aesthetic_options = FALSE) {#output format
 
+  theme <- match.arg(theme)
   font <- match.arg(font)
   legend_position <- match.arg(legend_position)
   facet_var_strip_position <- match.arg(facet_var_strip_position)
@@ -2670,61 +2889,114 @@ plot_scatter <- function(data, y, x,#essential parameters
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(is.error(class(data[[x]]))) {
+    x <- deparse(substitute(x))
+  } else if(!is.character(x) || length(x) > 1){
+    stop('If specified, `x` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(shape_var)) {
+    if(is.error(class(data[[shape_var]]))) {
+      shape_var <- deparse(substitute(shape_var))
+    }else if(!is.character(shape_var) || length(shape_var) > 1){
+      stop('If specified, `shape_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(size_var)) {
+    if(is.error(class(data[[size_var]]))) {
+      size_var <- deparse(substitute(size_var))
+    }else if(!is.character(size_var) || length(size_var) > 1){
+      stop('If specified, `size_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #fill variable recoding
-  if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
-  }
-  if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
-  }
-  if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+  if(!missing(fill_var) && class(.data[[fill_var]]) %ni% c("numeric", "integer")){
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
+    if(!missing(fill_var) && !missing(fill_var_order)){
+      data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
+    }
+    if(!missing(fill_var) && !missing(fill_var_labs)){
+      data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
+    }
   }
 
   #colour variable recoding
-  if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
-  }
-  if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
-  }
-  if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+  if(!missing(colour_var) && class(.data[[colour_var]]) %ni% c("numeric", "integer")){
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
+    if(!missing(colour_var_order)){
+      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
+    }
+    if(!missing(colour_var_labs)){
+      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
+    }
   }
 
   #shape variable recoding
   if(!missing(shape_var)){
-    data <- dplyr::mutate(data, {{shape_var}} := as.character({{shape_var}}))
+    data <- dplyr::mutate(data, {{shape_var}} := as.character(.data[[shape_var]]))
   }
   if(!missing(shape_var) && !missing(shape_var_order)){
-    data <- dplyr::mutate(data, {{shape_var}} := forcats::fct_relevel({{shape_var}}, levels = !!!shape_var_order))
+    data <- dplyr::mutate(data, {{shape_var}} := forcats::fct_relevel(.data[[shape_var]], levels = !!!shape_var_order))
   }
   if(!missing(shape_var) && !missing(shape_var_labs)){
-    data <- dplyr::mutate(data, {{shape_var}} := forcats::fct_recode({{shape_var}}, !!!shape_var_labs))
+    data <- dplyr::mutate(data, {{shape_var}} := forcats::fct_recode(.data[[shape_var]], !!!shape_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #core plotting layer
   if(jitter == FALSE){
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}},
-                          colour = {{colour_var}}, fill = {{fill_var}},
-                          shape = {{shape_var}}, size = {{size_var}})) +
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
+                                                   colour = colour_var, fill = fill_var,
+                                                   shape = shape_var, size = size_var)) +
       ggplot2::geom_point(alpha = alpha, ...)
 
   } else if(jitter == TRUE){
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}},
-                          colour = {{colour_var}}, fill = {{fill_var}},
-                          shape = {{shape_var}}, size = {{size_var}})) +
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
+                                                   colour = colour_var, fill = fill_var,
+                                                   shape = shape_var, size = size_var)) +
       ggplot2::geom_jitter(alpha = alpha, ...)
   }
 
@@ -2738,40 +3010,89 @@ plot_scatter <- function(data, y, x,#essential parameters
       p <- p +
         ggplot2::scale_fill_manual(values = fill_var_values)
     } else {
-      p <- p +
-        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
-                                      option = palette, direction = palette_direction)
+      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+      } else {
+        p <- p +
+          ggplot2::scale_fill_viridis_c(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+      }
     }
   } else if(missing(fill_var) && !missing(colour_var)) {
-    if(!missing(colour_var_values)){
+    if(!missing(colour_var_values) && class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
       p <- p +
         ggplot2::scale_colour_manual(values = colour_var_values)
     } else {
-      p <- p +
-        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
-                                        option = palette, direction = palette_direction)
+      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      } else {
+        p <- p +
+          ggplot2::scale_colour_viridis_c(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      }
     }
   } else if(!missing(fill_var) && !missing(colour_var)) {
     if(!missing(fill_var_values) && missing(colour_var_values)){
-      p <- p +
-        ggplot2::scale_fill_manual(values = fill_var_values) +
-        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
-                                        option = palette, direction = palette_direction)
+      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_fill_manual(values = fill_var_values) +
+          ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      } else {
+        p <- p +
+          ggplot2::scale_fill_manual(values = fill_var_values) +
+          ggplot2::scale_colour_viridis_c(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      }
     } else if(missing(fill_var_values) && !missing(colour_var_values)) {
-      p <- p +
-        ggplot2::scale_colour_manual(values = colour_var_values) +
-        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
-                                      option = palette, direction = palette_direction)
+      if(class(.data[[fill_var]]) %ni% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_colour_manual(values = colour_var_values) +
+          ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+      } else {
+        p <- p +
+          ggplot2::scale_colour_manual(values = colour_var_values) +
+          ggplot2::scale_fill_viridis_c(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+      }
     } else if(!missing(fill_var_values) && !missing(colour_var_values)) {
       p <- p +
         ggplot2::scale_fill_manual(values = fill_var_values) +
         ggplot2::scale_colour_manual(values = colour_var_values)
     } else {
-      p <- p +
-        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+      if(class(.data[[fill_var]]) %ni% c("numeric", "integer") &&
+         class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
                                         option = palette, direction = palette_direction) +
-        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
-                                      option = palette, direction = palette_direction)
+          ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      } else if(class(.data[[fill_var]]) %in% c("numeric", "integer") &&
+                class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_fill_viridis_c(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction) +
+          ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      } else if(class(.data[[fill_var]]) %ni% c("numeric", "integer") &&
+                class(.data[[colour_var]]) %in% c("numeric", "integer")) {
+        p <- p +
+          ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction) +
+          ggplot2::scale_colour_viridis_c(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      } else {
+        p <- p +
+          ggplot2::scale_fill_viridis_c(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction) +
+          ggplot2::scale_colour_viridis_c(begin = palette_begin, end = palette_end,
+                                          option = palette, direction = palette_direction)
+      }
     }
   }
   if (!missing(shape_var) && !missing(shape_var_values)){
@@ -2787,7 +3108,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     if(regression_line == TRUE && missing(regression_formula)){
       if(regression_method != "gam"){
         p <- p +
-          ggplot2::stat_smooth(method = regression_method,
+          ggplot2::stat_smooth(method = regression_method, formula = y ~ x,
                                se = regression_se, alpha = regression_alpha,
                                linetype = regression_line_type, colour = regression_line_colour,
                                size = regression_line_size, fullrange = regression_line_full_range,
@@ -2795,7 +3116,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                method.args = regression_method_args)
       } else if(regression_method == "gam"){
         p <- p +
-          ggplot2::stat_smooth(method = regression_method, formula = y ~ s(x),
+          ggplot2::stat_smooth(method = regression_method, formula = y ~ s(x, bs = "cr"),
                                se = regression_se, alpha = regression_alpha,
                                linetype = regression_line_type, colour = regression_line_colour,
                                size = regression_line_size, fullrange = regression_line_full_range,
@@ -2815,7 +3136,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     if(regression_line == TRUE && missing(regression_formula)){
       if(regression_method != "gam"){
         p <- p +
-          ggplot2::stat_smooth(method = regression_method,
+          ggplot2::stat_smooth(method = regression_method, formula = y ~ x,
                                se = regression_se, alpha = regression_alpha,
                                linetype = regression_line_type,
                                size = regression_line_size, fullrange = regression_line_full_range,
@@ -2823,7 +3144,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                method.args = regression_method_args)
       } else if(regression_method == "gam"){
         p <- p +
-          ggplot2::stat_smooth(method = regression_method, formula = y ~ s(x),
+          ggplot2::stat_smooth(method = regression_method, formula = y ~ s(x, bs = "cr"),
                                se = regression_se, alpha = regression_alpha,
                                linetype = regression_line_type,
                                size = regression_line_size, fullrange = regression_line_full_range,
@@ -2839,6 +3160,26 @@ plot_scatter <- function(data, y, x,#essential parameters
                              geom = regression_geom, level = ci_level, span = loess_span,
                              method.args = regression_method_args)
     }
+  }
+
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
   }
 
   #modification of x/y-axis limits & transformations
@@ -2887,7 +3228,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     }
   }
 
-  #modification of axis labels
+  #labels
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
@@ -2906,34 +3247,11 @@ plot_scatter <- function(data, y, x,#essential parameters
   if(!missing(size_var_title)){
     p <- p + ggplot2::labs(size = size_var_title)
   }
-
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -2941,7 +3259,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -2957,8 +3275,7 @@ plot_scatter <- function(data, y, x,#essential parameters
   }
 }
 
-
-# start of plot_bar -------------------------------------------------------
+# plot_bar ----------------------------------------------------------------
 #' @title
 #'
 #' Generate a bar plot.
@@ -2981,9 +3298,11 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom forcats fct_infreq
 #' @importFrom forcats fct_rev
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
 #' @importFrom ggplot2 scale_x_continuous
@@ -3010,16 +3329,18 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @param data A data frame or tibble containing at least one categorical
 #'   variable.
 #'
-#' @param x A categorical variable you want to obtain separate bar plots for. If
+#' @param x A categorical variable you want to obtain separate bar plots for (quoted or
+#'   unquoted), e.g. x = "variable" or x = variable. If
 #'   you want to plot all bars on top of each other (position = "fill" or
 #'   position = "stack") to form a single banded bar leave "x" blank and assign
 #'   a variable to either fill_var or colour_var instead. N.B. failing to assign
 #'   a variable to x will also remove x-axis ticks and labels.
 #'
 #' @param y A numeric variable containing the values you would like plotted on
-#'   the y-axis. If y is not specified, then the stat = "count" option will be
-#'   used for \code{\link[ggplot2]{geom_bar}} and the counts of the variable(s)
-#'   assigned to x, fill_var, and/or colour_var will be plotted on the y-axis.
+#'   the y-axis (quoted or unquoted), e.g. y = "variable" or y = variable. If y
+#'   is not specified, then the stat = "count" option will be used for
+#'   \code{\link[ggplot2]{geom_bar}} and the counts of the variable(s) assigned
+#'   to x, fill_var, and/or colour_var will be plotted on the y-axis.
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_bar}}, e.g. colour or fill, to be applied
@@ -3041,13 +3362,14 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   \code{\link[ggplot2]{position_dodge2}} for details.
 #'
 #' @param fill_var Use if you want to assign a variable to the bar fill colour,
-#'   e.g. fill_var = grouping_variable. Produces separate sets of bars for each
-#'   level of the fill variable. See \code{\link[ggplot2]{aes}} for details.
+#'   e.g. fill_var = "grouping_variable" or fill_var = grouping_variable.
+#'   Produces separate sets of bars for each level of the fill variable. See
+#'   \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param colour_var Use if you want to assign a variable to the bar outline
-#'   colour, e.g. colour_var = grouping_variable. Produces separate sets of
-#'   bars for each level of the colour variable. See \code{\link[ggplot2]{aes}}
-#'   for details.
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
 #'   "x-axis label"
@@ -3181,7 +3503,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   \code{\link[ggplot2]{coord_flip}} for details.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -3193,8 +3515,9 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -3281,15 +3604,25 @@ plot_bar <- function(data, x = NULL,
                      x_var_labs = NULL, fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
                      fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                      palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
-                     palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
-                     alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
+                     palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.9, #viridis colour palette options
+                     alpha = 0.8, greyscale = FALSE, #control transparency, convert to greyscale
                      line_size = 1,
                      coord_flip = FALSE,
-                     theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                     theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                     text_size = 14, font = c("sans", "serif", "mono"), #theme options
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                      facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                      legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                      interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  theme <- match.arg(theme)
+  position <- match.arg(position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
   if(missing(x) && missing(y) && missing(fill_var) && missing(colour_var)) {
     stop('At least one of "x", "y", "fill_var", or "colour_var" must be specified.')
@@ -3309,112 +3642,147 @@ plot_bar <- function(data, x = NULL,
       stop('"colour_var_order_by_y" should be one of "d", "a", or "i"')
     }
   }
-  position <- match.arg(position)
-  font <- match.arg(font)
-  legend_position <- match.arg(legend_position)
-  facet_var_strip_position <- match.arg(facet_var_strip_position)
-  palette <- match.arg(palette)
-  palette_direction <- match.arg(palette_direction)
-  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+  if(!missing(x)) {
+    if(is.error(class(data[[x]]))) {
+      x <- deparse(substitute(x))
+    } else if(!is.character(x) || length(x) > 1){
+      stop('If specified, `x` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(y)) {
+    if(is.error(class(data[[y]]))) {
+      y <- deparse(substitute(y))
+    } else if(!is.character(y) || length(y) > 1){
+      stop('If specified, `y` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
 
   #x-variable recoding
   if(!missing(x)){
-    data <- dplyr::mutate(data, {{x}} := as.character({{x}}))
+    data <- dplyr::mutate(data, {{x}} := as.character(.data[[x]]))
+  } else {
+    data <- dplyr::mutate(data, .x = 0)
   }
   if(!missing(x) && !missing(x_var_order_by_y)) {
     if(!missing(y)) {
       if(x_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = TRUE))
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder(.data[[x]], .data[[y]], .desc = TRUE))
       } else {
-        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = FALSE))
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder(.data[[x]], .data[[y]], .desc = FALSE))
       }
     } else {
       if(x_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{x}} := forcats::fct_infreq({{x}}))
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_infreq(.data[[x]]))
       } else {
-        data <- dplyr::mutate(data, {{x}} := forcats::fct_rev(forcats::fct_infreq({{x}})))
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_rev(forcats::fct_infreq(.data[[x]])))
       }
     }
   }
   if(!missing(x) && !missing(x_var_order)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel(.data[[x]], levels = !!!x_var_order))
   }
   if(!missing(x) && !missing(x_var_labs)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode(.data[[x]], !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order_by_y)) {
     if(!missing(y)) {
       if(fill_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = TRUE))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], .data[[y]], .desc = TRUE))
       } else {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = FALSE))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], .data[[y]], .desc = FALSE))
       }
     } else {
       if(fill_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_infreq({{fill_var}}))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_infreq(.data[[fill_var]]))
       } else {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_rev(forcats::fct_infreq({{fill_var}})))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_rev(forcats::fct_infreq(.data[[fill_var]])))
       }
     }
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order_by_y)) {
     if(!missing(y)) {
       if(colour_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = TRUE))
+        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = TRUE))
       } else {
-        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = FALSE))
+        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = FALSE))
       }
     } else {
       if(colour_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_infreq({{colour_var}}))
+        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_infreq(.data[[colour_var]]))
       } else {
-        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_rev(forcats::fct_infreq({{colour_var}})))
+        data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_rev(forcats::fct_infreq(.data[[colour_var]])))
       }
     }
   }
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
   if(!missing(y) && !missing(x)) {
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}, colour = {{colour_var}}))
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, fill = fill_var, colour = colour_var))
   } else if (!missing(x)) {
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, fill = fill_var, colour = colour_var))
   } else if (!missing(y) && missing(x)) {
-    p <- ggplot2::ggplot(data, ggplot2::aes(y = {{y}}, x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(y = y, x = ".x", fill = fill_var, colour = colour_var))
   } else {
-    p <- ggplot2::ggplot(data, ggplot2::aes(x = 1, fill = {{fill_var}}, colour = {{colour_var}}))
+    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = ".x", fill = fill_var, colour = colour_var))
   }
 
   #add the geom layer
@@ -3482,6 +3850,40 @@ plot_bar <- function(data, x = NULL,
     }
   }
 
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
+  #misc
+  if(omit_legend == TRUE){
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  if(legend_position != "right"){
+    p <- p + ggplot2::theme(legend.position = legend_position)
+  }
+  if(!missing(facet_var)){
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
+  }
+  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
+  }
+
   #modification of y-axis limits & transformations
   if(!missing(ylim) && coord_flip == FALSE) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
@@ -3499,13 +3901,19 @@ plot_bar <- function(data, x = NULL,
   }
 
   #modification of axis labels
+  if(missing(x) && coord_flip == FALSE){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  } else if (missing(x) && coord_flip == TRUE) {
+    p <- p + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                            axis.text.y = ggplot2::element_blank(),
+                            axis.ticks.y = ggplot2::element_blank())
+  }
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   } else if(missing(x)) {
     p <- p + ggplot2::labs(x = NULL)
-  }
-  if(missing(x)) {
-    p <- p + scale_x_continuous(breaks = NULL)
   }
   if(!missing(ylab)){
     p <- p + ggplot2::labs(y = ylab)
@@ -3518,45 +3926,8 @@ plot_bar <- function(data, x = NULL,
   if(!missing(colour_var_title)){
     p <- p + ggplot2::labs(color = colour_var_title)
   }
-
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
-  }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
-  if(omit_legend == TRUE){
-    p <- p + ggplot2::theme(legend.position = "none")
-  }
-  if(legend_position != "right"){
-    p <- p + ggplot2::theme(legend.position = legend_position)
-  }
-  if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
-  }
-  if(!missing(facet_var) & facet_var_text_bold == TRUE){
-    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -3569,7 +3940,8 @@ plot_bar <- function(data, x = NULL,
   }
 }
 
-# start of plot_stat_error -------------------------------------------------------
+
+# plot_stat_error ---------------------------------------------------------
 #' @title
 #'
 #' Plot a sample mean or median +/- error bars.
@@ -3594,6 +3966,7 @@ plot_bar <- function(data, x = NULL,
 #' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 geom_errorbar
 #' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 position_dodge
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_colour_manual
@@ -3616,6 +3989,7 @@ plot_bar <- function(data, x = NULL,
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom rlang .data
 #' @importFrom stats quantile
 #' @importFrom stats qnorm
 #' @importFrom stats var
@@ -3626,9 +4000,11 @@ plot_bar <- function(data, x = NULL,
 #' @param data A data frame or tibble containing the dependent measure "y", the
 #'   independent measure "x" (optional), and any grouping variables or covariates.
 #'
-#' @param y A numeric variable you want to plot against x.
+#' @param y A numeric variable you want to plot on the y-axis (quoted or
+#'   unquoted), e.g. y = "variable" or y = variable.
 #'
-#' @param x A categorical variable you want to plot against y.
+#' @param x A categorical variable you want to plot on the x-axis (quoted or
+#'   unquoted), e.g. x = "variable" or x = variable.
 #'
 #' @param geom Determines whether the chosen summary statistic is displayed
 #'   using \code{\link[ggplot2]{geom_bar}} (geom = "bar"; the default) or
@@ -3737,11 +4113,12 @@ plot_bar <- function(data, x = NULL,
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
 #' @param fill_var Use if you want to assign a variable to the point fill
-#'   colour, e.g. fill_var = grouping_variable. Produces separate sets of points
-#'   for each level of the fill variable. See \code{\link[ggplot2]{aes}} for
-#'   details. Note: for geom = "point", fill_var and fill only affect shapes
-#'   21-24 (21 is the default). To split the data by a variable based on colour,
-#'   it is therefore easier to use colour_var for this particular plot geometry.
+#'   colour, e.g. fill_var = "grouping_variable" or fill_var =
+#'   grouping_variable. Produces separate sets of points for each level of the
+#'   fill variable. See \code{\link[ggplot2]{aes}} for details. Note: for geom =
+#'   "point", fill_var and fill only affect shapes 21-24 (21 is the default). To
+#'   split the data by a variable based on colour, it is therefore easier to use
+#'   colour_var for this particular plot geometry.
 #'
 #' @param fill_var_order If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the order of the variable groups, e.g. fill_var =
@@ -3765,9 +4142,9 @@ plot_bar <- function(data, x = NULL,
 #'   this allows you to modify the variable label in the plot legend.
 #'
 #' @param colour_var Use if you want to assign a variable to the point outline
-#'   colour, e.g. colour_var = grouping_variable. Produces separate sets of
-#'   points for each level of the colour variable. See
-#'   \code{\link[ggplot2]{aes}} for details.
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of points for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param colour_var_order If a variable has been assigned to colour using
 #'   colour_var, this allows you to modify the order of the variable groups,
@@ -3869,7 +4246,7 @@ plot_bar <- function(data, x = NULL,
 #'   0.5.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -3889,8 +4266,9 @@ plot_bar <- function(data, x = NULL,
 #'   Options include "right" (the default), "left", "top", & "bottom".
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -3950,17 +4328,17 @@ plot_bar <- function(data, x = NULL,
 #'
 #' mtcars %>% plot_stat_error(y = mpg, x = cyl, colour = "blue", geom = "point")
 #'
-#' \dontrun{
+#' \donttest{
 #'
 #' pdata %>%
-#'   plot_stat_error(y = y1, x = d, colour_var = g, print_stats = T,
+#'   plot_stat_error(y = y1, x = d, colour_var = g, print_stats = TRUE,
 #'                   geom = "point", p_size = 3,
-#'                   add_lines = T,
+#'                   add_lines = TRUE,
 #'                   dodge_width = 0,
 #'                   alpha = 0.6)
 #'
 #' pdata %>%
-#'  plot_stat_error(y = y1, x = g, coord_flip = T,
+#'  plot_stat_error(y = y1, x = g, coord_flip = TRUE,
 #'                  fill_var = g, geom = "point", eb_size = 0.6,
 #'                  alpha = 0.6)
 #'
@@ -3975,7 +4353,7 @@ plot_bar <- function(data, x = NULL,
 #'
 #' pdata %>%
 #'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-#'                   stat = "mean", error = "ci", ci_level = 0.8, interactive = T)
+#'                   stat = "mean", error = "ci", ci_level = 0.8, interactive = TRUE)
 #'
 #' #when output = "ps" the plot is stored as the 1st element of a
 #' #list
@@ -3987,9 +4365,7 @@ plot_bar <- function(data, x = NULL,
 #' out$plot #print the plot to the appropriate active graphics device
 #'
 #' out$stats #print the descriptive summary table with the values used for plotting to the console
-#'
 #' }
-#'
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
@@ -4003,10 +4379,10 @@ plot_bar <- function(data, x = NULL,
 #' Efron, B., & Tibshirani, R. J. (1993). An introduction to the bootstrap. New
 #' York: Chapman & Hall.
 #'
-#' @seealso \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_line}},
+#' @seealso \code{\link{plot_stat_error}}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_line}},
 #'   \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
 #'   \code{\link[base]{mean}}, \code{\link[stats]{sd}}, \code{\link[stats]{quantile}},
-#'   \code{\link[boot]{boot.ci}}, \code{\link{median_ci}},
+#'   \code{\link[boot]{boot.ci}}, \code{\link{median_ci}}
 #'
 #' @export
 plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = c("mean", "median"),
@@ -4022,14 +4398,15 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                             colour_var = NULL, colour_var_order = NULL, colour_var_values = NULL,
                             colour_var_labs = NULL, colour_var_title = NULL,
                             palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
-                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
+                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8, #viridis colour palette options
                             greyscale = FALSE,
-                            b_width = 0.75, p_size = 2, p_shape = 21,
+                            b_width = 0.75, p_size = 3, p_shape = 21,
                             dodge_width = 0.9, eb_size = 0.3, eb_width = 0.2, eb_alpha = 1,
                             eb_line_type = 1, eb_colour = NULL,
                             add_lines = F, line_alpha = 0.75, line_group = NULL,
                             line_colour = NULL, line_type = 1, line_size = 0.5,
-                            theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),
+                            theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                            text_size = 14, font = c("sans", "serif", "mono"),
                             coord_flip = FALSE, omit_legend = FALSE,
                             legend_position = c("right", "left", "bottom", "top"),
                             facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL,
@@ -4038,6 +4415,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                             print_stats = F, aesthetic_options = FALSE,
                             output = "p", interactive = FALSE, na.rm = TRUE){
 
+  theme <- match.arg(theme)
   geom <- match.arg(geom)
   stat <- match.arg(stat)
   error <- match.arg(error)
@@ -4049,120 +4427,159 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(x)) {
+    if(is.error(class(data[[x]]))) {
+      x <- deparse(substitute(x))
+    } else if(!is.character(x) || length(x) > 1){
+      stop('If specified, `x` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #x-variable recoding
   if(!missing(x)){
-    data <- dplyr::mutate(data, {{x}} := as.character({{x}}))
+    data <- dplyr::mutate(data, {{x}} := as.character(.data[[x]]))
   }
   if(!missing(x_var_order)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel(.data[[x]], levels = !!!x_var_order))
   }
   if(!missing(x_var_labs)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode(.data[[x]], !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
   DT <- data.table::as.data.table(data)
-  ST <- deparse(substitute(stat))
-  Y <- deparse(substitute(y))
+  ST <- stat
 
-  if(!is.numeric(DT[[Y]])){
+  if(!is.numeric(DT[[y]])){
     stop("y must be a numeric vector or column of a data frame")
   }
 
   #grouping options
   if (!missing(x) && missing(fill_var) && missing(colour_var) && missing(facet_var)) {
-    G <- deparse(substitute(x))
+    G <- x
   } else if (missing(x) && !missing(fill_var) && missing(colour_var) && missing(facet_var)) {
-    G <- deparse(substitute(fill_var))
+    G <- fill_var
   } else if (missing(x) && missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-    G <- deparse(substitute(colour_var))
+    G <- colour_var
   } else if (missing(x) && missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-    G <- deparse(substitute(facet_var))
+    G <- facet_var
   } else if (!missing(x) && !missing(fill_var) && missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(fill_var)))
+    G <- c(x, fill_var)
   } else if (!missing(x) && missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)))
+    G <- c(x, colour_var)
   } else if (!missing(x) && missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(facet_var)))
+    G <- c(x, facet_var)
   } else if (missing(x) && !missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)))
+    G <- c(fill_var, colour_var)
   } else if (missing(x) && !missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+    G <- c(fill_var, facet_var)
   } else if (missing(x) && missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+    G <- c(colour_var, facet_var)
   } else if (!missing(x) && !missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)))
+    G <- c(fill_var, colour_var)
   } else if (!missing(x) && !missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+    G <- c(x, fill_var, facet_var)
   } else if (!missing(x) && missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+    G <- c(x, colour_var, facet_var)
   } else if (missing(x) && !missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(fill_var)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+    G <- c(fill_var, colour_var, facet_var)
   } else if (!missing(x) && !missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(fill_var)), deparse(substitute(facet_var)))
+    G <- c(x, colour_var, fill_var, facet_var)
   }
 
   #produce the descriptive stats & plot
   if(stat == "mean" && error == "se"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     se = round(se(get(Y), na.rm = na.rm), 3)),
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     se = round(se(get(y), na.rm = na.rm), 3)),
                  by = eval(G)]
       desc <- tibble::as_tibble(desc)
 
     } else {
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     se = round(se(get(Y), na.rm = na.rm), 3))]
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     se = round(se(get(y), na.rm = na.rm), 3))]
       desc <- tibble::as_tibble(desc)
     }
-    if (print_stats == T){
+    if (print_stats == TRUE){
       print(desc, n = Inf)
     }
 
     if(missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = "", fill = {{fill_var}}, colour = {{colour_var}}))
+      desc <- dplyr::mutate(desc, .x = 0)
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = ".x", fill = fill_var, colour = colour_var))
 
     } else if(!missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = x, fill = fill_var, colour = colour_var))
     }
 
     if (geom == "bar") {
@@ -4186,7 +4603,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       position = ggplot2::position_dodge(dodge_width))
       p
     } else if (!missing(eb_colour) && !missing(colour_var)){
-      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - se, ymax = mean + se, group = {{colour_var}}),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - se, ymax = mean + se, group = .data[[colour_var]]),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_line_type, colour = eb_colour,
                                       position = ggplot2::position_dodge(dodge_width))
@@ -4196,38 +4613,39 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 SE"))
+      p <- p + ggplot2::labs(y = paste0("mean ", y, " \u00B1 SE"))
     }
 
   } else if(stat == "mean" && error == "sd"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     sd = round(stats::sd(get(Y), na.rm = na.rm), 3)),
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     sd = round(stats::sd(get(y), na.rm = na.rm), 3)),
                  by = eval(G)]
       desc <- tibble::as_tibble(desc)
 
     } else {
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     sd = round(stats::sd(get(Y), na.rm = na.rm), 3))]
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     sd = round(stats::sd(get(y), na.rm = na.rm), 3))]
       desc <- tibble::as_tibble(desc)
     }
-    if (print_stats == T){
+    if (print_stats == TRUE){
       print(desc, n = Inf)
     }
 
     if(missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = "", fill = {{fill_var}}, colour = {{colour_var}}))
+      desc <- dplyr::mutate(desc, .x = 0)
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = ".x", fill = fill_var, colour = colour_var))
 
     } else if(!missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = x, fill = fill_var, colour = colour_var))
     }
 
     if (geom == "bar") {
@@ -4251,7 +4669,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       position = ggplot2::position_dodge(dodge_width))
       p
     } else if (!missing(eb_colour) && !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - sd, ymax = mean + sd, group = {{colour_var}}),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - sd, ymax = mean + sd, group = .data[[colour_var]]),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_line_type, colour = eb_colour,
                                       position = ggplot2::position_dodge(dodge_width))
@@ -4261,38 +4679,38 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 s"))
+      p <- p + ggplot2::labs(y = paste0("mean ", y, " \u00B1 s"))
     }
 
   } else if(stat == "mean" && error == "var"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     var = round(stats::var(get(Y), na.rm = na.rm), 3)),
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     var = round(stats::var(get(y), na.rm = na.rm), 3)),
                  by = eval(G)]
       desc <- tibble::as_tibble(desc)
 
     } else {
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     var = round(stats::var(get(Y), na.rm = na.rm), 3))]
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     var = round(stats::var(get(y), na.rm = na.rm), 3))]
       desc <- tibble::as_tibble(desc)
     }
-    if (print_stats == T){
+    if (print_stats == TRUE){
       print(desc, n = Inf)
     }
 
     if(missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = "", fill = {{fill_var}}, colour = {{colour_var}}))
-
+      desc <- dplyr::mutate(desc, .x = 0)
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = ".x", fill = fill_var, colour = colour_var))
     } else if(!missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = x, fill = fill_var, colour = colour_var))
     }
 
     if (geom == "bar") {
@@ -4302,7 +4720,6 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
       p  <- p + ggplot2::geom_point(position = ggplot2::position_dodge(dodge_width),
                                     size = p_size, shape = p_shape, ...)
     }
-
     if (missing(eb_colour)){
       p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - var, ymax = mean + var),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
@@ -4316,7 +4733,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       position = ggplot2::position_dodge(dodge_width))
       p
     } else if (!missing(eb_colour) && !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - var, ymax = mean + var, group = {{colour_var}}),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - var, ymax = mean + var, group = .data[[colour_var]]),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_line_type, colour = eb_colour,
                                       position = ggplot2::position_dodge(dodge_width))
@@ -4326,40 +4743,41 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 s\u00B2"))
+      p <- p + ggplot2::labs(y = paste0("mean ", y, " \u00B1 s\u00B2"))
     }
 
   } else if(stat == "mean" && error == "ci"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     lower = round(mean(get(Y), na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     upper = round(mean(get(Y), na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3)),
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     lower = round(mean(get(y), na.rm = TRUE) - (abs(stats::qnorm((1-ci_level)/2))*se(get(y))), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     upper = round(mean(get(y), na.rm = TRUE) + (abs(stats::qnorm((1-ci_level)/2))*se(get(y))), 3)),
                  by = eval(G)]
       desc <- tibble::as_tibble(desc)
 
     } else {
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     lower = round(mean(get(Y), na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3),
-                     mean = round(sum(get(Y), na.rm = na.rm)/length(na.omit(get(Y))), 3),
-                     upper = round(mean(get(Y), na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se(get(Y))), 3))]
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     lower = round(mean(get(y), na.rm = TRUE) - (abs(stats::qnorm((1-ci_level)/2))*se(get(y))), 3),
+                     mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), 3),
+                     upper = round(mean(get(y), na.rm = TRUE) + (abs(stats::qnorm((1-ci_level)/2))*se(get(y))), 3))]
       desc <- tibble::as_tibble(desc)
     }
-    if (print_stats == T){
+    if (print_stats == TRUE){
       print(desc, n = Inf)
     }
 
     if(missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = "", fill = {{fill_var}}, colour = {{colour_var}}))
+      desc <- dplyr::mutate(desc, .x = 0)
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = ".x", fill = fill_var, colour = colour_var))
 
     } else if(!missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = mean, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "mean", x = x, fill = fill_var, colour = colour_var))
     }
 
     if (geom == "bar") {
@@ -4383,7 +4801,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       linetype = eb_line_type, colour = eb_colour)
       p
     } else if (!missing(eb_colour) && !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper, group = {{colour_var}}),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper, group = .data[[colour_var]]),
                                       position = ggplot2::position_dodge(dodge_width),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_line_type, colour = eb_colour)
@@ -4392,39 +4810,39 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = paste0("mean ", Y, " \u00B1 ", scales::percent(ci_level),  " CI"))
+      p <- p + ggplot2::labs(y = paste0("mean ", y, " \u00B1 ", scales::percent(ci_level),  " CI"))
     }
 
   } else if(stat == "median" && error == "quartile"){
     if(!missing(x) || !missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     p25 = round(stats::quantile(get(Y), probs = 0.25, na.rm = na.rm), 3),
-                     p50 = round(stats::quantile(get(Y), probs = 0.50, na.rm = na.rm), 3),
-                     p75 = round(stats::quantile(get(Y), probs = 0.75, na.rm = na.rm), 3)),
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     p25 = round(stats::quantile(get(y), probs = 0.25, na.rm = na.rm), 3),
+                     p50 = round(stats::quantile(get(y), probs = 0.50, na.rm = na.rm), 3),
+                     p75 = round(stats::quantile(get(y), probs = 0.75, na.rm = na.rm), 3)),
                  by = eval(G)]
       desc <- tibble::as_tibble(desc)
 
     } else {
       desc <- DT[, .(cases = .N,
-                     n = sum(!is.na(get(Y))),
-                     na = sum(is.na(get(Y))),
-                     p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3),
-                     p25 = round(stats::quantile(get(Y), probs = 0.25, na.rm = na.rm), 3),
-                     p50 = round(stats::quantile(get(Y), probs = 0.50, na.rm = na.rm), 3),
-                     p75 = round(stats::quantile(get(Y), probs = 0.75, na.rm = na.rm), 3))]
+                     n = sum(!is.na(get(y))),
+                     na = sum(is.na(get(y))),
+                     p_na = round(sum(is.na(get(y)))/length(get(y)), 3),
+                     p25 = round(stats::quantile(get(y), probs = 0.25, na.rm = na.rm), 3),
+                     p50 = round(stats::quantile(get(y), probs = 0.50, na.rm = na.rm), 3),
+                     p75 = round(stats::quantile(get(y), probs = 0.75, na.rm = na.rm), 3))]
       desc <- tibble::as_tibble(desc)
     }
-    if (print_stats == T){
+    if (print_stats == TRUE){
       print(desc, n = Inf)
     }
     if(missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = p50, x = "", fill = {{fill_var}}, colour = {{colour_var}}))
-
+      desc <- dplyr::mutate(desc, .x = 0)
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "p50", x = ".x", fill = fill_var, colour = colour_var))
     } else if(!missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = p50, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "p50", x = x, fill = fill_var, colour = colour_var))
     }
 
     if (geom == "bar") {
@@ -4447,7 +4865,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       position = ggplot2::position_dodge(dodge_width))
       p
     } else if (!missing(eb_colour) && !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = p25, ymax = p75, group = {{colour_var}}),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = p25, ymax = p75, group = .data[[colour_var]]),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_line_type, colour = eb_colour,
                                       position = ggplot2::position_dodge(dodge_width))
@@ -4456,20 +4874,20 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     if(!missing(ylab)){
       p <- p + ggplot2::labs(y = ylab)
     } else if(missing(ylab)){
-      p <- p + ggplot2::labs(y = paste0("median ", Y, " \u00B1 quartile"))
+      p <- p + ggplot2::labs(y = paste0("median ", y, " \u00B1 quartile"))
     }
   } else if(stat == "median" && error == "ci"){
     if(!missing(x) || !missing(fill_var) || !missing(colour_var) || !missing(facet_var)){
       desc1 <- DT[, .(cases = .N,
-                      n = sum(!is.na(get(Y))),
-                      na = sum(is.na(get(Y))),
-                      p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3)),
+                      n = sum(!is.na(get(y))),
+                      na = sum(is.na(get(y))),
+                      p_na = round(sum(is.na(get(y)))/length(get(y)), 3)),
                   by = eval(G)]
       desc1 <- tibble::as_tibble(desc1)
 
       desc2 <- DT[,
                   .(measure = c("lower", "median", "upper"),
-                    value = median_ci(get(Y), replicates = replicates, ci_type = ci_type,
+                    value = median_ci(get(y), replicates = replicates, ci_type = ci_type,
                                       ci_level = ci_level, parallel = parallel, cores = cores)),
                   by = eval(G)]
       desc2 <- stats::na.omit(desc2)
@@ -4480,27 +4898,28 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
       )
     } else {
       desc1 <- DT[, .(cases = .N,
-                      n = sum(!is.na(get(Y))),
-                      na = sum(is.na(get(Y))),
-                      p_na = round(sum(is.na(get(Y)))/length(get(Y)), 3))]
+                      n = sum(!is.na(get(y))),
+                      na = sum(is.na(get(y))),
+                      p_na = round(sum(is.na(get(y)))/length(get(y)), 3))]
       desc1 <- tibble::as_tibble(desc1)
       desc2 <- DT[,
                   .(measure = c("lower", "median", "upper"),
-                    value = median_ci(get(Y), replicates = replicates, ci_type = ci_type,
+                    value = median_ci(get(y), replicates = replicates, ci_type = ci_type,
                                       ci_level = ci_level, parallel = parallel, cores = cores))]
       desc2 <- stats::na.omit(desc2)
       desc2 <- data.table::dcast(desc2, formula = ... ~ measure, value.var = "value")
       desc2 <- tibble::as_tibble(desc2)[,-1]
       desc <- dplyr::bind_cols(desc1, desc2)
     }
-    if (print_stats == T){
+    if (print_stats == TRUE){
       print(desc, n = Inf)
     }
     if(missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = median, x = "", fill = {{fill_var}}, colour = {{colour_var}}))
+      desc <- dplyr::mutate(desc, .x = 0)
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "median", x = ".x", fill = fill_var, colour = colour_var))
 
     } else if(!missing(x)){
-      p <- ggplot2::ggplot(desc, ggplot2::aes(y = median, x = {{x}}, fill = {{fill_var}}, colour = {{colour_var}}))
+      p <- ggplot2::ggplot(desc, ggplot2::aes_string(y = "median", x = x, fill = fill_var, colour = colour_var))
     }
 
     if (geom == "bar") {
@@ -4523,7 +4942,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       position = ggplot2::position_dodge(dodge_width))
       p
     } else if (!missing(eb_colour) && !missing(colour_var)) {
-      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper, group = {{colour_var}}),
+      p <- p + ggplot2::geom_errorbar(ggplot2::aes(ymin = lower, ymax = upper, group = .data[[colour_var]]),
                                       size = eb_size, width = eb_width, alpha = eb_alpha,
                                       linetype = eb_line_type, colour = eb_colour,
                                       position = ggplot2::position_dodge(dodge_width))
@@ -4541,11 +4960,64 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
       } else if(ci_type == "basic") {
         ci_tp <- "basic"
       }
-      p <- p + ggplot2::labs(y = paste0("median ", Y, " \u00B1 ",
+      p <- p + ggplot2::labs(y = paste0("median ", y, " \u00B1 ",
                                         scales::percent(ci_level),  " ", ci_tp,
                                         " CI\n(", scales::comma(replicates)," replicates)"))
     }
   }
+
+  #lines
+  if(add_lines == T && missing(x)){
+    errorCondition("a variable must be assigned to x to connect statistical estimates with lines")
+  } else if (add_lines == T && !missing(x)) {
+    if (missing(fill_var) && missing(colour_var)){
+      if (!missing(line_colour)) {
+        p <- p + ggplot2::geom_line(ggplot2::aes(group = 1), position = ggplot2::position_dodge(dodge_width),
+                                    colour = line_colour, linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      } else {
+        p <- p + ggplot2::geom_line(ggplot2::aes(group = 1), position = ggplot2::position_dodge(dodge_width),
+                                    linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      }
+
+    } else if (!missing(fill_var) && missing(colour_var)){
+      if (!missing(line_colour)) {
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(group = fill_var), position = ggplot2::position_dodge(dodge_width),
+                                    colour = line_colour, linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      } else {
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(group = fill_var), position = ggplot2::position_dodge(dodge_width),
+                                    linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      }
+    } else if (missing(fill_var) && !missing(colour_var)){
+      if (!missing(line_colour)) {
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(group = colour_var), position = ggplot2::position_dodge(dodge_width),
+                                    colour = line_colour, linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      } else {
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(group = colour_var, colour = colour_var),
+                                    position = ggplot2::position_dodge(dodge_width),
+                                    linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      }
+    } else if (!missing(fill_var) && !missing(colour_var) && !missing(line_group)){
+      if (!missing(line_colour)) {
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(group = line_group), position = ggplot2::position_dodge(dodge_width),
+                                    colour = line_colour, linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      } else {
+        p <- p + ggplot2::geom_line(ggplot2::aes_string(group = line_group, colour = line_group),
+                                    position = ggplot2::position_dodge(dodge_width),
+                                    colour = line_colour, linetype = line_type, size = line_size,
+                                    alpha = line_alpha)
+      }
+    } else if (!missing(fill_var) && !missing(colour_var) && missing(line_group)){
+      errorCondition("When variables are assigned to both fill and colour, specify which to use for splitting lines using line_group")
+    }
+  }
+
 
   #modification of the colour or fill values
   if (!missing(fill_var) && missing(colour_var)){
@@ -4589,11 +5061,36 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                                       option = palette, direction = palette_direction)
     }
   }
-  #modification of axis labels
-  if(missing(x)){
+
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
+  #labels
+  if(missing(x) && coord_flip == FALSE){
     p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
                             axis.text.x = ggplot2::element_blank(),
                             axis.ticks.x = ggplot2::element_blank())
+  } else if (missing(x) && coord_flip == TRUE) {
+    p <- p + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                            axis.text.y = ggplot2::element_blank(),
+                            axis.ticks.y = ggplot2::element_blank())
   }
   y_name <- names(dplyr::select(data, {{y}}))
   if(!missing(xlab)){
@@ -4609,85 +5106,6 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     p <- p + ggplot2::labs(title = title)
   }
 
-  #themes
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
-
-  #lines
-  if(add_lines == T && missing(x)){
-    errorCondition("a variable must be assigned to x to connect statistical estimates with lines")
-  } else if (add_lines == T && !missing(x)) {
-    if (missing(fill_var) && missing(colour_var)){
-      if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = 1), position = ggplot2::position_dodge(dodge_width),
-                                    colour = line_colour, linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      } else {
-        p <- p + ggplot2::geom_line(aes(group = 1), position = ggplot2::position_dodge(dodge_width),
-                                    linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      }
-
-    } else if (!missing(fill_var) && missing(colour_var)){
-      if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = {{fill_var}}), position = ggplot2::position_dodge(dodge_width),
-                                    colour = line_colour, linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      } else {
-        p <- p + ggplot2::geom_line(aes(group = {{fill_var}}), position = ggplot2::position_dodge(dodge_width),
-                                    linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      }
-    } else if (missing(fill_var) && !missing(colour_var)){
-      if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = {{colour_var}}), position = ggplot2::position_dodge(dodge_width),
-                                    colour = line_colour, linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      } else {
-        p <- p + ggplot2::geom_line(aes(group = {{colour_var}}, colour = {{colour_var}}),
-                                    position = ggplot2::position_dodge(dodge_width),
-                                    linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      }
-    } else if (!missing(fill_var) && !missing(colour_var) && !missing(line_group)){
-      if (!missing(line_colour)) {
-        p <- p + ggplot2::geom_line(aes(group = {{line_group}}), position = ggplot2::position_dodge(dodge_width),
-                                    colour = line_colour, linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      } else {
-        p <- p + ggplot2::geom_line(aes(group = {{line_group}}, colour = {{line_group}}),
-                                    position = ggplot2::position_dodge(dodge_width),
-                                    colour = line_colour, linetype = line_type, size = line_size,
-                                    alpha = line_alpha)
-      }
-    } else if (!missing(fill_var) && !missing(colour_var) && missing(line_group)){
-      errorCondition("When variables are assigned to both fill and colour, specify which to use for splitting lines using line_group")
-    }
-  }
-  if(missing(x)){
-    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                            axis.text.x = ggplot2::element_blank(),
-                            axis.ticks.x = ggplot2::element_blank())
-  }
   #modification of y-axis limits & transformations
   if(!missing(ylim) && coord_flip == FALSE) {
     p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
@@ -4705,10 +5123,6 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
   }
 
   #misc
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
-
   if(legend_position != "right"){
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
@@ -4723,7 +5137,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 
   #facets
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -4751,8 +5165,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
   }
 }
 
-
-# start of plot_pie -------------------------------------------------------
+# plot_pie ----------------------------------------------------------------
 #' @title
 #'
 #' Generate a pie chart.
@@ -4779,6 +5192,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #' @importFrom forcats fct_rev
 #' @importFrom forcats fct_lump_n
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 aes
@@ -4798,9 +5212,10 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #' @param data A data frame or tibble containing at least one categorical
 #'   variable.
 #'
-#' @param fill_var A categorical variable to assign to the slice fill colour,
-#'   e.g. fill_var = grouping_variable. Produces separate slices each
-#'   level of the fill variable. See \code{\link[ggplot2]{aes}} for details.
+#' @param fill_var A categorical variable to assign to the slice fill colour
+#'   (quoted or unquoted), e.g. fill_var = "grouping_variable" or fill_var =
+#'   grouping_variable. Produces separate slices each level of the fill
+#'   variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param y A numeric variable containing values to be used for calculating pie
 #'   slice sizes. If y is not specified, then pie slice sizes will be based on
@@ -4905,7 +5320,8 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #'
 #' @param facet_var Use if you want separate pie charts for each level of a
 #'   grouping variable (i.e. a facetted plot), e.g. facet_var =
-#'   grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for details.
+#'   "grouping_variable" or facet_var = grouping_variable. See
+#'   \code{\link[ggplot2]{facet_wrap}} for details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -4992,6 +5408,13 @@ plot_pie <- function(data,
                      legend_position = c("right", "left", "bottom", "top"), omit_legend = FALSE, #legend position
                      aesthetic_options = FALSE) {#output format
 
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  legend_position <- match.arg(legend_position)
+  font <- match.arg(font)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+
   if(!is.numeric(title_alignment)) {
     stop('"title_alignment" must be a number between 0 (left) and 1 (right)')
   }
@@ -5006,16 +5429,26 @@ plot_pie <- function(data,
       stop('"slice_text" should be one of "pct", "tot", or "grp"')
     }
   }
-  facet_var_strip_position <- match.arg(facet_var_strip_position)
-  legend_position <- match.arg(legend_position)
-  font <- match.arg(font)
-  palette <- match.arg(palette)
-  palette_direction <- match.arg(palette_direction)
-  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
 
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   } else {
     stop("A categorical variable in the data frame source must be assigned to fill_var!")
   }
@@ -5023,90 +5456,90 @@ plot_pie <- function(data,
   if(!missing(lump_n)) {
     if(!missing(y)) {
       if(!missing(lump_lab)) {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, w = {{y}}, n = lump_n, other_level = lump_lab))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n(.data[[fill_var]], w = .data[[y]], n = lump_n, other_level = lump_lab))
       } else {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, w = {{y}}, n = lump_n, other_level = "other"))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n(.data[[fill_var]], w = .data[[y]], n = lump_n, other_level = "other"))
       }
     } else {
       if(!missing(lump_lab)) {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, n = lump_n, other_level = lump_lab))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n(.data[[fill_var]], n = lump_n, other_level = lump_lab))
       } else {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n({{fill_var}}, n = lump_n, other_level = "other"))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_lump_n(.data[[fill_var]], n = lump_n, other_level = "other"))
       }
     }
   }
 
-  if(data.table::uniqueN(data[[deparse(substitute(fill_var))]]) > 5) {
+  if(data.table::uniqueN(data[[fill_var]]) > 5) {
     warning('Pie charts tend to be difficult to read with more than 5 slices.\n  Consider lumping infrequent categories together with "lump_n" or using plot_bar() to visualize these data.')
   }
   if(!missing(fill_var_order_by_y)) {
     if(!missing(y)) {
       if(fill_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = TRUE))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], w = .data[[y]], .desc = TRUE))
       } else {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder({{fill_var}}, {{y}}, .desc = FALSE))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], w = .data[[y]], .desc = FALSE))
       }
     } else {
       if(fill_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_infreq({{fill_var}}))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_infreq(.data[[fill_var]]))
       } else {
-        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_rev(forcats::fct_infreq({{fill_var}})))
+        data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_rev(forcats::fct_infreq(.data[[fill_var]])))
       }
     }
   }
 
   if(!missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #produce the descriptive stats & plot
   if(missing(y)) {
     if(missing(facet_var)) {
-      plot_data <- dplyr::group_by(data, {{fill_var}})
+      plot_data <- dplyr::group_by(data, .data[[fill_var]])
       plot_data <- dplyr::count(plot_data, name = "n_")
       plot_data <- dplyr::ungroup(plot_data)
-      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
+      plot_data <- dplyr::arrange(plot_data, rev(.data[[fill_var]]))
       plot_data <- dplyr::mutate(plot_data, p_ = n_/sum(n_), st_coords = cumsum(p_) - 0.5*p_)
     } else {
-      plot_data <- dplyr::group_by(data, {{fill_var}}, {{facet_var}})
+      plot_data <- dplyr::group_by(data, .data[[fill_var]], .data[[facet_var]])
       plot_data <- dplyr::count(plot_data, name = "n_")
       plot_data <- dplyr::ungroup(plot_data)
-      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
-      plot_data <- dplyr::group_by(plot_data, {{facet_var}})
+      plot_data <- dplyr::arrange(plot_data, rev(.data[[fill_var]]))
+      plot_data <- dplyr::group_by(plot_data, .data[[facet_var]])
       plot_data <- dplyr::mutate(plot_data, p_ = n_/sum(n_), st_coords = cumsum(p_) - 0.5*p_)
       plot_data <- dplyr::ungroup(plot_data)
     }
   } else {
     if(missing(facet_var)) {
-      plot_data <- dplyr::group_by(data, {{fill_var}})
-      plot_data <- dplyr::summarise(plot_data, ytot = sum({{y}}, na.rm = TRUE), .groups = "drop")
+      plot_data <- dplyr::group_by(data, .data[[fill_var]])
+      plot_data <- dplyr::summarise(plot_data, ytot = sum(.data[[y]], na.rm = TRUE), .groups = "drop")
       plot_data <- dplyr::ungroup(plot_data)
-      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
+      plot_data <- dplyr::arrange(plot_data, rev(.data[[fill_var]]))
       plot_data <- dplyr::mutate(plot_data, p_ = ytot/sum(ytot), st_coords = cumsum(p_) - 0.5*p_)
     } else {
-      plot_data <- dplyr::group_by(data, {{fill_var}}, {{facet_var}})
-      plot_data <- dplyr::summarise(plot_data, ytot = sum({{y}}, na.rm = TRUE), .groups = "drop")
-      plot_data <- dplyr::arrange(plot_data, rev({{fill_var}}))
-      plot_data <- dplyr::group_by(plot_data, {{facet_var}})
+      plot_data <- dplyr::group_by(data, .data[[fill_var]], .data[[facet_var]])
+      plot_data <- dplyr::summarise(plot_data, ytot = sum(.data[[y]], na.rm = TRUE), .groups = "drop")
+      plot_data <- dplyr::arrange(plot_data, rev(.data[[fill_var]]))
+      plot_data <- dplyr::group_by(plot_data, .data[[facet_var]])
       plot_data <- dplyr::mutate(plot_data, p_ = ytot/sum(ytot), st_coords = cumsum(p_) - 0.5*p_)
       plot_data <- dplyr::ungroup(plot_data)
     }
   }
-  p <- ggplot2::ggplot(plot_data, ggplot2::aes(y = p_, x = "", fill = {{fill_var}})) +
+  p <- ggplot2::ggplot(plot_data, ggplot2::aes(y = p_, x = "", fill = .data[[fill_var]])) +
     ggplot2::geom_bar(stat = "identity", position = "stack", width = 1, size = line_size, ...) +
     ggplot2::coord_polar("y", start= 0)
 
@@ -5115,45 +5548,45 @@ plot_pie <- function(data,
   } else if(!missing(slice_text) && missing(slice_text_custom)) {
     if(slice_text == "pct") {
       if(!missing(round_n)) {
-        p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
-                                        label=paste(slice_text_prefix, round(p_*100, round_n), slice_text_suffix)),
+        p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords,
+                                                 label=paste(slice_text_prefix, round(p_*100, round_n), slice_text_suffix)),
                                     colour = slice_text_colour, size = slice_text_size)
       } else {
-        p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
-                                        label=paste(slice_text_prefix, p_*100, slice_text_suffix)),
+        p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords,
+                                                 label=paste(slice_text_prefix, p_*100, slice_text_suffix)),
                                     colour = slice_text_colour, size = slice_text_size)
       }
     } else if (slice_text == "tot") {
       if(missing(y)) {
         if(!missing(round_n)) {
-          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
-                                          label=paste(slice_text_prefix, round(n_, round_n), slice_text_suffix)),
+          p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords,
+                                                   label=paste(slice_text_prefix, round(n_, round_n), slice_text_suffix)),
                                       colour = slice_text_colour, size = slice_text_size)
         } else {
-          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
-                                          label=paste(slice_text_prefix, n_), slice_text_suffix),
+          p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords,
+                                                   label=paste(slice_text_prefix, n_), slice_text_suffix),
                                       colour = slice_text_colour, size = slice_text_size)
         }
       } else {
         if(!missing(round_n)) {
-          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
-                                          label=paste(slice_text_prefix, round(ytot, round_n), slice_text_suffix)),
+          p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords,
+                                                   label=paste(slice_text_prefix, round(ytot, round_n), slice_text_suffix)),
                                       colour = slice_text_colour, size = slice_text_size)
         } else {
-          p <- p + ggplot2::geom_text(aes(x=1, y = st_coords,
-                                          label=paste(slice_text_prefix, ytot, slice_text_suffix)),
+          p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords,
+                                                   label=paste(slice_text_prefix, ytot, slice_text_suffix)),
                                       colour = slice_text_colour, size = slice_text_size)
         }
       }
     } else if (slice_text == "grp") {
-      p <- p + ggplot2::geom_text(aes(x=1, y = st_coords, label=unique(data[[deparse(substitute(fill_var))]])),
+      p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords, label=unique(.data[[fill_var]])),
                                   colour = slice_text_colour, size = slice_text_size)
     }
   } else if(missing(slice_text) && !missing(slice_text_custom)) {
-    if(length(slice_text_custom) != data.table::uniqueN(data[[deparse(substitute(fill_var))]])) {
+    if(length(slice_text_custom) != data.table::uniqueN(data[[fill_var]])) {
       stop('"slice_text_custom" must be a character vector with as many values as there are levels of "fill_var"')
     }
-    p <- p + ggplot2::geom_text(aes(x=1, y = st_coords, label=slice_text_custom),
+    p <- p + ggplot2::geom_text(ggplot2::aes(x=1, y = st_coords, label=slice_text_custom),
                                 colour = slice_text_colour, size = slice_text_size)
   }
 
@@ -5168,10 +5601,12 @@ plot_pie <- function(data,
   if(legend_position != "right"){
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
+
   #convert to greyscale
   if(greyscale == TRUE){
     p <- p + ggplot2::scale_fill_grey()
   }
+
   #title
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
@@ -5180,6 +5615,7 @@ plot_pie <- function(data,
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
+
   #customize fill colours
   if (!missing(fill_var) && !missing(fill_var_values)){
     p <- p +
@@ -5192,11 +5628,12 @@ plot_pie <- function(data,
 
   #facets
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) && facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
   }
+
   #misc
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -5204,9 +5641,7 @@ plot_pie <- function(data,
   return(p)
 }
 
-
-
-# start of plot_raincloud -------------------------------------------------
+# plot_raincloud ----------------------------------------------------------
 #' @title
 #'
 #' Generate a rain cloud plot.
@@ -5223,8 +5658,9 @@ plot_pie <- function(data,
 #' @importFrom forcats fct_relevel
 #' @importFrom forcats fct_recode
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_y_continuous
 #' @importFrom ggplot2 scale_fill_grey
@@ -5255,18 +5691,21 @@ plot_pie <- function(data,
 #' @param data A data frame or tibble containing the dependent measure "y" and
 #'   any grouping variables.
 #'
-#' @param y A numeric variable you want to obtain rain cloud plots for.
+#' @param y A numeric variable you want to obtain rain cloud plots for (quoted
+#'   or unquoted), e.g. y = "variable" or y = variable.
 #'
 #' @param x A categorical variable you want to obtain separate rain cloud plots
-#'   of y for (optional).
+#'   of y for (optional; quoted or unquoted), e.g. x = "variable" or x =
+#'   variable.
 #'
 #' @param fill_var Use if you want to assign a variable to the fill colour of
 #'   the half-violin and scattered points on the plot, e.g. fill_var =
-#'   grouping_variable. Produces separate rain cloud plots for each level of the
-#'   fill variable. See \code{\link[ggplot2]{aes}} for details. N.B. If you
-#'   intend to add box plots (via box_plot = TRUE), the same variable should be
-#'   assigned to both the x-axis and fill_var, otherwise the box plots will not
-#'   show up in the correct locations.
+#'   "grouping_var" or fill_var = grouping_variable. Produces separate rain
+#'   cloud plots for each level of the fill variable. See
+#'   \code{\link[ggplot2]{aes}} for details. N.B. If you intend to add box plots
+#'   (via box_plot = TRUE), the same variable should be assigned to both the
+#'   x-axis and fill_var, otherwise the box plots will not show up in the
+#'   correct locations.
 #'
 #' @param violin_colour Outline colour to use for the half-violin plot segment
 #'   of the rain cloud plot. Default is "black". You can use
@@ -5482,7 +5921,7 @@ plot_pie <- function(data,
 #'   arguments.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -5494,8 +5933,9 @@ plot_pie <- function(data,
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -5539,7 +5979,7 @@ plot_pie <- function(data,
 #'
 #' plot_raincloud(mtcars, y = mpg)
 #'
-#' \dontrun{
+#' \donttest{
 #' #set coord_flip = TRUE to flip the x and y axes so it looks like a rain cloud
 #' #add a box plot with box_plot = TRUE
 #' #add fill colours with violin_fill and point_fill
@@ -5563,7 +6003,8 @@ plot_pie <- function(data,
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
 #' Allen, M., Poggiali, D., Whitaker, K., Marshall, T. R., & Kievit, R. A. (2019). Raincloud plots: a multi-platform tool for robust data visualization. Wellcome open research, 4.
 #'
-#' @seealso \code{\link{plot_violin}}, \code{\link{plot_scatter}}, \code{\link{plot_box}}, \code{\link[gghalves]{geom_half_violin}}, \code{\link[gghalves]{geom_half_point}}, \code{\link[gghalves]{geom_half_boxplot}}
+#' @seealso \code{\link{plot_violin}}, \code{\link{plot_scatter}}, \code{\link{plot_box}},
+#' \code{\link[gghalves]{geom_half_violin}}, \code{\link[gghalves]{geom_half_point}}, \code{\link[gghalves]{geom_half_boxplot}}
 #'
 #' @export
 plot_raincloud <- function(data, y,#essential parameters
@@ -5597,12 +6038,14 @@ plot_raincloud <- function(data, y,#essential parameters
                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                            coord_flip = FALSE, #flip the x- and y- axes so that the half-violin plots look like rain clouds
                            greyscale = FALSE, #control transparency, convert to greyscale
-                           theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                           theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                           text_size = 14, font = c("sans", "serif", "mono"), #theme options
                            facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                            facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                            legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
                            aesthetic_options = FALSE) {
 
+  theme <- match.arg(theme)
   font <- match.arg(font)
   legend_position <- match.arg(legend_position)
   facet_var_strip_position <- match.arg(facet_var_strip_position)
@@ -5622,41 +6065,73 @@ plot_raincloud <- function(data, y,#essential parameters
                         "triangle up" = 24,
                         "triangle down" = 25)
 
+
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(x)) {
+    if(is.error(class(data[[x]]))) {
+      x <- deparse(substitute(x))
+    } else if(!is.character(x) || length(x) > 1){
+      stop('If specified, `x` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+    }else if(!is.character(fill_var) || length(fill_var) > 1){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
   #x-variable recoding
   if(!missing(x)){
-    data <- dplyr::mutate(data, {{x}} := as.character({{x}}))
+    data <- dplyr::mutate(data, {{x}} := as.character(.data[[x]]))
   }
   if(!missing(x_var_order)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel(.data[[x]], levels = !!!x_var_order))
   }
   if(!missing(x_var_labs)){
-    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+    data <- dplyr::mutate(data, {{x}} := forcats::fct_recode(.data[[x]], !!!x_var_labs))
   }
 
   #fill variable recoding
   if(!missing(fill_var)){
-    data <- dplyr::mutate(data, {{fill_var}} := as.character({{fill_var}}))
+    data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
   }
   if(!missing(fill_var) && !missing(fill_var_order)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel({{fill_var}}, levels = !!!fill_var_order))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
   }
   if(!missing(fill_var) && !missing(fill_var_labs)){
-    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode({{fill_var}}, !!!fill_var_labs))
+    data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, fill = {{fill_var}}))
+  p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, fill = fill_var))
 
   #add the geom layers
 
@@ -5739,6 +6214,7 @@ plot_raincloud <- function(data, y,#essential parameters
     }
 
   }
+
   #modification of the fill values
   if (!missing(fill_var)){
     if(!missing(fill_var_values)){
@@ -5751,10 +6227,24 @@ plot_raincloud <- function(data, y,#essential parameters
     }
   }
 
-  if(missing(x)){
-    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                            axis.text.x = ggplot2::element_blank(),
-                            axis.ticks.x = ggplot2::element_blank())
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
   }
 
   #modification of y-axis limits & transformations
@@ -5774,6 +6264,15 @@ plot_raincloud <- function(data, y,#essential parameters
   }
 
   #modification of axis labels
+  if(missing(x) && coord_flip == FALSE){
+    p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                            axis.text.x = ggplot2::element_blank(),
+                            axis.ticks.x = ggplot2::element_blank())
+  } else if (missing(x) && coord_flip == TRUE) {
+    p <- p + ggplot2::theme(axis.title.y = ggplot2::element_blank(),
+                            axis.text.y = ggplot2::element_blank(),
+                            axis.ticks.y = ggplot2::element_blank())
+  }
   if(!missing(xlab)){
     p <- p + ggplot2::labs(x = xlab)
   }
@@ -5783,34 +6282,11 @@ plot_raincloud <- function(data, y,#essential parameters
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
-
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_fill_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -5818,7 +6294,7 @@ plot_raincloud <- function(data, y,#essential parameters
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -5829,7 +6305,8 @@ plot_raincloud <- function(data, y,#essential parameters
   return(p)
 }
 
-# start of plot_line ------------------------------------------------------
+
+# plot_line ---------------------------------------------------------------
 #' @title
 #'
 #' Generate a line graph.
@@ -5869,11 +6346,12 @@ plot_raincloud <- function(data, y,#essential parameters
 #' @importFrom forcats fct_infreq
 #' @importFrom forcats fct_rev
 #' @importFrom rlang !!!
+#' @importFrom rlang .data
 #' @importFrom tibble as_tibble
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 geom_point
-#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 scale_linetype_manual
 #' @importFrom ggplot2 scale_colour_manual
@@ -5903,13 +6381,14 @@ plot_raincloud <- function(data, y,#essential parameters
 #'   variable.
 #'
 #' @param y A numeric variable containing the values you would like plotted on
-#'   the y-axis.
+#'   the y-axis (quoted or unquoted), e.g. y = "variable" or y = variable.
 #'
-#' @param x Typically a numeric or date/POSIX.ct variable to use for the x-axis.
-#'   If you assign a variable of a different class to x, it will be converted to
-#'   a factor and arranged in order of factor levels (left to right), unless it
-#'   is already a factor. The ordering of such variables can be modified with
-#'   x_var_order* arguments.
+#' @param x Typically a numeric or date/POSIX.ct variable to use for the x-axis
+#'   (quoted or unquoted), e.g. x = "variable" or x = variable. If you assign a
+#'   variable of a different class to x, it will be converted to a factor and
+#'   arranged in order of factor levels (left to right), unless it is already a
+#'   factor. The ordering of such variables can be modified with x_var_order*
+#'   arguments.
 #'
 #' @param ... Other graphical parameters (not associated with variables) to be
 #'   passed to \code{\link[ggplot2]{geom_line}} to be applied to all lines can
@@ -5918,14 +6397,14 @@ plot_raincloud <- function(data, y,#essential parameters
 #'   argument to TRUE. For colour options, see \code{\link{colour_options}}.
 #'
 #' @param colour_var Use if you want to assign a categorical variable to line
-#'   colour, e.g. colour_var = grouping_variable. Produces separate lines
-#'   for each level of the colour variable. See \code{\link[ggplot2]{aes}} for
-#'   details.
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate lines for each level of the colour
+#'   variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param line_type_var Use if you want to assign a categorical variable to the
-#'   line type, e.g. line_type_var = grouping_variable. Produces separate lines
-#'   for each level of the fill variable. See \code{\link[ggplot2]{aes}} for
-#'   details.
+#'   line type, e.g. line_type_var = "grouping_variable" or line_type_var =
+#'   grouping_variable. Produces separate lines for each level of the fill
+#'   variable. See \code{\link[ggplot2]{aes}} for details.
 #'
 #' @param stat If multiple values of the y-variable are detected for at least
 #'   one grouping variable level combination based on variables assigned to any
@@ -6114,7 +6593,7 @@ plot_raincloud <- function(data, y,#essential parameters
 #' @param point_size If points = TRUE, this controls the size of the points.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currenlty supported options are: "classic"
+#'   templates provided by ggplot2. Currently supported options are: "classic"
 #'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
 #'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 #'   information.
@@ -6126,8 +6605,9 @@ plot_raincloud <- function(data, y,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = grouping_variable. See
-#'   \code{\link[ggplot2]{facet_wrap}} for details.
+#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
 #'
 #' @param facet_var_order If a variable has been assigned for facetting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
@@ -6174,7 +6654,7 @@ plot_raincloud <- function(data, y,#essential parameters
 #' #basic line graph split by a grouping variable that has been assigned to line
 #' #colour
 #'
-#' plot_line(pdata, y = y1, x = d, colour_var = g)
+#' plot_line(pdata, y = y1, x = d, colour_var = "g")
 #'
 #' #add points with "points = TRUE"
 #' #disable the message that data needed to be aggregated to show a single line
@@ -6212,16 +6692,14 @@ plot_line <- function(data, y, x, ...,
                       points = FALSE,
                       point_colour = "black", point_fill = "black", point_alpha = 1,
                       point_shape = "circle", point_size = 3,
-                      theme = "classic", text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                      theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                      text_size = 14, font = c("sans", "serif", "mono"), #theme options
                       facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                       facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
                       legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
-                      interactive = FALSE, aesthetic_options = FALSE, verbose = TRUE) {#output format
+                      interactive = FALSE, aesthetic_options = FALSE, verbose = FALSE) {#output format
 
-  if(!is.numeric(qprob) || length(qprob) > 1 || qprob > 1 || qprob < 0){
-    stop('Quantile probability argument "qprob" must be a single number between 0 and 1.')
-  }
-
+  theme <- match.arg(theme)
   font <- match.arg(font)
   legend_position <- match.arg(legend_position)
   facet_var_strip_position <- match.arg(facet_var_strip_position)
@@ -6231,8 +6709,49 @@ plot_line <- function(data, y, x, ...,
   line_type <- match.arg(line_type)
   stat <- match.arg(stat)
 
+  if(!is.numeric(qprob) || length(qprob) > 1 || qprob > 1 || qprob < 0){
+    stop('Quantile probability argument "qprob" must be a single number between 0 and 1.')
+  }
+  if(is.error(class(data[[y]]))) {
+    y <- deparse(substitute(y))
+  } else if(!is.character(y) || length(y) > 1){
+    stop('If specified, `y` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(is.error(class(data[[x]]))) {
+    x <- deparse(substitute(x))
+  } else if(!is.character(x) || length(x) > 1){
+    stop('If specified, `x` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+    }else if(!is.character(colour_var) || length(colour_var) > 1){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(line_type_var)) {
+    if(is.error(class(data[[line_type_var]]))) {
+      line_type_var <- deparse(substitute(line_type_var))
+    }else if(!is.character(line_type_var) || length(line_type_var) > 1){
+      stop('If specified, `line_type_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+    } else if(!is.character(facet_var) || length(facet_var) > 1){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
+
   .classes <- class(data)
-  x_var_class <- class(data[[deparse(substitute(x))]])
+  x_var_class <- class(data[[x]])
 
   if("data.frame" %ni% .classes) {
     stop("Input data must be a data.table, tibble, or data.frame.")
@@ -6240,7 +6759,7 @@ plot_line <- function(data, y, x, ...,
   if(missing(x) || missing(y)) {
     stop('x and y must be specified.')
   }
-  if(!is.numeric(data[[deparse(substitute(y))]]) && !is.integer(data[[deparse(substitute(y))]])){
+  if(!is.numeric(data[[y]]) && !is.integer(data[[y]])){
     stop("y must be a numeric column of a data frame")
   }
 
@@ -6256,21 +6775,21 @@ plot_line <- function(data, y, x, ...,
 
   #grouping options
   if (missing(colour_var) && missing(line_type_var) && missing(facet_var)) {
-    G <- deparse(substitute(x))
+    G <- x
   } else if (!missing(line_type_var) && missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(line_type_var)))
+    G <- c(x, line_type_var)
   } else if (missing(line_type_var) && !missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)))
+    G <- c(x, colour_var)
   } else if (missing(line_type_var) && missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(facet_var)))
+    G <- c(x, facet_var)
   } else if (!missing(line_type_var) && !missing(colour_var) && missing(facet_var)) {
-    G <- c(deparse(substitute(line_type_var)), deparse(substitute(colour_var)))
+    G <- c(line_type_var, colour_var)
   } else if (!missing(line_type_var) && missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(line_type_var)), deparse(substitute(facet_var)))
+    G <- c(x, line_type_var, facet_var)
   } else if (missing(line_type_var) && !missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(facet_var)))
+    G <- c(x, colour_var, facet_var)
   } else if (!missing(x) && !missing(line_type_var) && !missing(colour_var) && !missing(facet_var)) {
-    G <- c(deparse(substitute(x)), deparse(substitute(colour_var)), deparse(substitute(line_type_var)), deparse(substitute(facet_var)))
+    G <- c(x, colour_var, line_type_var, facet_var)
   }
   G <- unique(G) #eliminate duplicates if the same variable is mapped to more than one aesthetic parameter
   data[, n_copies := .N, by = eval(G)]
@@ -6291,16 +6810,16 @@ plot_line <- function(data, y, x, ...,
                      ' rows in the input data contain multiple values of the y-axis variable\nfor one or more levels of the grouping variables assigned to arguments:\n "x", "colour_var", "line_type_var", and/or "facet_var".\nAggregating values with the chosen summary statistic = "', stat, '"'))
     }
     df_dupes <- dplyr::select(df_dupes, {{x}}, {{colour_var}}, {{line_type_var}}, {{facet_var}}, {{y}})
-    df_dupes <- dplyr::group_by(df_dupes, dplyr::across(-{{y}}))
+    df_dupes <- dplyr::group_by(df_dupes, dplyr::across(-.data[[y]]))
 
     if(stat == "mean") {
-      df_dupes <- dplyr::summarise(df_dupes, {{y}} := as.double(mean({{y}}, na.rm = TRUE)), .groups = "drop")
+      df_dupes <- dplyr::summarise(df_dupes, {{y}} := as.double(mean(.data[[y]], na.rm = TRUE)), .groups = "drop")
     } else if (stat == "quantile") {
       df_dupes <- dplyr::summarise(df_dupes,
-                                   {{y}} := as.double(quantile({{y}}, probs = qprob, na.rm = TRUE)),
+                                   {{y}} := as.double(quantile(.data[[y]], probs = qprob, na.rm = TRUE)),
                                    .groups = "drop")
     } else if (stat == "sum") {
-      df_dupes <- dplyr::summarise(df_dupes, {{y}} := as.double(sum({{y}}, na.rm = TRUE)), .groups = "drop")
+      df_dupes <- dplyr::summarise(df_dupes, {{y}} := as.double(sum(.data[[y]], na.rm = TRUE)), .groups = "drop")
     } else if (stat == "count") {
       message('When argument "stat" is set to "count" the y variable will be converted to a value of 1 for non-duplicated rows.')
       df_dupes <- dplyr::ungroup(dplyr::select(df_dupes, {{y}} := n_copies))
@@ -6326,77 +6845,77 @@ plot_line <- function(data, y, x, ...,
 
   #x-variable recoding
   if(x_var_class %in% c("character", "factor")) {
-    data <- dplyr::mutate(data, {{x}} := as.factor({{x}}))
+    data <- dplyr::mutate(data, {{x}} := as.factor(.data[[x]]))
 
     if(!missing(x_var_order_by_y)) {
       if(x_var_order_by_y == "d") {
-        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = TRUE))
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder(.data[[x]], .data[[y]], .desc = TRUE))
       } else {
-        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder({{x}}, {{y}}, .desc = FALSE))
+        data <- dplyr::mutate(data, {{x}} := forcats::fct_reorder(.data[[x]], .data[[y]], .desc = FALSE))
       }
     }
 
     if(!missing(x_var_order)){
-      data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel({{x}}, levels = !!!x_var_order))
+      data <- dplyr::mutate(data, {{x}} := forcats::fct_relevel(.data[[x]], levels = !!!x_var_order))
     }
     if(class(x_var_labs) != "waiver"){
-      data <- dplyr::mutate(data, {{x}} := forcats::fct_recode({{x}}, !!!x_var_labs))
+      data <- dplyr::mutate(data, {{x}} := forcats::fct_recode(.data[[x]], !!!x_var_labs))
     }
     #geom_line expects the x-axis to be numeric
-    xlabels <- as.character(levels(data[[deparse(substitute(x))]]))
-    data <- dplyr::mutate(data, {{x}} := as.numeric({{x}}))
+    xlabels <- as.character(levels(data[[x]]))
+    data <- dplyr::mutate(data, {{x}} := as.numeric(.data[[x]]))
   }
 
   #colour variable recoding
   if(!missing(colour_var)){
-    data <- dplyr::mutate(data, {{colour_var}} := as.character({{colour_var}}))
+    data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
   }
   if(!missing(colour_var) && !missing(colour_var_order_by_y)) {
     if(colour_var_order_by_y == "d") {
-      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = TRUE))
+      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = TRUE))
     } else {
-      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder({{colour_var}}, {{y}}, .desc = FALSE))
+      data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = FALSE))
     }
   }
 
   if(!missing(colour_var) && !missing(colour_var_order)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel({{colour_var}}, levels = !!!colour_var_order))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
   }
   if(!missing(colour_var) && !missing(colour_var_labs)){
-    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode({{colour_var}}, !!!colour_var_labs))
+    data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
   }
 
   #linetype variable recoding
   if(!missing(line_type_var)){
-    data <- dplyr::mutate(data, {{line_type_var}} := as.character({{line_type_var}}))
+    data <- dplyr::mutate(data, {{line_type_var}} := as.character(.data[[line_type_var]]))
   }
   if(!missing(line_type_var) && !missing(line_type_var_order_by_y)) {
     if(line_type_var_order_by_y == "d") {
-      data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_reorder({{line_type_var}}, {{y}}, .desc = TRUE))
+      data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_reorder(.data[[line_type_var]], .data[[y]], .desc = TRUE))
     } else {
-      data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_reorder({{line_type_var}}, {{y}}, .desc = FALSE))
+      data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_reorder(.data[[line_type_var]], .data[[y]], .desc = FALSE))
     }
   }
   if(!missing(line_type_var) && !missing(line_type_var_order)){
-    data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_relevel({{line_type_var}}, levels = !!!line_type_var_order))
+    data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_relevel(.data[[line_type_var]], levels = !!!line_type_var_order))
   }
   if(!missing(line_type_var) && !missing(line_type_var_labs)){
-    data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_recode({{line_type_var}}, !!!line_type_var_labs))
+    data <- dplyr::mutate(data, {{line_type_var}} := forcats::fct_recode(.data[[line_type_var]], !!!line_type_var_labs))
   }
 
   #facet label recoding
   if(!missing(facet_var)){
-    data <- dplyr::mutate(data, {{facet_var}} := as.character({{facet_var}}))
+    data <- dplyr::mutate(data, {{facet_var}} := as.character(.data[[facet_var]]))
   }
   if(!missing(facet_var) && !missing(facet_var_order)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel({{facet_var}}, levels = !!!facet_var_order))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
   }
   if(!missing(facet_var) && !missing(facet_var_labs)){
-    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode({{facet_var}}, !!!facet_var_labs))
+    data <- dplyr::mutate(data, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
   }
 
   #setup foundational plotting object layer
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = {{x}}, y = {{y}}, linetype = {{line_type_var}}, colour = {{colour_var}}))
+  p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, linetype = line_type_var, colour = colour_var))
 
   #add the geom_line layer
   if(!missing(colour_var)) {
@@ -6442,6 +6961,26 @@ plot_line <- function(data, y, x, ...,
     p <- p + ggplot2::scale_linetype_manual(values = line_type_var_values)
   }
 
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_colour_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
   #modification of x/y-axis limits & transformations
   if(!missing(xlim) && missing(ylim)) {
     p <- p + ggplot2::coord_cartesian(xlim = c(xlim[1], xlim[2]))
@@ -6482,21 +7021,21 @@ plot_line <- function(data, y, x, ...,
   if(!missing(ylab)){
     p <- p + ggplot2::labs(y = ylab)
   } else if (dupe_count > 0 && stat == "mean") {
-    p <- p + ggplot2::labs(y = paste("mean", deparse(substitute(y))))
+    p <- p + ggplot2::labs(y = paste("mean", y))
   } else if (dupe_count > 0 && stat == "quantile" && qprob == 0.5) {
-    p <- p + ggplot2::labs(y = paste("median", deparse(substitute(y))))
+    p <- p + ggplot2::labs(y = paste("median", y))
   } else if (dupe_count > 0 && stat == "quantile" && qprob == 0) {
-    p <- p + ggplot2::labs(y = paste("minimum", deparse(substitute(y))))
+    p <- p + ggplot2::labs(y = paste("minimum", y))
   } else if (dupe_count > 0 && stat == "quantile" && qprob == 1) {
-    p <- p + ggplot2::labs(y = paste("maximum", deparse(substitute(y))))
+    p <- p + ggplot2::labs(y = paste("maximum", y))
   } else if (dupe_count > 0 && stat == "quantile" && qprob %ni% c(0, 0.5, 1)) {
-    p <- p + ggplot2::labs(y = paste0(round(qprob*100), "th percentile of ", deparse(substitute(y))))
+    p <- p + ggplot2::labs(y = paste0(round(qprob*100), "th percentile of ", y))
   } else if (dupe_count > 0 && stat == "sum") {
-    p <- p + ggplot2::labs(y = paste("total", deparse(substitute(y))))
+    p <- p + ggplot2::labs(y = paste("total", y))
   } else if (dupe_count > 0 && stat == "count") {
-    p <- p + ggplot2::labs(y = paste("count of unique", deparse(substitute(y)), "values"))
+    p <- p + ggplot2::labs(y = paste("count of unique", y, "values"))
   } else {
-    p <- p + ggplot2::labs(y = deparse(substitute(y)))
+    p <- p + ggplot2::labs(y = y)
   }
 
   if(!missing(xlab)){
@@ -6509,34 +7048,11 @@ plot_line <- function(data, y, x, ...,
   if(!missing(line_type_var_title)){
     p <- p + ggplot2::labs(linetype = line_type_var_title)
   }
-
-  if(greyscale == TRUE){
-    p <- p + ggplot2::scale_colour_grey()
-  }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
   }
-  if(theme == "classic"){
-    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
-  } else if (theme == "bw"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "b & w"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black and white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "black & white"){
-    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
-  } else if (theme == "grey"){
-    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
-  } else if (theme == "gray"){
-    p <- p + ggplot2::theme_gray(base_size = text_size, base_family = font)
-  } else if (theme == "light"){
-    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
-  } else if (theme == "dark"){
-    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
-  } else if (theme == "minimal"){
-    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
-  }
+
+  #misc
   if(omit_legend == TRUE){
     p <- p + ggplot2::theme(legend.position = "none")
   }
@@ -6544,7 +7060,7 @@ plot_line <- function(data, y, x, ...,
     p <- p + ggplot2::theme(legend.position = legend_position)
   }
   if(!missing(facet_var)){
-    p <- p + ggplot2::facet_wrap(ggplot2::vars({{facet_var}}), strip.position = facet_var_strip_position)
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
   }
   if(!missing(facet_var) & facet_var_text_bold == TRUE){
     p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
@@ -6559,3 +7075,1683 @@ plot_line <- function(data, y, x, ...,
     return(p)
   }
 }
+
+# plot_var ----------------------------------------------------------------
+#' @title
+#'
+#' Plot variables/vectors using a class-appropriate plot_* function.
+#'
+#' @description Easily generate a ggplot2 graph using a class-appropriate
+#'   geometry for the chosen primary (required) and secondary (optional)
+#'   variable(s) from the same data frame source using other elucidate `plot_*`
+#'   functions with a restricted set of customization options and some modified
+#'   defaults. See "Arguments" section for details and
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2. To obtain plots of all
+#'   variables/columns of a data frame, use \code{\link{plot_var_all}} or
+#'   \code{\link{plot_var_pairs}} instead.
+#'
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 geom_violin
+#'
+#' @param data Either a data frame containing variables to be plotted or a
+#'   vector to be plotted (unlike most other `plot_*` functions, which always
+#'   require a data frame). Note that if a vector is supplied here, arguments
+#'   `var1`, `var2`, and/or `group_var` cannot also be used.
+#'
+#' @param var1 The name of the primary variable you want plot(s) for (quoted or
+#'   unquoted), e.g. var1 = "variable" or var1 = variable. If a data frame is
+#'   supplied to the `data` argument, then `var1` must also be specified. `var1`
+#'   will be assigned to the x-axis if `var2` is not specified. If `var2` is
+#'   also specified, `var1` will be assigned to the y-axis if it is a numeric,
+#'   integer, or date variable or to the x-axis if it is a factor, character, or
+#'   logical variable.
+#'
+#' @param var2 The name of a secondary variable to plot against the primary
+#'   variable (quoted or unquoted), e.g. var2 = "variable" or var2 = variable.
+#'   `var2` is usually assigned to the x-axis. However, if `var1` is a
+#'   categorical (factor, character, or logical) variable and `var2` is a
+#'   numeric, integer, or date variable, `var2` will be assigned to the y-axis
+#'   and `var1` will be assigned to the x-axis. If `var1` and `var2` are both
+#'   categorical variables, `var1` will be assigned to the x-axis and `var2`
+#'   will be assigned to `facet_var`.
+#'
+#' @param group_var Use if you want to assign a grouping variable to fill
+#'   (colour) and/or (outline) colour e.g. group_var = "grouping_variable" or
+#'   group_var = grouping_variable. Whether the grouping variable is mapped to
+#'   fill, colour, or both will depend upon which `plot_*` function is used (See
+#'   "Value" section). For density plots, both fill and colour are used for
+#'   consistency across the main density plots and added normal density curve
+#'   lines (if dnorm = TRUE). For bar graphs and box-and-whisker plots, the
+#'   variable will be assigned to fill. For scatter plots, the variable will be
+#'   assigned to colour. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param var1_lab Accepts a character string to use to change the axis label
+#'   for the variable assigned to `var1`.
+#'
+#' @param var2_lab Accepts a character string to use to change the axis label
+#'   for the variable assigned to `var2`. Ignored if `var1` and `var2` are both
+#'   categorical variables (since `var2` will be used for faceting in such
+#'   cases).
+#'
+#' @param title A character string to add as a title at the top of the graph.
+#'
+#' @param fill Fill colour to use for density plots, bar graphs, and box plots.
+#'   Ignored if a variable that has been assigned to `group_var` is mapped on to
+#'   `fill_var` (see `group_var` argument information above). Default is
+#'   "blue2". Use \code{\link{colour_options}} to see colour option examples.
+#'
+#' @param colour Outline colour to use for density plots, bar graphs, box plots,
+#'   and scatter plots. Ignored if a variable that has been assigned to
+#'   `group_var` is mapped on to `colour_var` (see `group_var` argument
+#'   information above). Default is "black". Use \code{\link{colour_options}} to
+#'   see colour option examples.
+#'
+#' @param palette If a variable is assigned to group_var, this determines which
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
+#'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'    link} for examples.
+#'
+#' @param palette_direction Choose "d2l" for dark to light (default) or "l2d"
+#'   for light to dark.
+#'
+#' @param palette_begin Value between 0 and 1 that determines where along the
+#'   full range of the chosen colour palette's spectrum to begin sampling
+#'   colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param palette_end Value between 0 and 1 that determines where along the full
+#'   range of the chosen colour palette's spectrum to end sampling colours. See
+#'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param alpha This adjusts the transparency/opacity of the main geometric
+#'   objects in the generated plot, with acceptable values ranging from 0 = 100%
+#'   transparent to 1 = 100% opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to grey scale.
+#'
+#' @param line_size Controls the thickness of plotted lines.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currently supported options are: "classic"
+#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
+#'
+#' @param legend_position This allows you to modify the legend position if a
+#'   variable is assigned to `group_var`. Options include "right" (the default),
+#'   "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legend(s).
+#'   Ignored if `group_var` is unspecified.
+#'
+#' @param dnorm When TRUE (default), this adds a dashed line representing a
+#'   normal/Gaussian density curve to density plots, which are rendered for
+#'   plots of single numeric variables. Disabled if `var1` is a date vector,
+#'   `var1_log10` = TRUE, or `basic` = TRUE.
+#'
+#' @param violin When TRUE (default), this adds violin plot outlines to box
+#'   plots, which are rendered in cases where a mixture of numeric and
+#'   categorical variables are assigned to `var1` and `var2`. Disabled if
+#'   `basic` = TRUE.
+#'
+#' @param var1_log10 If TRUE, applies a base-10 logarithmic transformation to a
+#'   numeric variable that has been assigned to `var1`. Ignored if `var1` is a
+#'   categorical variable.
+#'
+#' @param var2_log10 If TRUE, applies a base-10 logarithmic transformation to a
+#'   numeric variable that has been assigned to `var2`. Ignored if `var2` is a
+#'   categorical variable.
+#'
+#' @param point_size Controls the size of points used in scatter plots, which
+#'   are rendered in cases where `var1` and `var2` are both numeric, integer, or
+#'   date variables.
+#'
+#' @param point_shape Point shape to use in scatter plots, which
+#'   are rendered in cases where `var1` and `var2` are both numeric, integer, or
+#'   date variables.
+#'
+#' @param regression_line If TRUE (the default), adds a regression line to scatter
+#'   plots, which are rendered in cases where `var1` and `var2` are both
+#'   numeric, integer, or date variables. Disabled if `basic` = TRUE.
+#'
+#' @param regression_method If `regression_line` = TRUE, this determines the
+#'   type of regression line to use. Currently available options are "gam",
+#'   "loess", and "lm". "gam" is the default, which fits a generalized additive
+#'   model using a smoothing term for x. This method has a longer run time, but
+#'   typically provides a better fit to the data than other options and uses an
+#'   optimization algorithm to determine the optimal wiggliness of the line. If
+#'   the relationship between y and x is linear, the output will be equivalent
+#'   to fitting a linear model. "loess" may be preferable to "gam" for small
+#'   sample sizes. See \code{\link[ggplot2]{stat_smooth}} and
+#'   \code{\link[mgcv]{gam}} for details.
+#'
+#' @param regression_se If TRUE (the default), adds a 95% confidence envelope for the
+#'   regression line. Ignored if `regression_line` = FALSE.
+#'
+#' @param bar_position In bar plots, which are rendered for one or more
+#'   categorical variables, this determines how bars are arranged relative to
+#'   one another when a grouping variable is assigned to `group_var`. The
+#'   default, "dodge", uses \code{\link[ggplot2]{position_dodge}} to arrange
+#'   bars side-by-side; "stack" places the bars on top of each other; "fill"
+#'   also stacks bars but additionally converts y-axis from counts to
+#'   proportions.
+#'
+#' @param bar_width In bar plots, which are rendered for one or more categorical
+#'   variables, this adjusts the width of the bars (default = 0.9).
+#'
+#' @param basic This is a shortcut argument that allows you to simultaneously
+#'   disable the `dnorm`, `violin`, and `regression_line` arguments to produce a
+#'   basic version of a density, box, or scatter plot (depending on
+#'   `var1`/`var2` variable class(es)) without any of those additional layers.
+#'   Dropping these extra layers may noticeably reduce rendering time and memory
+#'   utilization, especially for larger sample sizes and/or when `interactive` =
+#'   TRUE.
+#'
+#' @param interactive Determines whether a static ggplot object or an
+#'   interactive html plotly object is returned. See
+#'   \code{\link[plotly]{ggplotly}} for details. Note that in cases where a box
+#'   plot is generated (for a mix of numeric and categorical variables) and a
+#'   variable is also assigned to `group_var`, activating interactive/plotly
+#'   mode will cause a spurious warning message about 'layout' objects not
+#'   having a 'boxmode' attribute to be printed to the console. This is a
+#'   \href{https://github.com/ropensci/plotly/issues/994}{documented bug} with
+#'   plotly that can be safely ignored, although unfortunately the message
+#'   cannot currently be suppressed.
+#'
+#' @param verbose If TRUE, this causes a message to be printed to the console
+#'   informing you of the classes detected for variables assigned to any of
+#'   `var1`, `var2`, and/or `group_var` as well as which arguments those
+#'   variables are passed to in the underlying geom-specific elucidate `plot_*`
+#'   function that is used to render the plot.
+#'
+#' @return A ggplot or plotly graph depending on whether static or interactive
+#'   output was requested. The type of graph (i.e. `ggplot2::geom*` layers) that
+#'   is rendered will depend upon the classes of the chosen variables, as
+#'   follows:
+#'
+#'   - One numeric (classes numeric/integer/date) variable will be graphed with
+#'   \code{\link{plot_density}}.
+#'
+#'   - One or two categorical (classes factor/character/logical) variable(s)
+#'   will be graphed with \code{\link{plot_bar}}.
+#'
+#'   - Two numeric variables will be graphed with \code{\link{plot_scatter}}.
+#'
+#'   - A mixture of numeric and categorical variables will be graphed with
+#'   \code{\link{plot_box}}.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' data(mtcars) #load the mtcars data
+#'
+#' #convert variables "cyl" and "am" to a factors
+#' mtcars$cyl <- as.factor(mtcars$cyl)
+#' mtcars$am <- as.factor(mtcars$am)
+#'
+#' # density plot of a single numeric variable on the x-axis
+#' # with normal density curve added as dashed line
+#' #
+#' # normal density curves can be disabled via `dnorm` = FALSE or `basic` = TRUE
+#'
+#' plot_var(data = mtcars, var1 = mpg)
+#'
+#' # density plot with a primary numeric variable on the x-axis
+#' # split by a categorical grouping variable assigned to the `fill_var`
+#' # argument of plot_density() & normal density curves distabled
+#'
+#' plot_var(mtcars, mpg, group_var = cyl, dnorm = FALSE)
+#'
+#' plot_var(mtcars, cyl) #bar plot of a single categorical variable on x-axis
+#'
+#' # bar plot with a primary categorical variable on the x-axis and a secondary
+#' # categorical variable used for faceting.
+#'
+#' plot_var(mtcars, var1 = cyl, var2 = am)
+#'
+#' # box plot with added violin plots for a mix of numeric and categorical variables
+#' # and verbose mode enabled to print variable assignment information to the console
+#' #
+#' # the violin plots can be disabled via `violin` = FALSE or `basic` = TRUE
+#'
+#' plot_var(mtcars, mpg, cyl, verbose = TRUE)
+#'
+#' # scatter plot with added generalized additive model regression line and
+#' # 95% confidence envelope for two numeric variables
+#' #
+#' # N.B. the regression line and CI can be disabled via `regression_line` = FALSE or
+#' # `basic`= TRUE
+#'
+#' plot_var(mtcars, mpg, hp)
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link{plot_density}}, \code{\link{plot_bar}},
+#'   \code{\link{plot_scatter}}, \code{\link{plot_box}},
+#'   \code{\link{plot_var_all}}, \code{\link{plot_var_pairs}}
+#'
+#' @export
+plot_var <- function(data,
+                     var1 = NULL, var2 = NULL, group_var = NULL,
+                     var1_lab = ggplot2::waiver(), var2_lab = ggplot2::waiver(), title = ggplot2::waiver(),
+                     fill = "blue2", colour = "black",
+                     palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
+                     palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
+                     alpha = 0.75, greyscale = FALSE, line_size = 1,
+                     theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                     text_size = 14, font = c("sans", "serif", "mono"),
+                     legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE,
+                     dnorm = TRUE, violin = TRUE, var1_log10 = FALSE, var2_log10 = FALSE,
+                     point_size = 2, point_shape = c("circle", "square", "diamond", "triangle up", "triangle down"),
+                     regression_line = TRUE, regression_method = c("gam", "loess", "lm"), regression_se = TRUE,
+                     bar_position = c("dodge", "fill", "stack"), bar_width = 0.9,
+                     basic = FALSE, interactive = FALSE, verbose = FALSE) {
+
+  theme <- match.arg(theme)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  font = match.arg(font)
+  legend_position = match.arg(legend_position)
+  bar_position = match.arg(bar_position)
+  point_shape <- match.arg(point_shape)
+  regression_method <- match.arg(regression_method)
+
+  if(basic == TRUE) {
+    dnorm <- FALSE
+    violin <- FALSE
+    regression_line <- FALSE
+  }
+
+  .data_nrow <- nrow(data)
+
+  if(!missing(var1)) {
+    if(is.error(class(data[[var1]]))) {
+      var1 <- deparse(substitute(var1))
+    } else if(!is.character(var1) || length(var1) > 1){
+      stop('If specified, `var1` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+    .var1_class <- class(data[[var1]])
+  }
+  if(!missing(var2)) {
+    if(is.error(class(data[[var2]]))) {
+      var2 <- deparse(substitute(var2))
+    } else if(!is.character(var2) || length(var2) > 1){
+      stop('If specified, `var2` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+    .var2_class <- class(data[[var2]])
+  }
+  if(!missing(group_var)) {
+    if(is.error(class(data[[group_var]]))) {
+      group_var <- deparse(substitute(group_var))
+    }else if(!is.character(group_var) || length(group_var) > 1){
+      stop('If specified, `group_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(var1)) {
+    #input data class checks
+    if(.var1_class %ni% c("numeric", "integer", "logical", "factor", "character", "Date")) {
+      stop('"var1" must be a numeric, logical, categorical, or date variable in the input data frame provided to the "data" argument.')
+    }
+    if(!missing(var2) && .var2_class %ni% c("numeric", "integer", "logical", "factor", "character", "Date")) {
+      stop('If "var2" is specified then it must be a numeric, logical, categorical, or date variable in the input data frame provided to the "data" argument.')
+    }
+    if("data.frame" %ni% class(data)) {
+      stop('If "var1" is specified, input data must be a data.table, tibble, or data.frame.')
+    }
+    #conditional plot_* evaluation
+    if(missing(var2) || var2 == var1) { #one variable in a data frame
+      if(.var1_class %in% c("numeric", "integer", "Date")) {
+        if(missing(group_var)) {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '".',
+                           '\nBuilding graph with `plot_density()`.',
+                           '\nAssigning `var1` to `x`.',
+                           '\nUse `plot_density()` instead to access additional customization options.',
+                           '\nSee help("plot_density") for details.'))
+          }
+          p <- plot_density(data, x = var1, xlab = var1_lab, title = title,
+                            fill = fill, colour = colour,
+                            palette = palette, palette_direction = palette_direction,
+                            palette_begin = palette_begin, palette_end = palette_end,
+                            alpha = alpha, greyscale = greyscale, theme = theme,
+                            text_size = text_size, font = font, interactive = interactive,
+                            dnorm = dnorm, dnorm_colour = colour, dnorm_alpha = 0.8,
+                            line_size = line_size, transform_x = var1_log10)
+        } else {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '".',
+                           '\nBuilding graph with `plot_density()`.',
+                           '\nAssigning `var1` to `x` and `group_var` to both `fill_var` and `colour_var`.',
+                           '\nUse `plot_density()` instead to access additional customization options.',
+                           '\nSee help("plot_density") for details.'))
+          }
+          p <- plot_density(data, x = var1, xlab = var1_lab, title = title,
+                            fill_var = group_var, colour_var = group_var,
+                            palette = palette, palette_direction = palette_direction,
+                            palette_begin = palette_begin, palette_end = palette_end,
+                            alpha = alpha, greyscale = greyscale, theme = theme,
+                            text_size = text_size, font = font, interactive = interactive,
+                            dnorm = dnorm, dnorm_colour = colour, dnorm_alpha = 0.8,
+                            line_size = line_size, transform_x = var1_log10,
+                            legend_position = legend_position, omit_legend = omit_legend)
+
+        }
+      } else if(.var1_class %in% c("factor", "character", "logical")) {
+        if(missing(group_var)) {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '".',
+                           '\nBuilding graph with `plot_bar()`.',
+                           '\nAssigning `var1` to `x`.',
+                           '\nUse `plot_bar()` instead to access additional customization options.',
+                           '\nSee help("plot_bar") for details.'))
+          }
+          p <- plot_bar(data, x = var1, xlab = var1_lab, title = title,
+                        fill = fill, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        position = bar_position, width = bar_width, line_size = line_size)
+        } else {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '".',
+                           '\nBuilding graph with `plot_bar()`.',
+                           '\nAssigning `var1` to `x` and `group_var` to `fill_var`.',
+                           '\nUse `plot_bar()` instead to access additional customization options.',
+                           '\nSee help("plot_bar") for details.'))
+          }
+          p <- plot_bar(data, x = var1, xlab = var1_lab, title = title,
+                        fill_var = group_var, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        position = bar_position, width = bar_width, line_size = line_size,
+                        legend_position = legend_position, omit_legend = omit_legend)
+
+        }
+      }
+    } else if(!missing(var2) && var2 != var1) { #2 variables in a data frame
+      if(.var1_class %in% c("numeric", "integer", "Date") && .var2_class %in% c("numeric", "integer", "Date")) {
+        if(missing(group_var)) {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_scatter()`.',
+                           '\nAssigning `var1` to `y` and `var2` to `x`.',
+                           '\nUse `plot_scatter()` instead to access additional customization options.',
+                           '\nSee help("plot_scatter") for details.'))
+          }
+          p <- plot_scatter(data, y = var1, x = var2,
+                            xlab = var1_lab, ylab = var2_lab, title = title,
+                            colour = colour,
+                            palette = palette, palette_direction = palette_direction,
+                            palette_begin = palette_begin, palette_end = palette_end,
+                            alpha = alpha, greyscale = greyscale, theme = theme,
+                            text_size = text_size, font = font, interactive = interactive,
+                            jitter = TRUE, size = point_size, shape = point_shape,
+                            regression_line = regression_line, regression_se = regression_se,
+                            regression_method = regression_method,
+                            transform_y = var1_log10, transform_x = var2_log10)
+        } else {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_scatter()`.',
+                           '\nAssigning `var1` to `y`, `var2` to `x`, and `group_var` to `colour_var`.',
+                           '\nUse `plot_scatter()` instead to access additional customization options.',
+                           '\nSee help("plot_scatter") for details.'))
+          }
+          p <- plot_scatter(data, y = var1, x = var2,
+                            xlab = var1_lab, ylab = var2_lab, title = title,
+                            colour_var = group_var,
+                            palette = palette, palette_direction = palette_direction,
+                            palette_begin = palette_begin, palette_end = palette_end,
+                            alpha = alpha, greyscale = greyscale, theme = theme,
+                            text_size = text_size, font = font, interactive = interactive,
+                            jitter = TRUE, size = point_size, shape = point_shape,
+                            regression_line = regression_line, regression_se = regression_se,
+                            regression_method = regression_method,
+                            transform_y = var1_log10, transform_x = var2_log10,
+                            legend_position = legend_position, omit_legend = omit_legend)
+        }
+      } else if(.var1_class %in% c("numeric", "integer", "Date") && .var2_class %in% c("factor", "character", "logical")) {
+        if(missing(group_var)) {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_box()`.',
+                           '\nAssigning `var1` to `y` and `var2` to `x`.',
+                           '\nUse `plot_box()` instead to access additional customization options.',
+                           '\nSee help("plot_box") for details.'))
+          }
+          p <- plot_box(data, y = var1, x = var2,
+                        ylab = var1_lab, xlab = var2_lab, title = title,
+                        fill = fill, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        line_size = line_size, transform_y = var1_log10)
+          if(violin == TRUE) {
+            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0, size = line_size*0.9)
+          }
+        } else {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_box()`.',
+                           '\nAssigning `var1` to `y`, `var2` to `x`, and `group_var` to `fill_var`.',
+                           '\nUse `plot_box()` instead to access additional customization options.',
+                           '\nSee help("plot_box") for details.'))
+          }
+          p <- plot_box(data, y = var1, x = var2,
+                        ylab = var1_lab, xlab = var2_lab, title = title,
+                        fill_var = group_var, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        line_size = line_size, transform_y = var1_log10,
+                        position = ggplot2::position_dodge(width = 0.9),
+                        legend_position = legend_position, omit_legend = omit_legend)
+          if(violin == TRUE) {
+            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0,
+                                          size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+          }
+        }
+      } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("numeric", "integer", "Date")) {
+        if(missing(group_var)) {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_box()`.',
+                           '\nAssigning `var1` to `x` and `var2` to `y`.',
+                           '\nUse `plot_box()` instead to access additional customization options.',
+                           '\nSee help("plot_box") for details.'))
+          }
+          p <- plot_box(data, y = var2, x = var1,
+                        ylab = var2_lab, xlab = var1_lab, title = title,
+                        fill = fill, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        line_size = line_size, transform_y = var2_log10)
+          if(violin == TRUE) {
+            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0, size = line_size*0.9)
+          }
+        } else {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_box()`.',
+                           '\nAssigning `var1` to `x`, `var2` to `y`, and `group_var` to `fill_var`.',
+                           '\nUse `plot_box()` instead to access additional customization options.',
+                           '\nSee help("plot_box") for details.'))
+          }
+          p <- plot_box(data, y = var2, x = var1,
+                        ylab = var2_lab, xlab = var1_lab, title = title,
+                        fill_var = group_var, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        line_size = line_size, transform_y = var2_log10,
+                        position = ggplot2::position_dodge(width = 0.9),
+                        legend_position = legend_position, omit_legend = omit_legend)
+          if(violin == TRUE) {
+            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0,
+                                          size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+          }
+        }
+      } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("factor", "character", "logical")) {
+        if(missing(group_var)) {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_bar()`.',
+                           '\nAssigning `var1` to `x` and `var2` to `facet_var`.',
+                           '\nUse `plot_bar()` instead to access additional customization options.',
+                           '\nSee help("plot_bar") for details.'))
+          }
+          p <- plot_bar(data, x = var1, xlab = var1_lab, facet_var = var2, title = title,
+                        fill = fill, colour = colour, line_size = line_size,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        width =  bar_width)
+        } else {
+          if(verbose == TRUE) {
+            message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
+                           '\nBuilding graph with `plot_bar()`.',
+                           '\nAssigning `var1` to `x` and `var2` to `facet_var`.',
+                           '\nUse `plot_bar()` instead to access additional customization options.',
+                           '\nSee help("plot_bar") for details.'))
+          }
+          p <- plot_bar(data, x = var1, xlab = var1_lab, facet_var = var2, title = title,
+                        colour = colour, fill_var = group_var, line_size = line_size,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        width = bar_width, position = bar_position,
+                        legend_position = legend_position, omit_legend = omit_legend)
+        }
+      }
+    } else {
+      stop('"var1" or "var2" variable class not supported.\nValid input classes include: "numeric", "integer", "logical", "factor", "character", and "Date".')
+    }
+    return(p)
+
+  } else {
+    #input data class check
+    .v_class <- class(data)
+
+    .v_length <- length(data)
+
+    if(.v_class %ni% c("numeric", "integer", "logical", "factor", "character", "Date")) {
+      stop('If "var1" is not specified, data must be a vector of class: "numeric", "integer", "logical", "factor", "character", or "Date".')
+    }
+
+    vec_df <- data.frame("var1" = data)
+
+    if(class(var1_lab) == "waiver") {
+      .var1_lab <- deparse(substitute(data))
+    }
+
+    if(.v_class %in% c("numeric", "integer", "Date")) {
+      if (verbose == TRUE) {
+        message(paste0('`data` class = "', .v_class, '".',
+                       '\nConverting input from a vector to data frame column.',
+                       '\nBuilding graph with `plot_density()` and assigning input vector to `x`.',
+                       '\nUse `plot_density()` instead to access additional customization options.',
+                       '\nSee help("plot_density") for details.'))
+      }
+      p <- plot_density(vec_df, x = "var1", xlab = .var1_lab, title = title,
+                        fill = fill, colour = colour,
+                        palette = palette, palette_direction = palette_direction,
+                        palette_begin = palette_begin, palette_end = palette_end,
+                        alpha = alpha, greyscale = greyscale, theme = theme,
+                        text_size = text_size, font = font, interactive = interactive,
+                        dnorm = dnorm, dnorm_colour = colour, dnorm_alpha = 0.8,
+                        line_size = line_size, transform_x = var1_log10)
+    } else if (.v_class %in% c("factor", "character", "logical")) {
+      if (verbose == TRUE) {
+        message(paste0('`data` class = "', .v_class, '".',
+                       '\nConverting input from a vector to data frame column.',
+                       '\nBuilding graph with `plot_bar()` and assigning input vector to `x`.',
+                       '\nUse `plot_bar()` instead to access additional customization options.',
+                       '\nSee help("plot_bar") for details.'))
+      }
+      p <- plot_bar(vec_df, x = "var1", xlab = .var1_lab, title = title,
+                    fill = fill, colour = colour,
+                    palette = palette, palette_direction = palette_direction,
+                    palette_begin = palette_begin, palette_end = palette_end,
+                    alpha = alpha, greyscale = greyscale, theme = theme,
+                    text_size = text_size, font = font, interactive = interactive,
+                    position = bar_position, width = bar_width, line_size = line_size)
+
+    }
+    return(p)
+  }
+}
+
+# plot_var_all ------------------------------------------------------------
+#' @title
+#'
+#' Plot all variables/vectors in a data frame using a class-appropriate `plot_*`
+#' function.
+#'
+#' @description Easily generate ggplot2 graphs for all (or a named vector of)
+#'   variables in a data frame using a class-appropriate geometry via other
+#'   elucidate `plot_*` functions with a restricted set of customization options
+#'   and some modified defaults. The `var2` argument also allows you to plot all
+#'   variables against a specific named secondary variable. The collection of
+#'   generated graphs will be combined into a single lattice-style figure with
+#'   either the patchwork package or trelliscopejs package. See "Arguments"
+#'   section for details and
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2. To obtain a plot of a single
+#'   variable or vector, use \code{\link{plot_var}} instead. To obtain pairwise plots of
+#'   all bivariate combinations of variables, use \code{\link{plot_var_pairs}}
+#'   instead.
+#'
+#' @importFrom ggplot2 waiver
+#' @importFrom dplyr mutate
+#' @importFrom rlang exec
+#' @importFrom trelliscopejs map_plot
+#' @importFrom trelliscopejs trelliscope
+#' @importFrom patchwork wrap_plots
+#' @importFrom patchwork plot_annotation
+#'
+#' @param data A data frame containing variables to be plotted.
+#'
+#' @param var2 The (quoted or unquoted) name of a secondary variable to plot
+#'   against all other variables in the input data (or a subset of them if the
+#'   `cols` argument is used), where the latter set of "primary" variables will
+#'   be automatically assigned to the `var1` argument of \code{\link{plot_var}}.
+#'   `var2` is usually assigned to the x-axis. However, if the primary variable
+#'   (i.e. `var1`) is a categorical (factor, character, or logical) variable and
+#'   `var2` is a numeric, integer, or date variable, `var2` will be assigned to
+#'   the y-axis and `var1` will be assigned to the x-axis. If `var1` and `var2`
+#'   are both categorical variables, `var1` will be assigned to the x-axis and
+#'   `var2` will be assigned to `facet_var`.
+#'
+#' @param group_var Use if you want to assign a grouping variable to fill
+#'   (colour) and/or (outline) colour e.g. group_var = "grouping_variable" or
+#'   group_var = grouping_variable. Whether the grouping variable is mapped to
+#'   fill, colour, or both will depend upon which `plot_*` function is used (See
+#'   "Value" section). For density plots, both fill and colour are used for
+#'   consistency across the main density plots and added normal density curve
+#'   lines (if dnorm = TRUE). For bar graphs and box-and-whisker plots, the
+#'   variable will be assigned to fill. For scatter plots, the variable will be
+#'   assigned to colour. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param cols A character (or integer) vector of column names (or indices)
+#'   which allows you to plot only a subset of the columns in the input data
+#'   frame, where each of these primary variable columns will be automatically
+#'   assigned to the `var1` argument of \code{\link{plot_var}}. Note that a
+#'   variable which has been assigned to `var2` or `group_var` does not also
+#'   need to be listed here.
+#'
+#' @param var2_lab Accepts a character string to use to change the axis label
+#'   for the variable assigned to `var2`. Ignored if `var2` and the primary
+#'   variable are both categorical variables (since `var2` will be used for
+#'   faceting in such cases).
+#'
+#' @param title A character string to add as a title at the top of the combined
+#'   multiple-panel patchwork graph or trelliscopejs display.
+#'
+#' @param fill Fill colour to use for density plots, bar graphs, and box plots.
+#'   Ignored if a variable that has been assigned to `group_var` is mapped on to
+#'   `fill_var` (see `group_var` argument information above). Default is
+#'   "blue2". Use \code{\link{colour_options}} to see colour option examples.
+#'
+#' @param colour Outline colour to use for density plots, bar graphs, box plots,
+#'   and scatter plots. Ignored if a variable that has been assigned to
+#'   `group_var` is mapped on to `colour_var` (see `group_var` argument
+#'   information above). Default is "black". Use \code{\link{colour_options}} to
+#'   see colour option examples.
+#'
+#' @param palette If a variable is assigned to group_var, this determines which
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
+#'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'    link} for examples.
+#'
+#' @param palette_direction Choose "d2l" for dark to light (default) or "l2d"
+#'   for light to dark.
+#'
+#' @param palette_begin Value between 0 and 1 that determines where along the
+#'   full range of the chosen colour palette's spectrum to begin sampling
+#'   colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param palette_end Value between 0 and 1 that determines where along the full
+#'   range of the chosen colour palette's spectrum to end sampling colours. See
+#'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param alpha This adjusts the transparency/opacity of the main geometric
+#'   objects in the generated plot, with acceptable values ranging from 0 = 100%
+#'   transparent to 1 = 100% opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to grey scale.
+#'
+#' @param line_size Controls the thickness of plotted lines.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currently supported options are: "classic"
+#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
+#'
+#' @param legend_position This allows you to modify the legend position if a
+#'   variable is assigned to `group_var`. Options include "right" (the default),
+#'   "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legend(s).
+#'   Ignored if `group_var` is unspecified.
+#'
+#' @param dnorm When TRUE (default), this adds a dashed line representing a
+#'   normal/Gaussian density curve to density plots, which are rendered for
+#'   plots of single numeric variables. Disabled if `var1` is a date vector,
+#'   `var1_log10` = TRUE, or `basic` = TRUE.
+#'
+#' @param violin When TRUE (default), this adds violin plot outlines to box
+#'   plots, which are rendered in cases where a mixture of numeric and
+#'   categorical variables are assigned to `var1` and `var2`. Disabled if
+#'   `basic` = TRUE.
+#'
+#' @param var1_log10 If TRUE, applies a base-10 logarithmic transformation to a
+#'   numeric variable that has been assigned to `var1`. Ignored if `var1` is a
+#'   categorical variable.
+#'
+#' @param var2_log10 If TRUE, applies a base-10 logarithmic transformation to a
+#'   numeric variable that has been assigned to `var2`. Ignored if `var2` is a
+#'   categorical variable.
+#'
+#' @param point_size Controls the size of points used in scatter plots, which
+#'   are rendered in cases where `var1` and `var2` are both numeric, integer, or
+#'   date variables.
+#'
+#' @param point_shape Point shape to use in scatter plots, which
+#'   are rendered in cases where `var1` and `var2` are both numeric, integer, or
+#'   date variables.
+#'
+#' @param regression_line If TRUE (the default), adds a regression line to scatter
+#'   plots, which are rendered in cases where `var1` and `var2` are both
+#'   numeric, integer, or date variables. Disabled if `basic` = TRUE.
+#'
+#' @param regression_method If `regression_line` = TRUE, this determines the
+#'   type of regression line to use. Currently available options are "gam",
+#'   "loess", and "lm". "gam" is the default, which fits a generalized additive
+#'   model using a smoothing term for x. This method has a longer run time, but
+#'   typically provides a better fit to the data than other options and uses an
+#'   optimization algorithm to determine the optimal wiggliness of the line. If
+#'   the relationship between y and x is linear, the output will be equivalent
+#'   to fitting a linear model. "loess" may be preferable to "gam" for small
+#'   sample sizes. See \code{\link[ggplot2]{stat_smooth}} and
+#'   \code{\link[mgcv]{gam}} for details.
+#'
+#' @param regression_se If TRUE (the default), adds a 95% confidence envelope for the
+#'   regression line. Ignored if `regression_line` = FALSE.
+#'
+#' @param bar_position In bar plots, which are rendered for one or more
+#'   categorical variables, this determines how bars are arranged relative to
+#'   one another when a grouping variable is assigned to `group_var`. The
+#'   default, "dodge", uses \code{\link[ggplot2]{position_dodge}} to arrange
+#'   bars side-by-side; "stack" places the bars on top of each other; "fill"
+#'   also stacks bars but additionally converts y-axis from counts to
+#'   proportions.
+#'
+#' @param bar_width In bar plots, which are rendered for one or more categorical
+#'   variables, this adjusts the width of the bars (default = 0.9).
+#'
+#' @param basic This is a shortcut argument that allows you to simultaneously
+#'   disable the `dnorm`, `violin`, and `regression_line` arguments to produce a
+#'   basic version of a density, box, or scatter plot (depending on
+#'   `var1`/`var2` variable class(es)) without any of those additional layers.
+#'   Dropping these extra layers may noticeably reduce rendering time and memory
+#'   utilization, especially for larger sample sizes and/or when `interactive` =
+#'   TRUE.
+#'
+#' @param interactive Determines whether a static ggplot object or an
+#'   interactive html plotly object is returned. Interactive/plotly mode for
+#'   multiple plots should only be used in conjunction with `trelliscope` =
+#'   TRUE. See \code{\link[plotly]{ggplotly}} for details. Note that in cases
+#'   where a box plot is generated (for a mix of numeric and categorical
+#'   variables) and a variable is also assigned to `group_var`, activating
+#'   interactive/plotly mode will cause a spurious warning message about
+#'   'layout' objects not having a 'boxmode' attribute to be printed to the
+#'   console. This is a
+#'   \href{https://github.com/ropensci/plotly/issues/994}{documented bug} with
+#'   plotly that can be safely ignored, although unfortunately the message
+#'   cannot currently be suppressed.
+#'
+#' @param trelliscope If changed to TRUE, plots will be combined into an
+#'   interactive trelliscope display rather than a static patchwork graph grid.
+#'   See \code{\link[trelliscopejs]{trelliscope}} for more information.
+#'
+#' @param nrow This controls the number of rows to use when arranging plots in
+#'   the combined patchwork or trelliscopejs display.
+#'
+#' @param ncol This controls the number of columns to use when arranging plots
+#'   in the combined patchwork or trelliscopejs display.
+#'
+#' @param guides Controls the pooling of `group_var` legends/guides across plot
+#'   panels if a categorical variable has been assigned to `group_var` and
+#'   `trelliscope` = FALSE. See \code{\link[patchwork]{wrap_plots}} for details.
+#'
+#' @return A static "patchwork" or dynamic "trelliscope" multi-panel graphical
+#'   display of ggplot2 or plotly graphs depending upon the values of the
+#'   `trelliscope` and `interactive` arguments. The type of graph (i.e.
+#'   `ggplot2::geom*` layers) that is rendered in each panel will depend upon
+#'   the classes of the chosen variables, as follows:
+#'
+#'   - One numeric (classes numeric/integer/date) variable will be graphed with
+#'   \code{\link{plot_density}}.
+#'
+#'   - One or two categorical (classes factor/character/logical) variable(s)
+#'   will be graphed with \code{\link{plot_bar}}.
+#'
+#'   - Two numeric variables will be graphed with \code{\link{plot_scatter}}.
+#'
+#'   - A mixture of numeric and categorical variables will be graphed with
+#'   \code{\link{plot_box}}.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' data(mtcars) #load the mtcars data
+#'
+#' #convert variables "cyl" to a factors
+#' mtcars$cyl <- as.factor(mtcars$cyl)
+#'
+#' #plot variables "hp", "wt", and "cyl" from the mtcars data frame
+#' plot_var_all(mtcars, cols = c("hp", "wt", "cyl"))
+#'
+#' #plot each of the same variables against column "mpg"
+#' plot_var_all(mtcars, var2 = mpg, cols = c("hp", "wt", "cyl"))
+#'
+#' #plot "hp" and "wt" against mpg, group by "cyl"
+#' plot_var_all(mtcars, var2 = mpg, group_var = cyl, cols = c("hp", "wt"),
+#'              basic = TRUE, #distable regression lines/CIs
+#'              ncol = 1, nrow = 2) #change the layout
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link{plot_density}}, \code{\link{plot_bar}},
+#'   \code{\link{plot_scatter}}, \code{\link{plot_box}}, \code{\link{plot_var}},
+#'   \code{\link{plot_var_pairs}}, \code{\link[patchwork]{wrap_plots}},
+#'   \code{\link[trelliscopejs]{trelliscope}}
+#'
+#' @export
+plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
+                         var2_lab = ggplot2::waiver(), title = ggplot2::waiver(),
+                         fill = "blue2", colour = "black",
+                         palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
+                         palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
+                         alpha = 0.75, greyscale = FALSE, line_size = 1,
+                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                         text_size = 14, font = c("sans", "serif", "mono"),
+                         legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE,
+                         dnorm = TRUE, violin = TRUE, var1_log10 = FALSE, var2_log10 = FALSE,
+                         point_size = 2, point_shape = c("circle", "square", "diamond", "triangle up", "triangle down"),
+                         regression_line = TRUE, regression_method = c("gam", "loess", "lm"), regression_se = TRUE,
+                         bar_position = c("dodge", "fill", "stack"), bar_width = 0.9,
+                         basic = FALSE, interactive = FALSE, trelliscope = FALSE, nrow = NULL, ncol = NULL, guides = "collect") {
+
+  theme <- match.arg(theme)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  font = match.arg(font)
+  legend_position = match.arg(legend_position)
+  bar_position = match.arg(bar_position)
+  point_shape <- match.arg(point_shape)
+  regression_method <- match.arg(regression_method)
+
+
+  .df_name <- deparse(substitute(data))
+  if(!missing(cols)) {
+    .col_names <- names(data[, cols])
+  } else {
+    .col_names <- names(data)
+  }
+  if(!missing(var2)) {
+    if(is.error(class(data[[var2]]))) {
+      var2 <- deparse(substitute(var2))
+    } else if(!is.character(var2) || length(var2) > 1){
+      stop('If specified, `var2` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+    .var2_class <- class(data[[var2]])
+  }
+  if(!missing(group_var)) {
+    if(is.error(class(data[[group_var]]))) {
+      group_var <- deparse(substitute(group_var))
+    } else if(!is.character(group_var) || length(group_var) > 1){
+      stop('If specified, `group_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(trelliscope == FALSE) {
+    if(missing(var2) && missing(group_var)) {
+      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+                                                                  var1 = .col_names[i],
+                                                                  fill = fill, colour = colour,
+                                                                  palette = palette, palette_direction = palette_direction,
+                                                                  palette_begin = palette_begin, palette_end = palette_end,
+                                                                  alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                  text_size = text_size, font = font, line_size = line_size,
+                                                                  legend_position = legend_position, omit_legend = omit_legend,
+                                                                  dnorm = dnorm, violin = violin,
+                                                                  var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                  point_size = point_size, point_shape = point_shape,
+                                                                  regression_line = regression_line,
+                                                                  regression_se = regression_se,
+                                                                  regression_method = regression_method,
+                                                                  bar_position = bar_position, bar_width = bar_width,
+                                                                  interactive = interactive, verbose = FALSE, basic = basic)
+      )
+    } else if(!missing(var2) && missing(group_var)) {
+      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+                                                                  var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
+                                                                  fill = fill, colour = colour,
+                                                                  palette = palette, palette_direction = palette_direction,
+                                                                  palette_begin = palette_begin, palette_end = palette_end,
+                                                                  alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                  text_size = text_size, font = font, line_size = line_size,
+                                                                  legend_position = legend_position, omit_legend = omit_legend,
+                                                                  dnorm = dnorm, violin = violin,
+                                                                  var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                  point_size = point_size, point_shape = point_shape,
+                                                                  regression_line = regression_line,
+                                                                  regression_se = regression_se,
+                                                                  regression_method = regression_method,
+                                                                  bar_position = bar_position, bar_width = bar_width,
+                                                                  interactive = interactive, verbose = FALSE, basic = basic)
+      )
+    } else if(missing(var2) && !missing(group_var)) {
+      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+                                                                  var1 = .col_names[i],
+                                                                  group_var = group_var,
+                                                                  fill = fill, colour = colour,
+                                                                  palette = palette, palette_direction = palette_direction,
+                                                                  palette_begin = palette_begin, palette_end = palette_end,
+                                                                  alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                  text_size = text_size, font = font, line_size = line_size,
+                                                                  legend_position = legend_position, omit_legend = omit_legend,
+                                                                  dnorm = dnorm, violin = violin,
+                                                                  var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                  point_size = point_size, point_shape = point_shape,
+                                                                  regression_line = regression_line,
+                                                                  regression_se = regression_se,
+                                                                  regression_method = regression_method,
+                                                                  bar_position = bar_position, bar_width = bar_width,
+                                                                  interactive = interactive, verbose = FALSE, basic = basic)
+      )
+    } else {
+      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+                                                                  var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
+                                                                  group_var = group_var,
+                                                                  fill = fill, colour = colour,
+                                                                  palette = palette, palette_direction = palette_direction,
+                                                                  palette_begin = palette_begin, palette_end = palette_end,
+                                                                  alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                  text_size = text_size, font = font, line_size = line_size,
+                                                                  legend_position = legend_position, omit_legend = omit_legend,
+                                                                  dnorm = dnorm, violin = violin,
+                                                                  var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                  point_size = point_size, point_shape = point_shape,
+                                                                  regression_line = regression_line,
+                                                                  regression_se = regression_se,
+                                                                  regression_method = regression_method,
+                                                                  bar_position = bar_position, bar_width = bar_width,
+                                                                  interactive = interactive, verbose = FALSE, basic = basic)
+      )
+    }
+
+    p <- patchwork::wrap_plots(.pl, nrow = nrow, ncol = ncol, guides = guides, byrow = TRUE)
+
+    if(class(title) != "waiver") {
+      p <- patchwork::plot_annotation(title = title)
+    }
+
+    return(p)
+
+  } else {
+    if(missing(var2) && missing(group_var)) {
+      .p_df <- dplyr::mutate(
+        data.frame("var1" = .col_names),
+        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+                                            function(i) rlang::exec("plot_var", data,
+                                                                    var1 = .col_names[i],
+                                                                    fill = fill, colour = colour,
+                                                                    palette = palette, palette_direction = palette_direction,
+                                                                    palette_begin = palette_begin, palette_end = palette_end,
+                                                                    alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                    text_size = text_size, font = font, line_size = line_size,
+                                                                    legend_position = legend_position, omit_legend = omit_legend,
+                                                                    dnorm = dnorm, violin = violin,
+                                                                    var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                    point_size = point_size, point_shape = point_shape,
+                                                                    regression_line = regression_line,
+                                                                    regression_se = regression_se,
+                                                                    regression_method = regression_method,
+                                                                    bar_position = bar_position, bar_width = bar_width,
+                                                                    interactive = interactive, verbose = FALSE, basic = basic)
+        )
+      )
+    } else if(!missing(var2) && missing(group_var)) {
+      .p_df <- dplyr::mutate(
+        data.frame("var1" = .col_names),
+        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+                                            function(i) rlang::exec("plot_var", data,
+                                                                    var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
+                                                                    fill = fill, colour = colour,
+                                                                    palette = palette, palette_direction = palette_direction,
+                                                                    palette_begin = palette_begin, palette_end = palette_end,
+                                                                    alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                    text_size = text_size, font = font, line_size = line_size,
+                                                                    legend_position = legend_position, omit_legend = omit_legend,
+                                                                    dnorm = dnorm, violin = violin,
+                                                                    var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                    point_size = point_size, point_shape = point_shape,
+                                                                    regression_line = regression_line,
+                                                                    regression_se = regression_se,
+                                                                    regression_method = regression_method,
+                                                                    bar_position = bar_position, bar_width = bar_width,
+                                                                    interactive = interactive, verbose = FALSE, basic = basic)
+        )
+      )
+    } else if(missing(var2) && !missing(group_var)) {
+      .p_df <- dplyr::mutate(
+        data.frame("var1" = .col_names),
+        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+                                            function(i) rlang::exec("plot_var", data,
+                                                                    var1 = .col_names[i],
+                                                                    group_var = group_var, fill = fill, colour = colour,
+                                                                    palette = palette, palette_direction = palette_direction,
+                                                                    palette_begin = palette_begin, palette_end = palette_end,
+                                                                    alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                    text_size = text_size, font = font, line_size = line_size,
+                                                                    legend_position = legend_position, omit_legend = omit_legend,
+                                                                    dnorm = dnorm, violin = violin,
+                                                                    var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                    point_size = point_size, point_shape = point_shape,
+                                                                    regression_line = regression_line,
+                                                                    regression_se = regression_se,
+                                                                    regression_method = regression_method,
+                                                                    bar_position = bar_position, bar_width = bar_width,
+                                                                    interactive = interactive, verbose = FALSE, basic = basic)
+        )
+      )
+    } else {
+      .p_df <- dplyr::mutate(
+        data.frame("var1" = .col_names),
+        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+                                            function(i) rlang::exec("plot_var", data,
+                                                                    var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
+                                                                    group_var = group_var, fill = fill, colour = colour,
+                                                                    palette = palette, palette_direction = palette_direction,
+                                                                    palette_begin = palette_begin, palette_end = palette_end,
+                                                                    alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                    text_size = text_size, font = font, line_size = line_size,
+                                                                    legend_position = legend_position, omit_legend = omit_legend,
+                                                                    dnorm = dnorm, violin = violin,
+                                                                    var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                    point_size = point_size, point_shape = point_shape,
+                                                                    regression_line = regression_line,
+                                                                    regression_se = regression_se,
+                                                                    regression_method = regression_method,
+                                                                    bar_position = bar_position, bar_width = bar_width,
+                                                                    interactive = interactive, verbose = FALSE, basic = basic)
+        )
+      )
+    }
+    if(missing(nrow) && missing(ncol)) {
+      trelliscopejs::trelliscope(.p_df,
+                                 name = paste(.df_name, "variable plots"))
+    } else if(!missing(nrow) && missing(ncol)) {
+      trelliscopejs::trelliscope(.p_df,
+                                 name = paste(.df_name, "variable plots"),
+                                 nrow = nrow)
+    } else if(missing(nrow) && !missing(ncol)) {
+      trelliscopejs::trelliscope(.p_df,
+                                 name = paste(.df_name, "variable plots"),
+                                 nrow = nrow)
+    } else {
+      trelliscopejs::trelliscope(.p_df,
+                                 name = paste(.df_name, "variable plots"),
+                                 nrow = nrow, ncol = ncol)
+    }
+  }
+}
+
+# plot_var_pairs ----------------------------------------------------------
+#' @title
+#'
+#' Plot all variables/vectors in a data frame using a class-appropriate `plot_*`
+#' function.
+#'
+#' @description Easily generate a matrix of ggplot2 graphs for all pairwise
+#'   combinations of all (or a subset of) variables in a data frame using a
+#'   class-appropriate geometry via other elucidate `plot_*` functions with a
+#'   restricted set of customization options and some modified defaults. The
+#'   collection of generated graphs will be combined into a single lattice-style
+#'   matrix figure with either the patchwork package or trelliscopejs package.
+#'   See "Arguments" section for details and
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2. To obtain a plot of a single
+#'   variable or vector, use \code{\link{plot_var}} instead. To obtain
+#'   univariate plots of all variables, or plots of all variables against a
+#'   specific secondary variable, use \code{\link{plot_var_all}} instead.
+#'
+#' @importFrom ggplot2 waiver
+#' @importFrom dplyr mutate
+#' @importFrom rlang exec
+#' @importFrom trelliscopejs map_plot
+#' @importFrom trelliscopejs trelliscope
+#' @importFrom patchwork wrap_plots
+#' @importFrom patchwork plot_annotation
+#'
+#' @param data A data frame containing variables to be plotted against each
+#'   other in pairwise/bivariate combinations.
+#'
+#' @param group_var Use if you want to assign a grouping variable to fill
+#'   (colour) and/or (outline) colour e.g. group_var = "grouping_variable" or
+#'   group_var = grouping_variable. Whether the grouping variable is mapped to
+#'   fill, colour, or both will depend upon which `plot_*` function is used (See
+#'   "Value" section). For density plots, both fill and colour are used for
+#'   consistency across the main density plots and added normal density curve
+#'   lines (if dnorm = TRUE). For bar graphs and box-and-whisker plots, the
+#'   variable will be assigned to fill. For scatter plots, the variable will be
+#'   assigned to colour. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param cols A character (or integer) vector of column names (or indices)
+#'   which allows you to generate pair plots only a subset of the columns in the
+#'   input data frame, where each variable combinmation will be assigned once
+#'   each of the `var1` and `var2` arguments of  \code{\link{plot_var}}. Note
+#'   that a variable which has been assigned to `group_var` does not also need
+#'   to be listed here.
+#'
+#' @param title A character string to add as a title at the top of the combined
+#'   multiple-panel patchwork graph or trelliscopejs display.
+#'
+#' @param fill Fill colour to use for density plots, bar graphs, and box plots.
+#'   Ignored if a variable that has been assigned to `group_var` is mapped on to
+#'   `fill_var` (see `group_var` argument information above). Default is
+#'   "blue2". Use \code{\link{colour_options}} to see colour option examples.
+#'
+#' @param colour Outline colour to use for density plots, bar graphs, box plots,
+#'   and scatter plots. Ignored if a variable that has been assigned to
+#'   `group_var` is mapped on to `colour_var` (see `group_var` argument
+#'   information above). Default is "black". Use \code{\link{colour_options}} to
+#'   see colour option examples.
+#'
+#' @param palette If a variable is assigned to group_var, this determines which
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
+#'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'    link} for examples.
+#'
+#' @param palette_direction Choose "d2l" for dark to light (default) or "l2d"
+#'   for light to dark.
+#'
+#' @param palette_begin Value between 0 and 1 that determines where along the
+#'   full range of the chosen colour palette's spectrum to begin sampling
+#'   colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param palette_end Value between 0 and 1 that determines where along the full
+#'   range of the chosen colour palette's spectrum to end sampling colours. See
+#'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param alpha This adjusts the transparency/opacity of the main geometric
+#'   objects in the generated plot, with acceptable values ranging from 0 = 100%
+#'   transparent to 1 = 100% opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to grey scale.
+#'
+#' @param line_size Controls the thickness of plotted lines.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currently supported options are: "classic"
+#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
+#'
+#' @param legend_position This allows you to modify the legend position if a
+#'   variable is assigned to `group_var`. Options include "right" (the default),
+#'   "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legend(s).
+#'   Ignored if `group_var` is unspecified.
+#'
+#' @param dnorm When TRUE (default), this adds a dashed line representing a
+#'   normal/Gaussian density curve to density plots, which are rendered for
+#'   plots of single numeric variables. Disabled if `var1` is a date vector,
+#'   `var1_log10` = TRUE, or `basic` = TRUE.
+#'
+#' @param violin When TRUE (default), this adds violin plot outlines to box
+#'   plots, which are rendered in cases where a mixture of numeric and
+#'   categorical variables are assigned to `var1` and `var2`. Disabled if
+#'   `basic` = TRUE.
+#'
+#' @param var1_log10 If TRUE, applies a base-10 logarithmic transformation to a
+#'   numeric variable that has been assigned to `var1`. Ignored if `var1` is a
+#'   categorical variable.
+#'
+#' @param var2_log10 If TRUE, applies a base-10 logarithmic transformation to a
+#'   numeric variable that has been assigned to `var2`. Ignored if `var2` is a
+#'   categorical variable.
+#'
+#' @param point_size Controls the size of points used in scatter plots, which
+#'   are rendered in cases where `var1` and `var2` are both numeric, integer, or
+#'   date variables.
+#'
+#' @param point_shape Point shape to use in scatter plots, which
+#'   are rendered in cases where `var1` and `var2` are both numeric, integer, or
+#'   date variables.
+#'
+#' @param regression_line If TRUE (the default), adds a regression line to scatter
+#'   plots, which are rendered in cases where `var1` and `var2` are both
+#'   numeric, integer, or date variables. Disabled if `basic` = TRUE.
+#'
+#' @param regression_method If `regression_line` = TRUE, this determines the
+#'   type of regression line to use. Currently available options are "gam",
+#'   "loess", and "lm". "gam" is the default, which fits a generalized additive
+#'   model using a smoothing term for x. This method has a longer run time, but
+#'   typically provides a better fit to the data than other options and uses an
+#'   optimization algorithm to determine the optimal wiggliness of the line. If
+#'   the relationship between y and x is linear, the output will be equivalent
+#'   to fitting a linear model. "loess" may be preferable to "gam" for small
+#'   sample sizes. See \code{\link[ggplot2]{stat_smooth}} and
+#'   \code{\link[mgcv]{gam}} for details.
+#'
+#' @param regression_se If TRUE (the default), adds a 95% confidence envelope for the
+#'   regression line. Ignored if `regression_line` = FALSE.
+#'
+#' @param bar_position In bar plots, which are rendered for one or more
+#'   categorical variables, this determines how bars are arranged relative to
+#'   one another when a grouping variable is assigned to `group_var`. The
+#'   default, "dodge", uses \code{\link[ggplot2]{position_dodge}} to arrange
+#'   bars side-by-side; "stack" places the bars on top of each other; "fill"
+#'   also stacks bars but additionally converts y-axis from counts to
+#'   proportions.
+#'
+#' @param bar_width In bar plots, which are rendered for one or more categorical
+#'   variables, this adjusts the width of the bars (default = 0.9).
+#'
+#' @param basic This is a shortcut argument that allows you to simultaneously
+#'   disable the `dnorm`, `violin`, and `regression_line` arguments to produce a
+#'   basic version of a density, box, or scatter plot (depending on
+#'   `var1`/`var2` variable class(es)) without any of those additional layers.
+#'   Dropping these extra layers may noticeably reduce rendering time and memory
+#'   utilization, especially for larger sample sizes and/or when `interactive` =
+#'   TRUE.
+#'
+#' @param interactive Determines whether a static ggplot object or an
+#'   interactive html plotly object is returned. Interactive/plotly mode for
+#'   multiple plots should only be used in conjunction with `trelliscope` =
+#'   TRUE. See \code{\link[plotly]{ggplotly}} for details. Note that in cases
+#'   where a box plot is generated (for a mix of numeric and categorical
+#'   variables) and a variable is also assigned to `group_var`, activating
+#'   interactive/plotly mode will cause a spurious warning message about
+#'   'layout' objects not having a 'boxmode' attribute to be printed to the
+#'   console. This is a
+#'   \href{https://github.com/ropensci/plotly/issues/994}{documented bug} with
+#'   plotly that can be safely ignored, although unfortunately the message
+#'   cannot currently be suppressed.
+#'
+#' @param trelliscope If changed to TRUE, plots will be combined into an
+#'   interactive trelliscope display rather than a static patchwork graph grid.
+#'   See \code{\link[trelliscopejs]{trelliscope}} for more information.
+#'
+#' @param nrow This controls the number of rows to use when arranging plots in
+#'   the combined patchwork or trelliscopejs display. Modifying the arrangement
+#'   of the plot matrix this way is not recommended when `trelliscope` = FALSE.
+#'
+#' @param ncol This controls the number of columns to use when arranging plots
+#'   in the combined patchwork or trelliscopejs display. Modifying the arrangement
+#'   of the plot matrix this way is not recommended when `trelliscope` = FALSE.
+#'
+#' @param guides Controls the pooling of `group_var` legends/guides across plot
+#'   panels if a categorical variable has been assigned to `group_var` and
+#'   `trelliscope` = FALSE. See \code{\link[patchwork]{wrap_plots}} for details.
+#'
+#' @return A static "patchwork" or dynamic "trelliscope" multi-panel graphical
+#'   display matrix of ggplot2 or plotly graphs depending upon the values of the
+#'   `trelliscope` and `interactive` arguments. The type of graph (i.e.
+#'   `ggplot2::geom*` layers) that is rendered in each panel will depend upon
+#'   the classes of the chosen variables, as follows:
+#'
+#'   - One numeric (classes numeric/integer/date) variable (e.g. on the diagonal
+#'   of the plot matrix) will be graphed with \code{\link{plot_density}}.
+#'
+#'   - One (e.g. on the diagonal) or two (appearing off-diagonal) categorical
+#'   (classes factor/character/logical) variable(s) will be graphed with
+#'   \code{\link{plot_bar}}.
+#'
+#'   - Two numeric variables will be graphed with \code{\link{plot_scatter}}.
+#'
+#'   - A mixture of numeric and categorical variables will be graphed with
+#'   \code{\link{plot_box}}, where the numeric variable will always be assigned
+#'   to the y-axis.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' data(mtcars) #load the mtcars data
+#'
+#' # convert variables "cyl" to a factors
+#' mtcars$cyl <- as.factor(mtcars$cyl)
+#'
+#' # plot all pairwise combinations of variables "mpg", "hp", and "cyl"
+#' plot_var_pairs(mtcars, cols = c("mpg", "hp", "cyl"))
+#'
+#' # render basic versions of the same plots without normal density curves,
+#' # violin plots, or regression lines added.
+#' plot_var_pairs(mtcars, cols = c("mpg", "hp", "cyl"), basic = TRUE)
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link{plot_density}}, \code{\link{plot_bar}},
+#'   \code{\link{plot_scatter}}, \code{\link{plot_box}}, \code{\link{plot_var}},
+#'   \code{\link{plot_var_all}}, \code{\link[patchwork]{wrap_plots}},
+#'   \code{\link[trelliscopejs]{trelliscope}}
+#'
+#' @export
+plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2::waiver(),
+                           fill = "blue2", colour = "black",
+                           palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
+                           palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
+                           alpha = 0.75, greyscale = FALSE, line_size = 1,
+                           theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),
+                           legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE,
+                           dnorm = TRUE, violin = TRUE, var1_log10 = FALSE, var2_log10 = FALSE,
+                           point_size = 2, point_shape = c("circle", "square", "diamond", "triangle up", "triangle down"),
+                           regression_line = TRUE, regression_method = c("gam", "loess", "lm"), regression_se = TRUE,
+                           bar_position = c("dodge", "fill", "stack"), bar_width = 0.9, basic = FALSE,
+                           interactive = FALSE, trelliscope = FALSE, nrow = NULL, ncol = NULL, guides = "collect") {
+
+  theme <- match.arg(theme)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  font = match.arg(font)
+  legend_position = match.arg(legend_position)
+  bar_position = match.arg(bar_position)
+  point_shape <- match.arg(point_shape)
+  regression_method <- match.arg(regression_method)
+
+  if(!missing(group_var)) {
+    if(is.error(class(data[[group_var]]))) {
+      group_var <- deparse(substitute(group_var))
+    } else if(!is.character(group_var) || length(group_var) > 1){
+      stop('If specified, `group_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(cols)) {
+    .col_names <- names(data[, cols])
+  } else {
+    .col_names <- names(data)
+  }
+
+  .ncols <- length(.col_names)
+  .comp_df <- expand.grid("v1" = .col_names, "v2" = .col_names, stringsAsFactors = FALSE)
+  .v1 <- .comp_df[["v1"]]
+  .v2 <- .comp_df[["v2"]]
+
+  if(trelliscope == FALSE) {
+    if(missing(group_var)) {
+      .pl <- lapply(1:length(.v1),
+                    function(i) rlang::exec("plot_var", data,
+                                            var1 = .v1[i], var2 = .v2[i],
+                                            fill = fill, colour = colour,
+                                            palette = palette, palette_direction = palette_direction,
+                                            palette_begin = palette_begin, palette_end = palette_end,
+                                            alpha = alpha, greyscale = greyscale, theme = theme,
+                                            text_size = text_size, font = font, line_size = line_size,
+                                            legend_position = legend_position, omit_legend = omit_legend,
+                                            dnorm = dnorm, violin = violin,
+                                            var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                            point_size = point_size, point_shape = point_shape,
+                                            regression_line = regression_line,
+                                            regression_se = regression_se,
+                                            regression_method = regression_method,
+                                            bar_position = bar_position, bar_width = bar_width,
+                                            interactive = interactive, verbose = FALSE, basic = basic)
+      )
+    } else {
+      .pl <- lapply(1:length(.v1),
+                    function(i) rlang::exec("plot_var", data,
+                                            var1 = .v1[i], var2 = .v2[i],
+                                            group_var = group_var,
+                                            fill = fill, colour = colour,
+                                            palette = palette, palette_direction = palette_direction,
+                                            palette_begin = palette_begin, palette_end = palette_end,
+                                            alpha = alpha, greyscale = greyscale, theme = theme,
+                                            text_size = text_size, font = font, line_size = line_size,
+                                            legend_position = legend_position, omit_legend = omit_legend,
+                                            dnorm = dnorm, violin = violin,
+                                            var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                            point_size = point_size, point_shape = point_shape,
+                                            regression_line = regression_line,
+                                            regression_se = regression_se,
+                                            regression_method = regression_method,
+                                            bar_position = bar_position, bar_width = bar_width,
+                                            interactive = interactive, verbose = FALSE, basic = basic)
+      )
+    }
+    if(missing(nrow) && missing(ncol)) {
+      p <- patchwork::wrap_plots(.pl, ncol = .ncols, nrow = .ncols, guides = guides, byrow = TRUE)
+      if(class(title) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title)
+      }
+    } else if(!missing(nrow) && missing(ncol)) {
+      p <- patchwork::wrap_plots(.pl, ncol = nrow, nrow = .ncols, guides = guides, byrow = TRUE)
+      if(class(title) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title)
+      }
+    } else if(missing(nrow) && !missing(ncol)) {
+      p <- patchwork::wrap_plots(.pl, ncol = .ncols, nrow = ncol, guides = guides, byrow = TRUE)
+      if(class(title) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title)
+      }
+    } else {
+      p <- patchwork::wrap_plots(.pl, ncol = ncol, nrow = ncol, guides = guides, byrow = TRUE)
+      if(class(title) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title)
+      }
+    }
+    return(p)
+  } else {
+    if(missing(group_var)) {
+      .p_df <- dplyr::mutate(.comp_df,
+                             data_plot = trelliscopejs::map_plot(1:length(.v1),
+                                                                 function(i) rlang::exec("plot_var", data,
+                                                                                         var1 = .v1[i], var2 = .v2[i],
+                                                                                         fill = fill, colour = colour,
+                                                                                         palette = palette, palette_direction = palette_direction,
+                                                                                         palette_begin = palette_begin, palette_end = palette_end,
+                                                                                         alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                                         text_size = text_size, font = font, line_size = line_size,
+                                                                                         legend_position = legend_position, omit_legend = omit_legend,
+                                                                                         dnorm = dnorm, violin = violin,
+                                                                                         var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                                         point_size = point_size, point_shape = point_shape,
+                                                                                         regression_line = regression_line,
+                                                                                         regression_se = regression_se,
+                                                                                         regression_method = regression_method,
+                                                                                         bar_position = bar_position, bar_width = bar_width,
+                                                                                         interactive = interactive, verbose = FALSE, basic = basic)
+                             )
+      )
+    } else {
+      .p_df <- dplyr::mutate(.comp_df,
+                             data_plot = trelliscopejs::map_plot(1:length(.v1),
+                                                                 function(i) rlang::exec("plot_var", data,
+                                                                                         var1 = .v1[i], var2 = .v2[i],
+                                                                                         group_var = group_var,
+                                                                                         fill = fill, colour = colour,
+                                                                                         palette = palette, palette_direction = palette_direction,
+                                                                                         palette_begin = palette_begin, palette_end = palette_end,
+                                                                                         alpha = alpha, greyscale = greyscale, theme = theme,
+                                                                                         text_size = text_size, font = font, line_size = line_size,
+                                                                                         legend_position = legend_position, omit_legend = omit_legend,
+                                                                                         dnorm = dnorm, violin = violin,
+                                                                                         var1_log10 = var1_log10, var2_log10 = var2_log10,
+                                                                                         point_size = point_size, point_shape = point_shape,
+                                                                                         regression_line = regression_line,
+                                                                                         regression_se = regression_se,
+                                                                                         regression_method = regression_method,
+                                                                                         bar_position = bar_position, bar_width = bar_width,
+                                                                                         interactive = interactive, verbose = FALSE, basic = basic)
+                             )
+      )
+    }
+    if(missing(nrow) && missing(ncol)) {
+      if(class(title) == "waiver") {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = "bivariate comparison plots")
+      } else {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = title)
+      }
+    } else if(!missing(nrow) && missing(ncol)) {
+      if(class(title) == "waiver") {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = "bivariate comparison plots",
+                                   nrow = nrow)
+      } else {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = title,
+                                   nrow = nrow)
+      }
+    } else if(missing(nrow) && !missing(ncol)) {
+      if(class(title) == "waiver") {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = "bivariate comparison plots",
+                                   ncol = ncol)
+      } else {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = title,
+                                   ncol = ncol)
+      }
+    } else {
+      if(class(title) == "waiver") {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = "bivariate comparison plots",
+                                   nrow = nrow, ncol = ncol)
+      } else {
+        trelliscopejs::trelliscope(.p_df,
+                                   name = title,
+                                   nrow = nrow, ncol = ncol)
+      }
+    }
+  }
+}
+
+# plot_c ------------------------------------------------------------------
+#' @title
+#'
+#' Combine plots into a multi-panel display with the `patchwork` or
+#' `trelliscopejs` packages.
+#'
+#' @description Easily combine an arbitrary number of plots into a multi-panel
+#'   display using either \code{\link[patchwork]{wrap_plots}} for a single
+#'   static display or \code{\link[trelliscopejs]{trelliscope}} for an
+#'   interactive display. The static (`patchwork`) output option (trelliscope =
+#'   FALSE) is useful if you intend to produce a multi-panel graph for printing
+#'   or inclusion in a static document. The interactive (`trelliscopejs`) output
+#'   option (trelliscope = TRUE) is useful when you want to combine too many
+#'   plots to render them all legibly on the screen or if you want to combine
+#'   `plotly` graphs such as those generated by the "interactive" mode of other
+#'   elucidate `plot_*` functions.
+#'
+#' @importFrom patchwork wrap_plots
+#' @importFrom trelliscopejs trelliscope
+#' @importFrom tibble tibble
+#
+#' @param ... Any number of plots to combine into a multi-panel display. Also
+#'   accepts a (single) list of plots. Set trelliscope = TRUE if any of the
+#'   plots are plotly objects.
+#'
+#' @param ncol The number of columns to use when arranging plot panels.
+#'
+#' @param nrow The number of rows to use when arranging plot panels.
+#'
+#' @param guides IF trelliscope = FALSE, this determines how
+#'   \code{\link[patchwork]{wrap_plots}} handles guides/legends across graphical
+#'   panels. If set to "collect" (default), redundant guides will be collected
+#'   such that only a single copy of each unique guide is shown. See
+#'   \code{\link[patchwork]{wrap_plots}} for details.
+#'
+#' @param trelliscope Set this to TRUE if you want to combine plots into an
+#'   interactive trelliscope display with
+#'   \code{\link[trelliscopejs]{trelliscope}}, otherwise plots will be combined
+#'   into a static display using \code{\link[patchwork]{wrap_plots}}.
+#'
+#' @return A static "patchwork" or dynamic "trelliscope" multi-panel graphical
+#'   display depending upon the value of the "trelliscope" argument.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' #create a few basic plots with elucidate::plot_* functions
+#' p1 <- plot_density(pdata, y1)
+#' p2 <- plot_bar(pdata, g)
+#' p3 <- plot_histogram(pdata, y2)
+#'
+#' #combine them into a static multi-panel display with plot_c()
+#' plot_c(p1, p2, p3)
+#'
+#' \donttest{
+#' #combine them into a dynamic multi-panel display
+#' #by setting the trelliscope argument to TRUE
+#' plot_c(p1, p2, p3, trelliscope = TRUE)
+#' }
+#'
+#'
+#' @seealso \code{\link[patchwork]{wrap_plots}}, \code{\link[trelliscopejs]{trelliscope}}
+#'
+#' @export
+plot_c <- function(..., nrow = NULL, ncol = NULL, guides = c("collect", "auto", "keep"), trelliscope = FALSE) {
+  guides <- match.arg(guides)
+  .classes <- lapply(list(...), class)
+  if("list" %in% .classes && length(.classes) == 1) {
+    if(trelliscope == FALSE) {
+      p <- patchwork::wrap_plots(..., nrow = nrow, ncol = ncol, guides = guides)
+      return(p)
+    } else {
+      .p_names <- names(...)
+      if(is.null(.p_names)) {
+        .p_names <- paste0("plot_", seq_along(...))
+      }
+
+      .p_df <- tibble::tibble("plot" = .p_names, "panel" = unlist(list(...), recursive = FALSE))
+
+      if(missing(nrow) && missing(ncol)) {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display")
+      } else if(!missing(nrow) && missing(ncol)) {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display",
+                                   nrow = nrow)
+      } else if(missing(nrow) && !missing(ncol)) {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display",
+                                   nrow = nrow)
+      } else {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display",
+                                   nrow = nrow, ncol = ncol)
+      }
+    }
+  } else {
+    if(trelliscope == FALSE) {
+      p <- patchwork::wrap_plots(list(...), nrow = nrow, ncol = ncol, guides = guides)
+      return(p)
+    } else {
+      .p_names <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+
+      .p_df <- tibble::tibble("plot" = .p_names, "panel" = list(...))
+
+      if(missing(nrow) && missing(ncol)) {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display")
+      } else if(!missing(nrow) && missing(ncol)) {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display",
+                                   nrow = nrow)
+      } else if(missing(nrow) && !missing(ncol)) {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display",
+                                   nrow = nrow)
+      } else {
+        trelliscopejs::trelliscope(.p_df, panel_col = "panel", name = "trelliscope display",
+                                   nrow = nrow, ncol = ncol)
+      }
+    }
+  }
+}
+

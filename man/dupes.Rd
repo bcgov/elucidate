@@ -18,8 +18,11 @@ dupes(
 \item{data}{a data frame, tibble, or data.table.}
 
 \item{...}{This special argument accepts any number of unquoted column names
-(also present in the data source) to use when searching for duplicates. If
-no column names are specified, all columns will be used.}
+(also present in the data source) to use when searching for duplicates,
+e.g. \verb{x, y, z}. Also accepts a character vector of column names or index
+numbers, e.g. c("x", "y", "z") or c(1, 2, 3), but not a mixture of formats
+in the same call. If no column names are specified, all columns will be
+used.}
 
 \item{keep_all_cols}{If column names are specified using \code{...}, this allows
 you to drop unspecified columns, similarly to the \code{.keep_all} argument for

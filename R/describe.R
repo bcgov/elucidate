@@ -82,12 +82,16 @@ tbcvs <- function(y, sep = "_") {
 #'   vector ("y") to be summarized and any grouping variables.
 #'
 #' @param y If the data object is a data.frame, this is the variable for which
-#'   you wish to obtain a descriptive summary
+#'   you wish to obtain a descriptive summary. You can use either the quoted or
+#'   unquoted name of the variable, e.g. "y_var" or y_var.
 #'
 #' @param ... If the data object is a data.frame, this special argument accepts
-#'   any number of unquoted grouping variable names (also present in the data source)
-#'   to use for subsetting, separated by commas (e.g. \code{group_var1,
-#'   group_var2})
+#'   any number of unquoted grouping variable names (also present in the data
+#'   source) to use for subsetting, separated by commas, e.g. `group_var1,
+#'   group_var2`. Also accepts a character vector of column names or index
+#'   numbers, e.g. c("group_var1", "group_var2") or c(1, 2), but not a mixture
+#'   of formats in the same call. If no column names are specified, all columns
+#'   will be used.
 #'
 #' @param digits This determines the number of digits used for rounding of
 #'   numeric outputs.
@@ -255,15 +259,26 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
                               counts_tb = tbcvs(data, sep = sep))]
       )
     } else {
-      stop("Input data class not currently supported.\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character")
+      stop(paste0("Input data class not currently supported.",
+           "\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character"))
     }
   } else {
     if(missing(y)){
-      stop("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.\nIf you want summaries for all variables in data, use describe_all() instead")
+      stop(paste0("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.",
+           "\nIf you want summaries for all variables in data, use describe_all() instead"))
+    } else {
+      if(is.error(class(data[[y]]))) {
+        y <- deparse(substitute(y))
+      } else if(!is.character(y) || length(y) > 1){
+        stop(paste0('`y` must be a single symbol or character string representing a column',
+             '\nin the input data frame supplied to the `data` argument.'))
+      }
     }
+    if(!missing(...)) {
+      g <- group_parser(data, ...)
+    }
+
     dt <- data.table::as.data.table(data)
-    y <- deparse(substitute(y))
-    g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
 
     if(is.numeric(dt[[y]])){
       if(!missing(...)){
@@ -426,7 +441,10 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #'
 #' @param ... This special argument accepts any number of unquoted grouping
 #'   variable names (also present in the data source) to use for subsetting,
-#'   separated by commas (e.g. \code{group_var1, group_var2})
+#'   separated by commas, e.g. `group_var1, group_var2`. Also accepts a
+#'   character vector of column names or index numbers, e.g. c("group_var1",
+#'   "group_var2") or c(1, 2), but not a mixture of formats in the same call. If
+#'   no column names are specified, all columns will be used.
 #'
 #' @param class The variable classes in data that you would like summaries for.
 #'   Either "all" for all classes, or a character vector indicating which
@@ -552,7 +570,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
   }
 
   if(!missing(...)) {
-    g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+    g <- group_parser(data, ...)
   }
 
   if(class == "all" || "d" %chin% class) {

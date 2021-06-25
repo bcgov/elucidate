@@ -46,7 +46,8 @@ se <- function(y, na.rm = TRUE) {
   return(se)
 }
 
-#inverse quantile:get the quantiles corresponding to a vector of values####
+
+# inverse quantile:get the quantiles corresponding to a vector of  --------
 #' @title
 #' Get the quantile(s) corresponding to a vector of values.
 #'
@@ -191,7 +192,7 @@ fmean <- function(y) {
 #' @seealso \code{\link[e1071]{skewness}}, \code{\link[psych]{skew}}
 #'
 #' @export
-skewness <- function (y, na.rm = TRUE, type = 2) {
+skewness <- function(y, na.rm = TRUE, type = 2) {
   #types are the same as e1071 & psych
   if(na.rm == TRUE) {
     y <- na.omit(y)
@@ -265,7 +266,7 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
   return(out)
 }
 
-#counts for unique values in a vector####
+# counts ------------------------------------------------------------------
 #' @title
 #' Obtain the counts for unique values of a vector.
 #'
@@ -334,7 +335,9 @@ counts <- function(y, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TR
   return(out)
 }
 
-#counts for unique values in a dataframe####
+
+
+# counts_all --------------------------------------------------------------
 #' @title
 #' Obtain the counts for unique values of all variables in a data frame.
 #'
@@ -399,6 +402,7 @@ counts_all <- function(data, n = "all", order = c("d", "a", "i"), sep = "_", na.
 #'   cases. For complex use cases see \code{\link{describe}}.
 #'
 #' @importFrom tidyr separate
+#' @importFrom stats na.omit
 #'
 #' @param y A vector.
 #'
@@ -432,7 +436,7 @@ counts_all <- function(data, n = "all", order = c("d", "a", "i"), sep = "_", na.
 counts_tb <- function(y, n = 10, sep = "_", na.rm = TRUE) {
   top <- counts(y, n = n, order = "d", sep = sep, na.rm = na.rm)
   bot <- counts(y, n = n, order = "a", sep = sep, na.rm = na.rm)
-  out <- data.frame(top, bot)
+  out <- na.omit(data.frame(top, bot))
   out <- tidyr::separate(out, col = "top", into = c("top_v", "top_n"), sep = sep)
   out <- tidyr::separate(out, col = "bot", into = c("bot_v", "bot_n"), sep = sep)
   return(out)
@@ -449,6 +453,7 @@ counts_tb <- function(y, n = 10, sep = "_", na.rm = TRUE) {
 #'   rare cases. For complex use cases see \code{\link{describe_all}}.
 #'
 #' @importFrom purrr map
+#' @importFrom stats na.omit
 #'
 #' @param data A data frame (required).
 #'
@@ -488,7 +493,7 @@ counts_tb <- function(y, n = 10, sep = "_", na.rm = TRUE) {
 #' @export
 counts_tb_all <- function(data, n = 10, sep = "_", na.rm = TRUE) {
   out <- purrr::map(data,
-                    ~counts_tb(.x, n = n, sep = sep, na.rm = na.rm))
+                    ~na.omit(counts_tb(.x, n = n, sep = sep, na.rm = na.rm)))
   return(out)
 }
 
@@ -503,7 +508,10 @@ counts_tb_all <- function(data, n = 10, sep = "_", na.rm = TRUE) {
 #'   \code{\link[reactable]{reactable}} will be used instead of
 #'   \code{\link[DT]{datatable}}, because the client-side version of
 #'   \code{\link[DT]{datatable}} (implemented here) doesn't perform well or may
-#'   crash your R studio session for larger datasets than this.
+#'   crash your R studio session for larger datasets than this. Note that
+#'   `ggplot2` graphs rendered by `plot_raincloud()` and `plot_pie()` currently
+#'   cannot be properly converted to plotly format because of incompatibility
+#'   with \code{\link[plotly]{ggplotly}}.
 #'
 #' @importFrom DT datatable
 #' @importFrom plotly ggplotly
@@ -907,6 +915,49 @@ translate <- function(y, old, new) {
 
 
 
+# is.error (internal) -----------------------------------------------------
+#' @title
+#' Does an R expression evaluate to an error? This is presently an internal
+#' function used by multiple other elucidate functions.
+#'
+#' @description Checks whether its argument evaluates to an error. This function
+#'   mostly just implements a
+#'   \href{http://adv-r.had.co.nz/Exceptions-Debugging.html}{code example} from
+#'   Hadley Wickham's Advanced R book.
+#'
+#' @param e An R expression to checked to see if it fails or not.
+#'
+#' @param silent If FALSE, an error message will be printed if appropriate.
+#'
+#' @return TRUE if `e` evaluates to an error (i.e. fails), FALSE otherwise.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@bov.bc.ca}
+#'
+#' @examples
+#'
+#' #The following example was the original use case that motivated adding this
+#' #function to `elucidate`. When writing a custom function that involves
+#' #subsetting data frames by named columns, you might want to check if a user
+#' #supplied the variable name as a character string (for standard evaluation) or
+#' #as an unquoted name (i.e. a symbol; for non-standard evaluation)...
+#'
+#' \dontrun{
+#' is.error(mtcars[[mpg]]) #TRUE
+#' #This expression evaluates to TRUE as it returns an error because the correct
+#' #syntax for subsetting a data frame with a variable name in base R is to
+#' wrap the variable name in quotation marks
+#'
+#' is.error(mtcars[["mpg"]]) #FALSE
+#' #This expression returns FALSE because the subsetting expression does not fail
+#' }
+#'
+#' @seealso \code{\link{try}}
+#'
+#' @noRd
+is.error <- function(e, silent = TRUE) {
+  inherits(try(e, silent = silent), "try-error")
+}
+
 # recode_errors_vec (internal) --------------------------------------------
 #' @title elucidate package internal function used by
 #'   \code{\link{recode_errors}}.
@@ -1163,4 +1214,42 @@ consum <- function(x, skip_na = FALSE) {
     x <- data.table::rowid(data.table::rleid(x))*x
   }
   return(x)
+}
+
+
+
+# group_parser (internal) -------------------------------------------------
+#' @title
+#' elucidate package internal function to parse a set of symbols, character
+#' strings, or numbers into a vector of column names
+#'
+#' @description `group_parser` is an internal function that supports multiple
+#'   other elucidate functions which attempt to parse ... as a vector of column
+#'   names to use for group-wise operations.
+#'
+#' @param data A data frame.
+#'
+#' @param ... any number of unquoted or quoted column names and/or a set of
+#'   numeric column indices
+#'
+#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
+#'
+#' @noRd
+group_parser <- function(data, ...) {
+  if(!missing(...)) {
+    if(is.error(names(data[, c(...)]))) {
+      g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+    } else {
+      g <- unlist(list(...))
+      if(!is.character(g)) {
+        g <- names(data)[g]
+      }
+    }
+  }
+  if(is.error(names(data[, g]))) {
+    stop("One or more of the variable names or indices supplied using",
+         "\nthe special ellipsis argument (`...`) cannot be found in the input data.",
+         "\nPlease ensure all variable names or indices are valid and try again.")
+  }
+  return(g)
 }

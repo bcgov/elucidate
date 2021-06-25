@@ -1,3 +1,47 @@
+## elucidate 0.1.0.9000 - June 30th, 2021
+
+### major update
+
+#### new functions
+
+* Added `plot_var()`, `plot_var_all()`, `plot_var_pairs()`, and `plot_c()` to complete the `plot_*` function set. 
+
+* `plot_var()` is an elucidate alternative to the flexible, but esoteric, `ggplot2::qplot()` function. It can also be thought of as a graphical version of the `describe()` function. `plot_var()` allows you to easily generate a ggplot2 graph for one or two numeric and/or categorical variables using one of four geom-specific `plot_*` functions in a class-appropriate manner, with some default enhancements and a restricted set of arguments:
+
+  - One numeric (classes numeric/integer/date) variable will be graphed with `plot_density()`. By default, a normal density curve will be added as a dashed line. This can be disabled by setting the "dnorm" argument to `FALSE` or the "basic" argument to `TRUE`. 
+
+  - One or two categorical (classes factor/character/logical) variable(s) will be graphed with `plot_bar()`.
+  
+  - Two numeric variables will be graphed with `plot_scatter()`. By default, a generalized additive model regression line and 95% confidence envelope will also be added to the scatter plot. These extras can be disabled by setting the "regression_line" argument to `FALSE` or the "basic" argument to `TRUE`. 
+  
+  - A mixture of numeric and categorical variables will be graphed with `plot_box()`. By Default, a `ggplot2::geom_violin()` layer will also be added to enable rapid detection of multi-modal distributions. This additional layer can be disabled by setting the "violin" argument to `FALSE` or the basic argument to `TRUE`.
+
+  - You can also use the "group_var" argument to split any of the above plots by a categorical grouping variable from the same data source, which will be mapped to either fill or colour depending upon the `plot_*` function that is used.
+  
+  - Unlike the geom-named `plot_*` functions (`plot_density()`, `plot_bar()`, etc.), `plot_var()` also works with vectors (i.e. does not require a data frame input).
+  
+  - To aid beginners, `plot_var()` also has a "verbose" argument that (when set to `TRUE`) will print a message to the console telling you which input variable classes were detected, which `plot_*` function was used to generate the graph, and which arguments of that function were used by `plot_var()` to map input variables to the x-axis, y-axis, and the fill/colour aesthetics. 
+
+* `plot_var_all()` is to `plot_var()` as `describe_all()` is to `describe()`, extending `plot_var()` to allow you to easily generate a graph of *each* variable in a data frame. Each of these "primary" variables can also be (optionally) plotted against a single named secondary variable (via the "var2" argument), and you can also use the same "group_var" argument to split each plot by a categorical grouping variable.
+
+* `plot_var_pairs()` extends `plot_var_all()` further, by allowing you to graph all pairwise variable combinations in a data frame to produce a matrix of so-called "pair" plots, similar to the `graphics::pairs()` or `GGally::ggpairs()` function. These pair plots can also be split by a grouping variable via the "group_var" argument.
+
+* Unlike existing alternative methods of producing plot matrices or lattices, `plot_var_all()` and `plot_var_pairs()` provide a "trelliscope" argument that can be used to combine plots into an interactive javascript display via the [trelliscopejs](https://ryanhafen.com/blog/trelliscopejs/) package, which is especially useful in cases where there are too many graphs to read on a single page. The default plot composition method uses the [patchwork](https://patchwork.data-imaginist.com/) package instead, which means that you can modify the multi-panel further with patchwork functions like `patchwork::plot_annotation()`.
+
+* `plot_c()` allows you to use either `patchwork::wrap_plots()` or `trelliscopejs::trelliscope()` to combine multiple plots into a multi-panel static or interactive display via a logical "trelliscope" argument. Unlike alternatives functions for combining plots, you can pass `plot_c()` either (1) a set of unquoted plot object names or (2) a list of plots. The interactive trelliscope version should also work with plotly graphs.
+
+#### upgrades to existing functions
+
+* Added a "dots" argument to `plot_box()` which allows you to overlay a `ggplot2::geom_dotplot()` layer over the box-and-whisker plot(s). Inclusion of the dotplot layer can reveal the presence of multimodal distributions (multiple peaks), which can't be detected using a box-and-whisker plot alone.
+
+* `copies()`, `dupes()`, and all `plot_*` and `describe*` functions now allow you to specify variables using quoted ("x") or unquoted (x) column names (instead of just unquoted), e.g. `plot_density(data = pdata, x = "y1")` or `plot_density(data = pdata, x = y1)`. Note that you must use one format or the other and should not mix formats within the same function call for functions which accept grouping variable names via the special ellipsis argument (`...`), like the `describe*` set, or the function will fail with an error indicating that one or more of variables could not be found in the input data.  By also accepting column names as character strings, these functions should be easier to use in loops and other functions, while the unquoted names are easier for interactive use. 
+
+#### bug fixes
+
+* Fixed a bug where plotly output of the `plot_box()` interactive mode was not dodging box plots when a variable was assigned to the "fill_var" or "colour_var" arguments. Now the boxes for each group will be separated, but a spurious warning message that "'layout' objects don't have these attributes: 'boxmode'" will be printed to the console. This warning message is a [documented bug](https://github.com/ropensci/plotly/issues/994) with the `plotly` package and the message can be safely ignored (unfortunately it cannot be suppressed though).
+ 
+* updated `counts_tb()` and `counts_tb_all()` to omit empty rows in their outputs if the number of top and bottom values requested exceeds the number of unique values in the input data.
+
 ## elucidate 0.0.0.9026 - June 2nd, 2021
 
 * Added a new plotting function, `plot_line()`, to make it easy to generate ggplot2 line graphs. Unlike a basic `ggplot2::geom_line()` layer, `plot_line()` will automatically check the input data to see if there are multiple values of the y-axis variable for each level of x-axis variable and any grouping variables mapped to line colour or line type, or used for facetting. In addition, `plot_line()` makes it easier for you to use a non-numeric/non-date variable on the x-axis by converting it to a factor with levels that can easily be rearranged using the "x_var_order_by_y" or "x_var_order" arguments. 
