@@ -609,6 +609,8 @@ plot_density <- function(data, x, #essential parameters
   }
   if(!missing(ylab)){
     p <- p + ggplot2::labs(y = ylab)
+  } else if(dnorm == TRUE) {
+    p <- p + ggplot2::labs(y = "density")
   }
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
