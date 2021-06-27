@@ -1,7 +1,7 @@
 Package: elucidate
 Type: Package
 Title: A Collection of Convenience Functions to Help Researchers Elucidate Patterns in Their Data 
-Version: 0.1.0.9000
+Version: 0.1.0.9001
 Author: c(person("Craig", "Hutton", email = "Craig.Hutton@gov.bc.ca", role = c("aut", "cre")), person(given = "Province of British Columbia", role = "cph"))
 Maintainer: Craig P. Hutton <Craig.Hutton@gov.bc.ca>
 Description: A collection of convenience functions to facilitate exploratory data analysis. While many of the functions are geared towards data analysis tasks typical in the behavioural and health sciences (e.g. analysis of numerical variables between experimental groups), they are generally useful for working with tabular data. The package has also been designed with the goal of making common analytical processes in R more accessible to science trainees by providing a consistent API for data analysis and visualization. See "A Scientist's Guide to R blog" at https://craig.rbind.io/ for related tutorials. 

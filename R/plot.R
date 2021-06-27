@@ -7543,10 +7543,19 @@ plot_var <- function(data,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
                         alpha = alpha, greyscale = greyscale, theme = theme,
-                        text_size = text_size, font = font, interactive = interactive,
+                        text_size = text_size, font = font,
                         line_size = line_size, transform_y = var1_log10)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0, size = line_size*0.9)
+            p <- p + ggplot2::geom_violin(colour = colour, fill = NA, size = line_size*0.9)
+          }
+          if(interactive == TRUE){
+            if(missing(group_var)) {
+              p <- plotly::ggplotly(p)
+            } else {
+              p <- plotly::ggplotly(p)
+              p <- plotly::layout(p, boxmode = "group")
+            }
+            return(p)
           }
         } else {
           if(verbose == TRUE) {
@@ -7562,13 +7571,22 @@ plot_var <- function(data,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
                         alpha = alpha, greyscale = greyscale, theme = theme,
-                        text_size = text_size, font = font, interactive = interactive,
+                        text_size = text_size, font = font,
                         line_size = line_size, transform_y = var1_log10,
                         position = ggplot2::position_dodge(width = 0.9),
                         legend_position = legend_position, omit_legend = omit_legend)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0,
+            p <- p + ggplot2::geom_violin(colour = colour, fill = NA,
                                           size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+          }
+          if(interactive == TRUE){
+            if(missing(group_var)) {
+              p <- plotly::ggplotly(p)
+            } else {
+              p <- plotly::ggplotly(p)
+              p <- plotly::layout(p, boxmode = "group")
+            }
+            return(p)
           }
         }
       } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("numeric", "integer", "Date")) {
@@ -7586,10 +7604,19 @@ plot_var <- function(data,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
                         alpha = alpha, greyscale = greyscale, theme = theme,
-                        text_size = text_size, font = font, interactive = interactive,
+                        text_size = text_size, font = font,
                         line_size = line_size, transform_y = var2_log10)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0, size = line_size*0.9)
+            p <- p + ggplot2::geom_violin(colour = colour, fill = NA, size = line_size*0.9)
+          }
+          if(interactive == TRUE){
+            if(missing(group_var)) {
+              p <- plotly::ggplotly(p)
+            } else {
+              p <- plotly::ggplotly(p)
+              p <- plotly::layout(p, boxmode = "group")
+            }
+            return(p)
           }
         } else {
           if(verbose == TRUE) {
@@ -7605,13 +7632,22 @@ plot_var <- function(data,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
                         alpha = alpha, greyscale = greyscale, theme = theme,
-                        text_size = text_size, font = font, interactive = interactive,
+                        text_size = text_size, font = font,
                         line_size = line_size, transform_y = var2_log10,
                         position = ggplot2::position_dodge(width = 0.9),
                         legend_position = legend_position, omit_legend = omit_legend)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, alpha = 0,
+            p <- p + ggplot2::geom_violin(colour = colour, fill = NA,
                                           size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+          }
+          if(interactive == TRUE){
+            if(missing(group_var)) {
+              p <- plotly::ggplotly(p)
+            } else {
+              p <- plotly::ggplotly(p)
+              p <- plotly::layout(p, boxmode = "group")
+            }
+            return(p)
           }
         }
       } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("factor", "character", "logical")) {
