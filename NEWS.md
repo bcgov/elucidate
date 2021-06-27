@@ -1,6 +1,6 @@
 ## elucidate 0.1.0.9001 - June 27th, 2021
 
-* Fixed a bug with `plot_var()` that was preventing the comined box-and-whisker plots + violin plots produced by default for a mix of numeric and categorical variables from generating a plotly graph when the "interactive" argument was set to `TRUE`.
+* Fixed a bug with `plot_var()` that was preventing the combined box-and-whisker plots + violin plots produced by default for a mix of numeric and categorical variables from generating a plotly graph when the "interactive" argument was set to `TRUE`.
 
 ## elucidate 0.1.0.9000 - June 25th, 2021
 

@@ -7095,6 +7095,8 @@ plot_line <- function(data, y, x, ...,
 #'
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 geom_violin
+#' @importFrom plotly ggplotly
+#' @importFrom plotly layout
 #'
 #' @param data Either a data frame containing variables to be plotted or a
 #'   vector to be plotted (unlike most other `plot_*` functions, which always
