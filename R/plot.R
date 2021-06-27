@@ -7548,7 +7548,11 @@ plot_var <- function(data,
                         text_size = text_size, font = font,
                         line_size = line_size, transform_y = var1_log10)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, fill = NA, size = line_size*0.9)
+            if(interactive == FALSE) {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0, size = line_size*0.9)
+            } else {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0.25, size = line_size*0.9)
+            }
           }
           if(interactive == TRUE){
             if(missing(group_var)) {
@@ -7578,8 +7582,13 @@ plot_var <- function(data,
                         position = ggplot2::position_dodge(width = 0.9),
                         legend_position = legend_position, omit_legend = omit_legend)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, fill = NA,
-                                          size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+            if(interactive == FALSE) {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0,
+                                            size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+            } else {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0.25,
+                                            size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+            }
           }
           if(interactive == TRUE){
             if(missing(group_var)) {
@@ -7609,7 +7618,11 @@ plot_var <- function(data,
                         text_size = text_size, font = font,
                         line_size = line_size, transform_y = var2_log10)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, fill = NA, size = line_size*0.9)
+            if(interactive == FALSE) {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0, size = line_size*0.9)
+            } else {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0.25, size = line_size*0.9)
+            }
           }
           if(interactive == TRUE){
             if(missing(group_var)) {
@@ -7639,8 +7652,13 @@ plot_var <- function(data,
                         position = ggplot2::position_dodge(width = 0.9),
                         legend_position = legend_position, omit_legend = omit_legend)
           if(violin == TRUE) {
-            p <- p + ggplot2::geom_violin(colour = colour, fill = NA,
-                                          size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+            if(interactive == FALSE) {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0,
+                                            size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+            } else {
+              p <- p + ggplot2::geom_violin(colour = colour, alpha = 0.25,
+                                            size = line_size*0.9, position = ggplot2::position_dodge(width = 0.9))
+            }
           }
           if(interactive == TRUE){
             if(missing(group_var)) {
