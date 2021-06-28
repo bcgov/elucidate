@@ -1,3 +1,7 @@
+## elucidate 0.1.0.9002 - June 28th, 2021
+
+* Fixed a bug that prevented `copies()` and `dupes()` from working correctly when the input data is a data.table. 
+
 ## elucidate 0.1.0.9001 - June 27th, 2021
 
 * Fixed a bug with `plot_var()` that was preventing the combined box-and-whisker plots + violin plots produced by default for a mix of numeric and categorical variables from generating a plotly graph when the "interactive" argument was set to `TRUE`.

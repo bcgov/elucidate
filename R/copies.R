@@ -130,7 +130,7 @@ copies <- function(data, ...,
   output <-  match.arg(output)
 
   if(!missing(...)) {
-    g <- group_parser(data, ...)
+    g <- group_parser(as.data.frame(data), ...)
   } else {
     message("No column names specified - using all columns.")
     .cols <- names(data)
@@ -337,7 +337,7 @@ dupes <- function(data, ...,
   output <-  match.arg(output)
 
   if(!missing(...)) {
-    g <- group_parser(data, ...)
+    g <- group_parser(as.data.frame(data), ...)
   } else {
     message("No column names specified - using all columns.")
     .cols <- names(data)
