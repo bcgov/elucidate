@@ -1,6 +1,9 @@
+
 ## elucidate 0.1.0.9002 - June 28th, 2021
 
 * Fixed a bug that prevented `copies()` and `dupes()` from working correctly when the input data is a data.table. 
+
+* Added citation file.
 
 ## elucidate 0.1.0.9001 - June 27th, 2021
 
