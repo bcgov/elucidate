@@ -33,24 +33,24 @@ threshold for the number of rows in a input data frame beyond which a
 reactable() is generated as output instead of a datatable().}
 
 \item{group_by}{If the input is a data frame and reactable is TRUE and/or the
-number of rows exceeds the reatable_threshold, this allows you to group the
+number of rows exceeds the reactable_threshold, this allows you to group the
 reactable output by input columns, which can be specified using a character
 vector.}
 
 \item{reactable_stripe_colour}{If the input is a data frame and reactable is
-TRUE and/or the number of rows exceeds the reatable_threshold, this allows
+TRUE and/or the number of rows exceeds the reactable_threshold, this allows
 you to change the row striping colour (specified using a hexcode or base R
 colour name). Use \code{elucidate::colour_options()} to see which colour options
 are available.}
 
 \item{reactable_highlight_colour}{If the input is a data frame and reactable is
-TRUE and/or the number of rows exceeds the reatable_threshold, this allows
+TRUE and/or the number of rows exceeds the reactable_threshold, this allows
 you to change the row highlight colour (specified using a hexcode or base R
 colour name). Use \code{elucidate::colour_options()} to see which colour options
 are available.}
 
 \item{reactable_selected_colour}{If the input is a data frame and reactable
-is TRUE and/or the number of rows exceeds the reatable_threshold, this
+is TRUE and/or the number of rows exceeds the reactable_threshold, this
 allows you to change the background colour of selected rows (specified
 using a hexcode or base R colour name). Use \code{elucidate::colour_options()}
 to see which colour options are available.}

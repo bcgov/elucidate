@@ -305,7 +305,7 @@ envelope.}
 extend beyond the limits of the data to cover the full range of the plot.}
 
 \item{regression_method_args}{Additional arguments you would like passed to
-the regression_method modeling function, see method.args in
+the regression_method modelling function, see method.args in
 \code{\link[ggplot2]{stat_smooth}}.}
 
 \item{loess_span}{Affects the wiggliness of the loess regression line. See
@@ -330,27 +330,27 @@ information.}
 New).}
 
 \item{facet_var}{Use if you want separate plots for each level of a grouping
-variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 details.}
 
-\item{facet_var_order}{If a variable has been assigned for facetting using
+\item{facet_var_order}{If a variable has been assigned for faceting using
 facet_var, this allows you to modify the order of the variable groups, e.g.
 facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 See \code{\link[forcats]{fct_relevel}} for details.}
 
-\item{facet_var_labs}{If a variable has been assigned for facetting using
+\item{facet_var_labs}{If a variable has been assigned for faceting using
 facet_var, this allows you to modify the labels of the variable groups
 which will appear in the facet strips, e.g. facet_var = grouping_variable,
 facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 \code{\link[forcats]{fct_recode}} for details.}
 
-\item{facet_var_strip_position}{If a variable has been assigned for facetting
+\item{facet_var_strip_position}{If a variable has been assigned for faceting
 using facet_var, this allows you to modify the position of the facet strip
 labels. Sensible options include "top" (the default) or "bottom".}
 
-\item{facet_var_text_bold}{If a variable has been assigned for facetting
+\item{facet_var_text_bold}{If a variable has been assigned for faceting
 using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 for the facet strip label text.}
 

@@ -65,7 +65,7 @@
 #'
 #' @param parallel set to TRUE if you want to use multiple cores or FALSE if you
 #'   don't (the default). Note that there is some processing overhead involved
-#'   when operating in parallel so speed gains may not be very noticable for
+#'   when operating in parallel so speed gains may not be very noticeable for
 #'   smaller samples (and may even take longer than sequential processing). Due
 #'   to the nature of the underlying parallelization architecture, performance
 #'   gains will likely be greater on non-Windows machines that can use the
@@ -215,7 +215,7 @@ mean_ci <- function(y, replicates = 2000,
 #'
 #' @param parallel set to TRUE if you want to use multiple cores or FALSE if you
 #'   don't (the default). Note that there is some processing overhead involved
-#'   when operating in parallel so speed gains may not be very noticable for
+#'   when operating in parallel so speed gains may not be very noticeable for
 #'   smaller samples (and may even take longer than sequential processing). Due
 #'   to the nature of the underlying parallelization architecture, performance
 #'   gains will likely be greater on non-Windows machines that can use the
@@ -371,7 +371,7 @@ median_ci <- function(y, replicates = 2000,
 #'
 #' @param parallel set to TRUE if you want to use multiple cores or FALSE if you
 #'   don't (the default). Note that there is some processing overhead involved
-#'   when operating in parallel so speed gains may not be very noticable for
+#'   when operating in parallel so speed gains may not be very noticeable for
 #'   smaller samples (and may even take longer than sequential processing). Due
 #'   to the nature of the underlying parallelization architecture, performance
 #'   gains will likely be greater on non-Windows machines that can use the

@@ -297,27 +297,27 @@ information.}
 New).}
 
 \item{facet_var}{Use if you want separate plots for each level of a grouping
-variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 details.}
 
-\item{facet_var_order}{If a variable has been assigned for facetting using
+\item{facet_var_order}{If a variable has been assigned for faceting using
 facet_var, this allows you to modify the order of the variable groups, e.g.
 facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 See \code{\link[forcats]{fct_relevel}} for details.}
 
-\item{facet_var_labs}{If a variable has been assigned for facetting using
+\item{facet_var_labs}{If a variable has been assigned for faceting using
 facet_var, this allows you to modify the labels of the variable groups
 which will appear in the facet strips, e.g. facet_var = grouping_variable,
 facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 \code{\link[forcats]{fct_recode}} for details.}
 
-\item{facet_var_strip_position}{If a variable has been assigned for facetting
+\item{facet_var_strip_position}{If a variable has been assigned for faceting
 using facet_var, this allows you to modify the position of the facet strip
 labels. Sensible options include "top" (the default) or "bottom".}
 
-\item{facet_var_text_bold}{If a variable has been assigned for facetting
+\item{facet_var_text_bold}{If a variable has been assigned for faceting
 using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 for the facet strip label text.}
 
@@ -346,7 +346,7 @@ customization interface for common modifications with static (ggplot) and
 interactive (plotly) output options. Unlike
 \code{\link[ggplot2]{geom_line}}, plot_line() will automatically check if
 there are multiple values of the y-axis variable for each level of the
-x-axis variable and/or other grouping variables (e.g. used for facetting)
+x-axis variable and/or other grouping variables (e.g. used for faceting)
 and will aggregate values for you using a summary statistic specified via
 the "stat" argument (default is the mean). This effectively produces a
 single line per group level combination and should make your line graphs

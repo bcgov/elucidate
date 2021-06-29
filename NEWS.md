@@ -55,7 +55,7 @@
 
 ## elucidate 0.0.0.9026 - June 2nd, 2021
 
-* Added a new plotting function, `plot_line()`, to make it easy to generate ggplot2 line graphs. Unlike a basic `ggplot2::geom_line()` layer, `plot_line()` will automatically check the input data to see if there are multiple values of the y-axis variable for each level of x-axis variable and any grouping variables mapped to line colour or line type, or used for facetting. In addition, `plot_line()` makes it easier for you to use a non-numeric/non-date variable on the x-axis by converting it to a factor with levels that can easily be rearranged using the "x_var_order_by_y" or "x_var_order" arguments. 
+* Added a new plotting function, `plot_line()`, to make it easy to generate ggplot2 line graphs. Unlike a basic `ggplot2::geom_line()` layer, `plot_line()` will automatically check the input data to see if there are multiple values of the y-axis variable for each level of x-axis variable and any grouping variables mapped to line colour or line type, or used for faceting. In addition, `plot_line()` makes it easier for you to use a non-numeric/non-date variable on the x-axis by converting it to a factor with levels that can easily be rearranged using the "x_var_order_by_y" or "x_var_order" arguments. 
 
 * Added "xbreaks" and "ybreaks" arguments as appropriate for `plot*` functions which accept numeric variables on the x and/or y axes. These arguments allow you to modify the x or y axis breaks via `ggplot2::scale_*_continuous()`. One exception to this rule is that "xbreaks" uses `ggplot2::scale_x_date()` instead if a date vector is mapped to the x-axis of `plot_line()`. You can also modify the x and y axis tick labels (for numeric variables) with "x_var_labs" and "y_var_labs" arguments.
 
@@ -87,7 +87,7 @@
 
 ## elucidate 0.0.0.9022 - April 22nd, 2021
 
-* Added `plot_pie()` for building pie charts with `ggplot2::geom_bar()` & `ggplot2::coord_polar()`. Despite well founded criticisms of pie charts (e.g. https://www.data-to-viz.com/caveat/pie.html), sometimes our project stakeholders, bosses, clients, or graduate supervisors want to see them anyways, so `plot_pie()` aims to make producing them with ggplot2 a bit easier. To encourage limiting the number of slices users display in a pie chart, if the chosen fill variable (argument "fill_var") contains more than 5 unique values (leading to >5 pie slices), a warning is issued which urges the user to consider either lumping some slices together (via argument "lump_n") or using `plot_bar()` instead.
+* Added `plot_pie()` for building pie charts with `ggplot2::geom_bar()` & `ggplot2::coord_polar()`. Despite well founded criticisms of pie charts (e.g. https://www.data-to-viz.com/caveat/pie.html), sometimes our project stakeholders, bosses, clients, or graduate supervisors want to see them anyway, so `plot_pie()` aims to make producing them with ggplot2 a bit easier. To encourage limiting the number of slices users display in a pie chart, if the chosen fill variable (argument "fill_var") contains more than 5 unique values (leading to >5 pie slices), a warning is issued which urges the user to consider either lumping some slices together (via argument "lump_n") or using `plot_bar()` instead.
 
 * Minor `plot_bar()` bug fixes. Changed "flip_coordinates" argument to `plot_stat_error()` to "coord_flip" to align with the underlying `ggplot2::coord_flip()` and `plot_bar()`.
 
@@ -147,7 +147,7 @@
 
 ## elucidate 0.0.0.9010 - March 3rd, 2020
 
-*	Updated readme and made font options arg for plots available to Windows OS systems only
+*	Updated readme and made the font options argument for plots available to Windows OS systems only.
 
 *	Package approved for public release by SDPR administration and published: https://github.com/bcgov/elucidate
 
@@ -167,7 +167,7 @@
 
 ## elucidate 0.0.0.9008 - Dec. 10th, 2019
 
-* Added the %ni% operator which returns the negative of the %in% operator, i.e. FALSE for matching values and TRUE for non-matching values instead of TRUE for matches and FALSE for non-matches
+* Added the `%ni%` operator which returns the negative of the `%in%` operator, i.e. FALSE for matching values and TRUE for non-matching values instead of TRUE for matches and FALSE for non-matches
 
 ## elucidate 0.0.0.9007 - Dec. 9th, 2019 
 
@@ -179,7 +179,7 @@
  
 *	upgraded `describe()` and `describe_all()` to use `data.table` for their underlying calculations and added multiple output types for variable classes including dates, factors, logicals, character strings. Also removed the mode from the list of summary statistics returned because it slowed overall performance by too much. Use `counts()` to get the most and least common values instead.
 
-*	Direct interactive output option was removed for performance and since the plotly versions of boxplots and histograms didn’t seem to render without a commercial license when you have a large data set anyways. Interactive tables can still be generated from the outputs using `static_to_dynamic()`.
+*	Direct interactive output option was removed for performance and since the plotly versions of boxplots and histograms didn’t seem to render without a commercial license when you have a large data set anyway. Interactive tables can still be generated from the outputs using `static_to_dynamic()`.
 
 *	Added a 10,000 row version of pdata (practice data) for testing purposes
 
@@ -199,11 +199,11 @@
 
 *	Added utility functions `wash_df()`, `translate()`, & `recode_errors()`. For`wash_df()`, benchmarking indicates that vroom parser is not faster than the readr parser used by `wash_df()`.
 
-  -	**Note:** `translate()` is similar to a left join but only for a vector pair. The results should be equivalent to left joins where the key (e.g. “by” arg) is a single column and only a single other column is added… therefore it can be viewed as a special case of a left join.
+  -	**Note:** `translate()` is similar to a left join but only for a vector pair. The results should be equivalent to left joins where the key (e.g. “by” argument) is a single column and only a single other column is added… therefore it can be viewed as a special case of a left join.
 
 ## elucidate 0.0.0.9005 - Oct. 11th, 2019
 
-*	Fixed a `plot_scatter()` bug where splitting regression lines by colour_var didn't work, but spltting did work when variables were mapped to either shape or fill.
+*	Fixed a `plot_scatter()` bug where splitting regression lines by colour_var didn't work, but splitting did work when variables were mapped to either shape or fill.
 
 *	Added `plot_stat_error()`, which plots a statistic and confidence intervals or other uncertainty metric as error bars. This initial version of the function only plots the mean and has several options for the error bars (standard deviation, standard error, confidence interval).
 

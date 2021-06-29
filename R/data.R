@@ -19,7 +19,7 @@
 #'
 #' @format A data frame of 12,000 rows and 10 columns
 #' \describe{
-#'  \item{id}{a sequence of numbers from 1:1000 labeling the row id, repeats for each unique value of d}
+#'  \item{id}{a sequence of numbers from 1:1000 labelling the row id, repeats for each unique value of d}
 #'  \item{d}{a sequence of dates (yyyy-mm-dd) ranging from 2008-01-01 to 2019-01-01 in 1 year increments}
 #'  \item{g}{5 level factor of values "a", "b", "c", "d", and "e" which was assigned to ids randomly within d}
 #'  \item{high_low}{character vector indicating whether y2 is above = "high" or below = "low" the mean value of 100}

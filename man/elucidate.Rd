@@ -16,3 +16,11 @@ science trainees by providing a consistent API for data analysis and
 visualization. Note This package is currently in development and its
 functionality will be improved over time."
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/bcgov/elucidate}
+  \item Report bugs at \url{https://github.com/bcgov/elucidate/issues}
+}
+
+}

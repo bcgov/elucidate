@@ -17,7 +17,7 @@ FALSE.}
 \description{
 display the base R colour options in the active graphics
 plotting device or printed to a PDF file. This makes it easier to see what
-the color options are in conjunction with their R labels to make it easier
+the colour options are in conjunction with their R labels to make it easier
 to specify custom colours for plots.
 }
 \examples{

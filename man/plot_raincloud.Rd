@@ -183,7 +183,7 @@ opaque (ignored if box_plot = FALSE).}
 \item{box_line_size}{Adjusts the thickness of box plot lines (ignored if box_plot = FALSE).}
 
 \item{box_line_type}{Used to specify the type of line to use for box plots
-(ignored if box_plot = FALSe). Options include: "solid", "dashed",
+(ignored if box_plot = FALSE). Options include: "solid", "dashed",
 "dotted", "dotdash", "longdash", and "twodash".}
 
 \item{box_whisker_coef}{The length of box plot whiskers as a multiple of the
@@ -196,8 +196,8 @@ interquartile range (marked by the box length). Default is the standard
 ends of the box plot whiskers (ignored if box_plot = FALSE).}
 
 \item{box_nudge}{Controls the distance between the box plot and mid line of
-the overall rain cloud plot, where 0 is touching the midline and higher
-values displace the box plot futher in the direction specified with the
+the overall rain cloud plot, where 0 is touching the mid-line and higher
+values displace the box plot further in the direction specified with the
 box_side argument. Ignored if box_plot = FALSE.}
 
 \item{box_outlier_colour}{Controls the colour of the boxplot outlier
@@ -321,27 +321,27 @@ information.}
 New).}
 
 \item{facet_var}{Use if you want separate plots for each level of a grouping
-variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 details.}
 
-\item{facet_var_order}{If a variable has been assigned for facetting using
+\item{facet_var_order}{If a variable has been assigned for faceting using
 facet_var, this allows you to modify the order of the variable groups, e.g.
 facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 See \code{\link[forcats]{fct_relevel}} for details.}
 
-\item{facet_var_labs}{If a variable has been assigned for facetting using
+\item{facet_var_labs}{If a variable has been assigned for faceting using
 facet_var, this allows you to modify the labels of the variable groups
 which will appear in the facet strips, e.g. facet_var = grouping_variable,
 facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 \code{\link[forcats]{fct_recode}} for details.}
 
-\item{facet_var_strip_position}{If a variable has been assigned for facetting
+\item{facet_var_strip_position}{If a variable has been assigned for faceting
 using facet_var, this allows you to modify the position of the facet strip
 labels. Sensible options include "top" (the default) or "bottom".}
 
-\item{facet_var_text_bold}{If a variable has been assigned for facetting
+\item{facet_var_text_bold}{If a variable has been assigned for faceting
 using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 for the facet strip label text.}
 

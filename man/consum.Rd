@@ -18,7 +18,7 @@ A numeric vector of the same length as x with the consecutive total.
 \description{
 Calculate a rolling sum of consecutive TRUE values for a logical
 vector or "1" values for a binary vector. The total will continue
-increasing as it moves along the vector and encouters only 1/TRUE, then
+increasing as it moves along the vector and encounters only 1/TRUE, then
 will reset after encountering a 0/FALSE value. When working with monthly
 service utilization data with rows organized by ID and month, this is
 useful for estimating things like how many consecutive months someone used

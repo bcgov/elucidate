@@ -60,7 +60,7 @@ assigned to colour. See \code{\link[ggplot2]{aes}} for details.}
 
 \item{cols}{A character (or integer) vector of column names (or indices)
 which allows you to generate pair plots only a subset of the columns in the
-input data frame, where each variable combinmation will be assigned once
+input data frame, where each variable combination will be assigned once
 each of the \code{var1} and \code{var2} arguments of  \code{\link{plot_var}}. Note
 that a variable which has been assigned to \code{group_var} does not also need
 to be listed here.}

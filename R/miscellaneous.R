@@ -282,7 +282,7 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #' @param order "d" for descending/decreasing order. "a" or "i" for
 #'   ascending/increasing order.
 #'
-#' @param sep A charater string to use to separate unique values from their counts
+#' @param sep A character string to use to separate unique values from their counts
 #'   ("_" by default).
 #'
 #' @param na.rm Should missing values be omitted (TRUE/FALSE)?
@@ -355,7 +355,7 @@ counts <- function(y, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TR
 #' @param order "d" for descending/decreasing order. "a" or "i" for
 #'   ascending/increasing order.
 #'
-#' @param sep A charater string to use to separate unique values from their counts
+#' @param sep A character string to use to separate unique values from their counts
 #'   ("_" by default).
 #'
 #' @param na.rm Should missing values be omitted (TRUE/FALSE)?
@@ -536,24 +536,24 @@ counts_tb_all <- function(data, n = 10, sep = "_", na.rm = TRUE) {
 #'   reactable() is generated as output instead of a datatable().
 #'
 #' @param group_by If the input is a data frame and reactable is TRUE and/or the
-#'   number of rows exceeds the reatable_threshold, this allows you to group the
+#'   number of rows exceeds the reactable_threshold, this allows you to group the
 #'   reactable output by input columns, which can be specified using a character
 #'   vector.
 #'
 #' @param reactable_stripe_colour If the input is a data frame and reactable is
-#'   TRUE and/or the number of rows exceeds the reatable_threshold, this allows
+#'   TRUE and/or the number of rows exceeds the reactable_threshold, this allows
 #'   you to change the row striping colour (specified using a hexcode or base R
 #'   colour name). Use `elucidate::colour_options()` to see which colour options
 #'   are available.
 #'
 #' @param reactable_highlight_colour If the input is a data frame and reactable is
-#'   TRUE and/or the number of rows exceeds the reatable_threshold, this allows
+#'   TRUE and/or the number of rows exceeds the reactable_threshold, this allows
 #'   you to change the row highlight colour (specified using a hexcode or base R
 #'   colour name). Use `elucidate::colour_options()` to see which colour options
 #'   are available.
 #'
 #' @param reactable_selected_colour If the input is a data frame and reactable
-#'   is TRUE and/or the number of rows exceeds the reatable_threshold, this
+#'   is TRUE and/or the number of rows exceeds the reactable_threshold, this
 #'   allows you to change the background colour of selected rows (specified
 #'   using a hexcode or base R colour name). Use `elucidate::colour_options()`
 #'   to see which colour options are available.
@@ -1174,7 +1174,7 @@ recode_errors <- function(data, errors, replacement = NA, rows = NULL, cols = NU
 #'
 #' @description Calculate a rolling sum of consecutive TRUE values for a logical
 #'   vector or "1" values for a binary vector. The total will continue
-#'   increasing as it moves along the vector and encouters only 1/TRUE, then
+#'   increasing as it moves along the vector and encounters only 1/TRUE, then
 #'   will reset after encountering a 0/FALSE value. When working with monthly
 #'   service utilization data with rows organized by ID and month, this is
 #'   useful for estimating things like how many consecutive months someone used

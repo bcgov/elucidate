@@ -34,7 +34,6 @@ Imports:
     tidyr (>= 1.0.0), 
     tidyselect(>= 0.2.5),
     trelliscopejs (>= 0.2.6)
-LinkingTo:
 Suggests: 
     htmltools,
     htmlwidgets,
@@ -44,3 +43,4 @@ Suggests:
     shiny (>= 1.5.0),
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
+Language: en-GB

@@ -19,7 +19,7 @@
 #'
 #' @param y A vector/variable (required).
 #'
-#' @param sep A charater string to use to separate unique values from their
+#' @param sep A character string to use to separate unique values from their
 #'   counts ("_" by default).
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
@@ -104,7 +104,7 @@ tbcvs <- function(y, sep = "_") {
 #' @param na.rm This determines whether missing values (NAs) should be removed
 #'   before attempting to calculate summary statistics.
 #'
-#' @param sep A charater string to use to separate unique values from their
+#' @param sep A character string to use to separate unique values from their
 #'   counts ("_" by default). Only applicable to factors and character vectors.
 #'
 #' @param output "tibble" for tibble or "dt" for data.table. Tibble is used as
@@ -147,7 +147,7 @@ tbcvs <- function(y, sep = "_") {
 #'     \item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} instead.}
 #'   }
 #'
-#'   In addition to part 1, these measures are provided for \strong{logcial} vectors:
+#'   In addition to part 1, these measures are provided for \strong{logical} vectors:
 #'
 #'   \describe{
 #'     \item{n_TRUE}{the total number of y values that are TRUE}
@@ -166,8 +166,8 @@ tbcvs <- function(y, sep = "_") {
 #'     \item{p50}{the 50th percentile (the median) of y}
 #'     \item{p75}{the 25th percentile of y}
 #'     \item{p100}{the 100th percentile (the maximum) of y}
-#'     \item{skew}{the skewness of the distibution of y}
-#'     \item{kurt}{the kurtosis of the distibution of y}
+#'     \item{skew}{the skewness of the distribution of y}
+#'     \item{kurt}{the kurtosis of the distribution of y}
 #'   }
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
@@ -468,7 +468,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #' @param na.rm This determines whether missing values (NAs) should be removed
 #'   before attempting to calculate summary statistics.
 #'
-#' @param sep A charater string to use to separate unique values from their
+#' @param sep A character string to use to separate unique values from their
 #'   counts ("_" by default). Only applicable to factors and character vectors.
 #'
 #' @param output Output type for each class of variables. "tibble" for tibble or
@@ -515,7 +515,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #'     \item{counts_tb}{the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use \code{\link{counts}} or \code{\link{counts_tb}} instead.}
 #'   }
 #'
-#'   In addition to part 1, these measures are provided for \strong{logcial} vectors:
+#'   In addition to part 1, these measures are provided for \strong{logical} vectors:
 #'
 #'   \describe{
 #'     \item{n_TRUE}{the total number of y values that are TRUE}
@@ -534,8 +534,8 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #'     \item{p50}{the 50th percentile (the median) of y}
 #'     \item{p75}{the 25th percentile of y}
 #'     \item{p100}{the 100th percentile (the maximum) of y}
-#'     \item{skew}{the skewness of the distibution of y}
-#'     \item{kurt}{the kurtosis of the distibution of y}
+#'     \item{skew}{the skewness of the distribution of y}
+#'     \item{kurt}{the kurtosis of the distribution of y}
 #'   }
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}

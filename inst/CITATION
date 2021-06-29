@@ -6,7 +6,7 @@ citEntry(
   author   = "Craig P. Hutton",
   organization  = "Province of British Columbia",
   year     = "2021",
-  note     = "R package version 0.1.0"
+  note     = "R package version 0.1.0",
   url      = "https://github.com/bcgov/elucidate",
   textVersion = paste(
   "Hutton, C.P. (2021). elucidate: Convenience Functions to Help Researchers Elucidate Patterns in Their Data. R package version 0.1.0. Province of British Columbia. https://github.com/bcgov/elucidate"

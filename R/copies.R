@@ -42,7 +42,7 @@
 #' @param filter Shortcuts for filtering (retaining a subset of) the rows of the
 #'   output based on the number of copies detected. Options include: `"all"` =
 #'   all rows that were present in the input (default), `"dupes"` = only rows
-#'   that were found to be duplciated (mimics the behaviour of
+#'   that were found to be duplicated (mimics the behaviour of
 #'   \code{\link[janitor]{get_dupes}}), `"unique"` = only rows that appear as a
 #'   single copy (not duplicated at all), `"first"` = keeps the 1st copy in
 #'   cases where duplicates are detected (mimics the behaviour of

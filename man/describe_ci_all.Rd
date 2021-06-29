@@ -57,7 +57,7 @@ sized samples, at the obvious cost of requiring more time to calculate. See
 
 \item{parallel}{set to TRUE if you want to use multiple cores or FALSE if you
 don't (the default). Note that there is some processing overhead involved
-when operating in parallel so speed gains may not be very noticable for
+when operating in parallel so speed gains may not be very noticeable for
 smaller samples (and may even take longer than sequential processing). Due
 to the nature of the underlying parallelization architecture, performance
 gains will likely be greater on non-Windows machines that can use the
@@ -84,7 +84,7 @@ for each numeric variable in a data frame split by any number of grouping
 variables. Like \code{\link{stat_ci}} you can specify any function that
 operates on a numeric variable and returns a single value (e.g. mean,
 median, sd, se, etc.). Calculations of confidence intervals for the mean
-are obtained based on refernce to the theoretical normal/gaussian
+are obtained based on reference to the theoretical normal/gaussian
 distribution for speed, otherwise bootstrapping is used, with options for
 multicore machines to use parallel processing which can speed things up
 quite a bit for larger samples. \code{\link{stat_ci}} may be useful instead

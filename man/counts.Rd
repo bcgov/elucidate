@@ -14,7 +14,7 @@ counts(y, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TRUE)
 \item{order}{"d" for descending/decreasing order. "a" or "i" for
 ascending/increasing order.}
 
-\item{sep}{A charater string to use to separate unique values from their counts
+\item{sep}{A character string to use to separate unique values from their counts
 ("_" by default).}
 
 \item{na.rm}{Should missing values be omitted (TRUE/FALSE)?}

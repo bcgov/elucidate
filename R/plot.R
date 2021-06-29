@@ -16,7 +16,7 @@
 #'
 #' @description display the base R colour options in the active graphics
 #'   plotting device or printed to a PDF file. This makes it easier to see what
-#'   the color options are in conjunction with their R labels to make it easier
+#'   the colour options are in conjunction with their R labels to make it easier
 #'   to specify custom colours for plots.
 #'
 #' @importFrom grDevices pdf
@@ -233,7 +233,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
 #'
-#' @param line_size THis modifies the thickness of the density curve.
+#' @param line_size This modifies the thickness of the density curve.
 #'
 #' @param rug Set this to TRUE to add rug lines to the bottom of the plot.
 #'
@@ -272,27 +272,27 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -826,7 +826,7 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
 #'
-#' @param line_size THis modifies the thickness of the histogram bar outlines.
+#' @param line_size This modifies the thickness of the histogram bar outlines.
 #'
 #' @param rug Set this to TRUE to add rug lines to the bottom of the plot.
 #'
@@ -868,27 +868,27 @@ plot_density <- function(data, x, #essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -1463,27 +1463,27 @@ plot_histogram <- function(data, x, #essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -1776,7 +1776,7 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
   if(!missing(colour_var_title)){
-    p <- p + ggplot2::labs(color = colour_var_title)
+    p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
@@ -1873,7 +1873,7 @@ plot_box <- function(data, y,#essential parameters
 #'   to \code{\link[ggplot2]{geom_violin}}, e.g. colour or fill, to be applied
 #'   to all bars. To see some of the available options in a web browser, set the
 #'   aesthetic_options argument to TRUE. An option unique to geom_violin is
-#'   draw_quantiles, which adds horizonal lines for the specified quantiles,
+#'   draw_quantiles, which adds horizontal lines for the specified quantiles,
 #'   e.g. draw_quantiles = c(0.25, 0.5, 0.75) would add lines for the 25th,
 #'   50th, and 75th percentiles (similar to a boxplot).
 #'
@@ -2010,27 +2010,27 @@ plot_box <- function(data, y,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -2316,7 +2316,7 @@ plot_violin <- function(data, y, #essential parameters
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
   if(!missing(colour_var_title)){
-    p <- p + ggplot2::labs(color = colour_var_title)
+    p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
@@ -2624,7 +2624,7 @@ plot_violin <- function(data, y, #essential parameters
 #'   extend beyond the limits of the data to cover the full range of the plot.
 #'
 #' @param regression_method_args Additional arguments you would like passed to
-#'   the regression_method modeling function, see method.args in
+#'   the regression_method modelling function, see method.args in
 #'   \code{\link[ggplot2]{stat_smooth}}.
 #'
 #' @param loess_span Affects the wiggliness of the loess regression line. See
@@ -2649,27 +2649,27 @@ plot_violin <- function(data, y, #essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -3241,7 +3241,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
   if(!missing(colour_var_title)){
-    p <- p + ggplot2::labs(color = colour_var_title)
+    p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(shape_var_title)){
     p <- p + ggplot2::labs(shape = shape_var_title)
@@ -3517,27 +3517,27 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -3926,7 +3926,7 @@ plot_bar <- function(data, x = NULL,
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
   if(!missing(colour_var_title)){
-    p <- p + ggplot2::labs(color = colour_var_title)
+    p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
@@ -4052,9 +4052,9 @@ plot_bar <- function(data, x = NULL,
 #'
 #' @param parallel set to TRUE if you want to use multiple cores or FALSE if you
 #'   don't (the default). Note that there is some processing overhead involved
-#'   when operating in parallel so speed gains may not be very noticable for
+#'   when operating in parallel so speed gains may not be very noticeable for
 #'   smaller samples (and may even take longer than sequential processing). Due
-#'   to the nature of the underlying parallelization architecture, performance
+#'   to the nature of the underlying parallelisation architecture, performance
 #'   gains will likely be greater on non-Windows machines that can use the
 #'   "multicore" implementation instead of "snow". For obvious reasons this
 #'   option only works on machines with more than 1 logical processing core.
@@ -4223,7 +4223,7 @@ plot_bar <- function(data, x = NULL,
 #'
 #' @param add_lines Would you like to connect the estimated statistics (the
 #'   points or ends of the bars) with lines (TRUE/FALSE)? Default = FALSE.
-#'   Requires that a varable is assigned to x. Particularly useful for showing
+#'   Requires that a variable is assigned to x. Particularly useful for showing
 #'   changes over time between groups (assigned to either fill_var or
 #'   colour_var). If only one of fill_var or colour_var are specified then lines
 #'   will be split according to the same variable mapping. If neither or both of
@@ -4235,7 +4235,7 @@ plot_bar <- function(data, x = NULL,
 #'   transparent to 1 = 100 percent opaque.
 #'
 #' @param line_group Determines which variable to split the connecting lines on.
-#'   Only required if (2 different) variabes are already assigned to both
+#'   Only required if (2 different) variables are already assigned to both
 #'   fill_var and colour_var.
 #'
 #' @param line_colour Controls the colour of connection lines. If unspecified,
@@ -4268,27 +4268,27 @@ plot_bar <- function(data, x = NULL,
 #'   Options include "right" (the default), "left", "top", & "bottom".
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -5102,7 +5102,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
   if(!missing(colour_var_title)){
-    p <- p + ggplot2::labs(color = colour_var_title)
+    p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
     p <- p + ggplot2::labs(title = title)
@@ -5321,27 +5321,27 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #'   "other" category.
 #'
 #' @param facet_var Use if you want separate pie charts for each level of a
-#'   grouping variable (i.e. a facetted plot), e.g. facet_var =
+#'   grouping variable (i.e. a faceted plot), e.g. facet_var =
 #'   "grouping_variable" or facet_var = grouping_variable. See
 #'   \code{\link[ggplot2]{facet_wrap}} for details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -5797,7 +5797,7 @@ plot_pie <- function(data,
 #' @param box_line_size Adjusts the thickness of box plot lines (ignored if box_plot = FALSE).
 #'
 #' @param box_line_type Used to specify the type of line to use for box plots
-#'   (ignored if box_plot = FALSe). Options include: "solid", "dashed",
+#'   (ignored if box_plot = FALSE). Options include: "solid", "dashed",
 #'   "dotted", "dotdash", "longdash", and "twodash".
 #'
 #' @param box_whisker_coef The length of box plot whiskers as a multiple of the
@@ -5810,8 +5810,8 @@ plot_pie <- function(data,
 #'   ends of the box plot whiskers (ignored if box_plot = FALSE).
 #'
 #' @param box_nudge Controls the distance between the box plot and mid line of
-#'   the overall rain cloud plot, where 0 is touching the midline and higher
-#'   values displace the box plot futher in the direction specified with the
+#'   the overall rain cloud plot, where 0 is touching the mid-line and higher
+#'   values displace the box plot further in the direction specified with the
 #'   box_side argument. Ignored if box_plot = FALSE.
 #'
 #' @param box_outlier_colour Controls the colour of the boxplot outlier
@@ -5935,27 +5935,27 @@ plot_pie <- function(data,
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -6318,7 +6318,7 @@ plot_raincloud <- function(data, y,#essential parameters
 #'   interactive (plotly) output options. Unlike
 #'   \code{\link[ggplot2]{geom_line}}, plot_line() will automatically check if
 #'   there are multiple values of the y-axis variable for each level of the
-#'   x-axis variable and/or other grouping variables (e.g. used for facetting)
+#'   x-axis variable and/or other grouping variables (e.g. used for faceting)
 #'   and will aggregate values for you using a summary statistic specified via
 #'   the "stat" argument (default is the mean). This effectively produces a
 #'   single line per group level combination and should make your line graphs
@@ -6607,27 +6607,27 @@ plot_raincloud <- function(data, y,#essential parameters
 #'   New).
 #'
 #' @param facet_var Use if you want separate plots for each level of a grouping
-#'   variable (i.e. a facetted plot), e.g. facet_var = "grouping_variable" or
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 #'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
 #'   details.
 #'
-#' @param facet_var_order If a variable has been assigned for facetting using
+#' @param facet_var_order If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the order of the variable groups, e.g.
 #'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 #'   See \code{\link[forcats]{fct_relevel}} for details.
 #'
-#' @param facet_var_labs If a variable has been assigned for facetting using
+#' @param facet_var_labs If a variable has been assigned for faceting using
 #'   facet_var, this allows you to modify the labels of the variable groups
 #'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
 #'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 #'   "group_2_new_label" = "group_2_old_label"). See
 #'   \code{\link[forcats]{fct_recode}} for details.
 #'
-#' @param facet_var_strip_position If a variable has been assigned for facetting
+#' @param facet_var_strip_position If a variable has been assigned for faceting
 #'   using facet_var, this allows you to modify the position of the facet strip
 #'   labels. Sensible options include "top" (the default) or "bottom".
 #'
-#' @param facet_var_text_bold If a variable has been assigned for facetting
+#' @param facet_var_text_bold If a variable has been assigned for faceting
 #'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 #'   for the facet strip label text.
 #'
@@ -7045,7 +7045,7 @@ plot_line <- function(data, y, x, ...,
   }
 
   if(!missing(colour_var_title)){
-    p <- p + ggplot2::labs(color = colour_var_title)
+    p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(line_type_var_title)){
     p <- p + ggplot2::labs(linetype = line_type_var_title)
@@ -8304,7 +8304,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
 #'
 #' @param cols A character (or integer) vector of column names (or indices)
 #'   which allows you to generate pair plots only a subset of the columns in the
-#'   input data frame, where each variable combinmation will be assigned once
+#'   input data frame, where each variable combination will be assigned once
 #'   each of the `var1` and `var2` arguments of  \code{\link{plot_var}}. Note
 #'   that a variable which has been assigned to `group_var` does not also need
 #'   to be listed here.
