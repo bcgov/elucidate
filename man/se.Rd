@@ -28,5 +28,5 @@ errors. Bmj, 331(7521), 903.
 \code{\link[stats]{sd}}, \code{\link{sqrt}}, \code{\link{length}}
 }
 \author{
-Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

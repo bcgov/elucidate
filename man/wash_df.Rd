@@ -97,5 +97,5 @@ mtcars
 \code{\link[janitor]{remove_empty}}
 }
 \author{
-Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

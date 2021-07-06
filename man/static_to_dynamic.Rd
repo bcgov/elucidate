@@ -113,5 +113,5 @@ mtcars \%>\%
 \code{\link[DT]{datatable}}, \code{\link[plotly]{ggplotly}}
 }
 \author{
-Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

@@ -39,5 +39,5 @@ mode(y, inv = TRUE) #returns the anti-mode
 \code{\link{counts}}
 }
 \author{
-Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

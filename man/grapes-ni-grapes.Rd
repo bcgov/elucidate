@@ -36,5 +36,5 @@ dplyr::filter(pdata, g \%ni\% c("a", "e"))
 \code{\link{match}}, \code{\link{Negate}}
 }
 \author{
-Craig P. Hutton, \email{Craig.Hutton@bov.bc.ca}
+Craig P. Hutton, \email{Craig.Hutton@gov.bc.ca}
 }

@@ -43,4 +43,3 @@ Suggests:
     shiny (>= 1.5.0),
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
-Language: en-GB
