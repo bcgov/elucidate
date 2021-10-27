@@ -18,6 +18,9 @@ plot_histogram(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_title = NULL,
   colour_var_title = NULL,
   xlim = c(NA, NA),
@@ -111,6 +114,16 @@ colour variable. See \code{\link[ggplot2]{aes}} for details.}
 
 \item{title}{Add a main title to the plot using a character string, e.g.
 "Distribution of X"}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{fill_var_title}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.}
@@ -293,30 +306,37 @@ blog post} for an introduction to ggplot2.
 \examples{
 data(mtcars) #load the mtcars data
 
-library(magrittr)
-
-mtcars \%>\% plot_histogram(x = mpg, fill = "blue")
+plot_histogram(mtcars, x = mpg, fill = "blue")
 
 \donttest{
-mtcars \%>\% plot_histogram(x = mpg, fill = "blue")
+plot_histogram(mtcars, x = mpg, fill = "blue")
 
-mtcars \%>\% plot_histogram(x = mpg, fill = "blue", colour = "black")
+plot_histogram(mtcars, x = mpg,
+              fill = "blue", colour = "black")
 
-mtcars \%>\% plot_histogram(x = mpg, colour_var = cyl, fill = "white")
+plot_histogram(mtcars, x = mpg,
+               colour_var = cyl, fill = "white")
 
-mtcars \%>\% plot_histogram(x = mpg, fill_var = cyl, position = "identity") #default in elucidate
+plot_histogram(mtcars, x = mpg,
+              fill_var = cyl, position = "identity") #default in elucidate
 
-mtcars \%>\% plot_histogram(x = mpg, fill_var = cyl, position = "dodge", binwidth = 1)
+plot_histogram(mtcars, x = mpg,
+              fill_var = cyl, position = "dodge", binwidth = 1)
 
-mtcars \%>\% plot_histogram(x = mpg, fill_var = cyl, position = "stack") #default in ggplot2
+plot_histogram(mtcars, x = mpg,
+               fill_var = cyl, position = "stack") #default in ggplot2
 
-mtcars \%>\% plot_histogram(x = mpg, fill = "blue", binwidth = 5)
+plot_histogram(mtcars, x = mpg,
+               fill = "blue", binwidth = 5)
 
-mtcars \%>\% plot_histogram(x = mpg, fill = "blue", binwidth = NULL, bins = 30) #default in ggplot2
+plot_histogram(mtcars, x = mpg,
+               fill = "blue", binwidth = NULL, bins = 30) #default in ggplot2
 
-mtcars \%>\% plot_histogram(x = mpg, fill = "blue", interactive = TRUE)
+plot_histogram(mtcars, x = mpg,
+               fill = "blue", interactive = TRUE)
 
-mtcars \%>\% plot_histogram(x = mpg, fill_var = cyl, binwidth = 5, interactive = TRUE)
+plot_histogram(mtcars, x = mpg,
+               fill_var = cyl, binwidth = 5, interactive = TRUE)
 }
 
 }

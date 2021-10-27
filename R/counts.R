@@ -131,7 +131,12 @@ counts <- function(y, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TR
 #' @export
 counts_all <- function(data, n = "all", order = c("d", "a", "i"), sep = "_", na.rm = TRUE) {
   order <-  match.arg(order, several.ok = FALSE)
-  out <- purrr::map(data, ~counts(.x, n = n, order = order, sep = sep, na.rm = na.rm))
+  if(na.rm == TRUE) {
+    out <- purrr::map(data, ~as.character(na.omit(counts(.x, n = n, order = order, sep = sep, na.rm = na.rm))))
+  } else {
+    out <- purrr::map(data, ~counts(.x, n = n, order = order, sep = sep, na.rm = na.rm))
+  }
+
   return(out)
 }
 

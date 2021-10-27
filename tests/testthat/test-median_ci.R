@@ -15,26 +15,26 @@ set.seed(1234)
 
 test_that("median_ci works with defaults", {
   expect_equal(median_ci(mtcars$mpg),
-               c("lower" = 15.9, "median" = 19.2, "upper" = 21.2),
+               c("median" = 19.2, "lower" = 15.9, "upper" = 21.2),
                tolerance = 1)
 })
 
 test_that("median_ci with altered ci_level works", {
   expect_equal(median_ci(mtcars$mpg, ci_level = 0.8),
-               c("lower" = 17.10, "median" = 19.2, "upper" = 20.5),
+               c("median" = 19.2, "lower" = 17.10, "upper" = 20.5),
                tolerance = 1)
 })
 
 
 test_that("median_ci with altered ci_type works", {
   expect_equal(median_ci(mtcars$mpg, ci_type = "basic"),
-               c("lower" = 17.0, "median" = 19.2, "upper" = 21.9),
+               c("median" = 19.2, "lower" = 17.0, "upper" = 21.9),
                tolerance = 1)
 })
 
 test_that("median_ci with parallel processing works", {
   expect_equal(median_ci(mtcars$mpg, ci_type = "perc", parallel = TRUE, cores = 2),
-               c("lower" = 16.5, "median" = 19.2, "upper" = 21.4),
+               c("median" = 19.2, "lower" = 16.5, "upper" = 21.4),
                tolerance = 1)
 })
 

@@ -5,7 +5,11 @@
 
 ## Project Status
 
+<!-- badges: start -->
+
 [![img](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+[![R-CMD-check](https://github.com/bcgov/elucidate/workflows/R-CMD-check/badge.svg)](https://github.com/bcgov/elucidate/actions)
+<!-- badges: end -->
 
 This package is currently maintained by [Craig
 Hutton](https://craig.rbind.io/), a Data Scientist working with the
@@ -17,24 +21,24 @@ Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structu
 
 `elucidate` provides a collection of convenience functions to make
 exploratory data analysis in R easier and more accessible for
-researchers to:
+researchers to (among other things):
 
-  - Interrogate data in search of row duplications and anomalous values
-    with `dupes()`, `copies()`, and the `counts*` set of functions.
+-   Interrogate data in search of row duplicates with `dupes()` and
+    anomalous values with the `counts*` set of functions.
 
-  - Describe data with the `describe*` set of functions for obtaining
+-   Describe data with the `describe*` set of functions for obtaining
     summary statistics, bootstrapping confidence intervals, and
     detecting missing values.
 
-  - Quickly visualise and interact with data representations with
-    `static_to_dynamic()` and the `plot_*` set of functions.
+-   Quickly visualise and interact with data representations with the
+    `plot_*` set of functions.
 
 Inspired by tidyverse naming conventions, the core functions of
 `elucidate` are organized into sets that begin with a common root
 (e.g. `describe*`, `plot_*`), since this enables the user to see them
 all as suggestions as you are coding in R studio.
 
-Drawing from similar inspiration, many elucidate functions are also
+Drawing from similar inspiration, many `elucidate` functions are also
 designed to accept a data object as the 1st argument and return a data
 or plotting object (e.g. ggplot2 or plotly) so they are compatible with
 the pipe operator from the
@@ -42,6 +46,9 @@ the pipe operator from the
 for easy integration into data processing pipelines. For convenience,
 the pipe operator (`%>%`) is also imported from `magrittr` when
 `elucidate` is loaded.
+
+For a comprehensive introduction to the package see the vignette via
+`vignette("elucidate")`.
 
 ## Installation
 
@@ -65,14 +72,12 @@ mostly have remained a collection of ideas instead of functions.
 
 ## Usage
 
-`copies()` can tell you how many rows are duplicated based on one or
-more variables (default is all of them). To return duplicated rows only
-we can set the filter argument to “dupes”. To sort the results by the
-number of copies that are detected we can set the “sort\_by\_copies”
-argument to `TRUE`.
+`dupes()` can tell you how many rows are duplicated based on one or more
+variables (default is all of them).
 
 ``` r
 library(elucidate)
+#> Loading required package: ggplot2
 #> 
 #> Attaching package: 'elucidate'
 #> The following object is masked from 'package:base':
@@ -81,10 +86,7 @@ library(elucidate)
 
 #list any number of variables to use when searching for duplicates after the
 #data argument
-copies(pdata,
-       d, #in this case we search for duplicated based on the "d" (date) column
-       filter = "dupes",#return duplicated rows only
-       sort_by_copies = TRUE) 
+dupes(pdata, d) 
 #> Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.
 #> # A tibble: 12,000 x 11
 #>       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies
@@ -100,145 +102,110 @@ copies(pdata,
 #>  9     9 2019-01-01 e     high     FALSE  156. 110.      4   136   220     1000
 #> 10    10 2019-01-01 c     low      TRUE   248.  95.9    63   113   213     1000
 #> # ... with 11,990 more rows
+#in this case we search for duplicated based on the "d" (date) column        
 ```
 
-Since this is by far the most common way of using `copies()`, version
-0.0.0.9023 of `elucidate` also introduced a convenience wrapper called
-`dupes()` for the above:
+`describe()` a single variable in a data frame or a vector of values.
 
 ``` r
-copies_result <- copies(pdata, d, filter = "dupes", sort_by_copies = TRUE)
-dupes_result <- dupes(pdata, d)
+#set random generator seed for reproducibility
+set.seed(1234)
 
-identical(copies_result, dupes_result)
-#> [1] TRUE
-```
-
-Use `describe()` to describe a single variable in a data frame or a
-vector of values:
-
-``` r
 #using a numeric vector as input
 describe(data = rnorm(1:1000, 100, 5))
 #> # A tibble: 1 x 14
 #>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew
 #>   <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
-#> 1  1000  1000     0     0  100.  5.10 0.161  83.5  96.6  100.  104.  116. -0.063
+#> 1  1000  1000     0     0  99.9  4.99 0.158  83.0  96.6  99.8  103.  116. -0.005
 #> # ... with 1 more variable: kurt <dbl>
 ```
 
-To describe all variables in a data frame, use `describe_all()`:
+`describe_all()` all variables in a data frame.
 
 ``` r
-#if more than one class of variable is summarized you'll get a list
-#if only one class is present in the data, or only one is requested, you'll get a dataframe
-
-describe_all(pdata,
-             #you can ask for a "tibble" or "dt" (data.table) as output options
-             #default is currently "tibble", as in the previous example.
-             output = "dt") 
+describe_all(pdata)
 #> $date
-#>    variable cases     n na p_na n_unique      start        end
-#> 1:        d 12000 12000  0    0       12 2008-01-01 2019-01-01
+#> # A tibble: 1 x 8
+#>   variable cases     n    na  p_na n_unique start      end       
+#>   <chr>    <int> <int> <int> <dbl>    <int> <date>     <date>    
+#> 1 d        12000 12000     0     0       12 2008-01-01 2019-01-01
 #> 
 #> $factor
-#>    variable cases     n na p_na n_unique ordered
-#> 1:        g 12000 12000  0    0        5   FALSE
-#>                              counts_tb
-#> 1: a_2592, b_2460, ..., e_2352, c_2220
+#> # A tibble: 1 x 8
+#>   variable cases     n    na  p_na n_unique ordered counts_tb                   
+#>   <chr>    <int> <int> <int> <dbl>    <int> <lgl>   <chr>                       
+#> 1 g        12000 12000     0     0        5 FALSE   a_2592, b_2460, ..., e_2352~
 #> 
 #> $character
-#>    variable cases     n na p_na n_unique min_chars max_chars
-#> 1: high_low 12000 12000  0    0        2         3         4
-#>              counts_tb
-#> 1: high_6045, low_5955
+#> # A tibble: 1 x 9
+#>   variable cases     n    na  p_na n_unique min_chars max_chars counts_tb       
+#>   <chr>    <int> <int> <int> <dbl>    <int>     <int>     <int> <chr>           
+#> 1 high_low 12000 12000     0     0        2         3         4 high_6045, low_~
 #> 
 #> $logical
-#>    variable cases     n na p_na n_TRUE n_FALSE p_TRUE
-#> 1:     even 12000 12000  0    0   6000    6000    0.5
+#> # A tibble: 1 x 8
+#>   variable cases     n    na  p_na n_TRUE n_FALSE p_TRUE
+#>   <chr>    <int> <int> <int> <dbl>  <dbl>   <dbl>  <dbl>
+#> 1 even     12000 12000     0     0   6000    6000    0.5
 #> 
 #> $numeric
-#>    variable cases     n na p_na    mean      sd    se      p0     p25     p50
-#> 1:       id 12000 12000  0    0 500.500 288.687 2.635   1.000 250.750 500.500
-#> 2:       y1 12000 12000  0    0 153.705  42.724 0.390  69.224 120.941 144.782
-#> 3:       y2 12000 12000  0    0 100.092  10.120 0.092  59.963  93.351 100.128
-#> 4:       x1 12000 12000  0    0  50.495  28.937 0.264   1.000  25.000  50.000
-#> 5:       x2 12000 12000  0    0 150.651  28.820 0.263 101.000 126.000 150.000
-#> 6:       x3 12000 12000  0    0 250.497  28.865 0.264 201.000 225.000 251.000
-#>        p75     p100   skew   kurt
-#> 1: 750.250 1000.000  0.000 -1.200
-#> 2: 181.022  289.235  0.739 -0.181
-#> 3: 106.906  142.181 -0.032  0.059
-#> 4:  75.000  100.000  0.008 -1.208
-#> 5: 176.000  200.000  0.002 -1.209
-#> 6: 276.000  300.000  0.006 -1.214
+#> # A tibble: 6 x 15
+#>   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75
+#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 id       12000 12000     0     0 500.  289.  2.64    1   251.   500.  750.
+#> 2 y1       12000 12000     0     0 154.   42.7 0.39   69.2 121.   145.  181.
+#> 3 y2       12000 12000     0     0 100.   10.1 0.092  60.0  93.4  100.  107.
+#> 4 x1       12000 12000     0     0  50.5  28.9 0.264   1    25     50    75 
+#> 5 x2       12000 12000     0     0 151.   28.8 0.263 101   126    150   176 
+#> 6 x3       12000 12000     0     0 250.   28.9 0.264 201   225    251   276 
+#> # ... with 3 more variables: p100 <dbl>, skew <dbl>, kurt <dbl>
 ```
 
-Only want to summarise certain variable classes? No problem, use the
-“class” argument.
-
-Would you like a description for each level of a grouping variable? Just
-provide the unquoted name of the column to use for splitting.
+Use `plot_var()` to produce a class-appropriate
+[ggplot2](https://ggplot2.tidyverse.org/) graph of a single variable in
+a data frame or a vector of values.
 
 ``` r
-
-pdata %>% 
-  describe_all(g, #get a description for each level of the "g" column
-               class = "n") #describe numeric columns only
-#> # A tibble: 30 x 16
-#>    g     variable cases     n    na  p_na  mean    sd    se    p0   p25   p50
-#>    <fct> <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1 e     id        2352  2352     0     0 526.  290.  5.98    1   266.   536.
-#>  2 e     y1        2352  2352     0     0 135.   18.6 0.383  75.1 123.   137.
-#>  3 e     y2        2352  2352     0     0 100.   10.3 0.212  62.3  93.1  100.
-#>  4 e     x1        2352  2352     0     0  50.7  28.7 0.593   1    26     51 
-#>  5 e     x2        2352  2352     0     0 151.   28.6 0.59  101   126    151 
-#>  6 e     x3        2352  2352     0     0 250.   28.6 0.589 201   225    250 
-#>  7 c     id        2220  2220     0     0 495.  266.  5.64    2   286    484 
-#>  8 c     y1        2220  2220     0     0 177.   57.0 1.21   77.0 127.   165.
-#>  9 c     y2        2220  2220     0     0  99.9  10.1 0.214  60.0  93.4  100.
-#> 10 c     x1        2220  2220     0     0  49.9  29.0 0.615   1    24     49 
-#> # ... with 20 more rows, and 4 more variables: p75 <dbl>, p100 <dbl>,
-#> #   skew <dbl>, kurt <dbl>
+plot_var(data = rnorm(1:1000, 100, 5)) 
 ```
 
-Use the `plot_*` set of functions to easily generate customized ggplot2
-visualisations:
+<img src="man/figures/README-plot_var-1.png" width="100%" />
 
 ``` r
-data(mtcars)
-
-#customized density plot
-mtcars %>% plot_density(x = mpg,
-                        colour_var = cyl, #assign a variable to colour
-                        colour_var_order = c("6", "8", "4"), #reorder the levels of the colour variable
-                        colour_var_labs = c("six" = "6", "eight" = "8"), #recode the colour variable labels
-                        colour_var_values = c("blue3", "red3", "green3"), #change the colours from the ggplot2 defaults
-                        colour_var_title = "# cylinders")
+#in this case we get a density plot with a normal density curve added for
+#reference (dashed line).
 ```
 
-<img src="man/figures/README-plot-1.png" width="100%" />
+To generate class-appropriate `ggplot2` graphs for all variables in a
+data frame and combine them into a multiple-panel figure with the
+[patchwork](https://patchwork.data-imaginist.com/index.html) package,
+use `plot_var_all()`. You can also limit the graphing to a subset of
+columns with the “cols” argument, which accepts a character vector of
+column names.
 
 ``` r
-
-#plot group means with SE error bars
-mtcars %>% 
-  plot_stat_error(y = mpg, x = cyl,
-                  stat = "mean", error = "se",
-                  alpha = 0.6, fill = "blue2")
+plot_var_all(pdata, cols = c("y1", "y2", "g", "even"))
 ```
 
-<img src="man/figures/README-plot-2.png" width="100%" />
+<img src="man/figures/README-plot_var_all-1.png" width="100%" />
+
+``` r
+#density plots for numeric variables and bar graphs for categorical variables
+```
+
+## Learn more
 
 These examples only highlight a few of the many things `elucidate` can
-do. **Check out [this blog
-post](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/)
-for a comprehensive guide.**
+do. You can learn more from these additional resources:
 
-## Development Notes
+-   A **[blog
+    post](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/)**,
+    which was written to help researchers and science trainees learn how
+    to use the package for common exploratory data analysis tasks.
 
-`elucidate` is still in the formative stage of development and
-considerable changes may occur to it in the near future.
+-   The **introductory vignette** (`vignette("elucidate")`), which
+    provides annotated code examples that demonstrate most of the
+    package’s functionality.
 
 ## Reporting an Issue
 
@@ -248,7 +215,7 @@ GitHub repo. If raising an issue, *please provide a reproducible
 example* ([reprex](https://www.tidyverse.org/help/)) of the problem
 you’re encountering.
 
-## Requesting Features/Changes
+## Requesting Features and/or Changes
 
 To suggest changes or code improvements, please submit a [pull
 request](https://github.com/bcgov/elucidate/pulls).
@@ -259,7 +226,7 @@ Copyright 2021 Province of British Columbia
 
 Licensed under the Apache License, Version 2.0 (the “License”); you may
 not use this file except in compliance with the License. You may obtain
-a copy of the License at
+a copy of the License at:
 
 <http://www.apache.org/licenses/LICENSE-2.0>
 

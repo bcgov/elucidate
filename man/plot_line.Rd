@@ -16,6 +16,9 @@ plot_line(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   colour_var_title = NULL,
   line_type_var_title = NULL,
   ylim = c(NA, NA),
@@ -122,6 +125,16 @@ statistic was used by default.}
 
 \item{title}{Add a main title to the plot using a character string, e.g.
 "bar plots of y for each group of x"}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{colour_var_title}{If a variable has been assigned to colour using
 colour_var, this allows you to modify the variable label in the plot

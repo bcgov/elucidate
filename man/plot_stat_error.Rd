@@ -19,6 +19,9 @@ plot_stat_error(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   ...,
   ylim = c(NA, NA),
   ybreaks = ggplot2::waiver(),
@@ -150,7 +153,17 @@ omitted.}
 the chosen statistic, y variable, and error bar options.}
 
 \item{title}{Add a main title to the plot using a character string, e.g.
-"scatterplot of y as a function of x"}
+"scatterplot of y as a function of x".}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{...}{graphical parameters (not associated with variables) to be passed
 to \code{\link[ggplot2]{geom_point}} or \code{\link[ggplot2]{geom_bar}}
@@ -411,45 +424,37 @@ blog post} for an introduction to ggplot2.
 \examples{
 data(mtcars) #load the mtcars data
 
-library(magrittr)
+plot_stat_error(mtcars, y = mpg, x = cyl, colour = "blue")
 
-mtcars \%>\% plot_stat_error(y = mpg, x = cyl, colour = "blue")
-
-mtcars \%>\% plot_stat_error(y = mpg, x = cyl, colour = "blue", geom = "point")
+plot_stat_error(mtcars, y = mpg, x = cyl, colour = "blue", geom = "point")
 
 \donttest{
 
-pdata \%>\%
-  plot_stat_error(y = y1, x = d, colour_var = g, print_stats = TRUE,
-                  geom = "point", p_size = 3,
-                  add_lines = TRUE,
-                  dodge_width = 0,
-                  alpha = 0.6)
+plot_stat_error(pdata, y = y1, x = d, colour_var = g, print_stats = TRUE,
+                geom = "point", p_size = 3,
+                add_lines = TRUE,
+                dodge_width = 0,
+                alpha = 0.6)
 
-pdata \%>\%
- plot_stat_error(y = y1, x = g, coord_flip = TRUE,
-                 fill_var = g, geom = "point", eb_size = 0.6,
-                 alpha = 0.6)
+plot_stat_error(pdata, y = y1, x = g, coord_flip = TRUE,
+                fill_var = g, geom = "point", eb_size = 0.6,
+                alpha = 0.6)
 
-pdata \%>\%
-  plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-                  stat = "median", error = "quartile")
+plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
+                stat = "median", error = "quartile")
 
-pdata \%>\%
-  plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
+plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
                   stat = "median", error = "ci")
 
-
-pdata \%>\%
-  plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-                  stat = "mean", error = "ci", ci_level = 0.8, interactive = TRUE)
+plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
+                stat = "mean", error = "ci", ci_level = 0.8,
+                interactive = TRUE)
 
 #when output = "ps" the plot is stored as the 1st element of a
 #list
 
-out <- pdata \%>\%
-  plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-                  stat = "mean", error = "ci", output = "ps")
+out <- plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
+                       stat = "mean", error = "ci", output = "ps")
 
 out$plot #print the plot to the appropriate active graphics device
 

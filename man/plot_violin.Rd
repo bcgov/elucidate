@@ -14,6 +14,9 @@ plot_violin(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_title = NULL,
   colour_var_title = NULL,
   ylim = c(NA, NA),
@@ -34,7 +37,7 @@ plot_violin(
   palette_direction = c("d2l", "l2d"),
   palette_begin = 0,
   palette_end = 1,
-  alpha = 0.6,
+  alpha = 0.75,
   greyscale = FALSE,
   line_size = 1,
   theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
@@ -87,6 +90,16 @@ colour variable. See \code{\link[ggplot2]{aes}} for details.}
 
 \item{title}{Add a main title to the plot using a character string, e.g.
 "Violin graph of X"}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{fill_var_title}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.}
@@ -254,44 +267,41 @@ blog post} for an introduction to ggplot2.
 \examples{
 data(mtcars) #load the mtcars data
 
-library(magrittr)
+plot_violin(mtcars, y = mpg, x = cyl, fill = "blue")
 
-mtcars \%>\% plot_violin(y = mpg, x = cyl, fill = "blue")
-mtcars \%>\% plot_violin(y = mpg, x = cyl, fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
+plot_violin(mtcars, y = mpg, x = cyl,
+            fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
 
 \donttest{
-mtcars \%>\%
- plot_violin(x = cyl, y = hp,
-          xlab = "# of cylinders",
-          ylab = "horsepower",
-          fill_var = am,
-          fill_var_title = "transmission",
-          fill_var_labs = c("manual" = "0", "automatic" = "1"),
-          fill_var_values = c("blue", "red"),
-          theme = "bw")
+plot_violin(mtcars, x = cyl, y = hp,
+           xlab = "# of cylinders",
+           ylab = "horsepower",
+           fill_var = am,
+           fill_var_title = "transmission",
+           fill_var_labs = c("manual" = "0", "automatic" = "1"),
+           fill_var_values = c("blue", "red"),
+           theme = "bw")
 
 #modifying fill doesn't work as well for the interactive version of a boxplot
-mtcars \%>\%
- plot_violin(x = cyl, y = hp,
-          xlab = "# of cylinders",
-          ylab = "horsepower",
-          fill_var = am,
-          fill_var_title = "transmission",
-          fill_var_labs = c("manual" = "0", "automatic" = "1"),
-          fill_var_values = c("blue", "red"),
-          theme = "bw",
-          interactive = TRUE)
+plot_violin(mtcars, x = cyl, y = hp,
+           xlab = "# of cylinders",
+           ylab = "horsepower",
+           fill_var = am,
+           fill_var_title = "transmission",
+           fill_var_labs = c("manual" = "0", "automatic" = "1"),
+           fill_var_values = c("blue", "red"),
+           theme = "bw",
+           interactive = TRUE)
 
 #using colour works better for the interactive version
-mtcars \%>\%
- plot_violin(x = cyl, y = hp,
-          xlab = "# of cylinders",
-          ylab = "horsepower",
-          colour_var = am,
-          colour_var_title = "transmission",
-          colour_var_labs = c("manual" = "0", "automatic" = "1"),
-          colour_var_values = c("blue", "red"),
-          theme = "bw", interactive = TRUE)
+plot_violin(mtcars, x = cyl, y = hp,
+           xlab = "# of cylinders",
+           ylab = "horsepower",
+           colour_var = am,
+           colour_var_title = "transmission",
+           colour_var_labs = c("manual" = "0", "automatic" = "1"),
+           colour_var_values = c("blue", "red"),
+           theme = "bw", interactive = TRUE)
 }
 
 

@@ -12,6 +12,7 @@ plot_var(
   var1_lab = ggplot2::waiver(),
   var2_lab = ggplot2::waiver(),
   title = ggplot2::waiver(),
+  caption = ggplot2::waiver(),
   fill = "blue2",
   colour = "black",
   palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
@@ -85,6 +86,8 @@ categorical variables (since \code{var2} will be used for faceting in such
 cases).}
 
 \item{title}{A character string to add as a title at the top of the graph.}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
 
 \item{fill}{Fill colour to use for density plots, bar graphs, and box plots.
 Ignored if a variable that has been assigned to \code{group_var} is mapped on to

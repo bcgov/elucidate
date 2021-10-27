@@ -4,3 +4,5 @@
 .Ruserdata
 COMPLIANCE.yaml
 README_cache
+inst/doc
+docs

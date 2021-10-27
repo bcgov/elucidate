@@ -13,6 +13,9 @@ plot_density(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_title = NULL,
   colour_var_title = NULL,
   xlim = c(NA, NA),
@@ -87,6 +90,16 @@ variable. See \code{\link[ggplot2]{aes}} for details.}
 
 \item{title}{Add a main title to the plot using a character string, e.g.
 "Density graph of X"}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{fill_var_title}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.}
@@ -267,43 +280,42 @@ blog post} for an introduction to ggplot2.
 \examples{
 data(mtcars) #load the mtcars data
 
-library(magrittr)
-
-mtcars \%>\% plot_density(x = mpg)
+plot_density(mtcars, x = mpg)
 
 \donttest{
-mtcars \%>\%
-  plot_density(x = mpg, transform_x = TRUE, x_transformation = "log2")
+plot_density(mtcars, x = mpg, transform_x = TRUE, x_transformation = "log2")
 
-mtcars \%>\%
-  plot_density(x = mpg, transform_x = TRUE, x_transformation = "log10") #default transformation
+plot_density(mtcars, x = mpg, transform_x = TRUE,
+             x_transformation = "log10") #default transformation
 
-mtcars \%>\%
-  plot_density(x = mpg, transform_x = TRUE, x_transformation = "sqrt") #default transformation
+plot_density(mtcars, x = mpg, transform_x = TRUE,
+             x_transformation = "sqrt") #default transformation
 
-mtcars \%>\% plot_density(x = mpg, fill_var = cyl, fill_var_labs = c("four" = "4"))
+plot_density(mtcars, x = mpg, fill_var = cyl, fill_var_labs = c("four" = "4"))
 
-mtcars \%>\% plot_density(x = mpg, fill_var = cyl, fill_var_title = "# cyl",
-                        interactive = TRUE)
+plot_density(mtcars, x = mpg, fill_var = cyl, fill_var_title = "# cyl",
+             interactive = TRUE)
 
-mtcars \%>\% plot_density(x = mpg,
-                        fill_var = am,
-                        fill_var_order = c("1", "0"),
-                        fill_var_labs = c("manual" = "0",
-                                          "automatic" = "1"),
-                        fill_var_values = c("blue4", "red4"),
-                        fill_var_title = "transmission")
+plot_density(mtcars,
+             x = mpg,
+             fill_var = am,
+             fill_var_order = c("1", "0"),
+             fill_var_labs = c("manual" = "0",
+                               "automatic" = "1"),
+             fill_var_values = c("blue4", "red4"),
+             fill_var_title = "transmission")
 
-mtcars \%>\% plot_density(x = mpg,
-                        colour_var = cyl,
-                        colour_var_order = c("6", "8", "4"),
-                        colour_var_labs = c("six" = "6", "eight" = "8"),
-                        colour_var_values = c("blue3", "red3", "green3"),
-                        colour_var_title = "# cylinders")
+plot_density(mtcars,
+             x = mpg,
+             colour_var = cyl,
+             colour_var_order = c("6", "8", "4"),
+             colour_var_labs = c("six" = "6", "eight" = "8"),
+             colour_var_values = c("blue3", "red3", "green3"),
+             colour_var_title = "# cylinders")
 
 #interactive version
 
-mtcars \%>\% plot_density(mpg, fill_var = cyl, interactive = TRUE)
+plot_density(mtcars, mpg, fill_var = cyl, interactive = TRUE)
 }
 
 

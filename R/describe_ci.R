@@ -142,16 +142,15 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 
   if(is.numeric(data)){
     if(st == "mean") {
-      description <- dt[[1]] %>% mean_ci(replicates = replicates, ci_type = ci_type,
-                                         ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
+      description <- mean_ci(dt[[1]], replicates = replicates, ci_type = ci_type,
+                             ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
       description <- data.table::data.table(description[1], description[2], description[3])
-      names(description) <- c("lower", st, "upper")
+      names(description) <- c(st, "lower", "upper")
     } else {
-      description <- dt[[1]] %>%
-        stat_ci(stat = stat, replicates = replicates, ci_type = ci_type,
-                ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
+      description <- stat_ci(dt[[1]], stat = stat, replicates = replicates, ci_type = ci_type,
+                             ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
       description <- data.table::data.table(description[1], description[2], description[3])
-      names(description) <- c("lower", st, "upper")
+      names(description) <- c(st, "lower", "upper")
     }
   } else if(!is.data.frame(data)) {
     stop("data must either be a numeric vector or data frame")
@@ -164,31 +163,30 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 
       if(st == "mean") {
         description <- dt[,
-                          .(measure = c("lower", st, "upper"),
+                          .(measure = factor(c(st, "lower", "upper"), levels = c(st, "lower", "upper")),
                             value = mean_ci(get(y), replicates = replicates, ci_type = ci_type,
                                             ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)),
-                          by = eval(g)] %>% stats::na.omit() %>%
-          data.table::dcast(formula = ... ~ measure, value.var = "value")
+                          by = eval(g)]
+        description <- data.table::dcast(stats::na.omit(description), formula = ... ~ measure, value.var = "value")
       } else {
         description <- dt[,
-                          .(measure = c("lower", st, "upper"),
+                          .(measure = factor(c(st, "lower", "upper"), levels = c(st, "lower", "upper")),
                             value = stat_ci(get(y), stat = stat, replicates = replicates, ci_type = ci_type,
                                             ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)),
-                          by = eval(g)] %>% stats::na.omit() %>%
-          data.table::dcast(formula = ... ~ measure, value.var = "value")
+                          by = eval(g)]
+        description <- data.table::dcast(stats::na.omit(description), formula = ... ~ measure, value.var = "value")
       }
     } else {
       if(st == "mean") {
-        description <- dt[[y]] %>% mean_ci(replicates = replicates, ci_type = ci_type,
-                                           ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
+        description <- mean_ci(dt[[y]], replicates = replicates, ci_type = ci_type,
+                               ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
         description <- data.table::data.table(description[1], description[2], description[3])
-        names(description) <- c("lower", st, "upper")
+        names(description) <- c(st, "lower", "upper")
       } else {
-        description <- dt[[y]] %>%
-          stat_ci(stat = stat, replicates = replicates, ci_type = ci_type,
+        description <- stat_ci(dt[[y]], stat = stat, replicates = replicates, ci_type = ci_type,
                   ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
         description <- data.table::data.table(description[1], description[2], description[3])
-        names(description) <- c("lower", st, "upper")
+        names(description) <- c(st, "lower", "upper")
       }
     }
   }
@@ -338,48 +336,45 @@ describe_ci_all <- function(data, ..., stat = mean, replicates = 2000,
                       na.rm = TRUE, output = "dt"){
       dt <- data.table::as.data.table(data)
       if(st == "mean") {
-        description <- dt[[1]] %>% mean_ci
+        description <- mean_ci(dt[[1]])
         description <- data.table::data.table(description[1], description[2], description[3])
-        names(description) <- c("lower", st, "upper")
+        names(description) <- c(st, "lower", "upper")
       } else {
-        description <- dt[[1]] %>%
-          stat_ci(stat = stat, replicates = replicates, ci_type = ci_type,
+        description <- stat_ci(dt[[1]], stat = stat, replicates = replicates, ci_type = ci_type,
                   ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
         description <- data.table::data.table(description[1], description[2], description[3])
-        names(description) <- c("lower", st, "upper")
+        names(description) <- c(st, "lower", "upper")
       }
       return(description)
     }
     if(st == "mean"){
-      out <- num_data %>%
-        purrr::map(~st_ci(data = .x, stat = mean, replicates = replicates, ci_type = ci_type,
+      out <- purrr::map(num_data,
+                   ~st_ci(data = .x, stat = mean, replicates = replicates, ci_type = ci_type,
                           ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm,
-                          output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
+                          output = "dt"))
+      out <- data.table::rbindlist(out, use.names = TRUE, idcol = "variable", fill = TRUE)
     } else {
-      out <- num_data %>%
-        purrr::map(~st_ci(data = .x, stat = stat, replicates = replicates, ci_type = ci_type,
+      out <- purrr::map(num_data,
+                   ~st_ci(data = .x, stat = stat, replicates = replicates, ci_type = ci_type,
                           ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm,
-                          output = "dt")) %>%
-        data.table::rbindlist(use.names = TRUE, idcol = "variable", fill = TRUE)
+                          output = "dt"))
+      out <- data.table::rbindlist(out, use.names = TRUE, idcol = "variable", fill = TRUE)
     }
     return(out)
   }
 
   if(!missing(...)){
     g <- group_parser(data, ...)
-
-    description <- data %>%
-      dplyr::group_by(dplyr::across(dplyr::all_of(g))) %>%
-      tidyr::nest() %>%
-      dplyr::mutate(data = purrr::map(data, ~dscr_ci_all(data = .x, stat = stat, replicates = replicates,
-                                                         ci_level = ci_level, ci_type = ci_type,
-                                                         parallel = parallel, cores = cores, na.rm = na.rm
-                                                         )
-                                      )
-                    ) %>%
-      tidyr::unnest(data) %>% dplyr::select(variable, tidyselect::everything()) %>%
-      dplyr::arrange(variable)
+    description <- dplyr::group_by(data, dplyr::across(dplyr::all_of(g)))
+    description <- tidyr::nest(description)
+    description <- dplyr::mutate(description,
+                                 data = purrr::map(data,
+                                                   ~dscr_ci_all(data = .x, stat = stat, replicates = replicates,
+                                                                ci_level = ci_level, ci_type = ci_type,
+                                                                parallel = parallel, cores = cores, na.rm = na.rm)))
+    description <- tidyr::unnest(description, data)
+    description <- dplyr::select(description, variable, tidyselect::everything())
+    description <- dplyr::arrange(description, variable)
   } else {
     description <- dscr_ci_all(data, stat = stat, replicates = replicates,
                                ci_level = ci_level, ci_type = ci_type,

@@ -355,16 +355,15 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 #' library(ggplot2)
 #'
 #' p1 <- ggplot(mtcars, aes(x = mpg)) + geom_histogram(binwidth = 1)
-#' p1 %>% static_to_dynamic()
+#' static_to_dynamic(p1)
 #'
-#' mtcars %>% static_to_dynamic()
+#' static_to_dynamic(mtcars)
 #'
-#' mtcars %>% static_to_dynamic(reactable = TRUE)
+#' static_to_dynamic(mtcars, reactable = TRUE)
 #'
-#' mtcars %>% static_to_dynamic(reactable = TRUE, group_by = "cyl")
+#' static_to_dynamic(mtcars, reactable = TRUE, group_by = "cyl")
 #'
-#' mtcars %>%
-#'      static_to_dynamic(reactable = TRUE,
+#' static_to_dynamic(mtcars, reactable = TRUE,
 #'                        reactable_hightlight_colour = "lightgreen")
 #' }
 #'
@@ -374,7 +373,7 @@ kurtosis <- function(y, na.rm = TRUE, type = 2) {
 static_to_dynamic <- function(static_object, caption = NULL,
                               reactable = FALSE,
                               reactable_threshold = 10000,
-                              group_by = NULL, #group_by accepts multiple arguments as a character vector
+                              group_by = NULL,
                               reactable_stripe_colour = "#e4e2e9",
                               reactable_highlight_colour = "#a28adb",
                               reactable_selected_colour = "#aaaadb") {
@@ -516,7 +515,6 @@ static_to_dynamic <- function(static_object, caption = NULL,
 #'   rows & columns. A convenience wrapper for some helpful routine cleaning
 #'   functions from the janitor, readr, & tibble packages.
 #'
-#' @importFrom magrittr %>%
 #' @importFrom janitor remove_empty
 #' @importFrom janitor clean_names
 #' @importFrom tibble rownames_to_column
@@ -573,7 +571,6 @@ static_to_dynamic <- function(static_object, caption = NULL,
 #' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
 #'
 #' @examples
-#' library(magrittr)
 #' data(mtcars)
 #'
 #' mtcars$`Extra Column` <- rep(NA, length.out = nrow(mtcars)) #add an empty column
@@ -583,12 +580,12 @@ static_to_dynamic <- function(static_object, caption = NULL,
 #' mtcars #now mtcars is messy & more like a real raw data set
 #'
 #' #clean it up and convert the row names to a column
-#' mtcars <- mtcars %>% wash_df(rownames_to_column = TRUE, col_name = "car")
+#' mtcars <- wash_df(mtcars, rownames_to_column = TRUE, col_name = "car")
 #'
 #' mtcars #the empty rows and column are gone, huzzah! So is that awkard column name!
 #'
 #' #or turn a column with rownames into row names
-#' mtcars <- mtcars %>% wash_df(column_to_rownames = TRUE, names_col = "car")
+#' mtcars <- wash_df(mtcars, column_to_rownames = TRUE, names_col = "car")
 #' mtcars
 #'
 #' @seealso \code{\link[janitor]{remove_empty}}
@@ -601,30 +598,25 @@ wash_df <- function(data, clean_names = TRUE, case = "snake",
                     column_to_rownames = FALSE, names_col = "rowname"){
 
   if (remove_empty == TRUE) {
-    data <- data %>%
-      janitor::remove_empty(which = remove_which)
+    data <- janitor::remove_empty(data, which = remove_which)
   }
 
   if (clean_names == TRUE) {
-    data <- data %>%
-      janitor::clean_names(case = case)
+    data <- janitor::clean_names(data, case = case)
   }
 
   if (rownames_to_column == TRUE) {
-    data <- data %>%
-      tibble::rownames_to_column(., var = col_name)
+    data <- tibble::rownames_to_column(data, var = col_name)
   }
 
   if (parse == TRUE) {
-    data <- data %>%
-      purrr::map_dfc(~as.character(.x)) %>%
-      purrr::map_dfc(~readr::parse_guess(.x, na = na,
+    data <- purrr::map_dfc(data, ~as.character(.x))
+    data <- purrr::map_dfc(data, ~readr::parse_guess(.x, na = na,
                                          guess_integer = guess_integer))
   }
 
   if (column_to_rownames == TRUE) {
-    data <- data %>%
-      tibble::column_to_rownames(., var = names_col)
+    data <- tibble::column_to_rownames(data, var = names_col)
   }
   return(data)
 }
@@ -638,8 +630,6 @@ wash_df <- function(data, clean_names = TRUE, case = "snake",
 #'   conditional matching in situations where it would be overly tedious to use
 #'   recode, if_else, or case_when to recode a variable because there are many
 #'   conditional replacements to be specified.
-#'
-#' @importFrom magrittr %>%
 #'
 #' @param y A vector that you wish to translate/recode.
 #'
@@ -669,10 +659,10 @@ wash_df <- function(data, clean_names = TRUE, case = "snake",
 #' translate(y = mtcars$cyl, old = old_values, new = new_values)
 #'
 #' #or within a dplyr::mutate call
-#' mtcars %>%
-#'   dplyr::mutate(translated_cyl = translate(cyl,
-#'                                     old = old_values,
-#'                                     new = new_values))
+#' dplyr::mutate(mtcars,
+#'               translated_cyl = translate(cyl,
+#'                                          old = old_values,
+#'                                          new = new_values))
 #'
 #' @seealso \code{\link[base]{match}}
 #'
@@ -681,8 +671,6 @@ translate <- function(y, old, new) {
   out <- new[match(y, old)]
   return(out)
 }
-
-
 
 # is.error (internal) -----------------------------------------------------
 #' @title

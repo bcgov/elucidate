@@ -16,13 +16,13 @@ d <- pdata[1:100, ]
 
 describe_ci(d, y1, stat = mean)
 
-r1 <- tibble::tibble("lower" = 96.6, "mean" = 98.4, "upper" = 100.0)
+r1 <- tibble::tibble("mean" = 98.4, "lower" = 96.6, "upper" = 100.0)
 
-r1b <- tibble::tibble("lower" = 97.3, "mean" = 98.4, "upper" = 99.6)
+r1b <- tibble::tibble("mean" = 98.4, "lower" = 97.3, "upper" = 99.6)
 
-r2 <- tibble::tibble("lower" = 96.5, "median" = 97.8, "upper" = 101.0)
+r2 <- tibble::tibble("median" = 97.8, "lower" = 96.5, "upper" = 101.0)
 
-r3 <- tibble::tibble("lower" = 8.05, "sd" = 9.24, "upper" = 10.30)
+r3 <- tibble::tibble("sd" = 9.24, "lower" = 8.05, "upper" = 10.30)
 
 test_that("describe_ci works for the mean", {
   expect_equivalent(as.data.frame(describe_ci(d, y1)), as.data.frame(r1), tolerance = 1)

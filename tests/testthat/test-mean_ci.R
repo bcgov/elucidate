@@ -15,31 +15,31 @@ set.seed(1234)
 
 test_that("mean_ci works with defaults", {
   expect_equal(mean_ci(mtcars$mpg),
-               c("lower" = 18.00243, "mean" = 20.09062, "upper" = 22.17882),
+               c("mean" = 20.09062, "lower" = 18.00243, "upper" = 22.17882),
                tolerance = 0.00001)
 })
 
 test_that("mean_ci with altered ci_level works", {
   expect_equal(mean_ci(mtcars$mpg, ci_level = 0.8),
-               c("lower" = 18.72523, "mean" = 20.09062, "upper" = 21.45602),
+               c("mean" = 20.09062, "lower" = 18.72523, "upper" = 21.45602),
                tolerance = 0.00001)
 })
 
 
 test_that("mean_ci with bootsrapping works", {
   expect_equal(mean_ci(mtcars$mpg, ci_type = "perc"),
-               c("lower" = 18.12539, "mean" = 20.09062, "upper" = 22.23125),
+               c("mean" = 20.09062, "lower" = 18.12539, "upper" = 22.23125),
                tolerance = 0.1)
 })
 
 test_that("mean_ci with bootsrapping and parallel processing works", {
   expect_equal(mean_ci(mtcars$mpg, ci_type = "perc", parallel = TRUE, cores = 2),
-               c("lower" = 18.12539, "mean" = 20.09062, "upper" = 22.23125),
+               c("mean" = 20.09062, "lower" = 18.12539, "upper" = 22.23125),
                tolerance = 0.1)
 })
 
 test_that("mean_ci with na.rm = FALSE returns NA for mean", {
   expect_equal(mean_ci(c(1:10, NA, 11:20), na.rm = FALSE),
-               c("lower" = 7.907211, "mean" = NA, "upper" = 13.092789),
+               c("mean" = NA, "lower" = 7.907211, "upper" = 13.092789),
                tolerance = 0.00001)
 })

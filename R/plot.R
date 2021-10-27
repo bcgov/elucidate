@@ -111,6 +111,7 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -144,6 +145,16 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "Density graph of X"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
@@ -315,43 +326,42 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #' @examples
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
-#'
-#' mtcars %>% plot_density(x = mpg)
+#' plot_density(mtcars, x = mpg)
 #'
 #' \donttest{
-#' mtcars %>%
-#'   plot_density(x = mpg, transform_x = TRUE, x_transformation = "log2")
+#' plot_density(mtcars, x = mpg, transform_x = TRUE, x_transformation = "log2")
 #'
-#' mtcars %>%
-#'   plot_density(x = mpg, transform_x = TRUE, x_transformation = "log10") #default transformation
+#' plot_density(mtcars, x = mpg, transform_x = TRUE,
+#'              x_transformation = "log10") #default transformation
 #'
-#' mtcars %>%
-#'   plot_density(x = mpg, transform_x = TRUE, x_transformation = "sqrt") #default transformation
+#' plot_density(mtcars, x = mpg, transform_x = TRUE,
+#'              x_transformation = "sqrt") #default transformation
 #'
-#' mtcars %>% plot_density(x = mpg, fill_var = cyl, fill_var_labs = c("four" = "4"))
+#' plot_density(mtcars, x = mpg, fill_var = cyl, fill_var_labs = c("four" = "4"))
 #'
-#' mtcars %>% plot_density(x = mpg, fill_var = cyl, fill_var_title = "# cyl",
-#'                         interactive = TRUE)
+#' plot_density(mtcars, x = mpg, fill_var = cyl, fill_var_title = "# cyl",
+#'              interactive = TRUE)
 #'
-#' mtcars %>% plot_density(x = mpg,
-#'                         fill_var = am,
-#'                         fill_var_order = c("1", "0"),
-#'                         fill_var_labs = c("manual" = "0",
-#'                                           "automatic" = "1"),
-#'                         fill_var_values = c("blue4", "red4"),
-#'                         fill_var_title = "transmission")
+#' plot_density(mtcars,
+#'              x = mpg,
+#'              fill_var = am,
+#'              fill_var_order = c("1", "0"),
+#'              fill_var_labs = c("manual" = "0",
+#'                                "automatic" = "1"),
+#'              fill_var_values = c("blue4", "red4"),
+#'              fill_var_title = "transmission")
 #'
-#' mtcars %>% plot_density(x = mpg,
-#'                         colour_var = cyl,
-#'                         colour_var_order = c("6", "8", "4"),
-#'                         colour_var_labs = c("six" = "6", "eight" = "8"),
-#'                         colour_var_values = c("blue3", "red3", "green3"),
-#'                         colour_var_title = "# cylinders")
+#' plot_density(mtcars,
+#'              x = mpg,
+#'              colour_var = cyl,
+#'              colour_var_order = c("6", "8", "4"),
+#'              colour_var_labs = c("six" = "6", "eight" = "8"),
+#'              colour_var_values = c("blue3", "red3", "green3"),
+#'              colour_var_title = "# cylinders")
 #'
 #' #interactive version
 #'
-#' mtcars %>% plot_density(mpg, fill_var = cyl, interactive = TRUE)
+#' plot_density(mtcars, mpg, fill_var = cyl, interactive = TRUE)
 #' }
 #'
 #'
@@ -366,7 +376,9 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 plot_density <- function(data, x, #essential parameters
                          ..., #non-variable aesthetic specification
                          fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
-                         xlab = NULL, ylab = NULL, title = NULL, fill_var_title = NULL, colour_var_title = NULL, #titles
+                         xlab = NULL, ylab = NULL,
+                         title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
+                         fill_var_title = NULL, colour_var_title = NULL, #titles
                          xlim = c(NA, NA), xbreaks = ggplot2::waiver(), #control the x axis limits and scaling
                          transform_x = FALSE, x_transformation = "log10", x_var_labs = ggplot2::waiver(),
                          fill_var_order = NULL, colour_var_order = NULL, #modify grouping variable level order
@@ -619,7 +631,12 @@ plot_density <- function(data, x, #essential parameters
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #misc
@@ -687,6 +704,7 @@ plot_density <- function(data, x, #essential parameters
 #' @importFrom ggplot2 sec_axis
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -738,6 +756,16 @@ plot_density <- function(data, x, #essential parameters
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "Distribution of X"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
@@ -911,30 +939,37 @@ plot_density <- function(data, x, #essential parameters
 #' @examples
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
-#'
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue")
+#' plot_histogram(mtcars, x = mpg, fill = "blue")
 #'
 #' \donttest{
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue")
+#' plot_histogram(mtcars, x = mpg, fill = "blue")
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue", colour = "black")
+#' plot_histogram(mtcars, x = mpg,
+#'               fill = "blue", colour = "black")
 #'
-#' mtcars %>% plot_histogram(x = mpg, colour_var = cyl, fill = "white")
+#' plot_histogram(mtcars, x = mpg,
+#'                colour_var = cyl, fill = "white")
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill_var = cyl, position = "identity") #default in elucidate
+#' plot_histogram(mtcars, x = mpg,
+#'               fill_var = cyl, position = "identity") #default in elucidate
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill_var = cyl, position = "dodge", binwidth = 1)
+#' plot_histogram(mtcars, x = mpg,
+#'               fill_var = cyl, position = "dodge", binwidth = 1)
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill_var = cyl, position = "stack") #default in ggplot2
+#' plot_histogram(mtcars, x = mpg,
+#'                fill_var = cyl, position = "stack") #default in ggplot2
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue", binwidth = 5)
+#' plot_histogram(mtcars, x = mpg,
+#'                fill = "blue", binwidth = 5)
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue", binwidth = NULL, bins = 30) #default in ggplot2
+#' plot_histogram(mtcars, x = mpg,
+#'                fill = "blue", binwidth = NULL, bins = 30) #default in ggplot2
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill = "blue", interactive = TRUE)
+#' plot_histogram(mtcars, x = mpg,
+#'                fill = "blue", interactive = TRUE)
 #'
-#' mtcars %>% plot_histogram(x = mpg, fill_var = cyl, binwidth = 5, interactive = TRUE)
+#' plot_histogram(mtcars, x = mpg,
+#'                fill_var = cyl, binwidth = 5, interactive = TRUE)
 #' }
 #'
 #' @references
@@ -950,7 +985,9 @@ plot_histogram <- function(data, x, #essential parameters
                            position = c("identity", "stack", "dodge"),
                            stat = c("bin", "count"), na.rm = TRUE, #geom specific customization params.
                            fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
-                           xlab = NULL, ylab = NULL, title = NULL, fill_var_title = NULL, colour_var_title = NULL, #titles
+                           xlab = NULL, ylab = NULL,
+                           title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
+                           fill_var_title = NULL, colour_var_title = NULL, #titles
                            xlim = c(NA, NA), xbreaks = ggplot2::waiver(), #control the x axis limits and scaling
                            transform_x = FALSE, x_transformation = "log10", x_var_labs = ggplot2::waiver(),
                            fill_var_order = NULL, colour_var_order = NULL, #modify grouping variable level order
@@ -1209,7 +1246,7 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::labs(x = xlab)
   }
   if(!missing(ylab)){
-    p <- p + ggplot2::labs(y = xlab)
+    p <- p + ggplot2::labs(y = ylab)
   }
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
@@ -1218,7 +1255,12 @@ plot_histogram <- function(data, x, #essential parameters
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #misc
@@ -1300,6 +1342,7 @@ plot_histogram <- function(data, x, #essential parameters
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom plotly layout
 #' @importFrom utils browseURL
@@ -1336,6 +1379,16 @@ plot_histogram <- function(data, x, #essential parameters
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "boxplots graph of y for each group of x"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
@@ -1513,43 +1566,38 @@ plot_histogram <- function(data, x, #essential parameters
 #' @examples
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
-#'
-#' mtcars %>% plot_box(y = mpg, x = cyl, fill = "blue")
+#' plot_box(mtcars, y = mpg, x = cyl, fill = "blue")
 #'
 #' \donttest{
-#' mtcars %>%
-#'  plot_box(x = cyl, y = hp,
-#'           xlab = "# of cylinders",
-#'           ylab = "horsepower",
-#'           fill_var = am,
-#'           fill_var_title = "transmission",
-#'           fill_var_labs = c("manual" = "0", "automatic" = "1"),
-#'           fill_var_values = c("blue", "red"),
-#'           theme = "bw")
+#' plot_box(mtcars, x = cyl, y = hp,
+#'          xlab = "# of cylinders",
+#'          ylab = "horsepower",
+#'          fill_var = am,
+#'          fill_var_title = "transmission",
+#'          fill_var_labs = c("manual" = "0", "automatic" = "1"),
+#'          fill_var_values = c("blue", "red"),
+#'          theme = "bw")
 #'
 #' #modifying fill doesn't work as well for the interactive version of a boxplot
-#' mtcars %>%
-#'  plot_box(x = cyl, y = hp,
-#'           xlab = "# of cylinders",
-#'           ylab = "horsepower",
-#'           fill_var = am,
-#'           fill_var_title = "transmission",
-#'           fill_var_labs = c("manual" = "0", "automatic" = "1"),
-#'           fill_var_values = c("blue", "red"),
-#'           theme = "bw",
-#'           interactive = TRUE)
+#' plot_box(mtcars, x = cyl, y = hp,
+#'          xlab = "# of cylinders",
+#'          ylab = "horsepower",
+#'          fill_var = am,
+#'          fill_var_title = "transmission",
+#'          fill_var_labs = c("manual" = "0", "automatic" = "1"),
+#'          fill_var_values = c("blue", "red"),
+#'          theme = "bw",
+#'          interactive = TRUE)
 #'
 #' #using colour works better for the interactive version
-#' mtcars %>%
-#'  plot_box(x = cyl, y = hp,
-#'           xlab = "# of cylinders",
-#'           ylab = "horsepower",
-#'           colour_var = am,
-#'           colour_var_title = "transmission",
-#'           colour_var_labs = c("manual" = "0", "automatic" = "1"),
-#'           colour_var_values = c("blue", "red"),
-#'           theme = "bw", interactive = TRUE)
+#' plot_box(mtcars, x = cyl, y = hp,
+#'          xlab = "# of cylinders",
+#'          ylab = "horsepower",
+#'          colour_var = am,
+#'          colour_var_title = "transmission",
+#'          colour_var_labs = c("manual" = "0", "automatic" = "1"),
+#'          colour_var_values = c("blue", "red"),
+#'          theme = "bw", interactive = TRUE)
 #' }
 #'
 #'
@@ -1563,7 +1611,8 @@ plot_box <- function(data, y,#essential parameters
                      x = NULL,
                      ..., #geom-specific customization see ?geom_boxplot for details
                      fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
-                     xlab = NULL, ylab = NULL, title = NULL,
+                     xlab = NULL, ylab = NULL,
+                     title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                      fill_var_title = NULL, colour_var_title = NULL, #titles
                      ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
                      transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
@@ -1573,7 +1622,7 @@ plot_box <- function(data, y,#essential parameters
                      fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                      palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
                      palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
-                     alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
+                     alpha = 0.75, greyscale = FALSE, #control transparency, convert to greyscale
                      line_size = 1, dots = FALSE, dots_colour = "black", dots_alpha = 0.4, dots_binwidth = 0.9,
                      theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
                      text_size = 14, font = c("sans", "serif", "mono"), #theme options
@@ -1682,11 +1731,21 @@ plot_box <- function(data, y,#essential parameters
   #add a dotplot layer if enabled
   if(dots == TRUE) {
     if(missing(colour_var)) {
-      p <- p + ggplot2::geom_dotplot(binaxis='y', stackdir='center',
-                                     alpha = dots_alpha, binwidth = dots_binwidth)
+      if(!missing(x)) {
+        p <- p + ggplot2::geom_dotplot(binaxis='y', stackdir='center',
+                                       alpha = dots_alpha, binwidth = dots_binwidth)
+      } else {
+        p <- p + ggplot2::geom_dotplot(aes(x = 0), binaxis='y', stackdir='center',
+                                       alpha = dots_alpha, binwidth = dots_binwidth)
+      }
     } else {
-      p <- p + ggplot2::geom_dotplot(binaxis='y', stackdir='center',
-                                     colour = dots_colour, alpha = dots_alpha, binwidth = dots_binwidth)
+      if(!missing(x)) {
+        p <- p + ggplot2::geom_dotplot(binaxis='y', stackdir='center',
+                                       colour = dots_colour, alpha = dots_alpha, binwidth = dots_binwidth)
+      } else {
+        p <- p + ggplot2::geom_dotplot(aes(x = 0), binaxis='y', stackdir='center',
+                                       colour = dots_colour, alpha = dots_alpha, binwidth = dots_binwidth)
+      }
     }
   }
 
@@ -1779,7 +1838,12 @@ plot_box <- function(data, y,#essential parameters
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
   if(missing(x)){
     p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank(),
@@ -1857,6 +1921,7 @@ plot_box <- function(data, y,#essential parameters
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -1895,6 +1960,16 @@ plot_box <- function(data, y,#essential parameters
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "Violin graph of X"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
@@ -2053,44 +2128,41 @@ plot_box <- function(data, y,#essential parameters
 #' @examples
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
+#' plot_violin(mtcars, y = mpg, x = cyl, fill = "blue")
 #'
-#' mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue")
-#' mtcars %>% plot_violin(y = mpg, x = cyl, fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
+#' plot_violin(mtcars, y = mpg, x = cyl,
+#'             fill = "blue", draw_quantiles = c(0.25, 0.5, 0.75))
 #'
 #' \donttest{
-#' mtcars %>%
-#'  plot_violin(x = cyl, y = hp,
-#'           xlab = "# of cylinders",
-#'           ylab = "horsepower",
-#'           fill_var = am,
-#'           fill_var_title = "transmission",
-#'           fill_var_labs = c("manual" = "0", "automatic" = "1"),
-#'           fill_var_values = c("blue", "red"),
-#'           theme = "bw")
+#' plot_violin(mtcars, x = cyl, y = hp,
+#'            xlab = "# of cylinders",
+#'            ylab = "horsepower",
+#'            fill_var = am,
+#'            fill_var_title = "transmission",
+#'            fill_var_labs = c("manual" = "0", "automatic" = "1"),
+#'            fill_var_values = c("blue", "red"),
+#'            theme = "bw")
 #'
 #' #modifying fill doesn't work as well for the interactive version of a boxplot
-#' mtcars %>%
-#'  plot_violin(x = cyl, y = hp,
-#'           xlab = "# of cylinders",
-#'           ylab = "horsepower",
-#'           fill_var = am,
-#'           fill_var_title = "transmission",
-#'           fill_var_labs = c("manual" = "0", "automatic" = "1"),
-#'           fill_var_values = c("blue", "red"),
-#'           theme = "bw",
-#'           interactive = TRUE)
+#' plot_violin(mtcars, x = cyl, y = hp,
+#'            xlab = "# of cylinders",
+#'            ylab = "horsepower",
+#'            fill_var = am,
+#'            fill_var_title = "transmission",
+#'            fill_var_labs = c("manual" = "0", "automatic" = "1"),
+#'            fill_var_values = c("blue", "red"),
+#'            theme = "bw",
+#'            interactive = TRUE)
 #'
 #' #using colour works better for the interactive version
-#' mtcars %>%
-#'  plot_violin(x = cyl, y = hp,
-#'           xlab = "# of cylinders",
-#'           ylab = "horsepower",
-#'           colour_var = am,
-#'           colour_var_title = "transmission",
-#'           colour_var_labs = c("manual" = "0", "automatic" = "1"),
-#'           colour_var_values = c("blue", "red"),
-#'           theme = "bw", interactive = TRUE)
+#' plot_violin(mtcars, x = cyl, y = hp,
+#'            xlab = "# of cylinders",
+#'            ylab = "horsepower",
+#'            colour_var = am,
+#'            colour_var_title = "transmission",
+#'            colour_var_labs = c("manual" = "0", "automatic" = "1"),
+#'            colour_var_values = c("blue", "red"),
+#'            theme = "bw", interactive = TRUE)
 #' }
 #'
 #'
@@ -2104,7 +2176,8 @@ plot_violin <- function(data, y, #essential parameters
                         x = NULL,
                         ..., #geom-specific customization see ?geom_violin for details
                         fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
-                        xlab = NULL, ylab = NULL, title = NULL,
+                        xlab = NULL, ylab = NULL,
+                        title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                         fill_var_title = NULL, colour_var_title = NULL, #titles
                         ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
                         transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
@@ -2114,7 +2187,7 @@ plot_violin <- function(data, y, #essential parameters
                         fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
                         palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
                         palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
-                        alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
+                        alpha = 0.75, greyscale = FALSE, #control transparency, convert to greyscale
                         line_size = 1,
                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
                         text_size = 14, font = c("sans", "serif", "mono"),#theme options
@@ -2319,7 +2392,12 @@ plot_violin <- function(data, y, #essential parameters
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #misc
@@ -2394,6 +2472,7 @@ plot_violin <- function(data, y, #essential parameters
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -2413,6 +2492,9 @@ plot_violin <- function(data, y, #essential parameters
 #'
 #' @param jitter Set to TRUE to slightly offset overlapping points in random
 #'   directions. See \code{\link[ggplot2]{geom_jitter}} for details.
+#'
+#' @param shape Point shape to use. Default is 21 for "circle filled". Use the
+#'   "aesthetic_options" argument to view the options.
 #'
 #' @param fill_var Use if you want to assign a variable to the point fill
 #'   colour, e.g. fill_var = "grouping_variable" or fill_var =
@@ -2445,6 +2527,16 @@ plot_violin <- function(data, y, #essential parameters
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "scatterplot of y as a function of x"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
@@ -2692,147 +2784,118 @@ plot_violin <- function(data, y, #essential parameters
 #' @examples
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
-#'
-#' mtcars %>% plot_scatter(y = mpg, x = hp, colour = "blue")
+#' plot_scatter(mtcars, y = mpg, x = hp, colour = "blue")
 #'
 #' \donttest{
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp)
+#' plot_scatter(mtcars, y = mpg, x = hp)
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, fill_var = cyl)
+#' plot_scatter(mtcars, y = mpg, x = hp, fill_var = cyl)
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, fill_var = cyl, shape = 21, size = 2)
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              fill_var = cyl, shape = 21, size = 2)
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, colour_var = cyl, shape_var = am, size = 4)
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              colour_var = cyl, shape_var = am, size = 4)
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, colour = "blue",
-#'                shape_var_labs = c("manual" = "0", "automatic" = "1"),
-#'                shape_var = am, theme = "bw")
+#' plot_scatter(mtcars, y = mpg, x = hp, colour = "blue",
+#'              shape_var_labs = c("manual" = "0", "automatic" = "1"),
+#'              shape_var = am, theme = "bw")
 #'
 #' #map colour, shape, and size to different variables
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                colour_var = cyl, shape_var = am, size_var = wt)
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              colour_var = cyl, shape_var = am, size_var = wt)
 #'
 #' #map colour and shape to a common variable
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl)
-#'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl)
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              shape_var = cyl, colour_var = cyl)
 #'
 #' #add a regression line
 #'
 #' #linear
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_method = "lm")
+#'  plot_scatter(mtcars, y = mpg, x = hp,
+#'               regression_line = TRUE, regression_method = "lm")
 #'
 #' #change the regression line colour
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_method = "lm",
-#'                regression_line_colour = "green")
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_method = "lm",
+#'              regression_line_colour = "green")
 #'
 #' #add standard error envelope
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_method = "lm", regression_se = TRUE)
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_method = "lm",
+#'              regression_se = TRUE)
 #'
 #' #adjust standard error envelope transparency
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
-#'                regression_alpha = 0.8) #default is 0.5
-#'
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_method = "lm",
+#'              regression_se = TRUE,
+#'              regression_alpha = 0.8) #default is 0.5
 #'
 #' #split by a grouping variable
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, colour_var = cyl,
-#'                regression_line = TRUE, regression_method = "lm")
-#'
+#' plot_scatter(mtcars, y = mpg, x = hp, colour_var = cyl,
+#'              regression_line = TRUE, regression_method = "lm")
 #'
 #' #fit a polynomial regression line by specifying a regression_formula = formula()
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
-#'                regression_formula = y ~ poly(x, 2))
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
+#'              regression_formula = y ~ poly(x, 2))
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl,
-#'                regression_line = TRUE, regression_method = "lm",
-#'                regression_formula = y ~ poly(x, 3))
+#' plot_scatter(mtcars, y = mpg, x = hp, shape_var = cyl, colour_var = cyl,
+#'              regression_line = TRUE, regression_method = "lm",
+#'              regression_formula = y ~ poly(x, 3))
 #'
 #'
 #' #fit a non-linear regression line using locally(-weighted) scatterplot smoothing (loess)
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_se = TRUE,
-#'                regression_method = "loess")
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_se = TRUE,
+#'              regression_method = "loess")
 #'
 #'
 #' #fit a non-linear regression line using locally(-weighted) scatterplot smoothing (loess)
 #' #& also adjust the span (default = 0.75).
 #' #This controls how much of the data is used for the weighted smoothing.
 #'
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_se = TRUE,
-#'                regression_method = "loess", loess_span = 0.3)
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_se = TRUE,
+#'              regression_method = "loess", loess_span = 0.3)
 #'
 #' #fit a non-linear regression line using a generalized additive model (gam), the default
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_se = TRUE,
-#'                regression_method = "gam")
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_se = TRUE,
+#'              regression_method = "gam")
 #'
 #' #use a dashed regression line instead
-#' mtcars %>%
-#'   plot_scatter(y = mpg, x = hp,
-#'                regression_line = TRUE, regression_se = TRUE, regression_line_type = "dashed")
+#' plot_scatter(mtcars, y = mpg, x = hp,
+#'              regression_line = TRUE, regression_se = TRUE, regression_line_type = "dashed")
 #'
 #' #more complex example with overplotting
-#' pdata %>%
-#'   plot_scatter(y = y1, x = d, colour_var = g,
-#'                regression_line = TRUE)
+#' plot_scatter(pdata, y = y1, x = d, colour_var = g,
+#'              regression_line = TRUE)
 #'
 #' #option 1 for dealing with overplotting: add jittering to offset overlappping points
-#'  pdata %>%
-#'  plot_scatter(y = y1, x = d, colour_var = g,
-#'                jitter = TRUE,
-#'                regression_line = TRUE)
+#' plot_scatter(pdata, y = y1, x = d, colour_var = g,
+#'              jitter = TRUE,
+#'              regression_line = TRUE)
 #'
 #' #option 2: make overlapping values more transparent
-#'  pdata %>%
-#'   plot_scatter(y = y1, x = d, colour_var = g,
-#'                alpha = 0.2,
-#'                regression_line = TRUE)
+#' plot_scatter(pdata, y = y1, x = d, colour_var = g,
+#'              alpha = 0.2,
+#'              regression_line = TRUE)
 #'
 #' #option 3: do both and make it interactive
-#' pdata %>%
-#'  plot_scatter(y = y1, x = d, colour_var = g,
-#'               jitter = TRUE, alpha = 0.2,
-#'               regression_line = TRUE, interactive = TRUE)
+#' plot_scatter(pdata, y = y1, x = d, colour_var = g,
+#'              jitter = TRUE, alpha = 0.2,
+#'              regression_line = TRUE, interactive = TRUE)
 #'
 #' #add a faceting variable
-#' pdata %>%
-#'  plot_scatter(y = y1, x = d,
-#'               colour = "black", shape = 21, fill = "green4",
-#'               jitter = TRUE, size = 4, alpha = 0.1,
-#'               regression_line = TRUE, regression_se = TRUE,
-#'               facet_var = g,
-#'               ylab = "outcome",
-#'               theme = "bw")
-#'
-#' #open a web page with details on the aesthetic options for ggplot2
-#' mtcars %>%
-#'  plot_scatter(y = mpg, x = hp, aesthetic_options = TRUE)
+#' plot_scatter(pdata, y = y1, x = d,
+#'              colour = "black", shape = 21, fill = "green4",
+#'              jitter = TRUE, size = 4, alpha = 0.1,
+#'              regression_line = TRUE, regression_se = TRUE,
+#'              facet_var = g,
+#'              ylab = "outcome",
+#'              theme = "bw")
 #' }
 #'
 #' @references
@@ -2844,13 +2907,14 @@ plot_violin <- function(data, y, #essential parameters
 #'
 #' @export
 plot_scatter <- function(data, y, x,#essential parameters
-                         jitter = FALSE,
+                         jitter = FALSE, shape = 21,
                          ..., #non-variable geom customization see ?geom_point for details
                          #grouping variable aesthetic mappings
                          fill_var = NULL, colour_var = NULL,
                          shape_var = NULL, size_var = NULL,
 
-                         ylab = NULL, xlab = NULL, title = NULL, #titles
+                         ylab = NULL, xlab = NULL,
+                         title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                          fill_var_title = NULL, colour_var_title = NULL, #titles
                          shape_var_title = NULL, size_var_title = NULL, #titles
 
@@ -2990,20 +3054,35 @@ plot_scatter <- function(data, y, x,#essential parameters
 
   #core plotting layer
   if(jitter == FALSE){
-    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
-                                                   colour = colour_var, fill = fill_var,
-                                                   shape = shape_var, size = size_var)) +
-      ggplot2::geom_point(alpha = alpha, ...)
-
+    if(!missing(shape_var)){
+      p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
+                                                     colour = colour_var, fill = fill_var,
+                                                     shape = shape_var, size = size_var)) +
+        ggplot2::geom_point(alpha = alpha, ...)
+    } else {
+      p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
+                                                     colour = colour_var, fill = fill_var,
+                                                     size = size_var)) +
+        ggplot2::geom_point(alpha = alpha, shape = shape, ...)
+    }
   } else if(jitter == TRUE){
-    p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
-                                                   colour = colour_var, fill = fill_var,
-                                                   shape = shape_var, size = size_var)) +
-      ggplot2::geom_jitter(alpha = alpha, ...)
+    if(!missing(shape_var)) {
+      p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
+                                                     colour = colour_var, fill = fill_var,
+                                                     shape = shape_var, size = size_var)) +
+        ggplot2::geom_jitter(alpha = alpha, ...)
+    } else {
+      p <- ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y,
+                                                     colour = colour_var, fill = fill_var,
+                                                     size = size_var)) +
+        ggplot2::geom_jitter(alpha = alpha, shape = shape, ...)
+    }
   }
 
   if(!missing(fill_var)){
-    warning("For ggplot2 scatterplots, fill argument only works for point shapes 21-24.\nSpecify the point shape using the shape argument.\nNote: For scatterplots, mapping a grouping variable to colour using colour_var works for all point shapes.")
+    if(missing(shape_var) && shape %ni% c(21:24)) {
+      warning('For ggplot2 scatterplots, arguments "fill" and "fill_var" only work for point shapes 21-24.\nSpecify the point shape using the "shape" argument.\nNote: For scatterplots, mapping a grouping variable to colour using colour_var works for all point shapes.')
+    }
   }
 
   #modification of the colour, fill, or shape values
@@ -3250,7 +3329,12 @@ plot_scatter <- function(data, y, x,#essential parameters
     p <- p + ggplot2::labs(size = size_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #misc
@@ -3325,6 +3409,7 @@ plot_scatter <- function(data, y, x,#essential parameters
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -3381,6 +3466,16 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "bar plots of y for each group of x"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
@@ -3576,11 +3671,10 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'    group_by(g) %>%
 #'    summarise(y1_max = max(y1), .groups = "drop")
 #'
-#' grouped_y1_max %>%
-#'   plot_bar(x = g, y = y1_max,
-#'            xlab = "group", ylab = "y1 maximum value",
-#'            x_var_order_by_y = "i", #order levels of x by increasing y value
-#'            fill = "blue2")
+#' plot_bar(grouped_y1_max, x = g, y = y1_max,
+#'          xlab = "group", ylab = "y1 maximum value",
+#'          x_var_order_by_y = "i", #order levels of x by increasing y value
+#'          fill = "blue2")
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
@@ -3596,7 +3690,8 @@ plot_bar <- function(data, x = NULL,
                      position = c("dodge", "fill", "stack"),
                      dodge_padding = 0.1,
                      fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
-                     xlab = NULL, ylab = NULL, title = NULL,
+                     xlab = NULL, ylab = NULL,
+                     title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                      fill_var_title = NULL, colour_var_title = NULL, #titles
                      ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
                      transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
@@ -3929,7 +4024,12 @@ plot_bar <- function(data, x = NULL,
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
   if(aesthetic_options == TRUE){
     utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
@@ -3991,6 +4091,7 @@ plot_bar <- function(data, x = NULL,
 #' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 waiver
 #' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
 #' @importFrom rlang .data
 #' @importFrom stats quantile
 #' @importFrom stats qnorm
@@ -4072,7 +4173,17 @@ plot_bar <- function(data, x = NULL,
 #'   omitted.
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
-#'   "scatterplot of y as a function of x"
+#'   "scatterplot of y as a function of x".
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param ... graphical parameters (not associated with variables) to be passed
 #'   to \code{\link[ggplot2]{geom_point}} or \code{\link[ggplot2]{geom_bar}}
@@ -4324,45 +4435,37 @@ plot_bar <- function(data, x = NULL,
 #' @examples
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
+#' plot_stat_error(mtcars, y = mpg, x = cyl, colour = "blue")
 #'
-#' mtcars %>% plot_stat_error(y = mpg, x = cyl, colour = "blue")
-#'
-#' mtcars %>% plot_stat_error(y = mpg, x = cyl, colour = "blue", geom = "point")
+#' plot_stat_error(mtcars, y = mpg, x = cyl, colour = "blue", geom = "point")
 #'
 #' \donttest{
 #'
-#' pdata %>%
-#'   plot_stat_error(y = y1, x = d, colour_var = g, print_stats = TRUE,
-#'                   geom = "point", p_size = 3,
-#'                   add_lines = TRUE,
-#'                   dodge_width = 0,
-#'                   alpha = 0.6)
+#' plot_stat_error(pdata, y = y1, x = d, colour_var = g, print_stats = TRUE,
+#'                 geom = "point", p_size = 3,
+#'                 add_lines = TRUE,
+#'                 dodge_width = 0,
+#'                 alpha = 0.6)
 #'
-#' pdata %>%
-#'  plot_stat_error(y = y1, x = g, coord_flip = TRUE,
-#'                  fill_var = g, geom = "point", eb_size = 0.6,
-#'                  alpha = 0.6)
+#' plot_stat_error(pdata, y = y1, x = g, coord_flip = TRUE,
+#'                 fill_var = g, geom = "point", eb_size = 0.6,
+#'                 alpha = 0.6)
 #'
-#' pdata %>%
-#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-#'                   stat = "median", error = "quartile")
+#' plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
+#'                 stat = "median", error = "quartile")
 #'
-#' pdata %>%
-#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
+#' plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
 #'                   stat = "median", error = "ci")
 #'
-#'
-#' pdata %>%
-#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-#'                   stat = "mean", error = "ci", ci_level = 0.8, interactive = TRUE)
+#' plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
+#'                 stat = "mean", error = "ci", ci_level = 0.8,
+#'                 interactive = TRUE)
 #'
 #' #when output = "ps" the plot is stored as the 1st element of a
 #' #list
 #'
-#' out <- pdata %>%
-#'   plot_stat_error(y = y1, x = g, fill = "blue", alpha = 0.6,
-#'                   stat = "mean", error = "ci", output = "ps")
+#' out <- plot_stat_error(pdata, y = y1, x = g, fill = "blue", alpha = 0.6,
+#'                        stat = "mean", error = "ci", output = "ps")
 #'
 #' out$plot #print the plot to the appropriate active graphics device
 #'
@@ -4391,7 +4494,9 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                             error = c("ci", "sd", "se", "var", "quartile"),
                             ci_level = 0.95, ci_type = c("perc","bca", "norm", "basic"),
                             replicates = 2000, parallel = FALSE, cores = NULL,
-                            xlab = NULL, ylab = NULL, title = NULL, ...,
+                            xlab = NULL, ylab = NULL,
+                            title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
+                            ...,
                             ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
                             transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
                             x_var_order = NULL, x_var_labs = NULL,
@@ -4888,7 +4993,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
       desc1 <- tibble::as_tibble(desc1)
 
       desc2 <- DT[,
-                  .(measure = c("lower", "median", "upper"),
+                  .(measure = factor(c("median", "lower", "upper"), levels = c("median", "lower", "upper")),
                     value = median_ci(get(y), replicates = replicates, ci_type = ci_type,
                                       ci_level = ci_level, parallel = parallel, cores = cores)),
                   by = eval(G)]
@@ -4905,7 +5010,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                       p_na = round(sum(is.na(get(y)))/length(get(y)), 3))]
       desc1 <- tibble::as_tibble(desc1)
       desc2 <- DT[,
-                  .(measure = c("lower", "median", "upper"),
+                  .(measure = factor(c("median", "lower", "upper"), levels = c("median", "lower", "upper")),
                     value = median_ci(get(y), replicates = replicates, ci_type = ci_type,
                                       ci_level = ci_level, parallel = parallel, cores = cores))]
       desc2 <- stats::na.omit(desc2)
@@ -5105,7 +5210,12 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
     p <- p + ggplot2::labs(colour = colour_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #modification of y-axis limits & transformations
@@ -5208,6 +5318,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 margin
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 rel
 #' @importFrom utils browseURL
 #' @importFrom data.table uniqueN
 #'
@@ -5233,8 +5344,15 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "pie chart title"
 #'
-#' @param title_alignment Left-to-right alignment of the main plot title.
-#'   Accepts values from 0 (far left) to 1 (far right). Default is 0.5 (centre).
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param fill_var_order_by_y This allows you to sort the slices of the chart in
 #'   order of increasing/ascending ("i" or "a") or decreasing ("d") value of y.
@@ -5385,7 +5503,7 @@ plot_pie <- function(data,
                      fill_var,
                      y = NULL,
                      ..., #geom-specific customization see ?geom_bar for details
-                     title = NULL, title_alignment = 0.5,
+                     title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                      fill_var_order_by_y = NULL,
                      fill_var_order = NULL,
                      fill_var_labs = NULL,
@@ -5417,8 +5535,8 @@ plot_pie <- function(data,
   palette_direction <- match.arg(palette_direction)
   palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
 
-  if(!is.numeric(title_alignment)) {
-    stop('"title_alignment" must be a number between 0 (left) and 1 (right)')
+  if(!is.numeric(title_hjust)) {
+    stop('"title_hjust" must be a number between 0 (left) and 1 (right)')
   }
 
   if(!missing(fill_var_order_by_y)) {
@@ -5611,8 +5729,12 @@ plot_pie <- function(data,
 
   #title
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
-    p <- p + ggplot2::theme(plot.title = ggplot2::element_text(hjust = title_alignment))
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
   if(!missing(fill_var_title)){
     p <- p + ggplot2::labs(fill = fill_var_title)
@@ -5687,6 +5809,7 @@ plot_pie <- function(data,
 #' @importFrom gghalves geom_half_point
 #' @importFrom gghalves geom_half_boxplot
 #' @importFrom ggplot2 remove_missing
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -5844,6 +5967,16 @@ plot_pie <- function(data,
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "Violin graph of X"
 #'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
+#'
 #' @param fill_var_title If a variable has been assigned to fill using fill_var,
 #'   this allows you to modify the variable label in the plot legend.
 #'
@@ -5975,8 +6108,6 @@ plot_pie <- function(data,
 #'
 #' data(mtcars) #load the mtcars data
 #'
-#' library(magrittr)
-#'
 #' #basic raincloud plot
 #'
 #' plot_raincloud(mtcars, y = mpg)
@@ -5986,23 +6117,22 @@ plot_pie <- function(data,
 #' #add a box plot with box_plot = TRUE
 #' #add fill colours with violin_fill and point_fill
 #'
-#' mtcars %>%
-#'   plot_raincloud(mpg,
-#'                  coord_flip = TRUE, box_plot = TRUE,
-#'                  violin_fill = "steelblue", point_fill = "blue2")
+#' plot_raincloud(mtcars, mpg,
+#'                coord_flip = TRUE, box_plot = TRUE,
+#'                violin_fill = "steelblue", point_fill = "blue2")
 #'
 #' #split the plot by a grouping variable with the x argument
 #' #assign a variable to fill colour with the fill_var argument
 #' #it is recommended to assign the same variable to x and fill_colour or box
 #' #plots will not show up correctly
 #'
-#' mtcars %>%
-#'   plot_raincloud(mpg, x = cyl, fill_var = cyl,
-#'                  coord_flip = TRUE, box_plot = TRUE)
+#' plot_raincloud(mtcars, mpg, x = cyl, fill_var = cyl,
+#'                coord_flip = TRUE, box_plot = TRUE)
 #' }
 #'
 #' @references
 #' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
 #' Allen, M., Poggiali, D., Whitaker, K., Marshall, T. R., & Kievit, R. A. (2019). Raincloud plots: a multi-platform tool for robust data visualization. Wellcome open research, 4.
 #'
 #' @seealso \code{\link{plot_violin}}, \code{\link{plot_scatter}}, \code{\link{plot_box}},
@@ -6028,7 +6158,8 @@ plot_raincloud <- function(data, y,#essential parameters
                            box_outlier_colour = "red3", box_outlier_fill = NULL, box_outlier_size = 2,
                            box_outlier_shape = 18, box_outlier_alpha = 0.8,
                            #general parameters
-                           xlab = NULL, ylab = NULL, title = NULL,
+                           xlab = NULL, ylab = NULL,
+                           title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                            fill_var_title = NULL,
                            ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
                            transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
@@ -6188,7 +6319,7 @@ plot_raincloud <- function(data, y,#essential parameters
       }
     } else if (!missing(box_fill) && missing(box_outlier_fill)) {
       p <- p + gghalves::geom_half_boxplot(side = box_side, center = !box_half, nudge = box_nudge,
-                                           colour = box_colour, box_fill,
+                                           colour = box_colour, fill = box_fill,
                                            alpha = box_alpha, width = box_width, size = box_line_size,
                                            linetype = box_line_type, coef = box_whisker_coef,
                                            errorbar.draw = box_error_bars,
@@ -6285,7 +6416,12 @@ plot_raincloud <- function(data, y,#essential parameters
     p <- p + ggplot2::labs(fill = fill_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #misc
@@ -6376,6 +6512,7 @@ plot_raincloud <- function(data, y,#essential parameters
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 position_dodge2
 #' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 rel
 #' @importFrom plotly ggplotly
 #' @importFrom utils browseURL
 #'
@@ -6432,6 +6569,16 @@ plot_raincloud <- function(data, y,#essential parameters
 #'
 #' @param title Add a main title to the plot using a character string, e.g.
 #'   "bar plots of y for each group of x"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
 #'
 #' @param colour_var_title If a variable has been assigned to colour using
 #'   colour_var, this allows you to modify the variable label in the plot
@@ -6676,7 +6823,8 @@ plot_line <- function(data, y, x, ...,
                       colour_var = NULL, line_type_var = NULL, #grouping variable aesthetic mappings
                       stat = c("mean", "quantile", "sum", "count"),
                       qprob = 0.5, #probability to use if stat = "quantile"
-                      xlab = NULL, ylab = NULL, title = NULL,
+                      xlab = NULL, ylab = NULL,
+                      title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
                       colour_var_title = NULL, line_type_var_title = NULL, #titles
                       ylim = c(NA, NA), ybreaks = ggplot2::waiver(),
                       transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(), #control the y axis limits and scaling
@@ -7051,7 +7199,12 @@ plot_line <- function(data, y, x, ...,
     p <- p + ggplot2::labs(linetype = line_type_var_title)
   }
   if(!missing(title)){
-    p <- p + ggplot2::labs(title = title)
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
   }
 
   #misc
@@ -7139,6 +7292,8 @@ plot_line <- function(data, y, x, ...,
 #'   cases).
 #'
 #' @param title A character string to add as a title at the top of the graph.
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
 #'
 #' @param fill Fill colour to use for density plots, bar graphs, and box plots.
 #'   Ignored if a variable that has been assigned to `group_var` is mapped on to
@@ -7347,7 +7502,8 @@ plot_line <- function(data, y, x, ...,
 #' @export
 plot_var <- function(data,
                      var1 = NULL, var2 = NULL, group_var = NULL,
-                     var1_lab = ggplot2::waiver(), var2_lab = ggplot2::waiver(), title = ggplot2::waiver(),
+                     var1_lab = ggplot2::waiver(), var2_lab = ggplot2::waiver(),
+                     title = ggplot2::waiver(), caption = ggplot2::waiver(),
                      fill = "blue2", colour = "black",
                      palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
                      palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
@@ -7364,9 +7520,9 @@ plot_var <- function(data,
   theme <- match.arg(theme)
   palette <- match.arg(palette)
   palette_direction <- match.arg(palette_direction)
-  font = match.arg(font)
-  legend_position = match.arg(legend_position)
-  bar_position = match.arg(bar_position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  bar_position <- match.arg(bar_position)
   point_shape <- match.arg(point_shape)
   regression_method <- match.arg(regression_method)
 
@@ -7386,6 +7542,9 @@ plot_var <- function(data,
            '\n representing a column in the input data frame supplied to the `data` argument.')
     }
     .var1_class <- class(data[[var1]])
+    if(length(.var1_class) > 1){
+      .var1_class <- .var1_class[1]
+    }
   }
   if(!missing(var2)) {
     if(is.error(class(data[[var2]]))) {
@@ -7395,6 +7554,9 @@ plot_var <- function(data,
            '\n representing a column in the input data frame supplied to the `data` argument.')
     }
     .var2_class <- class(data[[var2]])
+    if(length(.var2_class) > 1){
+      .var2_class <- .var2_class[1]
+    }
   }
   if(!missing(group_var)) {
     if(is.error(class(data[[group_var]]))) {
@@ -7406,10 +7568,10 @@ plot_var <- function(data,
   }
   if(!missing(var1)) {
     #input data class checks
-    if(.var1_class %ni% c("numeric", "integer", "logical", "factor", "character", "Date")) {
+    if(.var1_class %ni% c("numeric", "integer", "logical", "ordered", "factor", "character", "Date")) {
       stop('"var1" must be a numeric, logical, categorical, or date variable in the input data frame provided to the "data" argument.')
     }
-    if(!missing(var2) && .var2_class %ni% c("numeric", "integer", "logical", "factor", "character", "Date")) {
+    if(!missing(var2) && .var2_class %ni% c("numeric", "integer", "logical", "ordered", "factor", "character", "Date")) {
       stop('If "var2" is specified then it must be a numeric, logical, categorical, or date variable in the input data frame provided to the "data" argument.')
     }
     if("data.frame" %ni% class(data)) {
@@ -7426,7 +7588,8 @@ plot_var <- function(data,
                            '\nUse `plot_density()` instead to access additional customization options.',
                            '\nSee help("plot_density") for details.'))
           }
-          p <- plot_density(data, x = var1, xlab = var1_lab, title = title,
+          p <- plot_density(data, x = var1, xlab = var1_lab,
+                            title = title, caption = caption,
                             fill = fill, colour = colour,
                             palette = palette, palette_direction = palette_direction,
                             palette_begin = palette_begin, palette_end = palette_end,
@@ -7442,7 +7605,7 @@ plot_var <- function(data,
                            '\nUse `plot_density()` instead to access additional customization options.',
                            '\nSee help("plot_density") for details.'))
           }
-          p <- plot_density(data, x = var1, xlab = var1_lab, title = title,
+          p <- plot_density(data, x = var1, xlab = var1_lab, title = title, caption = caption,
                             fill_var = group_var, colour_var = group_var,
                             palette = palette, palette_direction = palette_direction,
                             palette_begin = palette_begin, palette_end = palette_end,
@@ -7453,7 +7616,7 @@ plot_var <- function(data,
                             legend_position = legend_position, omit_legend = omit_legend)
 
         }
-      } else if(.var1_class %in% c("factor", "character", "logical")) {
+      } else if(.var1_class %in% c("factor", "character", "logical", "ordered")) {
         if(missing(group_var)) {
           if(verbose == TRUE) {
             message(paste0('`var1` class = "', .var1_class, '".',
@@ -7462,7 +7625,7 @@ plot_var <- function(data,
                            '\nUse `plot_bar()` instead to access additional customization options.',
                            '\nSee help("plot_bar") for details.'))
           }
-          p <- plot_bar(data, x = var1, xlab = var1_lab, title = title,
+          p <- plot_bar(data, x = var1, xlab = var1_lab, title = title, caption = caption,
                         fill = fill, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7477,7 +7640,7 @@ plot_var <- function(data,
                            '\nUse `plot_bar()` instead to access additional customization options.',
                            '\nSee help("plot_bar") for details.'))
           }
-          p <- plot_bar(data, x = var1, xlab = var1_lab, title = title,
+          p <- plot_bar(data, x = var1, xlab = var1_lab, title = title, caption = caption,
                         fill_var = group_var, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7499,7 +7662,7 @@ plot_var <- function(data,
                            '\nSee help("plot_scatter") for details.'))
           }
           p <- plot_scatter(data, y = var1, x = var2,
-                            xlab = var1_lab, ylab = var2_lab, title = title,
+                            xlab = var1_lab, ylab = var2_lab, title = title, caption = caption,
                             colour = colour,
                             palette = palette, palette_direction = palette_direction,
                             palette_begin = palette_begin, palette_end = palette_end,
@@ -7518,7 +7681,7 @@ plot_var <- function(data,
                            '\nSee help("plot_scatter") for details.'))
           }
           p <- plot_scatter(data, y = var1, x = var2,
-                            xlab = var1_lab, ylab = var2_lab, title = title,
+                            xlab = var1_lab, ylab = var2_lab, title = title, caption = caption,
                             colour_var = group_var,
                             palette = palette, palette_direction = palette_direction,
                             palette_begin = palette_begin, palette_end = palette_end,
@@ -7530,7 +7693,7 @@ plot_var <- function(data,
                             transform_y = var1_log10, transform_x = var2_log10,
                             legend_position = legend_position, omit_legend = omit_legend)
         }
-      } else if(.var1_class %in% c("numeric", "integer", "Date") && .var2_class %in% c("factor", "character", "logical")) {
+      } else if(.var1_class %in% c("numeric", "integer", "Date") && .var2_class %in% c("factor", "character", "logical", "ordered")) {
         if(missing(group_var)) {
           if(verbose == TRUE) {
             message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
@@ -7540,7 +7703,7 @@ plot_var <- function(data,
                            '\nSee help("plot_box") for details.'))
           }
           p <- plot_box(data, y = var1, x = var2,
-                        ylab = var1_lab, xlab = var2_lab, title = title,
+                        ylab = var1_lab, xlab = var2_lab, title = title, caption = caption,
                         fill = fill, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7572,7 +7735,7 @@ plot_var <- function(data,
                            '\nSee help("plot_box") for details.'))
           }
           p <- plot_box(data, y = var1, x = var2,
-                        ylab = var1_lab, xlab = var2_lab, title = title,
+                        ylab = var1_lab, xlab = var2_lab, title = title, caption = caption,
                         fill_var = group_var, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7600,7 +7763,7 @@ plot_var <- function(data,
             return(p)
           }
         }
-      } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("numeric", "integer", "Date")) {
+      } else if(.var1_class %in% c("factor", "character", "logical", "ordered") && .var2_class %in% c("numeric", "integer", "Date")) {
         if(missing(group_var)) {
           if(verbose == TRUE) {
             message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
@@ -7610,7 +7773,7 @@ plot_var <- function(data,
                            '\nSee help("plot_box") for details.'))
           }
           p <- plot_box(data, y = var2, x = var1,
-                        ylab = var2_lab, xlab = var1_lab, title = title,
+                        ylab = var2_lab, xlab = var1_lab, title = title, caption = caption,
                         fill = fill, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7642,7 +7805,7 @@ plot_var <- function(data,
                            '\nSee help("plot_box") for details.'))
           }
           p <- plot_box(data, y = var2, x = var1,
-                        ylab = var2_lab, xlab = var1_lab, title = title,
+                        ylab = var2_lab, xlab = var1_lab, title = title, caption = caption,
                         fill_var = group_var, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7670,7 +7833,7 @@ plot_var <- function(data,
             return(p)
           }
         }
-      } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("factor", "character", "logical")) {
+      } else if(.var1_class %in% c("factor", "character", "logical") && .var2_class %in% c("factor", "character", "logical", "ordered")) {
         if(missing(group_var)) {
           if(verbose == TRUE) {
             message(paste0('`var1` class = "', .var1_class, '" and `var2` class = "', .var2_class, '".',
@@ -7679,7 +7842,7 @@ plot_var <- function(data,
                            '\nUse `plot_bar()` instead to access additional customization options.',
                            '\nSee help("plot_bar") for details.'))
           }
-          p <- plot_bar(data, x = var1, xlab = var1_lab, facet_var = var2, title = title,
+          p <- plot_bar(data, x = var1, xlab = var1_lab, facet_var = var2, title = title, caption = caption,
                         fill = fill, colour = colour, line_size = line_size,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7694,7 +7857,7 @@ plot_var <- function(data,
                            '\nUse `plot_bar()` instead to access additional customization options.',
                            '\nSee help("plot_bar") for details.'))
           }
-          p <- plot_bar(data, x = var1, xlab = var1_lab, facet_var = var2, title = title,
+          p <- plot_bar(data, x = var1, xlab = var1_lab, facet_var = var2, title = title, caption = caption,
                         colour = colour, fill_var = group_var, line_size = line_size,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7712,10 +7875,13 @@ plot_var <- function(data,
   } else {
     #input data class check
     .v_class <- class(data)
+    if(length(.v_class) > 1) {
+      .v_class <- .v_class[1]
+    }
 
     .v_length <- length(data)
 
-    if(.v_class %ni% c("numeric", "integer", "logical", "factor", "character", "Date")) {
+    if(.v_class %ni% c("numeric", "integer", "logical", "ordered", "factor", "character", "Date")) {
       stop('If "var1" is not specified, data must be a vector of class: "numeric", "integer", "logical", "factor", "character", or "Date".')
     }
 
@@ -7733,7 +7899,7 @@ plot_var <- function(data,
                        '\nUse `plot_density()` instead to access additional customization options.',
                        '\nSee help("plot_density") for details.'))
       }
-      p <- plot_density(vec_df, x = "var1", xlab = .var1_lab, title = title,
+      p <- plot_density(vec_df, x = "var1", xlab = .var1_lab, title = title, caption = caption,
                         fill = fill, colour = colour,
                         palette = palette, palette_direction = palette_direction,
                         palette_begin = palette_begin, palette_end = palette_end,
@@ -7741,7 +7907,7 @@ plot_var <- function(data,
                         text_size = text_size, font = font, interactive = interactive,
                         dnorm = dnorm, dnorm_colour = colour, dnorm_alpha = 0.8,
                         line_size = line_size, transform_x = var1_log10)
-    } else if (.v_class %in% c("factor", "character", "logical")) {
+    } else if (.v_class %in% c("factor", "character", "logical", "ordered")) {
       if (verbose == TRUE) {
         message(paste0('`data` class = "', .v_class, '".',
                        '\nConverting input from a vector to data frame column.',
@@ -7749,7 +7915,7 @@ plot_var <- function(data,
                        '\nUse `plot_bar()` instead to access additional customization options.',
                        '\nSee help("plot_bar") for details.'))
       }
-      p <- plot_bar(vec_df, x = "var1", xlab = .var1_lab, title = title,
+      p <- plot_bar(vec_df, x = "var1", xlab = .var1_lab, title = title, caption = caption,
                     fill = fill, colour = colour,
                     palette = palette, palette_direction = palette_direction,
                     palette_begin = palette_begin, palette_end = palette_end,
@@ -7827,6 +7993,8 @@ plot_var <- function(data,
 #'
 #' @param title A character string to add as a title at the top of the combined
 #'   multiple-panel patchwork graph or trelliscopejs display.
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
 #'
 #' @param fill Fill colour to use for density plots, bar graphs, and box plots.
 #'   Ignored if a variable that has been assigned to `group_var` is mapped on to
@@ -8021,7 +8189,7 @@ plot_var <- function(data,
 #'
 #' @export
 plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
-                         var2_lab = ggplot2::waiver(), title = ggplot2::waiver(),
+                         var2_lab = ggplot2::waiver(), title = ggplot2::waiver(), caption = ggplot2::waiver(),
                          fill = "blue2", colour = "black",
                          palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
                          palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
@@ -8038,9 +8206,9 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
   theme <- match.arg(theme)
   palette <- match.arg(palette)
   palette_direction <- match.arg(palette_direction)
-  font = match.arg(font)
-  legend_position = match.arg(legend_position)
-  bar_position = match.arg(bar_position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  bar_position <- match.arg(bar_position)
   point_shape <- match.arg(point_shape)
   regression_method <- match.arg(regression_method)
 
@@ -8070,7 +8238,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
   }
   if(trelliscope == FALSE) {
     if(missing(var2) && missing(group_var)) {
-      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+      .pl <- lapply(seq_along(.col_names), function(i) rlang::exec("plot_var", data,
                                                                   var1 = .col_names[i],
                                                                   fill = fill, colour = colour,
                                                                   palette = palette, palette_direction = palette_direction,
@@ -8088,7 +8256,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
                                                                   interactive = interactive, verbose = FALSE, basic = basic)
       )
     } else if(!missing(var2) && missing(group_var)) {
-      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+      .pl <- lapply(seq_along(.col_names), function(i) rlang::exec("plot_var", data,
                                                                   var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
                                                                   fill = fill, colour = colour,
                                                                   palette = palette, palette_direction = palette_direction,
@@ -8106,7 +8274,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
                                                                   interactive = interactive, verbose = FALSE, basic = basic)
       )
     } else if(missing(var2) && !missing(group_var)) {
-      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+      .pl <- lapply(seq_along(.col_names), function(i) rlang::exec("plot_var", data,
                                                                   var1 = .col_names[i],
                                                                   group_var = group_var,
                                                                   fill = fill, colour = colour,
@@ -8125,7 +8293,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
                                                                   interactive = interactive, verbose = FALSE, basic = basic)
       )
     } else {
-      .pl <- lapply(1:length(.col_names), function(i) rlang::exec("plot_var", data,
+      .pl <- lapply(seq_along(.col_names), function(i) rlang::exec("plot_var", data,
                                                                   var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
                                                                   group_var = group_var,
                                                                   fill = fill, colour = colour,
@@ -8147,17 +8315,20 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
 
     p <- patchwork::wrap_plots(.pl, nrow = nrow, ncol = ncol, guides = guides, byrow = TRUE)
 
-    if(class(title) != "waiver") {
-      p <- patchwork::plot_annotation(title = title)
+    if(class(title) != "waiver" && class(caption) != "waiver") {
+      p <- p + patchwork::plot_annotation(title = title,  caption = caption)
+    } else if(class(title) != "waiver" && class(caption) == "waiver") {
+      p <- p + patchwork::plot_annotation(title = title)
+    } else if(class(title) == "waiver" && class(caption) != "waiver") {
+      p <- p + patchwork::plot_annotation(caption = caption)
     }
-
     return(p)
 
   } else {
     if(missing(var2) && missing(group_var)) {
       .p_df <- dplyr::mutate(
         data.frame("var1" = .col_names),
-        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+        data_plot = trelliscopejs::map_plot(seq_along(.col_names),
                                             function(i) rlang::exec("plot_var", data,
                                                                     var1 = .col_names[i],
                                                                     fill = fill, colour = colour,
@@ -8179,7 +8350,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
     } else if(!missing(var2) && missing(group_var)) {
       .p_df <- dplyr::mutate(
         data.frame("var1" = .col_names),
-        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+        data_plot = trelliscopejs::map_plot(seq_along(.col_names),
                                             function(i) rlang::exec("plot_var", data,
                                                                     var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
                                                                     fill = fill, colour = colour,
@@ -8201,7 +8372,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
     } else if(missing(var2) && !missing(group_var)) {
       .p_df <- dplyr::mutate(
         data.frame("var1" = .col_names),
-        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+        data_plot = trelliscopejs::map_plot(seq_along(.col_names),
                                             function(i) rlang::exec("plot_var", data,
                                                                     var1 = .col_names[i],
                                                                     group_var = group_var, fill = fill, colour = colour,
@@ -8223,7 +8394,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
     } else {
       .p_df <- dplyr::mutate(
         data.frame("var1" = .col_names),
-        data_plot = trelliscopejs::map_plot(1:length(.col_names),
+        data_plot = trelliscopejs::map_plot(seq_along(.col_names),
                                             function(i) rlang::exec("plot_var", data,
                                                                     var1 = .col_names[i], var2 = var2, var2_lab = var2_lab,
                                                                     group_var = group_var, fill = fill, colour = colour,
@@ -8311,6 +8482,8 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
 #'
 #' @param title A character string to add as a title at the top of the combined
 #'   multiple-panel patchwork graph or trelliscopejs display.
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
 #'
 #' @param fill Fill colour to use for density plots, bar graphs, and box plots.
 #'   Ignored if a variable that has been assigned to `group_var` is mapped on to
@@ -8504,7 +8677,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
 #'   \code{\link[trelliscopejs]{trelliscope}}
 #'
 #' @export
-plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2::waiver(),
+plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2::waiver(), caption = ggplot2::waiver(),
                            fill = "blue2", colour = "black",
                            palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
@@ -8520,9 +8693,9 @@ plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2:
   theme <- match.arg(theme)
   palette <- match.arg(palette)
   palette_direction <- match.arg(palette_direction)
-  font = match.arg(font)
-  legend_position = match.arg(legend_position)
-  bar_position = match.arg(bar_position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  bar_position <- match.arg(bar_position)
   point_shape <- match.arg(point_shape)
   regression_method <- match.arg(regression_method)
 
@@ -8547,7 +8720,7 @@ plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2:
 
   if(trelliscope == FALSE) {
     if(missing(group_var)) {
-      .pl <- lapply(1:length(.v1),
+      .pl <- lapply(seq_along(.v1),
                     function(i) rlang::exec("plot_var", data,
                                             var1 = .v1[i], var2 = .v2[i],
                                             fill = fill, colour = colour,
@@ -8566,7 +8739,7 @@ plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2:
                                             interactive = interactive, verbose = FALSE, basic = basic)
       )
     } else {
-      .pl <- lapply(1:length(.v1),
+      .pl <- lapply(seq_along(.v1),
                     function(i) rlang::exec("plot_var", data,
                                             var1 = .v1[i], var2 = .v2[i],
                                             group_var = group_var,
@@ -8588,30 +8761,49 @@ plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2:
     }
     if(missing(nrow) && missing(ncol)) {
       p <- patchwork::wrap_plots(.pl, ncol = .ncols, nrow = .ncols, guides = guides, byrow = TRUE)
-      if(class(title) != "waiver") {
+      if(class(title) != "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title,  caption = caption)
+      } else if(class(title) != "waiver" && class(caption) == "waiver") {
         p <- p + patchwork::plot_annotation(title = title)
+      } else if(class(title) == "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(caption = caption)
       }
+      return(p)
     } else if(!missing(nrow) && missing(ncol)) {
       p <- patchwork::wrap_plots(.pl, ncol = nrow, nrow = .ncols, guides = guides, byrow = TRUE)
-      if(class(title) != "waiver") {
+      if(class(title) != "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title,  caption = caption)
+      } else if(class(title) != "waiver" && class(caption) == "waiver") {
         p <- p + patchwork::plot_annotation(title = title)
+      } else if(class(title) == "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(caption = caption)
       }
+      return(p)
     } else if(missing(nrow) && !missing(ncol)) {
       p <- patchwork::wrap_plots(.pl, ncol = .ncols, nrow = ncol, guides = guides, byrow = TRUE)
-      if(class(title) != "waiver") {
+      if(class(title) != "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title,  caption = caption)
+      } else if(class(title) != "waiver" && class(caption) == "waiver") {
         p <- p + patchwork::plot_annotation(title = title)
+      } else if(class(title) == "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(caption = caption)
       }
+      return(p)
     } else {
-      p <- patchwork::wrap_plots(.pl, ncol = ncol, nrow = ncol, guides = guides, byrow = TRUE)
-      if(class(title) != "waiver") {
+      if(class(title) != "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(title = title,  caption = caption)
+      } else if(class(title) != "waiver" && class(caption) == "waiver") {
         p <- p + patchwork::plot_annotation(title = title)
+      } else if(class(title) == "waiver" && class(caption) != "waiver") {
+        p <- p + patchwork::plot_annotation(caption = caption)
       }
+      return(p)
     }
     return(p)
   } else {
     if(missing(group_var)) {
       .p_df <- dplyr::mutate(.comp_df,
-                             data_plot = trelliscopejs::map_plot(1:length(.v1),
+                             data_plot = trelliscopejs::map_plot(seq_along(.v1),
                                                                  function(i) rlang::exec("plot_var", data,
                                                                                          var1 = .v1[i], var2 = .v2[i],
                                                                                          fill = fill, colour = colour,
@@ -8632,7 +8824,7 @@ plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2:
       )
     } else {
       .p_df <- dplyr::mutate(.comp_df,
-                             data_plot = trelliscopejs::map_plot(1:length(.v1),
+                             data_plot = trelliscopejs::map_plot(seq_along(.v1),
                                                                  function(i) rlang::exec("plot_var", data,
                                                                                          var1 = .v1[i], var2 = .v2[i],
                                                                                          group_var = group_var,
@@ -8812,4 +9004,3 @@ plot_c <- function(..., nrow = NULL, ncol = NULL, guides = c("collect", "auto", 
     }
   }
 }
-

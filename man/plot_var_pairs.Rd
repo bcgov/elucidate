@@ -10,6 +10,7 @@ plot_var_pairs(
   group_var = NULL,
   cols = NULL,
   title = ggplot2::waiver(),
+  caption = ggplot2::waiver(),
   fill = "blue2",
   colour = "black",
   palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis",
@@ -67,6 +68,8 @@ to be listed here.}
 
 \item{title}{A character string to add as a title at the top of the combined
 multiple-panel patchwork graph or trelliscopejs display.}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
 
 \item{fill}{Fill colour to use for density plots, bar graphs, and box plots.
 Ignored if a variable that has been assigned to \code{group_var} is mapped on to

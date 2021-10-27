@@ -67,7 +67,6 @@ tbcvs <- function(y, sep = "_") {
 #'   comparable processing times to the alternatives. To obtain summaries for
 #'   all variables in a data frame use \code{\link{describe_all}} instead.
 #'
-#' @importFrom magrittr %>%
 #' @importFrom data.table as.data.table
 #' @importFrom data.table uniqueN
 #' @importFrom data.table dcast
@@ -422,7 +421,6 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #'   To obtain a summary of a single variable in a data frame use
 #'   \code{\link{describe}} instead.
 #'
-#' @importFrom magrittr %>%
 #' @importFrom data.table as.data.table
 #' @importFrom data.table %chin%
 #' @importFrom dplyr select
@@ -548,11 +546,10 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #' describe_all(pdata) #all summary types in a list
 #'
 #' #numeric summary only
-#' pdata %>% describe_all(high_low, output = "dt", class = "n")
+#' describe_all(pdata, high_low, output = "dt", class = "n")
 #'
 #' #numeric and logical summaries only
-#' pdata %>%
-#' describe_all(high_low, output = "dt", class = c("n", "l"))
+#' describe_all(pdata, high_low, output = "dt", class = c("n", "l"))
 #' }
 #'
 #' @seealso \code{\link{describe}}
@@ -574,7 +571,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
   }
 
   if(class == "all" || "d" %chin% class) {
-    date_cols <- sapply(data, lubridate::is.Date)
+    date_cols <- vapply(data, lubridate::is.Date, FUN.VALUE = logical(1))
     if(!missing(...)) {
       date_cols <- length(setdiff(names(data)[date_cols], g))
     } else {
@@ -582,7 +579,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     }
   }
   if(class == "all" || "f" %chin% class) {
-    fct_cols <- sapply(data, is.factor)
+    fct_cols <- vapply(data, is.factor, FUN.VALUE = logical(1))
     if(!missing(...)) {
       fct_cols <- length(setdiff(names(data)[fct_cols], g))
     } else {
@@ -590,7 +587,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     }
   }
   if(class == "all" || "c" %chin% class){
-    chr_cols <- sapply(data, is.character)
+    chr_cols <- vapply(data, is.character, FUN.VALUE = logical(1))
     if(!missing(...)) {
       chr_cols <- length(setdiff(names(data)[chr_cols], g))
     } else {
@@ -598,7 +595,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     }
   }
   if(class == "all" || "l" %chin% class) {
-    lgl_cols <- sapply(data, is.logical)
+    lgl_cols <- vapply(data, is.logical, FUN.VALUE = logical(1))
     if(!missing(...)) {
       lgl_cols <- length(setdiff(names(data)[lgl_cols], g))
     } else {
@@ -606,7 +603,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     }
   }
   if(class == "all" || "n" %chin% class) {
-    num_cols <- sapply(data, is.numeric)
+    num_cols <- vapply(data, is.numeric, FUN.VALUE = logical(1))
     if(!missing(...)) {
       num_cols <- length(setdiff(names(data)[num_cols], g))
     } else {

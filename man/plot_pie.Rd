@@ -10,7 +10,9 @@ plot_pie(
   y = NULL,
   ...,
   title = NULL,
-  title_alignment = 0.5,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_order_by_y = NULL,
   fill_var_order = NULL,
   fill_var_labs = NULL,
@@ -67,8 +69,15 @@ browser, set the aesthetic_options argument to TRUE.}
 \item{title}{Add a main title to the plot using a character string, e.g.
 "pie chart title"}
 
-\item{title_alignment}{Left-to-right alignment of the main plot title.
-Accepts values from 0 (far left) to 1 (far right). Default is 0.5 (centre).}
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{fill_var_order_by_y}{This allows you to sort the slices of the chart in
 order of increasing/ascending ("i" or "a") or decreasing ("d") value of y.

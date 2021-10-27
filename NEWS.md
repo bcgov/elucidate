@@ -1,19 +1,38 @@
+# elucidate 0.1.0.9003 - October 31st, 2021
 
-## elucidate 0.1.0.9002 - June 28th, 2021
+* Fixed a bug that caused `plot_var()` to fail for ordered factors. 
+
+* Fixed a bug that caused `plot_box()` to fail when the optional dot plot layer enhancement was enabled ("dots" = `TRUE`) but no variable was assigned to the x-axis.
+
+* Fixed a bug that prevented `plot_raincloud()` from allowing users to adjust the fill colour of the box plots when the "box_plot" option is enabled.
+
+* Updated the package readme and other documentation.
+
+* Added a package vignette and continuous integration build checks for Windows, MacOS, and Linux.
+
+* Added a "caption" argument to all `plot_*` functions which provides a shortcut for adding a caption to the bottom of the graph that is left-justified by default as per standard scientific communication practice (unlike the `ggplot2` default). All geom-specific `plot_*` functions (not `plot_var*` functions) now also have a "caption_hjust" argument that makes it easy to adjust the horizontal alignment of the caption by adding the appropriate `ggplot2::theme()` layer for you. 
+
+* Changed the name of the `plot_pie()` "title_alignment" argument to "title_hjust" for consistency with other `plot_*` functions, which also now all have a "title_hjust" argument (except for the `plot_var*` functions). The elucidate default title alignment is now 0.5 for centre-justified.
+
+* Rearranged the output of the `*ci()` functions such that the confidence interval lower and upper bound columns are after the summary statistic column.
+
+* The magrittr pipe operator (`%>%`) is no longer imported when `elucidate` is loaded. With the advent of the base R pipe operator (`|>`) in R 4.1 it seemed no longer necessary for `elucidate` to also import a secondary pipe operator, especially since it is already loaded with other common packages like `dplyr`.
+
+# elucidate 0.1.0.9002 - June 28th, 2021
 
 * Fixed a bug that prevented `copies()` and `dupes()` from working correctly when the input data is a data.table. 
 
 * Added citation file.
 
-## elucidate 0.1.0.9001 - June 27th, 2021
+# elucidate 0.1.0.9001 - June 27th, 2021
 
 * Fixed a bug with `plot_var()` that was preventing the combined box-and-whisker plots + violin plots produced by default for a mix of numeric and categorical variables from generating a plotly graph when the "interactive" argument was set to `TRUE`.
 
-## elucidate 0.1.0.9000 - June 25th, 2021
+# elucidate 0.1.0.9000 - June 25th, 2021
 
-### major update
+## major update
 
-#### new functions
+### new functions
 
 * Added `plot_var()`, `plot_var_all()`, `plot_var_pairs()`, and `plot_c()` to complete the `plot_*` function set. 
 
@@ -41,19 +60,19 @@
 
 * `plot_c()` allows you to use either `patchwork::wrap_plots()` or `trelliscopejs::trelliscope()` to combine multiple plots into a multi-panel static or interactive display via a logical "trelliscope" argument. Unlike alternatives functions for combining plots, you can pass `plot_c()` either (1) a set of unquoted plot object names or (2) a list of plots. The interactive trelliscope version should also work with plotly graphs.
 
-#### upgrades to existing functions
+### upgrades to existing functions
 
 * Added a "dots" argument to `plot_box()` which allows you to overlay a `ggplot2::geom_dotplot()` layer over the box-and-whisker plot(s). Inclusion of the dotplot layer can reveal the presence of multimodal distributions (multiple peaks), which can't be detected using a box-and-whisker plot alone.
 
 * `copies()`, `dupes()`, and all `plot_*` and `describe*` functions now allow you to specify variables using quoted ("x") or unquoted (x) column names (instead of just unquoted), e.g. `plot_density(data = pdata, x = "y1")` or `plot_density(data = pdata, x = y1)`. Note that you must use one format or the other and should not mix formats within the same function call for functions which accept grouping variable names via the special ellipsis argument (`...`), like the `describe*` set, or the function will fail with an error indicating that one or more of variables could not be found in the input data.  By also accepting column names as character strings, these functions should be easier to use in loops and other functions, while the unquoted names are easier for interactive use. 
 
-#### bug fixes
+### bug fixes
 
 * Fixed a bug where plotly output of the `plot_box()` interactive mode was not dodging box plots when a variable was assigned to the "fill_var" or "colour_var" arguments. Now the boxes for each group will be separated, but a spurious warning message that "'layout' objects don't have these attributes: 'boxmode'" will be printed to the console. This warning message is a [documented bug](https://github.com/ropensci/plotly/issues/994) with the `plotly` package and the message can be safely ignored (unfortunately it cannot be suppressed though).
  
 * updated `counts_tb()` and `counts_tb_all()` to omit empty rows in their outputs if the number of top and bottom values requested exceeds the number of unique values in the input data.
 
-## elucidate 0.0.0.9026 - June 2nd, 2021
+# elucidate 0.0.0.9026 - June 2nd, 2021
 
 * Added a new plotting function, `plot_line()`, to make it easy to generate ggplot2 line graphs. Unlike a basic `ggplot2::geom_line()` layer, `plot_line()` will automatically check the input data to see if there are multiple values of the y-axis variable for each level of x-axis variable and any grouping variables mapped to line colour or line type, or used for faceting. In addition, `plot_line()` makes it easier for you to use a non-numeric/non-date variable on the x-axis by converting it to a factor with levels that can easily be rearranged using the "x_var_order_by_y" or "x_var_order" arguments. 
 
@@ -61,7 +80,7 @@
 
 * Modified the behaviour of all `plot*` function "xlim" and "ylim" arguments to use `ggplot2::coord_cartesian()` (or `ggplot2::coord_flip()` if "coord_flip" = TRUE for `plot_bar()` or `plot_raincloud()`) instead of `ggplot2::scale_*_continuous()` to zoom in on part of the graph when limiting the x or y axis range rather than dropping values. 
 
-## elucidate 0.0.0.9025 - May 27th, 2021
+# elucidate 0.0.0.9025 - May 27th, 2021
 
 * Added a new plotting function, `plot_raincloud()`, to make ggplot2 [rain cloud plots](https://wellcomeopenresearch.org/articles/4-63/v2) using the [gghalves](https://github.com/erocoar/gghalves) package. A "rain cloud" plot consists of a half violin plot on one side and scattered points on the other side of the plot, which looks like a cloud (half-violin plot portion) over rain drops (scatter plot portion) when the x and y axes are flipped (via the "coord_flip" argument or by adding a ggplot2::coord_flip() layer). `plot_raincloud()` also provides a "box_plot" and "box_*" set of arguments to allow you to add and customize a box-and-whisker plot if you wish. This combination of half-violin plot, box-and-whisker-plot, and scatter plot is one of the best ways to compare continuous variables across levels of a categorical variable.
 
@@ -69,13 +88,13 @@
 
 * All `plot_*` functions now have a `palette*` set of arguments which enable you to easily apply any of the five core `viridis` palettes to an elucidate-generated ggplot2 graph via `ggplot2::scale_fill_viridis()`. See [this section](https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes) of my recent blog post for examples of each palette option. All `plot_*` functions now use the "plasma" viridis palette as a default whenever a variable is mapped to the fill or colour aesthetics (via the "fill_var" or "colour_var" arguments). Since the viridis palettes [were designed](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales) to be colourblind-friendly, hopefully more of your graphs will now be easier for colourblind individuals to read. Note that you can still override these palettes with the "fill_var_values" or "colour_var_values" arguments as appropriate. See the `plot_*` function documentation for other minor changes.
 
-## elucidate 0.0.0.9024 - May 22nd, 2021
+# elucidate 0.0.0.9024 - May 22nd, 2021
 
 * Fixed a bug that was causing `recode_errors()` to fail when a non-date/POSIX.ct value was passed to the "errors" argument and checked against a vector of dates. Now you can re-code erroneous values in date columns or vectors by simply specifying the erroneous values as character strings or numbers. For example, if a vector of dates named "date_vector" contains an erroneous value of "2099-01-01" that should be "2009-01-01", you can now fix it via `recode_errors(date_vector, errors = "2099-01-01", replacement = "2009-01-01")` instead of the previously required `recode_errors(date_vector, errors = as.Date("2099-01-01"), replacement = as.Date("2009-01-01"))`. If you are instead trying to re-code values of "." (or other arbitrary sting) as `NA` throughout a data frame, "df", via `recode_errors(df, errors = c(9999, "."))`, and the data frame happens to include a date column, the function will no longer fail with the error: "character string is not in a standard unambiguous format". 
 
 * In the process of debugging `recode_errors()`, some inefficient for loops were also replaced with `lapply` and `data.table::.SD`, which should considerably reduce execution times and memory utilization when re-coding long vectors or large data frames. For example, benchmarking the new version of `recode_errors()` against the old version to re-code 3 erroneous values of mixed classes as `NA` using a resampled version of `pdata` with one million rows by nine columns suggests that the new changes led to over a three-fold reduction in execution time and memory utilization. 
 
-## elucidate 0.0.0.9023 - May 20th, 2021
+# elucidate 0.0.0.9023 - May 20th, 2021
 
 * Added a convenience shortcut for `copies(filter = "dupes", sort_by_copies = TRUE)` as a new function, `dupes()`, which makes checking data frames for duplicated rows even easier. 
 
@@ -85,7 +104,7 @@
 
 * The `stringi` package has been removed as a dependency.
 
-## elucidate 0.0.0.9022 - April 22nd, 2021
+# elucidate 0.0.0.9022 - April 22nd, 2021
 
 * Added `plot_pie()` for building pie charts with `ggplot2::geom_bar()` & `ggplot2::coord_polar()`. Despite well founded criticisms of pie charts (e.g. https://www.data-to-viz.com/caveat/pie.html), sometimes our project stakeholders, bosses, clients, or graduate supervisors want to see them anyway, so `plot_pie()` aims to make producing them with ggplot2 a bit easier. To encourage limiting the number of slices users display in a pie chart, if the chosen fill variable (argument "fill_var") contains more than 5 unique values (leading to >5 pie slices), a warning is issued which urges the user to consider either lumping some slices together (via argument "lump_n") or using `plot_bar()` instead.
 
@@ -99,11 +118,11 @@
 
 * Moved packages `htmltools` and `htmlwidgets` from "Imports" section to "Suggests" section of Description file.
 
-## elucidate 0.0.0.9021 - April 20th, 2021
+# elucidate 0.0.0.9021 - April 20th, 2021
 
 * Added `plot_bar()` for building bar plots using `ggplot2::geom_bar()`/`ggplot2::geom_col()` with options to allow easy sorting bars in order of decreasing or increasing counts (or proportions if position = "fill"), based on values of a y-axis variable if one is specified, or manually.
 
-## elucidate 0.0.0.9020 - February 3rd, 2021
+# elucidate 0.0.0.9020 - February 3rd, 2021
 
 * Upgraded `describe()`, `mode()`, and the `counts*` function set to use the more efficient `Rfast::Table()` instead of `base::table()` for counting the unique values of a vector. We are trying to avoid adding any more dependencies to `elucidate` but the substantial performance improvements of using `Rfast::Table()` made using it worth the added dependency on `Rfast`. 
 
@@ -117,7 +136,7 @@
 
 * Fixed a bug with `copies()` where the input data was being modified in the global environment when the filter argument was set to either "all" or "dupes". This was only happening in cases where the input data source was already a data.table due to the subsequent use of the `:=` operator. Now all modifications occur within the function execution environment as expected, regardless of the classes of the input data. 
 
-## elucidate 0.0.0.9013 - November 30th, 2020
+# elucidate 0.0.0.9013 - November 30th, 2020
 
 * Added a `NEWS.md` file to track changes to the package.
 
@@ -131,7 +150,7 @@
 
 * Fixed a bug in recode_errors() that caused it to fail when trying to recode a factor with a non-NA replacement value. This now works for vector inputs but not (yet) when multiple columns are operated on for a data frame input. 
 
-## elucidate 0.0.0.9012 - October 6th, 2020
+# elucidate 0.0.0.9012 - October 6th, 2020
 
 *	Added the `copies()` function written primarily using data.table that combines functionality of `unique(DT)`/`distinct()` and `janitor::get_dupes()`. Performance is substantially better than `get_dupes()` based on benchmarking with a 10,000,000 row resampled version of `pdata`.
 
@@ -141,11 +160,11 @@
 
 *	Corrected `wash_df()` documentation return description.
 
-## elucidate 0.0.0.9011 - March 5th, 2020 
+# elucidate 0.0.0.9011 - March 5th, 2020 
 
 * Removed references to `grDevices::windowsFonts()` from the documentation to avoid linux compatibility issues.
 
-## elucidate 0.0.0.9010 - March 3rd, 2020
+# elucidate 0.0.0.9010 - March 3rd, 2020
 
 *	Updated readme and made the font options argument for plots available to Windows OS systems only.
 
@@ -153,7 +172,7 @@
 
 *	Updated installation instructions to use `remotes::install_github(“bcgov/elucidate”)`
 
-## elucidate 0.0.0.9009 - Dec. 12th, 2019
+# elucidate 0.0.0.9009 - Dec. 12th, 2019
 
 *	Updated licensing and other components to meet BG Gov R standards. 
 
@@ -165,11 +184,11 @@
 
 *	Removed gapminder data package as a dependency
 
-## elucidate 0.0.0.9008 - Dec. 10th, 2019
+# elucidate 0.0.0.9008 - Dec. 10th, 2019
 
 * Added the `%ni%` operator which returns the negative of the `%in%` operator, i.e. FALSE for matching values and TRUE for non-matching values instead of TRUE for matches and FALSE for non-matches
 
-## elucidate 0.0.0.9007 - Dec. 9th, 2019 
+# elucidate 0.0.0.9007 - Dec. 9th, 2019 
 
 * added `inv_quantile()` to calculate values of a vector `y` at different quantiles. Added convenience wrappers for calculating `skewness()` and `kurtosis()`.
 
@@ -189,7 +208,7 @@
 
 *	Removed simpleboot and glue as dependencies.
 
-## elucidate 0.0.0.9006 - Oct. 16th, 2019
+# elucidate 0.0.0.9006 - Oct. 16th, 2019
 
 *	Made the function titles more concise.
 
@@ -201,17 +220,17 @@
 
   -	**Note:** `translate()` is similar to a left join but only for a vector pair. The results should be equivalent to left joins where the key (e.g. “by” argument) is a single column and only a single other column is added… therefore it can be viewed as a special case of a left join.
 
-## elucidate 0.0.0.9005 - Oct. 11th, 2019
+# elucidate 0.0.0.9005 - Oct. 11th, 2019
 
 *	Fixed a `plot_scatter()` bug where splitting regression lines by colour_var didn't work, but splitting did work when variables were mapped to either shape or fill.
 
 *	Added `plot_stat_error()`, which plots a statistic and confidence intervals or other uncertainty metric as error bars. This initial version of the function only plots the mean and has several options for the error bars (standard deviation, standard error, confidence interval).
 
-## elucidate 0.0.0.9003 - Sept. 23rd, 2019
+# elucidate 0.0.0.9003 - Sept. 23rd, 2019
 
 * Updated documentation, dependencies, & fixed documentation typos.
 
-## elucidate 0.0.0.9002 - Sept. 19th, 2019
+# elucidate 0.0.0.9002 - Sept. 19th, 2019
 
 * fixed an issue from version 0.0.0.9000 where `describe_all()` output incorrectly displayed grouping variable names.
 
@@ -219,11 +238,11 @@
 
 * added `mode_of_y()`, which returns the mode of a numeric vector & convenience function `static_to_dynamic()` which converts data frames into interactive DataTables with `DT::datatable()` and ggplot2 graphs into interactive plotly graphs with `plotly::ggplotly()`.
 
-## elucidate 0.0.0.9001 - Sept. 16th, 2019
+# elucidate 0.0.0.9001 - Sept. 16th, 2019
 
 * reformatted `mcvals()` & `mcvals_all()`, removed `lcvals()` & `lcvals_all()`. Fixed issue from version 0.0.0.9000 with `describe_ci()` failing for sample sizes over 3,000.
 
-## elucidate 0.0.0.9000 - July 16th, 2019
+# elucidate 0.0.0.9000 - July 16th, 2019
 
 *	package created locally with initial definitions for functions `se()`, `mcvals()`, `lcvals()`, `mcvals_all()`, `lcvals_all()`, `describe()`, `describe_all()`, `describe_ci()`, and  `describe_ci_all()`
 

@@ -7,3 +7,7 @@
 ^README_cache
 ^tests/azure/
 ^COMPLIANCE\.yaml$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -42,10 +42,10 @@ new_values <- c("one", "two", "three", "four", "five",
 translate(y = mtcars$cyl, old = old_values, new = new_values)
 
 #or within a dplyr::mutate call
-mtcars \%>\%
-  dplyr::mutate(translated_cyl = translate(cyl,
-                                    old = old_values,
-                                    new = new_values))
+dplyr::mutate(mtcars,
+              translated_cyl = translate(cyl,
+                                         old = old_values,
+                                         new = new_values))
 
 }
 \seealso{

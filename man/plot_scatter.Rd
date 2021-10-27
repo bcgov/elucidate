@@ -9,6 +9,7 @@ plot_scatter(
   y,
   x,
   jitter = FALSE,
+  shape = 21,
   ...,
   fill_var = NULL,
   colour_var = NULL,
@@ -17,6 +18,9 @@ plot_scatter(
   ylab = NULL,
   xlab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_title = NULL,
   colour_var_title = NULL,
   shape_var_title = NULL,
@@ -90,6 +94,9 @@ unquoted), e.g. x = "variable" or x = variable.}
 \item{jitter}{Set to TRUE to slightly offset overlapping points in random
 directions. See \code{\link[ggplot2]{geom_jitter}} for details.}
 
+\item{shape}{Point shape to use. Default is 21 for "circle filled". Use the
+"aesthetic_options" argument to view the options.}
+
 \item{...}{graphical parameters (not associated with variables) to be passed
 to \code{\link[ggplot2]{geom_point}}, e.g. colour or fill, to be applied
 to all bars. To see some of the available options in a web browser, set the
@@ -126,6 +133,16 @@ sizes according to the value of the covariate. See
 
 \item{title}{Add a main title to the plot using a character string, e.g.
 "scatterplot of y as a function of x"}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{fill_var_title}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.}
@@ -382,147 +399,118 @@ blog post} for an introduction to ggplot2.
 \examples{
 data(mtcars) #load the mtcars data
 
-library(magrittr)
-
-mtcars \%>\% plot_scatter(y = mpg, x = hp, colour = "blue")
+plot_scatter(mtcars, y = mpg, x = hp, colour = "blue")
 
 \donttest{
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp)
+plot_scatter(mtcars, y = mpg, x = hp)
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, fill_var = cyl)
+plot_scatter(mtcars, y = mpg, x = hp, fill_var = cyl)
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, fill_var = cyl, shape = 21, size = 2)
+plot_scatter(mtcars, y = mpg, x = hp,
+             fill_var = cyl, shape = 21, size = 2)
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, colour_var = cyl, shape_var = am, size = 4)
+plot_scatter(mtcars, y = mpg, x = hp,
+             colour_var = cyl, shape_var = am, size = 4)
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, colour = "blue",
-               shape_var_labs = c("manual" = "0", "automatic" = "1"),
-               shape_var = am, theme = "bw")
+plot_scatter(mtcars, y = mpg, x = hp, colour = "blue",
+             shape_var_labs = c("manual" = "0", "automatic" = "1"),
+             shape_var = am, theme = "bw")
 
 #map colour, shape, and size to different variables
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               colour_var = cyl, shape_var = am, size_var = wt)
+plot_scatter(mtcars, y = mpg, x = hp,
+             colour_var = cyl, shape_var = am, size_var = wt)
 
 #map colour and shape to a common variable
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl)
-
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl)
+plot_scatter(mtcars, y = mpg, x = hp,
+             shape_var = cyl, colour_var = cyl)
 
 #add a regression line
 
 #linear
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_method = "lm")
+ plot_scatter(mtcars, y = mpg, x = hp,
+              regression_line = TRUE, regression_method = "lm")
 
 #change the regression line colour
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_method = "lm",
-               regression_line_colour = "green")
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_method = "lm",
+             regression_line_colour = "green")
 
 #add standard error envelope
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_method = "lm", regression_se = TRUE)
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_method = "lm",
+             regression_se = TRUE)
 
 #adjust standard error envelope transparency
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
-               regression_alpha = 0.8) #default is 0.5
-
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_method = "lm",
+             regression_se = TRUE,
+             regression_alpha = 0.8) #default is 0.5
 
 #split by a grouping variable
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, colour_var = cyl,
-               regression_line = TRUE, regression_method = "lm")
-
+plot_scatter(mtcars, y = mpg, x = hp, colour_var = cyl,
+             regression_line = TRUE, regression_method = "lm")
 
 #fit a polynomial regression line by specifying a regression_formula = formula()
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
-               regression_formula = y ~ poly(x, 2))
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_method = "lm", regression_se = TRUE,
+             regression_formula = y ~ poly(x, 2))
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp, shape_var = cyl, colour_var = cyl,
-               regression_line = TRUE, regression_method = "lm",
-               regression_formula = y ~ poly(x, 3))
+plot_scatter(mtcars, y = mpg, x = hp, shape_var = cyl, colour_var = cyl,
+             regression_line = TRUE, regression_method = "lm",
+             regression_formula = y ~ poly(x, 3))
 
 
 #fit a non-linear regression line using locally(-weighted) scatterplot smoothing (loess)
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_se = TRUE,
-               regression_method = "loess")
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_se = TRUE,
+             regression_method = "loess")
 
 
 #fit a non-linear regression line using locally(-weighted) scatterplot smoothing (loess)
 #& also adjust the span (default = 0.75).
 #This controls how much of the data is used for the weighted smoothing.
 
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_se = TRUE,
-               regression_method = "loess", loess_span = 0.3)
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_se = TRUE,
+             regression_method = "loess", loess_span = 0.3)
 
 #fit a non-linear regression line using a generalized additive model (gam), the default
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_se = TRUE,
-               regression_method = "gam")
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_se = TRUE,
+             regression_method = "gam")
 
 #use a dashed regression line instead
-mtcars \%>\%
-  plot_scatter(y = mpg, x = hp,
-               regression_line = TRUE, regression_se = TRUE, regression_line_type = "dashed")
+plot_scatter(mtcars, y = mpg, x = hp,
+             regression_line = TRUE, regression_se = TRUE, regression_line_type = "dashed")
 
 #more complex example with overplotting
-pdata \%>\%
-  plot_scatter(y = y1, x = d, colour_var = g,
-               regression_line = TRUE)
+plot_scatter(pdata, y = y1, x = d, colour_var = g,
+             regression_line = TRUE)
 
 #option 1 for dealing with overplotting: add jittering to offset overlappping points
- pdata \%>\%
- plot_scatter(y = y1, x = d, colour_var = g,
-               jitter = TRUE,
-               regression_line = TRUE)
+plot_scatter(pdata, y = y1, x = d, colour_var = g,
+             jitter = TRUE,
+             regression_line = TRUE)
 
 #option 2: make overlapping values more transparent
- pdata \%>\%
-  plot_scatter(y = y1, x = d, colour_var = g,
-               alpha = 0.2,
-               regression_line = TRUE)
+plot_scatter(pdata, y = y1, x = d, colour_var = g,
+             alpha = 0.2,
+             regression_line = TRUE)
 
 #option 3: do both and make it interactive
-pdata \%>\%
- plot_scatter(y = y1, x = d, colour_var = g,
-              jitter = TRUE, alpha = 0.2,
-              regression_line = TRUE, interactive = TRUE)
+plot_scatter(pdata, y = y1, x = d, colour_var = g,
+             jitter = TRUE, alpha = 0.2,
+             regression_line = TRUE, interactive = TRUE)
 
 #add a faceting variable
-pdata \%>\%
- plot_scatter(y = y1, x = d,
-              colour = "black", shape = 21, fill = "green4",
-              jitter = TRUE, size = 4, alpha = 0.1,
-              regression_line = TRUE, regression_se = TRUE,
-              facet_var = g,
-              ylab = "outcome",
-              theme = "bw")
-
-#open a web page with details on the aesthetic options for ggplot2
-mtcars \%>\%
- plot_scatter(y = mpg, x = hp, aesthetic_options = TRUE)
+plot_scatter(pdata, y = y1, x = d,
+             colour = "black", shape = 21, fill = "green4",
+             jitter = TRUE, size = 4, alpha = 0.1,
+             regression_line = TRUE, regression_se = TRUE,
+             facet_var = g,
+             ylab = "outcome",
+             theme = "bw")
 }
 
 }

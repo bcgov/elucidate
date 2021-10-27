@@ -133,11 +133,10 @@ describe_all(mtcars)
 describe_all(pdata) #all summary types in a list
 
 #numeric summary only
-pdata \%>\% describe_all(high_low, output = "dt", class = "n")
+describe_all(pdata, high_low, output = "dt", class = "n")
 
 #numeric and logical summaries only
-pdata \%>\%
-describe_all(high_low, output = "dt", class = c("n", "l"))
+describe_all(pdata, high_low, output = "dt", class = c("n", "l"))
 }
 
 }

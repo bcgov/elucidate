@@ -95,16 +95,15 @@ data(mtcars)
 library(ggplot2)
 
 p1 <- ggplot(mtcars, aes(x = mpg)) + geom_histogram(binwidth = 1)
-p1 \%>\% static_to_dynamic()
+static_to_dynamic(p1)
 
-mtcars \%>\% static_to_dynamic()
+static_to_dynamic(mtcars)
 
-mtcars \%>\% static_to_dynamic(reactable = TRUE)
+static_to_dynamic(mtcars, reactable = TRUE)
 
-mtcars \%>\% static_to_dynamic(reactable = TRUE, group_by = "cyl")
+static_to_dynamic(mtcars, reactable = TRUE, group_by = "cyl")
 
-mtcars \%>\%
-     static_to_dynamic(reactable = TRUE,
+static_to_dynamic(mtcars, reactable = TRUE,
                        reactable_hightlight_colour = "lightgreen")
 }
 

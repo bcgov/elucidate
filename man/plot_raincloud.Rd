@@ -44,6 +44,9 @@ plot_raincloud(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_title = NULL,
   ylim = c(NA, NA),
   ybreaks = ggplot2::waiver(),
@@ -230,6 +233,16 @@ transparent to 1 = 100\% opaque. Ignored if box_plot = FALSE.}
 \item{title}{Add a main title to the plot using a character string, e.g.
 "Violin graph of X"}
 
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
+
 \item{fill_var_title}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.}
 
@@ -369,8 +382,6 @@ blog post} for an introduction to ggplot2.
 
 data(mtcars) #load the mtcars data
 
-library(magrittr)
-
 #basic raincloud plot
 
 plot_raincloud(mtcars, y = mpg)
@@ -380,24 +391,23 @@ plot_raincloud(mtcars, y = mpg)
 #add a box plot with box_plot = TRUE
 #add fill colours with violin_fill and point_fill
 
-mtcars \%>\%
-  plot_raincloud(mpg,
-                 coord_flip = TRUE, box_plot = TRUE,
-                 violin_fill = "steelblue", point_fill = "blue2")
+plot_raincloud(mtcars, mpg,
+               coord_flip = TRUE, box_plot = TRUE,
+               violin_fill = "steelblue", point_fill = "blue2")
 
 #split the plot by a grouping variable with the x argument
 #assign a variable to fill colour with the fill_var argument
 #it is recommended to assign the same variable to x and fill_colour or box
 #plots will not show up correctly
 
-mtcars \%>\%
-  plot_raincloud(mpg, x = cyl, fill_var = cyl,
-                 coord_flip = TRUE, box_plot = TRUE)
+plot_raincloud(mtcars, mpg, x = cyl, fill_var = cyl,
+               coord_flip = TRUE, box_plot = TRUE)
 }
 
 }
 \references{
 Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+
 Allen, M., Poggiali, D., Whitaker, K., Marshall, T. R., & Kievit, R. A. (2019). Raincloud plots: a multi-platform tool for robust data visualization. Wellcome open research, 4.
 }
 \seealso{

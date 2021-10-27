@@ -1,7 +1,7 @@
 Package: elucidate
 Type: Package
 Title: Convenience Functions to Help Researchers Elucidate Patterns in Their Data 
-Version: 0.1.0.9002
+Version: 0.1.0.9003
 Author: c(person("Craig", "Hutton", email = "Craig.Hutton@gov.bc.ca", role = c("aut", "cre")), person(given = "Province of British Columbia", role = "cph"))
 Maintainer: Craig P. Hutton <Craig.Hutton@gov.bc.ca>
 Description: A collection of convenience functions to facilitate exploratory data analysis. While many of the functions are geared towards data analysis tasks typical in the behavioural and health sciences (e.g. analysis of numerical variables between experimental groups), they are generally useful for working with tabular data. The package has also been designed with the goal of making common analytical processes in R more accessible to science trainees by providing a consistent API for data analysis and visualization. See "A Scientist's Guide to R blog" at https://craig.rbind.io/ for related tutorials. 
@@ -22,7 +22,6 @@ Imports:
     gghalves (>= 0.1.1),
     janitor(>= 1.2.0),
     lubridate (>= 1.7.4),
-    magrittr (>= 1.5),
     patchwork (>= 1.1.1),
     plotly (>= 4.9.0),
     purrr (>= 0.3.2),
@@ -41,5 +40,7 @@ Suggests:
     reactable (>= 0.2.3),
     rmarkdown,
     shiny (>= 1.5.0),
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    psych
 VignetteBuilder: knitr
+Language: en-GB

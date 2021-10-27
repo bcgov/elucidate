@@ -17,26 +17,26 @@ y1 <- c(1:500)
 
 test_that("stat_ci works for sd", {
  expect_equal(stat_ci(y1, stat = sd, replicates = 500, ci_type = "perc"),
-              c("lower" = 138.5, "sd" = 144.5, "upper" = 149.8),
+              c("sd" = 144.5, "lower" = 138.5, "upper" = 149.8),
               tolerance = 1)
 })
 
 
 test_that("stat_ci works for sd in parallel", {
   expect_equal(stat_ci(y1, stat = sd, replicates = 500,  ci_type = "perc", parallel = TRUE, cores = 2),
-               c("lower" = 138.5, "sd" = 144.5, "upper" = 149.8),
+               c("sd" = 144.5, "lower" = 138.5, "upper" = 149.8),
                tolerance = 1)
 })
 
 test_that("stat_ci works for se", {
   expect_equal(stat_ci(y1, stat = se, replicates = 500, ci_type = "perc"),
-               c("lower" = 6.2, "se" = 6.4, "upper" = 6.7),
+               c("se" = 6.4, "lower" = 6.2, "upper" = 6.7),
                tolerance = 1)
 })
 
 test_that("stat_ci works with BCa interval", {
   expect_equal(stat_ci(y1, stat = sd, replicates = 500),
-               c("lower" = 138.5, "sd" = 144.5, "upper" = 149.8),
+               c("sd" = 144.5, "lower" = 138.5, "upper" = 149.8),
                tolerance = 1)
 })
 

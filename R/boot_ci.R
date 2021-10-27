@@ -114,7 +114,7 @@ mean_ci <- function(y, replicates = 2000,
     mn <- mean(y)
     mean_lb <- mean(y, na.rm = T) - (abs(stats::qnorm((1-ci_level)/2))*se(y))
     mean_ub <- mean(y, na.rm = T) + (abs(stats::qnorm((1-ci_level)/2))*se(y))
-    out <- c("lower" = mean_lb, "mean" = mn, "upper" = mean_ub)
+    out <- c("mean" = mn, "lower" = mean_lb, "upper" = mean_ub)
     return(out)
   } else {
 
@@ -163,7 +163,7 @@ mean_ci <- function(y, replicates = 2000,
       mean_ub <- bci$basic[5]
     }
 
-    out <- c("lower" = mean_lb, "mean" = mn, "upper" = mean_ub)
+    out <- c("mean" = mn, "lower" = mean_lb, "upper" = mean_ub)
     return(out)
   }
 }
@@ -313,7 +313,7 @@ median_ci <- function(y, replicates = 2000,
     p50_ub <- bci$basic[5]
   }
 
-  out <- c("lower" = p50_lb, "median" = p50, "upper" = p50_ub)
+  out <- c("median" = p50, "lower" = p50_lb, "upper" = p50_ub)
   return(out)
 }
 
@@ -468,8 +468,8 @@ stat_ci <- function(y, stat, ..., replicates = 2000,
     st_lb <- bci$basic[4]
     st_ub <- bci$basic[5]
   }
-  nms <- c("lower", deparse(substitute(stat)), "upper")
-  out <- c(st_lb, st, st_ub)
+  nms <- c(deparse(substitute(stat)), "lower", "upper")
+  out <- c(st, st_lb, st_ub)
   names(out) <- nms
   return(out)
 }

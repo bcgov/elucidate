@@ -17,6 +17,9 @@ plot_bar(
   xlab = NULL,
   ylab = NULL,
   title = NULL,
+  title_hjust = 0.5,
+  caption = NULL,
+  caption_hjust = 0,
   fill_var_title = NULL,
   colour_var_title = NULL,
   ylim = c(NA, NA),
@@ -112,6 +115,16 @@ colour variable. See \code{\link[ggplot2]{aes}} for details.}
 
 \item{title}{Add a main title to the plot using a character string, e.g.
 "bar plots of y for each group of x"}
+
+\item{title_hjust}{Left-to-right/horizontal justification (alignment) of
+the main plot title. Accepts values from 0 (far left) to 1 (far right).
+Default is 0.5 (centre).}
+
+\item{caption}{Add a figure caption to the bottom of the plot using a character string.}
+
+\item{caption_hjust}{Left-to-right/horizontal justification (alignment) of the
+caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+(left).}
 
 \item{fill_var_title}{If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.}
@@ -318,11 +331,10 @@ grouped_y1_max <- pdata \%>\%
    group_by(g) \%>\%
    summarise(y1_max = max(y1), .groups = "drop")
 
-grouped_y1_max \%>\%
-  plot_bar(x = g, y = y1_max,
-           xlab = "group", ylab = "y1 maximum value",
-           x_var_order_by_y = "i", #order levels of x by increasing y value
-           fill = "blue2")
+plot_bar(grouped_y1_max, x = g, y = y1_max,
+         xlab = "group", ylab = "y1 maximum value",
+         x_var_order_by_y = "i", #order levels of x by increasing y value
+         fill = "blue2")
 
 }
 \references{

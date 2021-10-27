@@ -1,5 +1,0 @@
-steps:
-- script: |
-    sudo apt-get -qq update -y
-    sudo apt-get -qq install -y build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev # install dependencies for devtools
-  displayName: 'apt dependencies'

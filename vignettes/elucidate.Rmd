@@ -1,0 +1,1202 @@
+---
+title: "Introduction to elucidate"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to elucidate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+**Exploratory data analysis (EDA)** is a key step in nearly all analysis workflows. However, this critical step in conducting meaningful analyses is inadequately covered in most STEM training programs, which typically make use of previously cleaned and explored data sets for course exercises. Consequently, aspiring researchers are often left to figure EDA out on their own when they encounter real (i.e. messy) data in their work, where finding suitable tools and accessible documentation can be daunting.
+
+`elucidate` helps you *explore* data in R by making it easy and efficient to perform the three core exploratory data analysis operations:
+
+1.  **Interrogating** data in search of anomalies with `dupes()` and the `counts*` function set.
+
+2.  **Describing** data with the `describe*` set of functions for obtaining summary statistics and detecting missing values.
+
+3.  **Visualizing** data with the `plot_*` set of functions.
+
+To access these functions, you first need to load `elucidate` with the `library()` function, just like you would for any other R package.
+
+```{r config, include=FALSE}
+knitr::opts_chunk$set(
+  cache = TRUE, out.width = "85%", dpi = 300, fig.align = 'center'
+)
+```
+
+```{r setup}
+library(elucidate)
+```
+
+## `magrittr` pipe compatibility
+
+Many `elucidate` functions accept a data frame as the 1st argument and return a data frame (or a list of data frames) as output, so they are compatible with the base R (`|>`; introduced in version 4.1) or [magrittr](https://magrittr.tidyverse.org/) (`%>%`) [pipe operators](https://craig.rbind.io/post/2019-12-30-asgr-2-1-data-transformation-part-1/#chaining-functions-with-the-pipe-operator). 
+
+## Data: pdata
+
+In this vignette, I will demonstrate how to use elucidate with a contrived *p*ractice dataset that comes with the package, called `pdata`. Using `str()` shows us that `pdata` is a tibble containing 12,000 rows and 10 columns of various classes. In case you are wondering, tibbles are enhanced data frames. If you haven't worked with them before, you can learn about them [here](https://tibble.tidyverse.org).
+
+```{r pdata_structure}
+str(pdata)
+```
+
+## Interrogating functions
+
+The first core EDA task is to check for common problems that can seriously perturb[^1] your analysis, a process I refer to as data **"interrogation"**. When interrogating data, we want to make sure there aren't any duplicated rows, data entry errors, or other anomalies that need to be addressed before we can try to derive any "results" from the data. We also want to check to make sure that the data are consistent, e.g. dates are in a common format, each "category" of a factor has a single unique value, etc. If the data were entered manually and/or by multiple individuals there is a good chance they contain at least one erroneous value. Another common issue occurs when data are passed through Microsoft Excel before being imported into R, because Excel has a nasty habit of parsing some numeric and string sequences as dates when it shouldn't. If you're importing, data into R directly from an Excel file, you may also end up with a column of dates being parsed as 5-digit numbers, which is how Excel represents dates internally. If you work with health data, you might also be familiar with missing values being coded as specific numbers like "999" instead of the usual `NA`.
+
+[^1]: See this [paper](https://www.tandfonline.com/doi/10.1080/09332480.2020.1726112?utm_source=CPB&utm_medium=cms&utm_campaign=JQG21039) on the importance of data cleaning for some blatant examples.
+
+Fortunately, in my work as a researcher and data scientist I've found that most of these issues can be detected with only two simple operations:
+
+1)  Checking for duplicated rows.
+
+2)  Checking the most/least common unique values of each column in the data.
+
+### `dupes()`
+
+`dupes()` can tell you how many rows are duplicated based on one or more variables (default is all of them). We care about this because duplicated records mislead you into thinking you have a larger sample size than you really do. Variables to use when searching for duplicates are simply specified using their names via the special [ellipsis](https://r4ds.had.co.nz/functions.html?q=...#dot-dot-dot) (`...`) argument after the "data" argument. I initially used the `janitor::get_dupes()` function for this purpose, but developed `elucidate::dupes()` because I found `janitor::get_dupes()` to be prohibitively slow when working with large administrative datasets (\> 1 million rows). You can see some timed comparisons between them [here](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/#dupes-vs-janitorget_dupes).
+
+```{r dupes1}
+library(elucidate)
+
+#list any number of variables to use when searching for duplicates after the
+#data argument
+dupes(pdata, d) 
+#in this case we search for duplicated based on the "d" (date) column      
+```
+
+As you can see, `dupes()` will print a message to the console letting you know if duplicated rows were detected and how many of the rows in the original data are present as multiple copies. It then returns a tibble or data.table (if output = "dt") containing the subset of rows which are duplicates, with an additional "n_copies" column (n_copies = *n*umber of copies), sorted by descending number of copies. In this case, searching for duplicated rows based on the date column "d" tells us that there are multiple records for each date.
+
+If we expand the search to cover both the "d" and "id" columns, no duplicates are detected, indicating that we only have a single record per individual per day, which is what you would probably expect to see for data from a longitudinal study (but recall that these aren't real data).
+
+```{r dupes2}
+dupes(pdata, id, d)
+
+```
+
+In addition to checking for row duplicates upon importing the data into R, I strongly recommend checking again after joining one data frame to another, e.g. with the [dplyr::\*\_join()](https://craig.rbind.io/post/2020-03-29-asgr-2-2-joining-data/) functions.
+
+`elucidate` also provides a `copies()` function that allows you to extract the first, last, or truly unique rows (i.e. those that had no duplicates in the original data) from a data frame using a "filter" argument that functions similarly to `dplyr::filter()` in that it specifies what is being retained.
+
+Extract the first copy of each set of duplicated rows with `filter = "first"`. For example, to get the earliest record for each id in `pdata` (which is already sorted by increasing date), we could use:
+
+```{r copies_first}
+#in this example I'm "piping" pdata into the first "data" argument of the
+#copies() function
+copies(pdata, id, filter = "first")
+```
+
+To get the last record for each id instead, we just change the filter argument to "last":
+
+```{r copies_last}
+copies(pdata, id, filter = "last")
+```
+
+### `counts*`
+
+Anomalous values, inconsistent value codes, and data entry errors tend to show up in the few most common or few least common unique values of a vector or data frame column. Counts of unique values can be easily obtained with the `counts*` set of functions.
+
+Use `counts()` to get all counts for unique values of a vector in descending (default) order...
+
+```{r counts}
+counts(pdata$g)
+```
+
+...or ascending/increasing order...
+
+```{r counts_ascending}
+counts(pdata$g, order = "a")
+```
+
+...where the results are provided as strings structured in the form "value_count". For vectors with many unique values, you can ask for the top or bottom "n" values with the "n" argument, e.g. for the top 3 values, use:
+
+```{r counts_3}
+counts(pdata$g, n = 3)
+```
+
+A convenience shortcut function that provides a data frame of the top and bottom "n" (default = 5) values in adjacent columns, you can use the `counts_tb()` function.
+
+```{r counts_tb}
+counts_tb(pdata$g)
+```
+
+Here the column "top_v" lists up to the top "n" unique values in order of descending counts (shown in the "top_n" column), and column "bot_v" lists the least common "n" unique values in order of ascending/increasing counts (shown in the "bot_n" column). If there are "n" or fewer unique values in a vector, all of them will be shown in under both column sets.
+
+`counts_all()` extends `counts()` by providing a named list of character vectors with counts of the unique values for each column in a data frame. Here I set a limit of 5 unique values per column (n = 5) for the sake of brevity. Note that if there are fewer than "n" unique values in a column, the output for that column will be reduced to the number of unique values it contains (unless you set the "na.rm" argument to `FALSE`).
+
+```{r counts_all}
+counts_all(pdata, n = 10)
+```
+
+`counts_tb_all()` similarly extends `counts_tb()` by providing the top and bottom "n" (n = 5 by default) counts of unique values for each column of a data frame. This time we get a named list of tibbles; one for each column that was present in the data source. To save space I will just print a couple of these tibbles to show you what the output looks like.
+
+```{r counts_tb_all}
+count_list <- counts_tb_all(pdata)
+
+#because the output is a named list we can subset it using a vector of character
+#names
+count_list[c("g", "high_low")] 
+
+#alternatively, you could pass the data through a dplyr::select() layer before
+#passing it to counts_tb_all()
+selected_counts_list <- pdata |> 
+  dplyr::select(g, high_low) |> 
+  counts_tb_all()
+
+identical(count_list[c("g", "high_low")], selected_counts_list)
+
+```
+
+I've found `counts_tb_all()` to be particularly useful when exploring a new data set for the first time, especially if someone else collected the data.
+
+## Describing functions
+
+The second core EDA task is describing data, typically with summary (AKA "descriptive") statistics. Getting most of the descriptive statistics you probably need for research purposes is incredibly easy with the `describe*` set of functions.
+
+You can `describe()` numeric vectors...
+
+```{r describe_dbl}
+describe(pdata$y1)
+```
+
+...or data frame columns...
+
+```{r describe_df_col}
+pdata |> describe(y1)
+```
+
+...just as easily as character string variables...
+
+```{r describe_chr}
+pdata |> describe(high_low)
+```
+
+...or dates...
+
+```{r describe_date}
+pdata |> describe(d)
+
+```
+
+While the output varies depending on the variable/vector class, in all cases you get the number of rows ("cases"), the number of non-missing values ("n"), the number of missing values ("na"), and the proportion of missing values ("p_na"). Factors and logical vectors can also be used (see below).
+
+For numeric variables (as supplied to the "y" argument), you may have noticed that we are additionally provided with:
+
+-   "mean" = the mean of y.
+
+-   "sd" = the standard deviation of y.
+
+-   "se" = the standard error of the mean of y.
+
+-   "p0" = the 0th percentile (AKA minimum) of y.
+
+-   "p25" = the 25th percentile of y.
+
+-   "p50" = the 50th percentile (AKA median) of y.
+
+-   "p75" = the 75th percentile of y.
+
+-   "p100" = the 100th percentile (AKA maximum) of y.
+
+-   "skew" = the skewness of the distribution of y.
+
+-   "kurt" = the (excess by default) kurtosis of the distribution of y.
+
+For factors:
+
+-   "n_unique" = the number of factor levels (AKA unique values).
+
+-   "ordered" = logical value indicating whether or not the factor is ordered.
+
+-   "counts_tb" = the counts of the top and bottom 2 unique values of the factor.
+
+For character vectors/strings:
+
+-   "n_unique" = number of unique strings.
+
+-   "min_chars" = minimum number of characters in the values of y (i.e. length of the shortest string).
+
+-   "max_chars" = maximum number of characters in the values of y (i.e. length of the longest string).
+
+-   "counts_tb" = the counts of the top and bottom 2 unique strings in y
+
+For dates:
+
+-   "n_unique" = the number of unique dates/time points.
+
+-   "start" = the earliest date.
+
+-   "end" = the most recent/last date.
+
+For logical vectors:
+
+-   "n_TRUE" = the number of `TRUE` values.
+
+-   "n_FALSE" = the number of `FALSE` values.
+
+-   "p_TRUE" = the proportion of values that are `TRUE`.
+
+`elucidate` was designed to support group-oriented analysis workflows that are common in scientific research, where one group is being compared against other groups. To split a description by a grouping variable, simply specify the name of that variable after the column you want a description of.
+
+```{r describe_grouped}
+pdata |>
+  describe(y1, #describe numeric column "y1"
+           g) #split by each level/category/group of the factor "g"
+```
+
+This grouping variable specification is passed to the special ellipsis argument, allowing you to split on as many grouping variables as you like, e.g. to split the description of numeric column "y1" by both factor column "g" and date column "d", I just add "d" to the function call.
+
+```{r, describe_grouped2}
+pdata |> describe(y1, g, d)
+```
+
+If you want to describe more than one column at a time, you can use the `describe_all()` function, which will describe each column of a data frame, where the variable being described will appear under the "variable" column.
+
+```{r describe_all}
+describe_all(pdata)
+```
+
+This returns a list of data frames, each containing a description for a set of variables that share a class. To describe variables of a particular class only, you can use the class argument. For example, to describe numeric columns, use:
+
+```{r describe_all_class}
+pdata |> 
+  describe_all(class = "n")
+```
+
+The class argument to `describe_all()` accepts any combination of "l" (logical), "d" (date), "n" (numeric), "f" (factor), or "c" (character) as a character vector to use for class-based subsetting. As you can see, if only one class if specified this way we end up with a single tibble or data frame as output. If you prefer to work with data.tables instead of tibbles, you can also change the "output" argument from the default value of "tibble" to "dt".
+
+The easiest way to describe a subset of columns of mixed classes at once is to simply pass the data through a `dplyr::select()` layer or use another subsetting method prior to passing it to `describe_all()`. We can also split these tabular descriptions by an arbitrary number of grouping variables just as we did for the basic `describe()` function.
+
+```{r describe_selected}
+pdata |> 
+  #select grouping variables and variables to be described
+  dplyr::select(g, y1, even) |> 
+  #pass them to describe_all()
+  describe_all(g, #split by factor variable "g" 
+               output = "dt") #change output to data.table format
+```
+
+There are also `describe_ci()` and `describe_ci_all()` functions that can be used to obtain confidence intervals for the mean or other summary statistics of numeric variables, which can also be split by an arbitrary number of grouping variables.
+
+```{r describe_ci}
+pdata |> describe_ci(y1)
+
+```
+
+Here the first column is named after the chosen summary statistic ("mean" in this case), "lower" refers to the lower bound of the confidence interval (CI), and "upper" refers to the upper bound of the CI. The default behaviour of `describe_ci()` is to provide 95% CIs based on 95% (percentile) bootstrapped CIs for the mean (default) for another chosen statistic. You can change this to the more common CIs calculated from a normal distribution by switching the ci_type to "norm" (also runs faster).
+
+```{r describe_ci_norm}
+pdata |> 
+  describe_ci(y1, 
+              g, #separate 95% CIs for each group in "g"
+              ci_type = "norm")
+```
+
+To get bias-corrected and accelerated (BCa) boostrapped confidence for the median of the "y1" variable in `pdata`, we can change the "stat" argument to median (unquoted; median, not "median") and the "ci_type" argument to "bca". This argument accepts the name of any function that calculates a single value based on a numeric vector and uses it to generate bootstrapped confidence intervals with the [boot](https://cran.r-project.org/web/packages/boot/index.html) package. I've also incorporated the parallel processing capabilities of the `boot` package into `describe_ci()` and `describe_ci_all()` functions, which can sometimes speed things up if you have multiple cores.
+
+```{r describe_ci_median}
+#set random number generator seed for reproducibility
+set.seed(2021)
+
+#start with a random sample 100 rows to limit processing time for demo 
+pdata[sample(1:nrow(pdata), 100),] |>
+  describe_ci(y1, stat = median, #get a CI of the median for y1
+              ci_type = "bca", #we want BCa CIs
+              replicates = 5000, #use 5000 bootstrap samples (default = 2000)
+              parallel = TRUE, #use parallel processing
+              cores = 2 #use 2 CPU cores
+              )
+```
+
+`describe_ci_all()` extends `describe_ci()` to provide a CI for the chosen summary statistic for each numeric variable in a data frame. For example, to get the 95% CI for the mean of each numeric variable in pdata, for each group in "g", we can use:
+
+```{r describe_ci_all}
+pdata |> 
+  dplyr::select(-id) |> #drop the id column
+  describe_ci_all(g, ci_type = "norm")
+```
+
+## Visualization functions
+
+Descriptive summary statistics are great, but you should also look at your data if you want to really make sense of it. Data visualization is the third core EDA task you'll need to tackle in most data analysis projects you work on. `elucidate` provides a set of 14 `plot_*` functions that make it easy to generate customized exploratory graphs using [ggplot2](https://ggplot2.tidyverse.org/), with an option to convert (most of) them into [plotly](https://plotly-r.com/) format for interactive exploration.
+
+**Geometry-specific `plot_*` functions:**
+
+1.  `plot_bar()`: bar graphs.
+
+2.  `plot_box()`: box-and-whisker plots.
+
+3.  `plot_density()`: kernel density curve plots.
+
+4.  `plot_histogram()`: histograms.
+
+5.  `plot_line()`: line graphs.
+
+6.  `plot_pie()`: opinionated (see below) pie charts.
+
+7.  `plot_raincloud()`: rain cloud plots.
+
+8.  `plot_scatter()`: scatter plots.
+
+9.  `plot_stat_error()`: bars or points of a summary statistic point estimate with error bars.
+
+10. `plot_violin()`: violin plots.
+
+**Generalized `plot_*` functions:**
+
+11. `plot_var()`: bar graphs, box/violin plots, density plots, or scatter plots depending on the input variable class.
+
+12. `plot_var_all()`: class-appropriate graphs for each variable in a data frame.
+
+13. `plot_var_paris()`: class-appropriate graphs for all pairwise comparisons of variables in a data frame.
+
+**Utility `plot_*` function:**
+
+14. `plot_c()`: combine multiple graphs into a lattice-type display.
+
+Examples of each of these `plot_*` functions are presented in the remainder of this section.
+
+### plot_* basics
+
+The `elucidate::plot_*` functions are built upon the [ggplot2](https://ggplot2.tidyverse.org/) graphics system, which allows for incredible flexibility in customizing plots, but can be intimidating for new users to work with. The `plot_*` functions make it easier for users to quickly explore data by providing shortcuts to graphing options that are appropriate for a particular type of graph through documented arguments. The easiest way to learn about all options available for each `plot_*` function is therefore to check that function's documentation with `?function()`, e.g. `?plot_bar()` for `plot_bar()`.
+
+In general, each `plot_*` function accepts a data frame source as the first argument (for pipe-compatibility), then requires one or two variables be assigned to the "x and/or "y" axes (depending on the graph type). For convenience, the principal axis used by each graph type/geometry is that `plot_*` function's second argument (e.g. x-axis for `plot_hisogram()`, y-axis for `plot_box()`), so you can always make a basic graph as easily as `plot_*(data, variable)`. For example, to get a simple histogram of the "y1" numeric variable in `pdata`, all you need to do is:
+
+```{r plot_histogram_basic, eval=FALSE}
+pdata |> plot_histogram(y1)
+
+```
+
+![](figs/plot_histogram_basic.png)
+
+Or for a violin plot of y1:
+
+```{r plot_violin_basic, eval = FALSE}
+pdata |> plot_violin(y1)
+```
+
+![](figs/plot_violin_basic.png)
+
+The second general design principle of the `plot_*` functions is that variables are mapped to aesthetic features of the graphs using arguments that have "\_var" in their name (with the exception of "x" and "y" which map variables to the x and y axes). For example, many of the `plot_*` functions allow you to map a variable onto the fill colour aesthetic of a graph with a "fill_var" argument (short for "fill variable"), or (outline) colour via a "colour_var" argument. For instance, if we wanted to split the histogram of "y1" above for each category of the "g" variable, all you need to do is:
+
+```{r plot_histogram_grouped, eval = FALSE}
+pdata |> 
+  plot_histogram(x = y1, fill_var = g)
+```
+
+![](figs/plot_histogram_grouped.png)
+
+As you can see, by assigning a categorical variable ("g") in the data source (`pdata`) to the "fill_var" argument of `plot_histogram()`, I get overlapping histograms of the primary numeric variable ("y1") assigned to the "x" argument, which are differentiated by their fill colour.
+
+The transparency of the bars (or geometric elements of other graph types) can adjusted with the alpha argument, with acceptable values ranging from 0 (fully transparent) to 1 (fully opaque).
+
+```{r plot_histogram_grouped_alpha, eval = FALSE}
+pdata |> 
+  plot_histogram(x = y1, fill_var = g, 
+                 alpha = 0.8) #80% opaque
+```
+
+![](figs/plot_histogram_grouped_alpha.png)
+
+To instead change the fill colour of a plot without splitting it by a grouping variable, we just use the "fill" argument instead.
+
+```{r plot_histogram_blue, eval = FALSE}
+pdata |> plot_histogram(y1, fill = "blue2")
+```
+
+![](figs/plot_histogram_blue.png)
+
+Similarly, to change the outline colour of the bars, we can use the "colour" argument.
+
+```{r plot_histogram_blueblack, eval = FALSE}
+pdata |> plot_histogram(y1, 
+                         fill = "blue2",
+                         colour = "black")
+```
+
+![](figs/plot_histogram_blueblack.png)
+
+Don't worry too much if terms like aesthetic parameters and variable mappings are confusing at this point. I wrote a blog post, available [here](https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/), on the basics of the ggplot2 graphing system with many examples that assumes no prior knowledge of R graphics and should help clear things up for you.
+
+The third general feature of most of the `plot_*` functions (except for `plot_raincloud()` and `plot_pie()`) that you may find helpful is a logical "interactive" argument which converts the graph to an interactive `plotly` format. This feature is more useful for interactively exploring data than for generating static graph images to be used in reports. You can see an example of the interactive version of `plot_stat_error()` [here](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/#interacting-with-dynamic-data-representations).
+
+All `plot_*` functions also allow you to customize the axis labels with "xlab" and "ylab" arguments and add a figure caption with the "caption" argument. You can also adjust the font family and size with the "font" and "text_size" arguments, and the theme with the "theme" argument. For example, all at once:
+
+```{r plot_histogram_text, eval = FALSE}
+pdata |> 
+  plot_histogram(y1,
+                 fill = "blue2",
+                 colour = "black",
+                 xlab = "y1 value", 
+                 ylab = "Count",
+                 caption = "Figure 1",
+                 font = "serif", #times new roman
+                 text_size = 16, 
+                 theme = "light") 
+```
+
+![](figs/plot_histogram_text.png)
+
+### bar graphs
+
+Bar graphs are one of the best ways to visualize categorical variables.
+
+As mentioned above, all we have to do to make a basic bar graph is pass a data frame to `plot_bar()` and tell it which categorical variable we want bars rendered for. If only the x-variable is specified, the bars will represent the counts of each category.
+
+```{r plot_bar, eval = FALSE}
+pdata |> plot_bar(g)
+```
+
+![](figs/plot_bar.png)
+
+If you want the bars to represent a specific value, such as the mean of a numeric variable, first calculate the grouped means and then assign the column containing the group means to the y argument.
+
+```{r plot_bar_y, eval = FALSE}
+pdata |> 
+  #here I use describe() as a shortcut to get the mean of "y1" for each group
+  #in "g"; pdata |> dplyr::group_by(g) |> summarise(mean = mean(y1)) would work just as well
+  describe(y1, g) |>
+  plot_bar(x = g, y = mean)
+```
+
+![](figs/plot_bar_y.png)
+
+The main thing to note here is that you want a single unique value for each category when using `plot_bar()` this way, otherwise you'll end up with a graph that is pretty tough to read, like this:
+
+```{r plot_bar3, eval = FALSE}
+pdata |> plot_bar(g, y1)
+```
+
+![](figs/plot_bar3.png)
+
+All `elucidate::plot_*` functions provide a wide variety of options to help you enhance your graphs. For example, we might want to use a different colour for each bar, in which case we can assign categorical variable "g" to the "fill_var" argument instead of "x" (or in addition to "x").
+
+```{r, plot_bar_custom1, eval = FALSE}
+pdata |> 
+  plot_bar(fill_var = g)
+```
+
+![](figs/plot_bar_custom1.png)
+
+If a variable has been assigned to "fill_var" you can stack the bars and get the proportions (of the total count) represented by each category instead of the counts by setting the "position" argument to "fill". As a bonus, the y axis label will be updated for you.
+
+```{r plot_bar_custom2, eval = FALSE}
+pdata |> plot_bar(fill_var = g, position = "fill")
+
+```
+
+![](figs/plot_bar_custom2.png)
+
+### box plots
+
+Box-and-whisker plots ("box plots") provide a quick non-parametric visualization of the distribution of a numeric variables using the five-number percentile summary.
+
+```{r plot_box, eval = FALSE}
+plot_box(pdata, y2)
+```
+
+![](figs/plot_box.png)
+
+In the basic box plot of `pdata` variable y2 above, the lower edge of the box represents the 25th percentile, the line inside the box represents the median (50th percentile), the upper edge of the box represents the 75th percentile, and the vertical lines extending from the box represent the limits of 1.5x the interquartile range (75th percentile - 25th percentile), or the minimum and maximum values (if no points are more extreme than the 1.5x IQR threshold). Points appearing beyond the ends of these lines are potential outliers that you should consider investigating further.
+
+You can get a box plot for each level of a factor by assigning another variable to the x-axis, and can make extreme values easier to see by changing their colour with `geom_boxplot()`'s "outlier.colour"/"outlier.color" argument, e.g.
+
+```{r plot_box_custom, eval = FALSE}
+pdata |> 
+  plot_box(y2, g, 
+           outlier.colour = "red2")
+```
+
+![](figs/plot_box_custom.png)
+
+The biggest flaw with box plots is that they won't show you if there the y-axis variable has a multi-modal distribution. To mitigate this issue, `plot_box()` has a convenient "dots" argument which overlays a dot plot (via `geom_dotplot()`) over the box plot so that the shape of the distribution is also visible.
+
+```{r plot_box_custom2, eval = FALSE}
+pdata |> 
+  plot_box(y2, g,
+           outlier.colour = "red2",
+           dots = TRUE, 
+           #if you have a lot of data, it's usually also a good idea to adjust
+           #the binwidth of the dots with the "dots_binwidth" argument, where
+           #smaller values compress the dots and larger values expand them
+           dots_binwidth = 0.4) 
+
+```
+
+![](figs/plot_box_custom2.png)
+
+In this case, it doesn't look like we have to worry about any multi-modal distributions.
+
+### density plots
+
+(Kernel) density plots are an excellent way to visualize the shape of the distribution of a numeric variable.
+
+```{r plot_density, eval = FALSE}
+pdata |> plot_density(y1)
+```
+
+![](figs/plot_density.png)
+
+The y1 distribution appears to be left-skewed. To see how far off it is from a normal distribution, we can easily compare them on the same plot via `plot_density()`'s "dnorm" argument, which adds a normal density curve as a dashed line.
+
+```{r plot_density_custom, eval = FALSE}
+pdata |> 
+  plot_density(y1, 
+               dnorm = TRUE)
+```
+
+![](figs/plot_density_custom.png)
+
+You can also add rug lines if you want to see how much data underlies each region of the density curve with the "rug" argument. Note that rug lines can take quite a while to render if you have many values.
+
+```{r plot_density_rug, eval = FALSE}
+pdata |> 
+  dplyr::slice_sample(n = 500) |> 
+  #here I am just randomly sampling 500 of the 12,000 y1 values with
+  #dplyr::slice_sample() to reduce rendering time
+  plot_density(y1, 
+               dnorm = TRUE,
+               rug = TRUE)
+```
+
+![](figs/plot_density_rug.png)
+
+### violin plots
+
+An alternative to the box plot or density plot is the violin plot, which provides a symmetrical mirrored (kernel) density curve. Like the box plot examples above, we can split it by a grouping variable by assigning that variable to the x-axis ("x"), "fill_var", and/or "colour_var".
+
+```{r plot_violin, eval = FALSE}
+pdata |> 
+  plot_violin(y1, g, fill_var = g)
+```
+
+![](figs/plot_violin.png)
+
+Quantile lines can be added with the "draw_quantiles" argument. To draw lines at the median, 25th percentile, and 75th percentile to mimic a box plot, we can use:
+
+```{r plot_violin_quantiles, eval = FALSE}
+pdata |> 
+  plot_violin(y1, g, fill_var = g, 
+              draw_quantiles = c(0.25, 0.5, 0.75))
+```
+
+![](figs/plot_violin_quantiles.png)
+
+### histograms
+
+If you would prefer the traditional histogram over the kernel density plot to visualize the distribution of a numeric variable, use `plot_histogram()` instead.
+
+```{r plot_histogram, eval = FALSE}
+pdata |> plot_histogram(y1)
+```
+
+![](figs/plot_histogram.png)
+
+An advantage of the histogram over the density plot is that we see the counts of the binned values and immediately get an impression of how much data was used to generate the plot. The main disadvantage is that the rendered shape of the distribution depends upon the chosen number of bins or binwidth (30 bins it the ggplot2 default). For example, if I change the number of bins to 10, the second mode near a y1 value of 200 disappears...
+
+```{r plot_histogram_custom, eval = FALSE}
+pdata |> 
+  plot_histogram(y1, bins = 10)
+```
+
+![](figs/plot_histogram_custom.png)
+
+`plot_histogram()` also has a "dnorm" argument to make it easy to add a normal density curve to the histogram, which also adds a secondary axis on the right side of the plot for the density curve. The "dnorm" argument is incompatible with the (default) "bins" argument, so we also need to set the "binwidth" rather than the number of "bins" to use "dnorm".
+
+```{r plot_histogram_dnorm, eval = FALSE}
+pdata |> 
+  plot_histogram(y1, 
+                 binwidth = 10,
+                 dnorm = TRUE, dnorm_colour = "blue2")
+```
+
+![](figs/plot_histogram_dnorm.png)
+
+### line graphs
+
+Line graphs are typically used to show changes in a numeric variable (on the y-axis) over time (on the x-axis).
+
+```{r plot_line, eval = FALSE}
+pdata |> 
+  #plot numeric variable "y1" by date variable "d"
+  plot_line(y = y1, x = d) 
+```
+
+![](figs/plot_line.png)
+
+Assigning a categorical variable to the "colour_var" argument gives you a different line for each category.
+
+```{r plot_line_custom, eval = FALSE}
+pdata |> 
+  plot_line(y = y1, x = d, colour_var = g)
+```
+
+![](figs/plot_line_custom.png)
+
+A key feature of `plot_line()` which makes it more convenient to use than `ggplot2::geom_line()` is that `plot_line()`, unlike `ggplot2::geom_line()`, will automatically aggregate the y variable for you if there isn't a single unique value of y for each level of the time/x variable and/or any other grouping variables you might use. By default, the mean is used for aggregation (as per the y-axis label), but you can change it to a percentile with the "stat" and "qprob" arguments, where the default quantile is 0.5 (the median):
+
+```{r plot_line_median, eval = FALSE}
+pdata |> 
+  plot_line(y = y1, x = d, colour_var = g,
+            stat = "quantile", #supports partial matching, could use "q" instead
+            qprob = 0.5) #adjust "qprob" for a different quantile (0 = min., 1 = max)
+```
+
+![](figs/plot_line_median.png)
+
+To reproduce this plot using `ggplot2` directly, we would need to pre-aggregate the data with `dplyr::group_by()` and `dplyr::summarise()`. To replicate the formatting we also need to apply some additional layers, like this:
+
+```{r, ggplot2_line, eval = FALSE}
+pdata |> 
+  dplyr::group_by(d, g) |> 
+  dplyr::summarise(median_y1 = median(y1), .groups = "drop") |> 
+  ggplot(aes(y = median_y1, x = d, colour = g)) +
+  geom_line(size = 1.1) +
+  scale_colour_viridis_d(option = "plasma", end = 0.8) +
+  theme_classic(14) +
+  labs(y = "median y1")
+
+```
+
+![](figs/ggplot2_line.png)
+
+Otherwise you'll end up with an incoherent mess because there isn't a single unique value of the y-axis variable for each combination of values for the x-axis variable and colour variable, like this:
+
+```{r ggplot2_messy_lines, eval = FALSE}
+pdata |> 
+  #without the grouping and aggregation steps
+  ggplot(aes(y = y1, x = d, colour = g)) +
+  geom_line(size = 1.1) +
+  scale_colour_viridis_d(option = "plasma", end = 0.8) +
+  theme_classic(14) +
+  labs(y = "y1")
+```
+
+![](figs/ggplot2_messy_lines.png)
+
+As you can see, it's easier and more intuitive to use `plot_line()` for these kinds of line graphs. Other convenience aggregation "stat" options currently accepted by `plot_line()` include "sum" and "count".
+
+### pie charts
+
+The vilified pie chart is an alternative way of visualizing categorical data than the bar graph, the primary criticism of which is that visually comparing slices is much harder for humans than comparing bar lengths. However, `elucidate` was developed for use by researchers working in business and government in addition to those working in academia, and sometimes executives or project stakeholders want to see pie charts regardless of their limitations. I have therefore attempted to provide a convenience function that allows users to produce `ggplot2` pie charts that stand a chance at being reasonably interpretable.
+
+In my professional opinion, a pie chart should only be used when:
+
+-   Your boss, academic supervisor, or project stakeholder specifically asks for one.
+
+-   You are only attempting to graph a nominal variable with 5 or fewer categories.
+
+In all other cases a bar graph should be used. If you're still determined to generate a pie chart, here are a few recommendations to help make it easier to read.
+
+-   `plot_pie()` has a "lump_n" argument that makes it easy to lump infrequent categories into an "other" category to help reduce the number of pie slices that will be plotted. Use this argument if you have more than 5 categories, otherwise a warning message will be printed to the console advising you to use it or switch to a bar graph.
+
+-   `plot_pie()` also provides a set of "slice_text\*" arguments that make it easy for you to annotate the slices of the pie chart to display the slice percentages for example. I strongly encourage you use these arguments to help the consumers/viewers of your pie chart quickly compare slices.
+
+Unlike most of the other `plot_*` functions, I will only demonstrate a single example of a "responsible" use of `plot_pie()`:
+
+```{r plot_pie, eval = FALSE}
+plot_pie(data = pdata,
+         #assign categorical variable "g" to slice fill colour
+         fill_var = g,
+         #"pct" is a shortcut for the slice percentages
+         slice_text = "pct", slice_text_suffix = "%", slice_text_size = 5,
+         alpha = 0.8) 
+```
+
+![](figs/plot_pie.png)
+
+As you can see, without the additional text specifying the percentages each category represents in terms of frequency of appearance in the data, it would be very difficult to compare slices. In contrast, a fairly basic bar graph is easier to read without requiring any extra text in/over the bars.
+
+```{r, bar_v_pie, eval = FALSE}
+pdata |> plot_bar(fill_var = g)
+
+```
+
+![](figs/plot_bar_v_pie.png)
+
+### scatter plots
+
+The scatter plot is an excellent way of graphing a relationship between two continuous variables, which can be done with `plot_scatter()`.
+
+```{r plot_scatter, eval = FALSE}
+pdata |> 
+  plot_scatter(y1, y2)
+```
+
+![](figs/plot_scatter.png)
+
+The "regression_line" and "regression_se" arguments make it easy to add a regression line (by default using a generalized additive model) with confidence envelope. If overplotting is an issue, as it is here, you can also adjust the transparency with the "alpha" argument (lower is more transparent) and add some jittering with the "jitter" argument.
+
+```{r plot_scatter_reg, eval = FALSE}
+pdata |> 
+  plot_scatter(y1, y2, 
+               regression_line = TRUE, regression_se = TRUE,
+               jitter = TRUE, alpha = 0.7)
+```
+
+![](figs/plot_scatter_regression.png)
+
+The relationship in this case looks to be pretty linear, so we can change the regression_method to "lm" for a basic linear model. We can also see how the relationship varies between categories of the grouping variable "g" by assigning it to the "colour_var" argument.
+
+```{r plot_scatter_lm_grouped, eval = FALSE}
+pdata |> 
+  plot_scatter(y1, y2, 
+               colour_var = g,
+               regression_line = TRUE, regression_se = TRUE,
+               regression_method = "lm",
+               jitter = TRUE, alpha = 0.7)
+```
+
+![](figs/plot_scatter_lm_grouped.png)
+
+Now we can see that there is some separation between groups along the y-axis (y1) but not much change for any group along the x-axis (y2). We can make the grouped subsets of the data more clearly visible by separating them into facets with "facet_var" and making the points smaller with the "size" argument.
+
+```{r plot_scatter_facetted, eval = FALSE}
+pdata |> 
+  plot_scatter(y1, y2, facet_var = g,
+               jitter = TRUE, alpha = 0.7, size = 1)
+```
+
+![](figs/plot_scatter_facetted.png)
+
+From this perspective it looks like y1 has a bi-modal distribution for groups "b", "c", and "d" (and perhaps "a"). We could follow this up with a density plot to investigate further via `plot_density()`.
+
+```{r plot_density_facetted, eval = FALSE}
+pdata |> 
+  plot_density(y1, facet_var = g)
+```
+
+![](figs/plot_density_facetted.png)
+
+From this perspective it looks like group "e" is the only one with a unimodal distribution of y1.
+
+### statistic +/- error bar plots
+
+One of the most common types of graphs in the sciences, requested by both lab Principal Investigators and journal reviewers/editors, is the bar or point graph of a summary statistic (typically the sample mean) and error bars representing either the standard error or a 95 % confidence interval (CI). These so-called "dynamite plots" can easily be made with `plot_stat_error()`, which will give you the mean and 95% confidence interval error bars by default.
+
+```{r plot_stat_error_point, eval = FALSE}
+pdata |> 
+  plot_stat_error(y = y1, x = g,
+                  #set geom = "bar" for the bar-graph version.
+                  fill = "blue2")
+```
+
+![](figs/plot_stat_error_point.png)
+
+If the y-axis variable is not normally distributed, you can get bootstrapped confidence intervals for the median by simply changing the "stat" argument to "median". By default, percentile CIs are used, but you can change this to bias-corrected and accelerated (BCa) CIs by setting "ci_type" = "bca". BCa CIs tend to require more replications to be estimated, so you will likely also want to increase the "replicates" argument to 5,000 or more (default is 2000). To speed things up a bit you can also use parallel processing with the "parallel" and "cores" arguments.
+
+```{r plot_median_ci, eval = FALSE}
+pdata |> 
+  plot_stat_error(y = y1, x = g, 
+                  fill = "blue2",
+                  stat = "median", 
+                  ci_type = "bca", replicates = 5000,
+                  parallel = TRUE, cores = 4)
+```
+
+![](figs/plot_median_ci.png)
+
+The principal limitation of these graphs is that they don't reveal anything about the underlying distribution of the data and have been [criticised](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3087125/) for concealing other pertinent information such as sample sizes. You should therefore use them with caution and perhaps present them alongside other graphics which show additional features of the data.
+
+### raincloud plots
+
+[Raincloud plots](https://wellcomeopenresearch.org/articles/4-63) overcome the limitations of the dynamite plots covered above by presenting a combination of the raw data, box plots and half-violin plots together in a single graph.
+
+```{r plot_raincloud, eval = FALSE}
+pdata |> 
+  plot_raincloud(y1, box_plot = TRUE)
+
+```
+
+![](figs/plot_raincloud.png)
+
+If you want it to look more like a rain cloud, you can flip the axes with the "coord_flip" argument. We can take things a step further by also adjusting the fill colours of the points and the half-violin plot.
+
+```{r plot_raincloud_custom, eval = FALSE}
+pdata |> 
+  plot_raincloud(y1, 
+                 box_plot = TRUE, 
+                 coord_flip = TRUE,
+                 box_fill = "white", box_alpha = 1,
+                 violin_fill = "slategray3",
+                 point_fill = "blue3", point_alpha = 0.2, point_size = 1)
+```
+
+![](figs/plot_raincloud_custom.png)
+
+For a grouped version, just assign a variable to "x". You can also adjust the width of the box plots with the "box_width" argument, and you can move the box to the points side with the "box_side" argument.
+
+```{r plot_raincloud_custom_grouped, eval = FALSE}
+pdata |> 
+  plot_raincloud(y1, x = g,
+                 coord_flip = TRUE,
+                 box_plot = TRUE, 
+                 box_fill = "white", box_alpha = 0.4,
+                 box_width = 0.35, box_side = "l",
+                 violin_fill = "slategray3",
+                 point_fill = "blue3", point_alpha = 0.2, point_size = 1)
+```
+
+![](figs/plot_raincloud_custom_grouped.png)
+
+This gives us a more transparent display of the between-group differences in y1 than the previous `plot_stat_error()` graphs, simultaneously showing the distribution of the data, sample sizes, and non-parametric summary statistics.
+
+### generalized univariate plots
+
+To facilitate rapid visual exploration of data, `elucidate` also provides a more flexible set of `plot_var*()` functions which generate appropriate plots for the data type without requiring the user to specify a plot geometry. The simplest of these functions is `plot_var()`, which allows you to plot up to two variables and optionally split the plot by a categorical grouping variable. 
+
+For a single numeric (classes "double" or "integer") or date variable, `plot_var()` generates a density plot. By default it will be enhanced by the addition of a normal density curve:
+
+```{r plot_var_num, eval = FALSE}
+pdata |> 
+  #here "var1" refers to the primary variable, which will be assigned to either
+  #the x- or y-axis for you automatically depending on the type of variable and
+  #which graph geometry is used
+  plot_var(var1 = y1) 
+```
+
+![](figs/plot_var_num.png)
+
+To split it by a categorical variable assign that variable to the "group_var" argument:
+
+```{r plot_var_num_grouped, eval = FALSE}
+pdata |> plot_var(var1 = y1, group_var = g)
+```
+
+![](figs/plot_var_num_grouped.png)
+
+Enhancements like the normal density curve can be disabled by setting the "basic" argument of any `plot_var*()` function to `TRUE`. Beginners may also find it helpful to enable "verbose" mode, which prints a message to the console explicitly stating which geom-specific `plot*()` function will be used to build the plot according to the detected varible class and which axes the primary (and secondary if specified) variable(s) will assigned to. 
+
+```{r plot_var_num_basic, eval = FALSE}
+pdata |> plot_var(y1, basic = TRUE, verbose = TRUE)
+```
+
+![](figs/plot_var_num_basic.png)
+
+One categorical (or logical) variable will be represented as a bar graph:
+
+```{r plot_var_cat, eval = FALSE}
+pdata |> plot_var(g)
+```
+
+![](figs/plot_var_cat.png)
+
+A jittered scatter plot with an added smooth (generalized additive model) regression line and confidence envelope is used for a combination of two numeric and/or date variables:
+
+```{r plot_var_2num, eval = FALSE}
+pdata |> plot_var(var1 = y1, var2 = d)
+```
+
+![](figs/plot_var_2num.png)
+
+Two categorical variable will be graphed using a faceted bar plot:
+
+```{r plot_var_2cat, eval = FALSE}
+pdata |> plot_var(g, high_low)
+```
+
+![](figs/plot_var_2cat.png)
+
+A combination of a numeric variable and a categorical variable will be graphed using a box plot enhanced with a violin plot layer, where the numeric variable will be assigned to the y-axis and the categorical variable will be assigned to the x-axis. 
+
+```{r plot_var_nc, eval = FALSE}
+pdata |> plot_var(y1, g)
+```
+
+![](figs/plot_var_nc.png)
+
+Note that the extra violin plot layer can be disabled by setting `basic = TRUE`, and splitting the graph by an additional grouping variable is again as easy as assigning that variable to the "group_var" argument.
+
+```{r plot_var_basic, eval = FALSE}
+plot_var(pdata, #data is the 1st argument
+         y1, #"var1" for the primary variable is the 2nd argument 
+         g, #"var2" for a secondary variable is the 3rd argument
+         high_low, #"group_var" for a grouping variable is the 4th argument
+         basic = TRUE, #basic box plot without extra violin plot layer
+         verbose = TRUE)
+
+```
+
+![](figs/plot_var_basic.png)
+
+### generalized multivariate plots
+
+When exploring data we often want to plot more than a couple of variables at a time. `plot_var_all()` extends `plot_var()` by generating a plot of each variable in a data frame and combining them into a [patchwork](https://patchwork.data-imaginist.com/) grid.
+
+```{r plot_var_all, eval = FALSE}
+pdata |> plot_var_all()
+```
+
+![](figs/plot_var_all.png)
+
+To plot a subset of variables you can pass a character vector of column names to the "cols" argument
+
+```{r plot_var_all_cols, eval = FALSE}
+pdata |> 
+  plot_var_all(cols = c("y1", "y2", "x1", "x2"))
+
+```
+
+![](figs/plot_var_all_cols.png)
+
+You can also plot each variable against a secondary variable of interest using the "var2" argument...
+
+```{r plot_var_all_var2, eval = FALSE}
+pdata |> 
+  plot_var_all(cols = c("y1", "y2"), 
+               var2 = high_low)
+```
+
+![](figs/plot_var_all2.png)
+
+...and split all of the plots by a grouping variable with "group_var":
+
+```{r plot_var_all_grouped, eval = FALSE}
+pdata |> 
+  plot_var_all(cols = c("y1", "y2"), 
+               var2 = high_low, group_var = g,
+               basic = TRUE) #disable the violin plot layer
+```
+
+![](figs/plot_var_all_grouped.png)
+
+### generalized pair plots
+
+`plot_var_pairs()` extends `plot_var_all()` even further by generating a plot for each pairwise combination of variables in a data frame ("pair plots"). Here I'll focus on a few columns at a time with the "cols" argument so the graphs are easier to read.
+
+```{r plot_var_pairs, eval = FALSE}
+pdata |> 
+  plot_var_pairs(cols = c("y1", "y2", "g"))
+```
+
+![](figs/plot_var_pairs.png)
+
+This produces a patchwork-combined matrix of class-appropriate ggplots:
+
+-   On the diagonal, you get a density plot for a comparison of a numeric variable to itself or bar graph for a comparison of a categorical variable to itself.
+
+-   Off of the diagonal, you get scatter plots (plus optional regression lines) for comparisons of two numeric variables, faceted bar graphs for comparisons of two categorical variables (not shown), and box-and-whisker plots (plus optional violin plot outlines) for a comparison of a numeric and categorical variables.
+
+The pair plots produced by `plot_var_pairs()` can also be split by a grouping variable with the "group_var" argument, and it may be easier to read the basic versions of each plot when there are many splits (via `basic = TRUE`).
+
+```{r plot_var_pairs_grouped, eval = FALSE}
+pdata |> 
+  plot_var_pairs(cols = c("y1", "y2", "g"), 
+                 group_var = high_low, basic = TRUE)
+```
+
+![](figs/plot_var_pairs_grouped.png)
+
+Although I unfortunately cannot demonstrate it in this vignette, `plot_var_all()` and `plot_var_pairs()` also have a "trelliscope" mode that can be enabled by setting the "trelliscope" argument to `TRUE`. Enabling this option will render the plots as panels in an interactive JavaScript-based trelliscope display with the [trelliscopejs](https://hafen.github.io/trelliscopejs/) package. Trellisope mode is particularly useful in situations where there would be too many graphs in a multi-panel display to view them all on a single page. 
+
+### combining plots
+
+`plot_c()` makes it easy to combine multiple plots into a multi-panel display with the [patchwork](https://patchwork.data-imaginist.com/) package. For example, we might want to show a box plot and density plot side by side:
+
+```{r plot_c, eval = FALSE}
+p1 <- pdata |> 
+  plot_box(y1, fill_var = g, ylim = c(50, 300))
+
+p2 <- pdata |> 
+  plot_density(y1, fill_var = g, xlim = c(50, 300)) +
+  coord_flip()
+
+plot_c(p1, p2)
+```
+
+![](figs/plot_c.png)
+
+`plot_c()` can also be used to combine a list of plots, such as a set of density plots rendered by looping `plot_density()` over all numeric columns of `pdata`, other than the "id" column, like this:
+
+```{r plot_c_list, eval = FALSE}
+col_names <- pdata |> 
+  dplyr::select(is.numeric, -id) |> #select all non-ID numeric variables
+  names() #get the names of the numeric columns
+
+#map plot_density() over all the numeric variables  
+plot_var_list <- purrr::map(col_names, ~plot_density(pdata, .x))
+
+plot_c(plot_var_list)
+
+```
+
+![](figs/plot_c_list.png)
+
+## Auxiliary functions
+
+To simplify your workflow even further, `elucidate` also provides a variety convenience functions that support the core operations outlined above, such as:
+
+-   Correcting data entry errors, anomaly indicator values, and structural inconsistencies seen in real world data more easily using `recode_errors()` and `wash_df()`.
+
+`recode_errors()` replaces a vector of error values with `NA` or another user-specified error indicator value. 
+
+```{r recode_errors}
+recode_errors(data = c(1, 0, 1, 0, 1, 1, 1, 99),  
+              errors = 99) #"99" is an erroneous value
+
+recode_errors(data = c(1, 0, 1, 0, 1, 1, 1, 99),
+              errors = 99,
+              replacement = -1) #recode it as -1 instead of NA
+```
+
+`wash_df()` is a convenience wrapper for several functions in the [janitor](https://garthtarr.github.io/meatR/janitor.html), [tibble](https://tibble.tidyverse.org/), and [readr](https://readr.tidyverse.org/) packages that aim to standardize the formatting of data frames. Specifically, it applies the following functions in order:
+
+  1. `janitor::remove_empty()` to remove completely empty rows and columns.
+  2. `janitor::clean_names()` to convert all column names to "snake_case" (by default).
+  3. `readr::parse_guess()` to re-parse the class of each column, which is especially useful after recoding values.
+
+For example, consider the following data frame with an erroneous letter value in an otherwise numeric column, inconsistent column name formatting, and a useless empty "notes" column.
+
+```{r wash_df}
+(messy_data <- data.frame(`Column A` = c(1:5, "A"), Column_B = 10:5, NOTES = NA))
+
+(recoded_messy_data <- recode_errors(messy_data, "A", cols = 1))
+```
+
+Fixing the error in the first column still leaves that column as a "character" vector even though it only contains numeric values. We can correct all of the formatting issues with this data using a single call to `wash_df()`:
+
+```{r wash_df2}
+recoded_messy_data |> wash_df()
+```
+
+Much nicer!
+
+-   Rapidly converting one vector into another (i.e. vectorized re-coding) with `translate()`. For example, you can use it to recode a column in a data frame within a call to `dplyr::mutate()`:
+
+```{r translate}
+pdata |> 
+  dplyr::mutate(new_g = translate(y = g, 
+                              old = c("a", "b", "c", "d", "e"),
+                              new = c("group A", "group B", "group C", "group D", "group E"))) |> 
+  dplyr::relocate(new_g, .after = g)
+```
+
+-   Interacting with dynamic tabular and graphical data representations via `static_to_dynamic()`. See [this link](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/#interacting-with-dynamic-data-representations) for an example.
+
+-   Calculating summary statistics that are not included in base R:
+
+    -   `mode()`: the most common value of a vector as a measure of central tendency (in addition to `base::mean()` and `stats::median()`), and the only one which works for non-numeric vectors.
+
+```{r mode}
+mode(pdata$g)
+```
+
+
+    -   `se()`: the standard error of the mean of a numeric vector.
+    
+```{r se}
+se(pdata$y1)
+
+#demonstration of equivalence to SE calculation from base/stats package R
+#functions
+all.equal(se(pdata$y1), 
+          sd(pdata$y1)/sqrt(length(pdata$y1))
+          )
+```
+    
+
+    -   `skewness()`: a convenience wrapper implementing the same functionality provided by `e1071::skewness()` or `psych::skew()` functions, which calculate the degree of skewness in a numeric distribution (Joanes & Gill, 1998). Unlike these alternatives, the `elucidate` version uses the type 2 calculation by default since this incorporates a correction for sample size that also matches what is used in SPSS and SAS.
+    
+```{r skewness}
+skewness(pdata$y1)
+
+#demonstration of equivalence to psych::skew(type = 2)
+if(requireNamespace("psych")){
+  all.equal(
+    skewness(pdata$y1), 
+    psych::skew(pdata$y1, type = 2)
+  ) 
+}
+```
+
+    -   `kurtosis()`: a convenience wrapper implementing the same functionality provided by `e1071::kurtosis()` or `psych::kurtosi()` functions, which calculate the degree of skewness in a numeric distribution (Joanes & Gill, 1998). Unlike these alternatives, the elucidate version uses the type 2 calculation by default since this incorporates a correction for sample size that also matches what is used in SPSS and SAS.
+
+```{r kurtosis}
+kurtosis(pdata$y1)
+
+#demonstration of equivalence to psych::kurtosi(type = 2)
+if(requireNamespace("psych")){
+  all.equal(
+    kurtosis(pdata$y1), 
+    psych::kurtosi(pdata$y1, type = 2)
+  ) 
+}
+```
+
+    -   `inv_quantile()`: inverse quantiles, or the opposite of what you get from `stats::quantile()`, namely, the probabilities corresponding to specific values in the input vector. These can be converted to percentiles by multiplying the results by 100, which could be useful for educators (or students) who want to know what their percetile rank is on a test for example.
+    
+```{r inv_quantile}
+#Which quantile in vector "y" is a value of 80?
+inv_quantile(y = seq(10, 100, 10), 
+             values = 80) 
+```
+    
+    -   `consum()`: cumulative summation of consecutive 0/1 or FALSE/TRUE values.
+    
+```{r consum}
+consum(c(1, 0, 1, 1, 0, 1, 1, 1))
+
+```
+    
+    -   `mean_ci()`: theoretical (i.e. assuming normality) or bootstrapped confidence intervals for a sample mean.
+    
+```{r mean_ci}
+set.seed(9999)
+x <- rnorm(100, 10, 1)
+mean_ci(x)
+```
+    
+    -   `median_ci()`: boostrapped confidence intervals for a sample median.
+    
+```{r median_ci}
+median_ci(x)
+```
+
+    -   `stat_ci()`: boostrapped confidence intervals for other summary statistics.
+    
+```{r stat_ci}
+stat_ci(x, 
+        #assign the unquoted name of a summary statistic function to the "stat"
+        #argument
+        stat = sd) 
+```
+    
+-   `colour_options()` renders a graph of all of the base R colour options to facilitate custom colour modifications. Note that it is easier to read if expanded to full-screen viewing or printed to a pdf file (via the "print_to_pdf" argument).
+
+```{r colour options, eval = FALSE}
+colour_options()
+```
+
+![](figs/colour_options.png)
+
+-   The `%ni%` operator, which does the opposite of the `%in%` operator, checking for values in one vector that are ***n**ot* ***i**n* another vector.
+
+```{r grapes-ni-grapes}
+#%in% checks for matching values
+c("a", "b", "a", "c", "d") %in% "a"
+
+c("a", "b", "a", "c", "d") %in% "z"
+
+#%ni% checks for non-matching values 
+c("a", "b", "a", "c", "d") %ni% "a" 
+
+c("a", "b", "a", "c", "d") %ni% "z"
+
+#using %in% for subsetting with dplyr::filter()
+pdata |> 
+  #extract only records for groups "a" or "b"
+  dplyr::filter(g %in% c("a", "b")) 
+
+#using %ni% for subsetting with dplyr::filter()
+pdata |> 
+  #extract records for groups other than "a" or "b"
+  dplyr::filter(g %ni% c("a", "b")) 
+
+```
+
+There you have it. Now you've seen most of what `elucidate` has to offer. Hopefully you'll find that the package helpful when exploring data!
+
+## Learn more
+
+  - To learn more about `elucidate`, visit the package's [GitHub repository](https://github.com/bcgov/elucidate) and checkout this [blog post](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/).

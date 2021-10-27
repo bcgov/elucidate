@@ -6,9 +6,11 @@
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under
+# the License.
 
 # copies ------------------------------------------------------------------
 #' @title
@@ -126,8 +128,8 @@ copies <- function(data, ...,
                    output = c("same", "tibble", "dt", "data.frame")) {
 
   filter <- match.arg(filter)
-  order <-  match.arg(order)
-  output <-  match.arg(output)
+  order <- match.arg(order)
+  output <- match.arg(output)
 
   if(!missing(...)) {
     g <- group_parser(as.data.frame(data), ...)
@@ -142,7 +144,6 @@ copies <- function(data, ...,
   if("data.frame" %ni% .classes) {
     stop("Input data must be a data.table, tibble, or data.frame.")
   }
-
 
   if("data.table" %ni% .classes) {
     .dt <- data.table::as.data.table(data)
@@ -161,7 +162,8 @@ copies <- function(data, ...,
     dupe_count <- nrow(.dt)
     if(dupe_count != 0) {
       message(paste0("Duplicated rows detected! ",
-                     dupe_count, " of ", orig_rows, " rows in the input data have multiple copies."))
+                     dupe_count, " of ", orig_rows,
+                     " rows in the input data have multiple copies."))
     } else {
       message("No duplicates detected.")
     }
@@ -201,14 +203,14 @@ copies <- function(data, ...,
       .dt <- as.data.frame(.dt)
       return(.dt)
 
-    } else if ("data.table" %in% .classes && output == "same") {
+    } else if("data.table" %in% .classes && output == "same") {
       return(.dt[])
 
-    } else if ("tbl" %in% .classes && output == "same") {
+    } else if("tbl" %in% .classes && output == "same") {
       .dt <- tibble::as_tibble(.dt)
       return(.dt)
 
-    } else if ("data.frame" %in% .classes) {
+    } else if("data.frame" %in% .classes) {
       .dt <- as.data.frame(.dt)
       return(.dt)
     }
@@ -222,7 +224,7 @@ copies <- function(data, ...,
         data.table::setorderv(.dt, "n_copies", na.last = na_last,
                               order = -1)
       }
-    } else if (order %in% c("a", "i")) {
+    } else if(order %in% c("a", "i")) {
       if(!missing(...)) {
         data.table::setorderv(.dt, c("n_copies", eval(g)),
                               na.last = na_last,
@@ -234,7 +236,7 @@ copies <- function(data, ...,
     }
   }
 
-  if (output == "dt") {
+  if(output == "dt") {
     return(.dt[])
 
   } else if(output == "tibble") {
@@ -245,14 +247,14 @@ copies <- function(data, ...,
     .dt <- as.data.frame(.dt)
     return(.dt)
 
-  } else if ("data.table" %in% .classes && output == "same") {
+  } else if("data.table" %in% .classes && output == "same") {
     return(.dt)
 
-  } else if ("tbl" %in% .classes && output == "same") {
+  } else if("tbl" %in% .classes && output == "same") {
     .dt <- tibble::as_tibble(.dt)
     return(.dt)
 
-  } else if ("data.frame" %in% .classes) {
+  } else if("data.frame" %in% .classes) {
     .dt <- as.data.frame(.dt)
     return(.dt)
   }
@@ -333,8 +335,8 @@ dupes <- function(data, ...,
                   na_last = FALSE,
                   output = c("same", "tibble", "dt", "data.frame")) {
 
-  order <-  match.arg(order)
-  output <-  match.arg(output)
+  order <- match.arg(order)
+  output <- match.arg(output)
 
   if(!missing(...)) {
     g <- group_parser(as.data.frame(data), ...)
@@ -367,7 +369,8 @@ dupes <- function(data, ...,
 
   if(dupe_count != 0) {
     message(paste0("Duplicated rows detected! ",
-                   dupe_count, " of ", orig_rows, " rows in the input data have multiple copies."))
+                   dupe_count, " of ", orig_rows,
+                   " rows in the input data have multiple copies."))
   } else {
     message("No duplicates detected.")
   }

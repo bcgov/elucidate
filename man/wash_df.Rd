@@ -74,7 +74,6 @@ rows & columns. A convenience wrapper for some helpful routine cleaning
 functions from the janitor, readr, & tibble packages.
 }
 \examples{
-library(magrittr)
 data(mtcars)
 
 mtcars$`Extra Column` <- rep(NA, length.out = nrow(mtcars)) #add an empty column
@@ -84,12 +83,12 @@ mtcars[33:50,] <- NA #add some missing rows
 mtcars #now mtcars is messy & more like a real raw data set
 
 #clean it up and convert the row names to a column
-mtcars <- mtcars \%>\% wash_df(rownames_to_column = TRUE, col_name = "car")
+mtcars <- wash_df(mtcars, rownames_to_column = TRUE, col_name = "car")
 
 mtcars #the empty rows and column are gone, huzzah! So is that awkard column name!
 
 #or turn a column with rownames into row names
-mtcars <- mtcars \%>\% wash_df(column_to_rownames = TRUE, names_col = "car")
+mtcars <- wash_df(mtcars, column_to_rownames = TRUE, names_col = "car")
 mtcars
 
 }

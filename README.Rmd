@@ -8,6 +8,7 @@ always_allow_html: true
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  cache = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -18,24 +19,27 @@ knitr::opts_chunk$set(
 
 ## Project Status
 
-[![img](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+<!-- badges: start -->
+[![img](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md) [![R-CMD-check](https://github.com/bcgov/elucidate/workflows/R-CMD-check/badge.svg)](https://github.com/bcgov/elucidate/actions)
+<!-- badges: end -->
 
 This package is currently maintained by [Craig Hutton](https://craig.rbind.io/), a Data Scientist working with the Research Branch of the [British Columbia Ministry of Social Development & Poverty Reduction](https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction).
 
 ## Why `elucidate`?
 
-`elucidate` provides a collection of convenience functions to make exploratory data analysis in R easier and more accessible for researchers to:
+`elucidate` provides a collection of convenience functions to make exploratory data analysis in R easier and more accessible for researchers to (among other things):
 
-  * Interrogate data in search of row duplications and anomalous values with `dupes()`, `copies()`, and the `counts*` set of functions.
-
+  * Interrogate data in search of row duplicates with `dupes()` and anomalous values with the `counts*` set of functions.
+  
   * Describe data with the `describe*` set of functions for obtaining summary statistics, bootstrapping confidence intervals, and detecting missing values.
 
-  * Quickly visualise and interact with data representations with `static_to_dynamic()` and the `plot_*` set of functions.
+  * Quickly visualise and interact with data representations with the `plot_*` set of functions.
 
 Inspired by tidyverse naming conventions, the core functions of `elucidate` are organized into sets that begin with a common root (e.g. `describe*`, `plot_*`), since this enables the user to see them all as suggestions as you are coding in R studio.
 
-Drawing from similar inspiration, many elucidate functions are also designed to accept a data object as the 1st argument and return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package for easy integration into data processing pipelines. For convenience, the pipe operator (`%>%`) is also imported from `magrittr` when `elucidate` is loaded.
+Drawing from similar inspiration, many `elucidate` functions are also designed to accept a data object as the 1st argument and return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package for easy integration into data processing pipelines. For convenience, the pipe operator (`%>%`) is also imported from `magrittr` when `elucidate` is loaded.
 
+For a comprehensive introduction to the package see the vignette via `vignette("elucidate")`.
 
 ## Installation
 
@@ -51,98 +55,65 @@ remotes::install_github("bcgov/elucidate")
 
 The authors of `elucidate` acknowledge and express their gratitude to the authors of the [tidyverse packages](https://www.tidyverse.org/), [data.table](https://github.com/Rdatatable/data.table), and the functions of other dependency packages which were used to build `elucidate`, since without their effort and ingenuity `elucidate` would mostly have remained a collection of ideas instead of functions. 
 
+
 ## Usage
 
-`copies()` can tell you how many rows are duplicated based on one or more variables (default is all of them). To return duplicated rows only we can set the filter argument to "dupes". To sort the results by the number of copies that are detected we can set the "sort_by_copies" argument to `TRUE`.
+`dupes()` can tell you how many rows are duplicated based on one or more variables (default is all of them). 
 
 ```{r copies, cache = TRUE}
 library(elucidate)
 
 #list any number of variables to use when searching for duplicates after the
 #data argument
-copies(pdata,
-       d, #in this case we search for duplicated based on the "d" (date) column
-       filter = "dupes",#return duplicated rows only
-       sort_by_copies = TRUE) 
+dupes(pdata, d) 
+#in this case we search for duplicated based on the "d" (date) column        
 
 ```
 
-Since this is by far the most common way of using `copies()`, version 0.0.0.9023 of `elucidate` also introduced a convenience wrapper called `dupes()` for the above:
-
-```{r, cache = TRUE, message = FALSE}
-copies_result <- copies(pdata, d, filter = "dupes", sort_by_copies = TRUE)
-dupes_result <- dupes(pdata, d)
-
-identical(copies_result, dupes_result)
-```
-
-Use `describe()` to describe a single variable in a data frame or a vector of values:
+`describe()` a single variable in a data frame or a vector of values.
 
 ```{r describe, cache = TRUE}
+#set random generator seed for reproducibility
+set.seed(1234)
+
 #using a numeric vector as input
 describe(data = rnorm(1:1000, 100, 5))
 
 ```
 
-To describe all variables in a data frame, use `describe_all()`:
-
-```{r describe_all, cache = TRUE}
-#if more than one class of variable is summarized you'll get a list
-#if only one class is present in the data, or only one is requested, you'll get a dataframe
-
-describe_all(pdata,
-             #you can ask for a "tibble" or "dt" (data.table) as output options
-             #default is currently "tibble", as in the previous example.
-             output = "dt") 
-
-```
-
-
-Only want to summarise certain variable classes? No problem, use the "class" argument.
-
-Would you like a description for each level of a grouping variable? Just provide the unquoted name of the column to use for splitting.
+`describe_all()` all variables in a data frame. 
 
 ```{r describe_all grouped, cache = TRUE}
-
-pdata %>% 
-  describe_all(g, #get a description for each level of the "g" column
-               class = "n") #describe numeric columns only
-
+describe_all(pdata)
 ```
 
-Use the `plot_*` set of functions to easily generate customized ggplot2 visualisations:
+Use `plot_var()` to produce a class-appropriate [ggplot2](https://ggplot2.tidyverse.org/) graph of a single variable in a data frame or a vector of values. 
 
-```{r plot, cache = TRUE}
-data(mtcars)
-
-#customized density plot
-mtcars %>% plot_density(x = mpg,
-                        colour_var = cyl, #assign a variable to colour
-                        colour_var_order = c("6", "8", "4"), #reorder the levels of the colour variable
-                        colour_var_labs = c("six" = "6", "eight" = "8"), #recode the colour variable labels
-                        colour_var_values = c("blue3", "red3", "green3"), #change the colours from the ggplot2 defaults
-                        colour_var_title = "# cylinders")
-
-#plot group means with SE error bars
-mtcars %>% 
-  plot_stat_error(y = mpg, x = cyl,
-                  stat = "mean", error = "se",
-                  alpha = 0.6, fill = "blue2")
-
+```{r plot_var, cache = TRUE}
+plot_var(data = rnorm(1:1000, 100, 5)) 
+#in this case we get a density plot with a normal density curve added for
+#reference (dashed line).
 ```
 
-These examples only highlight a few of the many things `elucidate` can do. **Check out [this blog post](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/) for a comprehensive guide.** 
+To generate class-appropriate `ggplot2` graphs for all variables in a data frame and combine them into a multiple-panel figure with the [patchwork](https://patchwork.data-imaginist.com/index.html) package, use `plot_var_all()`. You can also limit the graphing to a subset of columns with the "cols" argument, which accepts a character vector of column names.
 
+```{r plot_var_all, cache = TRUE}
+plot_var_all(pdata, cols = c("y1", "y2", "g", "even"))
+#density plots for numeric variables and bar graphs for categorical variables
+```
+## Learn more
 
-## Development Notes
+These examples only highlight a few of the many things `elucidate` can do. You can learn more from these additional resources: 
 
-`elucidate` is still in the formative stage of development and considerable changes may occur to it in the near future.
+ * A **[blog post](https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/)**, which was written to help researchers and science trainees learn how to use the package for common exploratory data analysis tasks.
+ 
+ * The **introductory vignette** (`vignette("elucidate")`), which provides annotated code examples that demonstrate most of the package's functionality.
 
 ## Reporting an Issue
 
 To report bugs/issues or request feature changes, open an [issue](https://github.com/bcgov/elucidate/issues) for the package GitHub repo. If raising an issue, *please provide a reproducible example* ([reprex](https://www.tidyverse.org/help/)) of the problem you're encountering.
 
-## Requesting Features/Changes
+## Requesting Features and/or Changes
 
 To suggest changes or code improvements, please submit a [pull request](https://github.com/bcgov/elucidate/pulls).
 
@@ -150,7 +121,7 @@ To suggest changes or code improvements, please submit a [pull request](https://
 
 Copyright 2021 Province of British Columbia
 
-Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
 
 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
