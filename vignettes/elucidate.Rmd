@@ -7,6 +7,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Overview
+
 **Exploratory data analysis (EDA)** is a key step in nearly all analysis workflows. However, this critical step in conducting meaningful analyses is inadequately covered in most STEM training programs, which typically make use of previously cleaned and explored data sets for course exercises. Consequently, aspiring researchers are often left to figure EDA out on their own when they encounter real (i.e. messy) data in their work, where finding suitable tools and accessible documentation can be daunting.
 
 `elucidate` helps you *explore* data in R by making it easy and efficient to perform the three core exploratory data analysis operations:
@@ -29,7 +31,7 @@ knitr::opts_chunk$set(
 library(elucidate)
 ```
 
-## `magrittr` pipe compatibility
+### `magrittr` pipe compatibility
 
 Many `elucidate` functions accept a data frame as the 1st argument and return a data frame (or a list of data frames) as output, so they are compatible with the base R (`|>`; introduced in version 4.1) or [magrittr](https://magrittr.tidyverse.org/) (`%>%`) [pipe operators](https://craig.rbind.io/post/2019-12-30-asgr-2-1-data-transformation-part-1/#chaining-functions-with-the-pipe-operator). 
 
