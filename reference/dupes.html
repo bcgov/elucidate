@@ -211,7 +211,7 @@ total number of copies of each row that were detected.</p>
     <pre class="examples"><div class='input'>
 <span class='co'># check for duplicates based on one variable, "g" in this case</span>
 <span class='fu'>dupes</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>g</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12,000 x 11</span>
+</div><div class='output co'>#&gt; <span class='message'>Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12,000 × 11</span>
 #&gt;       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span>     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284     <span style='text-decoration: underline;'>2</span>592
@@ -224,7 +224,7 @@ total number of copies of each row that were detected.</p>
 #&gt; <span style='color: #BCBCBC;'> 8</span>    19 2008-01-01 a     high     FALSE  99.6 108.      3   139   275     <span style='text-decoration: underline;'>2</span>592
 #&gt; <span style='color: #BCBCBC;'> 9</span>    21 2008-01-01 a     high     FALSE  95.6 103.     33   180   231     <span style='text-decoration: underline;'>2</span>592
 #&gt; <span style='color: #BCBCBC;'>10</span>    22 2008-01-01 a     high     TRUE   86.8 105.     92   117   251     <span style='text-decoration: underline;'>2</span>592
-#&gt; <span style='color: #949494;'># ... with 11,990 more rows</span></div><div class='input'>
+#&gt; <span style='color: #949494;'># … with 11,990 more rows</span></div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'>dupes</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>high_low</span>, <span class='va'>g</span><span class='op'>)</span> <span class='co'>#check based on 2 variables</span>
 

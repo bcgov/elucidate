@@ -140,7 +140,7 @@ user-friendly interface that is pipe-friendly while leveraging the
 excellent performance of data.table. The use of the ... argument also makes
 it incredibly easy to obtain summaries split by grouping variables. While
 other similar functions exist in other packages (e.g.
-<code><a href='https://rdrr.io/pkg/psych/man/describe.by.html'>describeBy</a></code> or <code><a href='https://docs.ropensci.org/skimr/reference/skim.html'>skim</a></code>), this version
+<code><a href='https://rdrr.io/pkg/psych/man/describe.by.html'>describeBy</a></code> or <code>skim</code>), this version
 provides the some of the useful added outputs of the psych package (e.g.
 se, skew, and kurtosis for numeric variables) while at the same time
 offering slightly more concise syntax than skim (e.g. no preceding group_by
@@ -192,8 +192,8 @@ numeric outputs.</p></td>
       <th>type</th>
       <td><p>For numeric and integer vectors this determines the type of
 skewness and kurtosis calculations to perform. See
-<code><a href='https://rdrr.io/pkg/e1071/man/skewness.html'>skewness</a></code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>skew</a></code> and
-<code><a href='https://rdrr.io/pkg/e1071/man/kurtosis.html'>kurtosis</a></code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>kurtosi</a></code> for details.</p></td>
+<code>skewness</code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>skew</a></code> and
+<code>kurtosis</code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>kurtosi</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -292,22 +292,22 @@ kurtosis. The Statistician, 47, 183-189.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'>describe</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>pdata</span>, y <span class='op'>=</span> <span class='va'>y1</span><span class='op'>)</span> <span class='co'>#no grouping variables, numeric input class</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 14</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 × 14</span>
 #&gt;   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100  skew
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> <span style='text-decoration: underline;'>12</span>000 <span style='text-decoration: underline;'>12</span>000     0     0  154.  42.7  0.39  69.2  121.  145.  181.  289. 0.739
-#&gt; <span style='color: #949494;'># ... with 1 more variable: kurt &lt;dbl&gt;</span></div><div class='input'><span class='fu'>describe</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>y1</span>, <span class='va'>high_low</span><span class='op'>)</span> <span class='co'>#one grouping variable, numeric input class</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 15</span>
+#&gt; <span style='color: #949494;'># … with 1 more variable: kurt &lt;dbl&gt;</span></div><div class='input'><span class='fu'>describe</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>y1</span>, <span class='va'>high_low</span><span class='op'>)</span> <span class='co'>#one grouping variable, numeric input class</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 × 15</span>
 #&gt;   high_low cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> high      <span style='text-decoration: underline;'>6</span>045  <span style='text-decoration: underline;'>6</span>045     0     0  154.  42.9 0.552  70.7  121.  145.  182.
 #&gt; <span style='color: #BCBCBC;'>2</span> low       <span style='text-decoration: underline;'>5</span>955  <span style='text-decoration: underline;'>5</span>955     0     0  154.  42.5 0.551  69.2  121.  145.  180.
-#&gt; <span style='color: #949494;'># ... with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></div><div class='input'><span class='fu'>describe</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>g</span><span class='op'>)</span> <span class='co'>#factor input class</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 7</span>
+#&gt; <span style='color: #949494;'># … with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></div><div class='input'><span class='fu'>describe</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>g</span><span class='op'>)</span> <span class='co'>#factor input class</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 × 7</span>
 #&gt;   cases     n    na  p_na n_unique ordered counts_tb                          
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                              
 #&gt; <span style='color: #BCBCBC;'>1</span> <span style='text-decoration: underline;'>12</span>000 <span style='text-decoration: underline;'>12</span>000     0     0        5 FALSE   a_2592, b_2460, ..., e_2352, c_2220</div><div class='input'><span class='fu'>describe</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>even</span><span class='op'>)</span> <span class='co'>#logical input class</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 7</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 × 7</span>
 #&gt;   cases     n    na  p_na n_TRUE n_FALSE p_TRUE
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> <span style='text-decoration: underline;'>12</span>000 <span style='text-decoration: underline;'>12</span>000     0     0   <span style='text-decoration: underline;'>6</span>000    <span style='text-decoration: underline;'>6</span>000    0.5</div><div class='input'>

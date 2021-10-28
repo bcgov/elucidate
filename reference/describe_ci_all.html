@@ -271,7 +271,7 @@ York: Chapman &amp; Hall.</p>
 <span class='fu'>describe_ci_all</span><span class='op'>(</span><span class='va'>pdata</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>1000</span>, <span class='op'>]</span>, stat <span class='op'>=</span> <span class='va'>median</span><span class='op'>)</span> <span class='co'>#bootstrapped CIs for the median</span>
 <span class='op'>}</span>
 <span class='fu'>describe_ci_all</span><span class='op'>(</span><span class='va'>pdata</span>, stat <span class='op'>=</span> <span class='va'>mean</span><span class='op'>)</span> <span class='co'>#the default</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 4</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 × 4</span>
 #&gt;   variable  mean lower upper
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> id       500.  495.  506. 
@@ -280,7 +280,7 @@ York: Chapman &amp; Hall.</p>
 #&gt; <span style='color: #BCBCBC;'>4</span> x1        50.5  50.0  51.0
 #&gt; <span style='color: #BCBCBC;'>5</span> x2       151.  150.  151. 
 #&gt; <span style='color: #BCBCBC;'>6</span> x3       250.  250.  251. </div><div class='input'><span class='fu'>describe_ci_all</span><span class='op'>(</span><span class='va'>pdata</span>, <span class='va'>high_low</span>, stat <span class='op'>=</span> <span class='va'>mean</span><span class='op'>)</span> <span class='co'>#split by a grouping variable</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 5</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 × 5</span>
 #&gt;    variable high_low  mean lower upper
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> id       high     494.  487.  502. 

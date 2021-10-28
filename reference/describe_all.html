@@ -180,8 +180,8 @@ numeric outputs.</p></td>
       <th>type</th>
       <td><p>For numeric and integer vectors this determines the type of
 skewness and kurtosis calculations to perform. See
-<code><a href='https://rdrr.io/pkg/e1071/man/skewness.html'>skewness</a></code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>skew</a></code> and
-<code><a href='https://rdrr.io/pkg/e1071/man/kurtosis.html'>kurtosis</a></code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>kurtosi</a></code> for details.</p></td>
+<code>skewness</code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>skew</a></code> and
+<code>kurtosis</code> or <code><a href='https://rdrr.io/pkg/psych/man/skew.html'>kurtosi</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -275,7 +275,7 @@ output type, in which case the data frame is returned directly.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'>describe_all</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 11 x 15</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 11 × 15</span>
 #&gt;    variable cases     n    na  p_na    mean      sd     se    p0    p25    p50
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> mpg         32    32     0     0  20.1     6.03   1.06  10.4   15.4   19.2 
@@ -289,7 +289,7 @@ output type, in which case the data frame is returned directly.</p>
 #&gt; <span style='color: #BCBCBC;'> 9</span> am          32    32     0     0   0.406   0.499  0.088  0      0      0   
 #&gt; <span style='color: #BCBCBC;'>10</span> gear        32    32     0     0   3.69    0.738  0.13   3      3      4   
 #&gt; <span style='color: #BCBCBC;'>11</span> carb        32    32     0     0   2.81    1.62   0.286  1      2      2   
-#&gt; <span style='color: #949494;'># ... with 4 more variables: p75 &lt;dbl&gt;, p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></div><div class='input'>
+#&gt; <span style='color: #949494;'># … with 4 more variables: p75 &lt;dbl&gt;, p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'>describe_all</span><span class='op'>(</span><span class='va'>pdata</span><span class='op'>)</span> <span class='co'>#all summary types in a list</span>
 

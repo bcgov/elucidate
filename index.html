@@ -93,7 +93,7 @@
 <li><p>Quickly visualise and interact with data representations with the <code>plot_*</code> set of functions.</p></li>
 </ul>
 <p>Inspired by tidyverse naming conventions, the core functions of <code>elucidate</code> are organized into sets that begin with a common root (e.g. <code>describe*</code>, <code>plot_*</code>), since this enables the user to see them all as suggestions as you are coding in R studio.</p>
-<p>Drawing from similar inspiration, many <code>elucidate</code> functions are also designed to accept a data object as the 1st argument and return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the <a href="https://magrittr.tidyverse.org/reference/pipe.html">magrittr</a> package for easy integration into data processing pipelines. For convenience, the pipe operator (<code>%&gt;%</code>) is also imported from <code>magrittr</code> when <code>elucidate</code> is loaded.</p>
+<p>Drawing from similar inspiration, many <code>elucidate</code> functions are also designed to accept a data object as the 1st argument and return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the <a href="https://magrittr.tidyverse.org/reference/pipe.html">magrittr</a> package for easy integration into data processing pipelines.</p>
 <p>For a comprehensive introduction to the package see the vignette via <code><a href="articles/elucidate.html">vignette("elucidate")</a></code>.</p>
 </div>
 <div id="installation" class="section level2">
@@ -105,7 +105,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co">#only run this 1st if you haven't installed remotes before</span>
 
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"bcgov/elucidate"</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bcgov/elucidate"</span><span class="op">)</span></code></pre></div>
 <p>The authors of <code>elucidate</code> acknowledge and express their gratitude to the authors of the <a href="https://www.tidyverse.org/">tidyverse packages</a>, <a href="https://github.com/Rdatatable/data.table">data.table</a>, and the functions of other dependency packages which were used to build <code>elucidate</code>, since without their effort and ingenuity <code>elucidate</code> would mostly have remained a collection of ideas instead of functions.</p>
 </div>
 <div id="usage" class="section level2">
