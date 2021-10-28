@@ -1060,8 +1060,6 @@ stat_ci(x,
 colour_options()
 ```
 
-![](figs/colour_options.png)
-
 -   The `%ni%` operator, which does the opposite of the `%in%` operator, checking for values in one vector that are ***n**ot* ***i**n* another vector.
 
 ```{r grapes-ni-grapes}
