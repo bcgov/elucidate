@@ -43,9 +43,7 @@ designed to accept a data object as the 1st argument and return a data
 or plotting object (e.g. ggplot2 or plotly) so they are compatible with
 the pipe operator from the
 [magrittr](https://magrittr.tidyverse.org/reference/pipe.html) package
-for easy integration into data processing pipelines. For convenience,
-the pipe operator (`%>%`) is also imported from `magrittr` when
-`elucidate` is loaded.
+for easy integration into data processing pipelines.
 
 For a comprehensive introduction to the package see the vignette via
 `vignette("elucidate")`.

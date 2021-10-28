@@ -365,59 +365,47 @@ The `elucidate::plot_*` functions are built upon the [ggplot2](https://ggplot2.t
 
 In general, each `plot_*` function accepts a data frame source as the first argument (for pipe-compatibility), then requires one or two variables be assigned to the "x and/or "y" axes (depending on the graph type). For convenience, the principal axis used by each graph type/geometry is that `plot_*` function's second argument (e.g. x-axis for `plot_hisogram()`, y-axis for `plot_box()`), so you can always make a basic graph as easily as `plot_*(data, variable)`. For example, to get a simple histogram of the "y1" numeric variable in `pdata`, all you need to do is:
 
-```{r plot_histogram_basic, eval=FALSE}
+```{r plot_histogram_basic}
 pdata |> plot_histogram(y1)
 
 ```
 
-![](figs/plot_histogram_basic.png)
-
 Or for a violin plot of y1:
 
-```{r plot_violin_basic, eval = FALSE}
+```{r plot_violin_basic}
 pdata |> plot_violin(y1)
 ```
 
-![](figs/plot_violin_basic.png)
-
 The second general design principle of the `plot_*` functions is that variables are mapped to aesthetic features of the graphs using arguments that have "\_var" in their name (with the exception of "x" and "y" which map variables to the x and y axes). For example, many of the `plot_*` functions allow you to map a variable onto the fill colour aesthetic of a graph with a "fill_var" argument (short for "fill variable"), or (outline) colour via a "colour_var" argument. For instance, if we wanted to split the histogram of "y1" above for each category of the "g" variable, all you need to do is:
 
-```{r plot_histogram_grouped, eval = FALSE}
+```{r plot_histogram_grouped}
 pdata |> 
   plot_histogram(x = y1, fill_var = g)
 ```
-
-![](figs/plot_histogram_grouped.png)
 
 As you can see, by assigning a categorical variable ("g") in the data source (`pdata`) to the "fill_var" argument of `plot_histogram()`, I get overlapping histograms of the primary numeric variable ("y1") assigned to the "x" argument, which are differentiated by their fill colour.
 
 The transparency of the bars (or geometric elements of other graph types) can adjusted with the alpha argument, with acceptable values ranging from 0 (fully transparent) to 1 (fully opaque).
 
-```{r plot_histogram_grouped_alpha, eval = FALSE}
+```{r plot_histogram_grouped_alpha}
 pdata |> 
   plot_histogram(x = y1, fill_var = g, 
                  alpha = 0.8) #80% opaque
 ```
 
-![](figs/plot_histogram_grouped_alpha.png)
-
 To instead change the fill colour of a plot without splitting it by a grouping variable, we just use the "fill" argument instead.
 
-```{r plot_histogram_blue, eval = FALSE}
+```{r plot_histogram_blue}
 pdata |> plot_histogram(y1, fill = "blue2")
 ```
 
-![](figs/plot_histogram_blue.png)
-
 Similarly, to change the outline colour of the bars, we can use the "colour" argument.
 
-```{r plot_histogram_blueblack, eval = FALSE}
+```{r plot_histogram_blueblack}
 pdata |> plot_histogram(y1, 
                          fill = "blue2",
                          colour = "black")
 ```
-
-![](figs/plot_histogram_blueblack.png)
 
 Don't worry too much if terms like aesthetic parameters and variable mappings are confusing at this point. I wrote a blog post, available [here](https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/), on the basics of the ggplot2 graphing system with many examples that assumes no prior knowledge of R graphics and should help clear things up for you.
 
@@ -425,7 +413,7 @@ The third general feature of most of the `plot_*` functions (except for `plot_ra
 
 All `plot_*` functions also allow you to customize the axis labels with "xlab" and "ylab" arguments and add a figure caption with the "caption" argument. You can also adjust the font family and size with the "font" and "text_size" arguments, and the theme with the "theme" argument. For example, all at once:
 
-```{r plot_histogram_text, eval = FALSE}
+```{r plot_histogram_text}
 pdata |> 
   plot_histogram(y1,
                  fill = "blue2",
@@ -438,23 +426,19 @@ pdata |>
                  theme = "light") 
 ```
 
-![](figs/plot_histogram_text.png)
-
 ### bar graphs
 
 Bar graphs are one of the best ways to visualize categorical variables.
 
 As mentioned above, all we have to do to make a basic bar graph is pass a data frame to `plot_bar()` and tell it which categorical variable we want bars rendered for. If only the x-variable is specified, the bars will represent the counts of each category.
 
-```{r plot_bar, eval = FALSE}
+```{r plot_bar}
 pdata |> plot_bar(g)
 ```
 
-![](figs/plot_bar.png)
-
 If you want the bars to represent a specific value, such as the mean of a numeric variable, first calculate the grouped means and then assign the column containing the group means to the y argument.
 
-```{r plot_bar_y, eval = FALSE}
+```{r plot_bar_y}
 pdata |> 
   #here I use describe() as a shortcut to get the mean of "y1" for each group
   #in "g"; pdata |> dplyr::group_by(g) |> summarise(mean = mean(y1)) would work just as well
@@ -462,59 +446,47 @@ pdata |>
   plot_bar(x = g, y = mean)
 ```
 
-![](figs/plot_bar_y.png)
-
 The main thing to note here is that you want a single unique value for each category when using `plot_bar()` this way, otherwise you'll end up with a graph that is pretty tough to read, like this:
 
-```{r plot_bar3, eval = FALSE}
+```{r plot_bar3}
 pdata |> plot_bar(g, y1)
 ```
 
-![](figs/plot_bar3.png)
-
 All `elucidate::plot_*` functions provide a wide variety of options to help you enhance your graphs. For example, we might want to use a different colour for each bar, in which case we can assign categorical variable "g" to the "fill_var" argument instead of "x" (or in addition to "x").
 
-```{r, plot_bar_custom1, eval = FALSE}
+```{r, plot_bar_custom1}
 pdata |> 
   plot_bar(fill_var = g)
 ```
 
-![](figs/plot_bar_custom1.png)
-
 If a variable has been assigned to "fill_var" you can stack the bars and get the proportions (of the total count) represented by each category instead of the counts by setting the "position" argument to "fill". As a bonus, the y axis label will be updated for you.
 
-```{r plot_bar_custom2, eval = FALSE}
+```{r plot_bar_custom2}
 pdata |> plot_bar(fill_var = g, position = "fill")
 
 ```
-
-![](figs/plot_bar_custom2.png)
 
 ### box plots
 
 Box-and-whisker plots ("box plots") provide a quick non-parametric visualization of the distribution of a numeric variables using the five-number percentile summary.
 
-```{r plot_box, eval = FALSE}
+```{r plot_box}
 plot_box(pdata, y2)
 ```
-
-![](figs/plot_box.png)
 
 In the basic box plot of `pdata` variable y2 above, the lower edge of the box represents the 25th percentile, the line inside the box represents the median (50th percentile), the upper edge of the box represents the 75th percentile, and the vertical lines extending from the box represent the limits of 1.5x the interquartile range (75th percentile - 25th percentile), or the minimum and maximum values (if no points are more extreme than the 1.5x IQR threshold). Points appearing beyond the ends of these lines are potential outliers that you should consider investigating further.
 
 You can get a box plot for each level of a factor by assigning another variable to the x-axis, and can make extreme values easier to see by changing their colour with `geom_boxplot()`'s "outlier.colour"/"outlier.color" argument, e.g.
 
-```{r plot_box_custom, eval = FALSE}
+```{r plot_box_custom}
 pdata |> 
   plot_box(y2, g, 
            outlier.colour = "red2")
 ```
 
-![](figs/plot_box_custom.png)
-
 The biggest flaw with box plots is that they won't show you if there the y-axis variable has a multi-modal distribution. To mitigate this issue, `plot_box()` has a convenient "dots" argument which overlays a dot plot (via `geom_dotplot()`) over the box plot so that the shape of the distribution is also visible.
 
-```{r plot_box_custom2, eval = FALSE}
+```{r plot_box_custom2}
 pdata |> 
   plot_box(y2, g,
            outlier.colour = "red2",
@@ -526,33 +498,27 @@ pdata |>
 
 ```
 
-![](figs/plot_box_custom2.png)
-
 In this case, it doesn't look like we have to worry about any multi-modal distributions.
 
 ### density plots
 
 (Kernel) density plots are an excellent way to visualize the shape of the distribution of a numeric variable.
 
-```{r plot_density, eval = FALSE}
+```{r plot_density}
 pdata |> plot_density(y1)
 ```
 
-![](figs/plot_density.png)
-
 The y1 distribution appears to be left-skewed. To see how far off it is from a normal distribution, we can easily compare them on the same plot via `plot_density()`'s "dnorm" argument, which adds a normal density curve as a dashed line.
 
-```{r plot_density_custom, eval = FALSE}
+```{r plot_density_custom}
 pdata |> 
   plot_density(y1, 
                dnorm = TRUE)
 ```
 
-![](figs/plot_density_custom.png)
-
 You can also add rug lines if you want to see how much data underlies each region of the density curve with the "rug" argument. Note that rug lines can take quite a while to render if you have many values.
 
-```{r plot_density_rug, eval = FALSE}
+```{r plot_density_rug}
 pdata |> 
   dplyr::slice_sample(n = 500) |> 
   #here I am just randomly sampling 500 of the 12,000 y1 values with
@@ -562,94 +528,77 @@ pdata |>
                rug = TRUE)
 ```
 
-![](figs/plot_density_rug.png)
-
 ### violin plots
 
 An alternative to the box plot or density plot is the violin plot, which provides a symmetrical mirrored (kernel) density curve. Like the box plot examples above, we can split it by a grouping variable by assigning that variable to the x-axis ("x"), "fill_var", and/or "colour_var".
 
-```{r plot_violin, eval = FALSE}
+```{r plot_violin}
 pdata |> 
   plot_violin(y1, g, fill_var = g)
 ```
 
-![](figs/plot_violin.png)
-
 Quantile lines can be added with the "draw_quantiles" argument. To draw lines at the median, 25th percentile, and 75th percentile to mimic a box plot, we can use:
 
-```{r plot_violin_quantiles, eval = FALSE}
+```{r plot_violin_quantiles}
 pdata |> 
   plot_violin(y1, g, fill_var = g, 
               draw_quantiles = c(0.25, 0.5, 0.75))
 ```
 
-![](figs/plot_violin_quantiles.png)
-
 ### histograms
 
 If you would prefer the traditional histogram over the kernel density plot to visualize the distribution of a numeric variable, use `plot_histogram()` instead.
 
-```{r plot_histogram, eval = FALSE}
+```{r plot_histogram}
 pdata |> plot_histogram(y1)
 ```
 
-![](figs/plot_histogram.png)
-
 An advantage of the histogram over the density plot is that we see the counts of the binned values and immediately get an impression of how much data was used to generate the plot. The main disadvantage is that the rendered shape of the distribution depends upon the chosen number of bins or binwidth (30 bins it the ggplot2 default). For example, if I change the number of bins to 10, the second mode near a y1 value of 200 disappears...
 
-```{r plot_histogram_custom, eval = FALSE}
+```{r plot_histogram_custom}
 pdata |> 
   plot_histogram(y1, bins = 10)
 ```
 
-![](figs/plot_histogram_custom.png)
-
 `plot_histogram()` also has a "dnorm" argument to make it easy to add a normal density curve to the histogram, which also adds a secondary axis on the right side of the plot for the density curve. The "dnorm" argument is incompatible with the (default) "bins" argument, so we also need to set the "binwidth" rather than the number of "bins" to use "dnorm".
 
-```{r plot_histogram_dnorm, eval = FALSE}
+```{r plot_histogram_dnorm}
 pdata |> 
   plot_histogram(y1, 
                  binwidth = 10,
                  dnorm = TRUE, dnorm_colour = "blue2")
 ```
 
-![](figs/plot_histogram_dnorm.png)
-
 ### line graphs
 
 Line graphs are typically used to show changes in a numeric variable (on the y-axis) over time (on the x-axis).
 
-```{r plot_line, eval = FALSE}
+```{r plot_line}
 pdata |> 
   #plot numeric variable "y1" by date variable "d"
   plot_line(y = y1, x = d) 
 ```
 
-![](figs/plot_line.png)
-
 Assigning a categorical variable to the "colour_var" argument gives you a different line for each category.
 
-```{r plot_line_custom, eval = FALSE}
+```{r plot_line_custom}
 pdata |> 
   plot_line(y = y1, x = d, colour_var = g)
 ```
 
-![](figs/plot_line_custom.png)
 
 A key feature of `plot_line()` which makes it more convenient to use than `ggplot2::geom_line()` is that `plot_line()`, unlike `ggplot2::geom_line()`, will automatically aggregate the y variable for you if there isn't a single unique value of y for each level of the time/x variable and/or any other grouping variables you might use. By default, the mean is used for aggregation (as per the y-axis label), but you can change it to a percentile with the "stat" and "qprob" arguments, where the default quantile is 0.5 (the median):
 
-```{r plot_line_median, eval = FALSE}
+```{r plot_line_median}
 pdata |> 
   plot_line(y = y1, x = d, colour_var = g,
             stat = "quantile", #supports partial matching, could use "q" instead
             qprob = 0.5) #adjust "qprob" for a different quantile (0 = min., 1 = max)
 ```
 
-![](figs/plot_line_median.png)
-
 To reproduce this plot using `ggplot2` directly, we would need to pre-aggregate the data with `dplyr::group_by()` and `dplyr::summarise()`. To replicate the formatting we also need to apply some additional layers, like this:
 
-```{r, ggplot2_line, eval = FALSE}
+```{r, ggplot2_line}
 pdata |> 
   dplyr::group_by(d, g) |> 
   dplyr::summarise(median_y1 = median(y1), .groups = "drop") |> 
@@ -661,11 +610,9 @@ pdata |>
 
 ```
 
-![](figs/ggplot2_line.png)
-
 Otherwise you'll end up with an incoherent mess because there isn't a single unique value of the y-axis variable for each combination of values for the x-axis variable and colour variable, like this:
 
-```{r ggplot2_messy_lines, eval = FALSE}
+```{r ggplot2_messy_lines}
 pdata |> 
   #without the grouping and aggregation steps
   ggplot(aes(y = y1, x = d, colour = g)) +
@@ -674,8 +621,6 @@ pdata |>
   theme_classic(14) +
   labs(y = "y1")
 ```
-
-![](figs/ggplot2_messy_lines.png)
 
 As you can see, it's easier and more intuitive to use `plot_line()` for these kinds of line graphs. Other convenience aggregation "stat" options currently accepted by `plot_line()` include "sum" and "count".
 
@@ -697,51 +642,44 @@ In all other cases a bar graph should be used. If you're still determined to gen
 
 Unlike most of the other `plot_*` functions, I will only demonstrate a single example of a "responsible" use of `plot_pie()`:
 
-```{r plot_pie, eval = FALSE}
+```{r plot_pie}
 plot_pie(data = pdata,
          #assign categorical variable "g" to slice fill colour
          fill_var = g,
          #"pct" is a shortcut for the slice percentages
-         slice_text = "pct", slice_text_suffix = "%", slice_text_size = 5,
+         slice_text = "pct", slice_text_suffix = "%", slice_text_size = 3,
          alpha = 0.8) 
 ```
 
-![](figs/plot_pie.png)
-
 As you can see, without the additional text specifying the percentages each category represents in terms of frequency of appearance in the data, it would be very difficult to compare slices. In contrast, a fairly basic bar graph is easier to read without requiring any extra text in/over the bars.
 
-```{r, bar_v_pie, eval = FALSE}
+```{r, bar_v_pie}
 pdata |> plot_bar(fill_var = g)
 
 ```
-
-![](figs/plot_bar_v_pie.png)
 
 ### scatter plots
 
 The scatter plot is an excellent way of graphing a relationship between two continuous variables, which can be done with `plot_scatter()`.
 
-```{r plot_scatter, eval = FALSE}
+```{r plot_scatter}
 pdata |> 
   plot_scatter(y1, y2)
 ```
 
-![](figs/plot_scatter.png)
 
 The "regression_line" and "regression_se" arguments make it easy to add a regression line (by default using a generalized additive model) with confidence envelope. If overplotting is an issue, as it is here, you can also adjust the transparency with the "alpha" argument (lower is more transparent) and add some jittering with the "jitter" argument.
 
-```{r plot_scatter_reg, eval = FALSE}
+```{r plot_scatter_reg}
 pdata |> 
   plot_scatter(y1, y2, 
                regression_line = TRUE, regression_se = TRUE,
                jitter = TRUE, alpha = 0.7)
 ```
 
-![](figs/plot_scatter_regression.png)
-
 The relationship in this case looks to be pretty linear, so we can change the regression_method to "lm" for a basic linear model. We can also see how the relationship varies between categories of the grouping variable "g" by assigning it to the "colour_var" argument.
 
-```{r plot_scatter_lm_grouped, eval = FALSE}
+```{r plot_scatter_lm_grouped}
 pdata |> 
   plot_scatter(y1, y2, 
                colour_var = g,
@@ -750,26 +688,20 @@ pdata |>
                jitter = TRUE, alpha = 0.7)
 ```
 
-![](figs/plot_scatter_lm_grouped.png)
-
 Now we can see that there is some separation between groups along the y-axis (y1) but not much change for any group along the x-axis (y2). We can make the grouped subsets of the data more clearly visible by separating them into facets with "facet_var" and making the points smaller with the "size" argument.
 
-```{r plot_scatter_facetted, eval = FALSE}
+```{r plot_scatter_facetted}
 pdata |> 
   plot_scatter(y1, y2, facet_var = g,
                jitter = TRUE, alpha = 0.7, size = 1)
 ```
 
-![](figs/plot_scatter_facetted.png)
-
 From this perspective it looks like y1 has a bi-modal distribution for groups "b", "c", and "d" (and perhaps "a"). We could follow this up with a density plot to investigate further via `plot_density()`.
 
-```{r plot_density_facetted, eval = FALSE}
+```{r plot_density_facetted}
 pdata |> 
   plot_density(y1, facet_var = g)
 ```
-
-![](figs/plot_density_facetted.png)
 
 From this perspective it looks like group "e" is the only one with a unimodal distribution of y1.
 
@@ -777,18 +709,16 @@ From this perspective it looks like group "e" is the only one with a unimodal di
 
 One of the most common types of graphs in the sciences, requested by both lab Principal Investigators and journal reviewers/editors, is the bar or point graph of a summary statistic (typically the sample mean) and error bars representing either the standard error or a 95 % confidence interval (CI). These so-called "dynamite plots" can easily be made with `plot_stat_error()`, which will give you the mean and 95% confidence interval error bars by default.
 
-```{r plot_stat_error_point, eval = FALSE}
+```{r plot_stat_error_point}
 pdata |> 
   plot_stat_error(y = y1, x = g,
                   #set geom = "bar" for the bar-graph version.
                   fill = "blue2")
 ```
 
-![](figs/plot_stat_error_point.png)
-
 If the y-axis variable is not normally distributed, you can get bootstrapped confidence intervals for the median by simply changing the "stat" argument to "median". By default, percentile CIs are used, but you can change this to bias-corrected and accelerated (BCa) CIs by setting "ci_type" = "bca". BCa CIs tend to require more replications to be estimated, so you will likely also want to increase the "replicates" argument to 5,000 or more (default is 2000). To speed things up a bit you can also use parallel processing with the "parallel" and "cores" arguments.
 
-```{r plot_median_ci, eval = FALSE}
+```{r plot_median_ci}
 pdata |> 
   plot_stat_error(y = y1, x = g, 
                   fill = "blue2",
@@ -797,25 +727,21 @@ pdata |>
                   parallel = TRUE, cores = 4)
 ```
 
-![](figs/plot_median_ci.png)
-
 The principal limitation of these graphs is that they don't reveal anything about the underlying distribution of the data and have been [criticised](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3087125/) for concealing other pertinent information such as sample sizes. You should therefore use them with caution and perhaps present them alongside other graphics which show additional features of the data.
 
 ### raincloud plots
 
 [Raincloud plots](https://wellcomeopenresearch.org/articles/4-63) overcome the limitations of the dynamite plots covered above by presenting a combination of the raw data, box plots and half-violin plots together in a single graph.
 
-```{r plot_raincloud, eval = FALSE}
+```{r plot_raincloud}
 pdata |> 
   plot_raincloud(y1, box_plot = TRUE)
 
 ```
 
-![](figs/plot_raincloud.png)
-
 If you want it to look more like a rain cloud, you can flip the axes with the "coord_flip" argument. We can take things a step further by also adjusting the fill colours of the points and the half-violin plot.
 
-```{r plot_raincloud_custom, eval = FALSE}
+```{r plot_raincloud_custom}
 pdata |> 
   plot_raincloud(y1, 
                  box_plot = TRUE, 
@@ -825,11 +751,9 @@ pdata |>
                  point_fill = "blue3", point_alpha = 0.2, point_size = 1)
 ```
 
-![](figs/plot_raincloud_custom.png)
-
 For a grouped version, just assign a variable to "x". You can also adjust the width of the box plots with the "box_width" argument, and you can move the box to the points side with the "box_side" argument.
 
-```{r plot_raincloud_custom_grouped, eval = FALSE}
+```{r plot_raincloud_custom_grouped}
 pdata |> 
   plot_raincloud(y1, x = g,
                  coord_flip = TRUE,
@@ -840,8 +764,6 @@ pdata |>
                  point_fill = "blue3", point_alpha = 0.2, point_size = 1)
 ```
 
-![](figs/plot_raincloud_custom_grouped.png)
-
 This gives us a more transparent display of the between-group differences in y1 than the previous `plot_stat_error()` graphs, simultaneously showing the distribution of the data, sample sizes, and non-parametric summary statistics.
 
 ### generalized univariate plots
@@ -850,7 +772,7 @@ To facilitate rapid visual exploration of data, `elucidate` also provides a more
 
 For a single numeric (classes "double" or "integer") or date variable, `plot_var()` generates a density plot. By default it will be enhanced by the addition of a normal density curve:
 
-```{r plot_var_num, eval = FALSE}
+```{r plot_var_num}
 pdata |> 
   #here "var1" refers to the primary variable, which will be assigned to either
   #the x- or y-axis for you automatically depending on the type of variable and
@@ -858,59 +780,45 @@ pdata |>
   plot_var(var1 = y1) 
 ```
 
-![](figs/plot_var_num.png)
-
 To split it by a categorical variable assign that variable to the "group_var" argument:
 
-```{r plot_var_num_grouped, eval = FALSE}
+```{r plot_var_num_grouped}
 pdata |> plot_var(var1 = y1, group_var = g)
 ```
 
-![](figs/plot_var_num_grouped.png)
-
 Enhancements like the normal density curve can be disabled by setting the "basic" argument of any `plot_var*()` function to `TRUE`. Beginners may also find it helpful to enable "verbose" mode, which prints a message to the console explicitly stating which geom-specific `plot*()` function will be used to build the plot according to the detected varible class and which axes the primary (and secondary if specified) variable(s) will assigned to. 
 
-```{r plot_var_num_basic, eval = FALSE}
+```{r plot_var_num_basic}
 pdata |> plot_var(y1, basic = TRUE, verbose = TRUE)
 ```
 
-![](figs/plot_var_num_basic.png)
-
 One categorical (or logical) variable will be represented as a bar graph:
 
-```{r plot_var_cat, eval = FALSE}
+```{r plot_var_cat}
 pdata |> plot_var(g)
 ```
 
-![](figs/plot_var_cat.png)
-
 A jittered scatter plot with an added smooth (generalized additive model) regression line and confidence envelope is used for a combination of two numeric and/or date variables:
 
-```{r plot_var_2num, eval = FALSE}
+```{r plot_var_2num}
 pdata |> plot_var(var1 = y1, var2 = d)
 ```
 
-![](figs/plot_var_2num.png)
-
 Two categorical variable will be graphed using a faceted bar plot:
 
-```{r plot_var_2cat, eval = FALSE}
+```{r plot_var_2cat}
 pdata |> plot_var(g, high_low)
 ```
 
-![](figs/plot_var_2cat.png)
-
 A combination of a numeric variable and a categorical variable will be graphed using a box plot enhanced with a violin plot layer, where the numeric variable will be assigned to the y-axis and the categorical variable will be assigned to the x-axis. 
 
-```{r plot_var_nc, eval = FALSE}
+```{r plot_var_nc}
 pdata |> plot_var(y1, g)
 ```
 
-![](figs/plot_var_nc.png)
-
 Note that the extra violin plot layer can be disabled by setting `basic = TRUE`, and splitting the graph by an additional grouping variable is again as easy as assigning that variable to the "group_var" argument.
 
-```{r plot_var_basic, eval = FALSE}
+```{r plot_var_basic}
 plot_var(pdata, #data is the 1st argument
          y1, #"var1" for the primary variable is the 2nd argument 
          g, #"var2" for a secondary variable is the 3rd argument
@@ -920,59 +828,47 @@ plot_var(pdata, #data is the 1st argument
 
 ```
 
-![](figs/plot_var_basic.png)
-
 ### generalized multivariate plots
 
 When exploring data we often want to plot more than a couple of variables at a time. `plot_var_all()` extends `plot_var()` by generating a plot of each variable in a data frame and combining them into a [patchwork](https://patchwork.data-imaginist.com/) grid.
 
-```{r plot_var_all, eval = FALSE}
+```{r plot_var_all}
 pdata |> plot_var_all()
 ```
 
-![](figs/plot_var_all.png)
-
 To plot a subset of variables you can pass a character vector of column names to the "cols" argument
 
-```{r plot_var_all_cols, eval = FALSE}
+```{r plot_var_all_cols}
 pdata |> 
   plot_var_all(cols = c("y1", "y2", "x1", "x2"))
 
 ```
 
-![](figs/plot_var_all_cols.png)
-
 You can also plot each variable against a secondary variable of interest using the "var2" argument...
 
-```{r plot_var_all_var2, eval = FALSE}
+```{r plot_var_all_var2}
 pdata |> 
   plot_var_all(cols = c("y1", "y2"), 
                var2 = high_low)
 ```
 
-![](figs/plot_var_all2.png)
-
 ...and split all of the plots by a grouping variable with "group_var":
 
-```{r plot_var_all_grouped, eval = FALSE}
+```{r plot_var_all_grouped}
 pdata |> 
   plot_var_all(cols = c("y1", "y2"), 
                var2 = high_low, group_var = g,
                basic = TRUE) #disable the violin plot layer
 ```
 
-![](figs/plot_var_all_grouped.png)
-
 ### generalized pair plots
 
 `plot_var_pairs()` extends `plot_var_all()` even further by generating a plot for each pairwise combination of variables in a data frame ("pair plots"). Here I'll focus on a few columns at a time with the "cols" argument so the graphs are easier to read.
 
-```{r plot_var_pairs, eval = FALSE}
+```{r plot_var_pairs}
 pdata |> 
   plot_var_pairs(cols = c("y1", "y2", "g"))
 ```
-
-![](figs/plot_var_pairs.png)
 
 This produces a patchwork-combined matrix of class-appropriate ggplots:
 
@@ -982,13 +878,11 @@ This produces a patchwork-combined matrix of class-appropriate ggplots:
 
 The pair plots produced by `plot_var_pairs()` can also be split by a grouping variable with the "group_var" argument, and it may be easier to read the basic versions of each plot when there are many splits (via `basic = TRUE`).
 
-```{r plot_var_pairs_grouped, eval = FALSE}
+```{r plot_var_pairs_grouped}
 pdata |> 
   plot_var_pairs(cols = c("y1", "y2", "g"), 
                  group_var = high_low, basic = TRUE)
 ```
-
-![](figs/plot_var_pairs_grouped.png)
 
 Although I unfortunately cannot demonstrate it in this vignette, `plot_var_all()` and `plot_var_pairs()` also have a "trelliscope" mode that can be enabled by setting the "trelliscope" argument to `TRUE`. Enabling this option will render the plots as panels in an interactive JavaScript-based trelliscope display with the [trelliscopejs](https://hafen.github.io/trelliscopejs/) package. Trellisope mode is particularly useful in situations where there would be too many graphs in a multi-panel display to view them all on a single page. 
 
@@ -996,7 +890,7 @@ Although I unfortunately cannot demonstrate it in this vignette, `plot_var_all()
 
 `plot_c()` makes it easy to combine multiple plots into a multi-panel display with the [patchwork](https://patchwork.data-imaginist.com/) package. For example, we might want to show a box plot and density plot side by side:
 
-```{r plot_c, eval = FALSE}
+```{r plot_c}
 p1 <- pdata |> 
   plot_box(y1, fill_var = g, ylim = c(50, 300))
 
@@ -1007,11 +901,9 @@ p2 <- pdata |>
 plot_c(p1, p2)
 ```
 
-![](figs/plot_c.png)
-
 `plot_c()` can also be used to combine a list of plots, such as a set of density plots rendered by looping `plot_density()` over all numeric columns of `pdata`, other than the "id" column, like this:
 
-```{r plot_c_list, eval = FALSE}
+```{r plot_c_list}
 col_names <- pdata |> 
   dplyr::select(is.numeric, -id) |> #select all non-ID numeric variables
   names() #get the names of the numeric columns
@@ -1022,8 +914,6 @@ plot_var_list <- purrr::map(col_names, ~plot_density(pdata, .x))
 plot_c(plot_var_list)
 
 ```
-
-![](figs/plot_c_list.png)
 
 ## Auxiliary functions
 
@@ -1166,7 +1056,7 @@ stat_ci(x,
     
 -   `colour_options()` renders a graph of all of the base R colour options to facilitate custom colour modifications. Note that it is easier to read if expanded to full-screen viewing or printed to a pdf file (via the "print_to_pdf" argument).
 
-```{r colour options, eval = FALSE}
+```{r colour options}
 colour_options()
 ```
 
