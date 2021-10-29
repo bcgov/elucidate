@@ -11,4 +11,3 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^vignettes\elucidate_cache
