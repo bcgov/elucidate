@@ -70,7 +70,7 @@ tbcvs <- function(y, sep = "_") {
 #' @importFrom data.table as.data.table
 #' @importFrom data.table uniqueN
 #' @importFrom data.table dcast
-#' @importFrom lubridate is.Date
+#' @importFrom lubridate is.instant
 #' @importFrom stats sd
 #' @importFrom stats quantile
 #' @importFrom stats na.omit
@@ -195,8 +195,7 @@ tbcvs <- function(y, sep = "_") {
 describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, sep = "_",  output = c("tibble", "dt")){
 
   output <- match.arg(output)
-
-  if((is.vector(data) || is.factor(data)) || lubridate::is.Date(data)) {
+  if((is.vector(data) || is.factor(data)) || lubridate::is.instant(data)) {
     if(is.numeric(data)){
       dt <- data.table::as.data.table(data)
       description <- dt[, .(cases = .N,
@@ -224,7 +223,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
                             n_FALSE = round(sum(data == 0, na.rm = na.rm), digits),
                             p_TRUE = round(sum(data, na.rm = na.rm)/length(na.omit(data)), digits))]
 
-    } else if (lubridate::is.Date(data)){
+    } else if (lubridate::is.instant(data)){
       dt <- data.table::as.data.table(data)
       description <- dt[, .(cases = .N,
                             n = sum(!is.na(data)),
@@ -259,7 +258,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
       )
     } else {
       stop(paste0("Input data class not currently supported.",
-           "\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character"))
+           "\nCurrently supported vector classes include: numeric/integer, factor, date/POSIXct/POSIXlt, logical, & character"))
     }
   } else {
     if(missing(y)){
@@ -331,7 +330,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
                               n_FALSE = round(sum(get(y) == 0, na.rm = na.rm), digits),
                               p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits))]
       }
-    } else if (lubridate::is.Date(dt[[y]])) {
+    } else if (lubridate::is.instant(dt[[y]])) {
       if(!missing(...)){
         description <- dt[, .(cases = .N,
                               n = sum(!is.na(get(y))),
@@ -399,7 +398,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
         )
       }
     } else {
-      stop("Input data class supplied to y argument not currently supported.\nCurrently supported vector classes include: numeric/integer, factor, date, logical, & character")
+      stop("Input data class supplied to y argument not currently supported.\nCurrently supported vector classes include: numeric/integer, factor, date/POSIXct/POSIXlt, logical, & character")
     }
   }
   if(output == "tibble") {
@@ -429,7 +428,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr group_cols
-#' @importFrom lubridate is.Date
+#' @importFrom lubridate is.instant
 #' @importFrom tidyr nest
 #' @importFrom tidyr unnest
 #' @importFrom purrr map
@@ -571,7 +570,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
   }
 
   if(class == "all" || "d" %chin% class) {
-    date_cols <- vapply(data, lubridate::is.Date, FUN.VALUE = logical(1))
+    date_cols <- vapply(data, lubridate::is.instant, FUN.VALUE = logical(1))
     if(!missing(...)) {
       date_cols <- length(setdiff(names(data)[date_cols], g))
     } else {
@@ -618,7 +617,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     if((class == "all" || "d" %chin% class) && date_cols >= 1){
       ls[["date"]] <- data[,  purrr::map_dfr(.SD,
                                              ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
-                                             .id = "variable"), by = eval(g), .SDcols = lubridate::is.Date]
+                                             .id = "variable"), by = eval(g), .SDcols = lubridate::is.instant]
     }
     if((class == "all" || "f" %chin% class) && fct_cols >= 1){
       ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
@@ -644,7 +643,7 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     if((class == "all" || "d" %chin% class) && date_cols >= 1){
       ls[["date"]] <- data[,  purrr::map_dfr(.SD,
                                              ~describe(.x, output = output),
-                                             .id = "variable"), .SDcols = lubridate::is.Date]
+                                             .id = "variable"), .SDcols = lubridate::is.instant]
 
     }
     if((class == "all" || "f" %chin% class) && fct_cols >= 1){
@@ -681,4 +680,3 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
   }
   return(ls)
 }
-

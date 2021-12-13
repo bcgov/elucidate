@@ -1,3 +1,7 @@
+# elucidate 0.1.0.9004 - December 13th, 2021
+
+* `describe()` and `describe_all()` now work for "POSIXct" and "POSIXlt" date/time class vectors in addition to the previously supported "Date" class vectors.
+
 # elucidate 0.1.0.9003 - October 31st, 2021
 
 * Fixed a bug that caused `plot_var()` to fail for ordered factors. 
