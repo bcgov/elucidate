@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9004</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/elucidate.html">Get started</a>
 </li>
@@ -55,7 +51,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/bcgov/elucidate/">
+  <a href="https://github.com/bcgov/elucidate/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -72,20 +68,19 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="elucidate-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#elucidate-" class="anchor"></a>elucidate <img src="reference/figures/hex-elucidate.png" align="right" height="139">
+<div class="section level1">
+<div class="page-header"><h1 id="elucidate-">elucidate <img src="reference/figures/hex-elucidate.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#elucidate-"></a>
 </h1></div>
-<div id="project-status" class="section level2">
-<h2 class="hasAnchor">
-<a href="#project-status" class="anchor"></a>Project Status</h2>
+<div class="section level2">
+<h2 id="project-status">Project Status<a class="anchor" aria-label="anchor" href="#project-status"></a>
+</h2>
 <!-- badges: start -->
 
-<p>This package is currently maintained by <a href="https://craig.rbind.io/">Craig Hutton</a>, a Data Scientist working with the Research Branch of the <a href="https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction">British Columbia Ministry of Social Development &amp; Poverty Reduction</a>.</p>
+<p>This package is currently maintained by <a href="https://craig.rbind.io/" class="external-link">Craig Hutton</a>, a Data Scientist working with the Research Branch of the <a href="https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/social-development-poverty-reduction" class="external-link">British Columbia Ministry of Social Development &amp; Poverty Reduction</a>.</p>
 </div>
-<div id="why-elucidate" class="section level2">
-<h2 class="hasAnchor">
-<a href="#why-elucidate" class="anchor"></a>Why <code>elucidate</code>?</h2>
+<div class="section level2">
+<h2 id="why-elucidate">Why <code>elucidate</code>?<a class="anchor" aria-label="anchor" href="#why-elucidate"></a>
+</h2>
 <p><code>elucidate</code> provides a collection of convenience functions to make exploratory data analysis in R easier and more accessible for researchers to (among other things):</p>
 <ul>
 <li><p>Interrogate data in search of row duplicates with <code><a href="reference/dupes.html">dupes()</a></code> and anomalous values with the <code>counts*</code> set of functions.</p></li>
@@ -93,27 +88,27 @@
 <li><p>Quickly visualise and interact with data representations with the <code>plot_*</code> set of functions.</p></li>
 </ul>
 <p>Inspired by tidyverse naming conventions, the core functions of <code>elucidate</code> are organized into sets that begin with a common root (e.g. <code>describe*</code>, <code>plot_*</code>), since this enables the user to see them all as suggestions as you are coding in R studio.</p>
-<p>Drawing from similar inspiration, many <code>elucidate</code> functions are also designed to accept a data object as the 1st argument and return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the <a href="https://magrittr.tidyverse.org/reference/pipe.html">magrittr</a> package for easy integration into data processing pipelines.</p>
+<p>Drawing from similar inspiration, many <code>elucidate</code> functions are also designed to accept a data object as the 1st argument and return a data or plotting object (e.g. ggplot2 or plotly) so they are compatible with the pipe operator from the <a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">magrittr</a> package for easy integration into data processing pipelines.</p>
 <p>For a comprehensive introduction to the package see the vignette via <code><a href="articles/elucidate.html">vignette("elucidate")</a></code>.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install the development version of elucidate from this repository with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># use the remotes package to install from a github repository</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co">#only run this 1st if you haven't installed remotes before</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co">#only run this 1st if you haven't installed remotes before</span>
 
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bcgov/elucidate"</span><span class="op">)</span></code></pre></div>
-<p>The authors of <code>elucidate</code> acknowledge and express their gratitude to the authors of the <a href="https://www.tidyverse.org/">tidyverse packages</a>, <a href="https://github.com/Rdatatable/data.table">data.table</a>, and the functions of other dependency packages which were used to build <code>elucidate</code>, since without their effort and ingenuity <code>elucidate</code> would mostly have remained a collection of ideas instead of functions.</p>
+<p>The authors of <code>elucidate</code> acknowledge and express their gratitude to the authors of the <a href="https://www.tidyverse.org/" class="external-link">tidyverse packages</a>, <a href="https://github.com/Rdatatable/data.table" class="external-link">data.table</a>, and the functions of other dependency packages which were used to build <code>elucidate</code>, since without their effort and ingenuity <code>elucidate</code> would mostly have remained a collection of ideas instead of functions.</p>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
 <p><code><a href="reference/dupes.html">dupes()</a></code> can tell you how many rows are duplicated based on one or more variables (default is all of them).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bcgov/elucidate">elucidate</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bcgov/elucidate" class="external-link">elucidate</a></span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: ggplot2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'elucidate'</span>
@@ -143,10 +138,10 @@
 <p><code><a href="reference/describe.html">describe()</a></code> a single variable in a data frame or a vector of values.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#set random generator seed for reproducibility</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
 
 <span class="co">#using a numeric vector as input</span>
-<span class="fu"><a href="reference/describe.html">describe</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="reference/describe.html">describe</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 1 x 14</span>
 <span class="co">#&gt;   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew</span>
 <span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
@@ -190,45 +185,45 @@
 <span class="co">#&gt; 5 x2       12000 12000     0     0 151.   28.8 0.263 101   126    150   176 </span>
 <span class="co">#&gt; 6 x3       12000 12000     0     0 250.   28.9 0.264 201   225    251   276 </span>
 <span class="co">#&gt; # ... with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></code></pre></div>
-<p>Use <code><a href="reference/plot_var.html">plot_var()</a></code> to produce a class-appropriate <a href="https://ggplot2.tidyverse.org/">ggplot2</a> graph of a single variable in a data frame or a vector of values.</p>
+<p>Use <code><a href="reference/plot_var.html">plot_var()</a></code> to produce a class-appropriate <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graph of a single variable in a data frame or a vector of values.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/plot_var.html">plot_var</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/plot_var.html">plot_var</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <p><img src="reference/figures/README-plot_var-1.png" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#in this case we get a density plot with a normal density curve added for</span>
 <span class="co">#reference (dashed line).</span></code></pre></div>
-<p>To generate class-appropriate <code>ggplot2</code> graphs for all variables in a data frame and combine them into a multiple-panel figure with the <a href="https://patchwork.data-imaginist.com/index.html">patchwork</a> package, use <code><a href="reference/plot_var_all.html">plot_var_all()</a></code>. You can also limit the graphing to a subset of columns with the “cols” argument, which accepts a character vector of column names.</p>
+<p>To generate class-appropriate <code>ggplot2</code> graphs for all variables in a data frame and combine them into a multiple-panel figure with the <a href="https://patchwork.data-imaginist.com/index.html" class="external-link">patchwork</a> package, use <code><a href="reference/plot_var_all.html">plot_var_all()</a></code>. You can also limit the graphing to a subset of columns with the “cols” argument, which accepts a character vector of column names.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span><span class="va">pdata</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"g"</span>, <span class="st">"even"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span><span class="va">pdata</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"g"</span>, <span class="st">"even"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-plot_var_all-1.png" width="100%"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#density plots for numeric variables and bar graphs for categorical variables</span></code></pre></div>
 </div>
-<div id="learn-more" class="section level2">
-<h2 class="hasAnchor">
-<a href="#learn-more" class="anchor"></a>Learn more</h2>
+<div class="section level2">
+<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
 <p>These examples only highlight a few of the many things <code>elucidate</code> can do. You can learn more from these additional resources:</p>
 <ul>
-<li><p>A <strong><a href="https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/">blog post</a></strong>, which was written to help researchers and science trainees learn how to use the package for common exploratory data analysis tasks.</p></li>
+<li><p>A <strong><a href="https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/" class="external-link">blog post</a></strong>, which was written to help researchers and science trainees learn how to use the package for common exploratory data analysis tasks.</p></li>
 <li><p>The <strong>introductory vignette</strong> (<code><a href="articles/elucidate.html">vignette("elucidate")</a></code>), which provides annotated code examples that demonstrate most of the package’s functionality.</p></li>
 </ul>
 </div>
-<div id="reporting-an-issue" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reporting-an-issue" class="anchor"></a>Reporting an Issue</h2>
-<p>To report bugs/issues or request feature changes, open an <a href="https://github.com/bcgov/elucidate/issues">issue</a> for the package GitHub repo. If raising an issue, <em>please provide a reproducible example</em> (<a href="https://www.tidyverse.org/help/">reprex</a>) of the problem you’re encountering.</p>
+<div class="section level2">
+<h2 id="reporting-an-issue">Reporting an Issue<a class="anchor" aria-label="anchor" href="#reporting-an-issue"></a>
+</h2>
+<p>To report bugs/issues or request feature changes, open an <a href="https://github.com/bcgov/elucidate/issues" class="external-link">issue</a> for the package GitHub repo. If raising an issue, <em>please provide a reproducible example</em> (<a href="https://www.tidyverse.org/help/" class="external-link">reprex</a>) of the problem you’re encountering.</p>
 </div>
-<div id="requesting-features-andor-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#requesting-features-andor-changes" class="anchor"></a>Requesting Features and/or Changes</h2>
-<p>To suggest changes or code improvements, please submit a <a href="https://github.com/bcgov/elucidate/pulls">pull request</a>.</p>
+<div class="section level2">
+<h2 id="requesting-features-andor-changes">Requesting Features and/or Changes<a class="anchor" aria-label="anchor" href="#requesting-features-andor-changes"></a>
+</h2>
+<p>To suggest changes or code improvements, please submit a <a href="https://github.com/bcgov/elucidate/pulls" class="external-link">pull request</a>.</p>
 </div>
-<div id="license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h2>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
 <p>Copyright 2021 Province of British Columbia</p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at:</p>
-<p><a href="http://www.apache.org/licenses/LICENSE-2.0" class="uri">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0" class="external-link uri">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 <p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
 </div>
 </div>
@@ -236,58 +231,63 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/bcgov/elucidate/">https://​github.com/​bcgov/​elucidate/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/bcgov/elucidate/issues">https://​github.com/​bcgov/​elucidate/​issues</a>
-</li>
+<li><a href="https://github.com/bcgov/elucidate/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/bcgov/elucidate/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing elucidate</a></li>
+<li><a href="authors.html#citation">Citing elucidate</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Craig P. Hutton <br><small class="roles"> Maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md"><img src="https://img.shields.io/badge/Lifecycle-Maturing-007EC6" alt="img"></a></li>
-<li><a href="https://github.com/bcgov/elucidate/actions"><img src="https://github.com/bcgov/elucidate/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md" class="external-link"><img src="https://img.shields.io/badge/Lifecycle-Maturing-007EC6" alt="img"></a></li>
+<li><a href="https://github.com/bcgov/elucidate/actions" class="external-link"><img src="https://github.com/bcgov/elucidate/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Craig P. Hutton.</p>
+  <p></p>
+<p>Developed by Craig P. Hutton.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -295,6 +295,8 @@
 
   
 
+
+  
 
   </body>
 </html>
