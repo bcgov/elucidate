@@ -984,6 +984,8 @@ consum <- function(x, skip_na = FALSE) {
 #'   other elucidate functions which attempt to parse ... as a vector of column
 #'   names to use for group-wise operations.
 #'
+#' @importFrom data.table is.data.table
+#'
 #' @param data A data frame.
 #'
 #' @param ... any number of unquoted or quoted column names and/or a set of
@@ -994,7 +996,7 @@ consum <- function(x, skip_na = FALSE) {
 #' @noRd
 group_parser <- function(data, ...) {
   if(!missing(...)) {
-    if(is.error(names(data[, c(...)]))) {
+    if(is.error(names(data[, c(...)])) || is.null(names(data[, c(...)]))) {
       g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
     } else {
       g <- unlist(list(...))
@@ -1003,10 +1005,18 @@ group_parser <- function(data, ...) {
       }
     }
   }
-  if(is.error(names(data[, g]))) {
-    stop("One or more of the variable names or indices supplied using",
-         "\nthe special ellipsis argument (`...`) cannot be found in the input data.",
-         "\nPlease ensure all variable names or indices are valid and try again.")
+  if(data.table::is.data.table(data)) {
+    if(is.error(names(data[, ..g]))) {
+      stop("One or more of the variable names or indices supplied using",
+           "\nthe special ellipsis argument (`...`) cannot be found in the input data.",
+           "\nPlease ensure all variable names or indices are valid and try again.")
+    }
+  } else {
+    if(is.error(names(data[, g]))) {
+      stop("One or more of the variable names or indices supplied using",
+           "\nthe special ellipsis argument (`...`) cannot be found in the input data.",
+           "\nPlease ensure all variable names or indices are valid and try again.")
+    }
   }
   return(g)
 }

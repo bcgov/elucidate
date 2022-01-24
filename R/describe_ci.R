@@ -134,7 +134,7 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
   dt <- data.table::as.data.table(data)
 
   if(is.error(class(data[[y]]))) {
-    y <- deparse(substitute(y))
+    y_str <- deparse(substitute(y))
   } else if(!is.character(y) || length(y) > 1){
     stop('If specified, `y` must be a single symbol or character string',
          '\n representing a column in the input data frame supplied to the `data` argument.')
@@ -155,7 +155,7 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
   } else if(!is.data.frame(data)) {
     stop("data must either be a numeric vector or data frame")
   } else if(is.data.frame(data)){
-    if(!is.numeric(dt[[y]])){
+    if(!is.numeric(dt[[y_str]])){
       stop("y must be a numeric vector or column of a data frame")
     }
     if(!missing(...)){
@@ -164,26 +164,26 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
       if(st == "mean") {
         description <- dt[,
                           .(measure = factor(c(st, "lower", "upper"), levels = c(st, "lower", "upper")),
-                            value = mean_ci(get(y), replicates = replicates, ci_type = ci_type,
+                            value = mean_ci(get(y_str), replicates = replicates, ci_type = ci_type,
                                             ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)),
                           by = eval(g)]
         description <- data.table::dcast(stats::na.omit(description), formula = ... ~ measure, value.var = "value")
       } else {
         description <- dt[,
                           .(measure = factor(c(st, "lower", "upper"), levels = c(st, "lower", "upper")),
-                            value = stat_ci(get(y), stat = stat, replicates = replicates, ci_type = ci_type,
+                            value = stat_ci(get(y_str), stat = stat, replicates = replicates, ci_type = ci_type,
                                             ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)),
                           by = eval(g)]
         description <- data.table::dcast(stats::na.omit(description), formula = ... ~ measure, value.var = "value")
       }
     } else {
       if(st == "mean") {
-        description <- mean_ci(dt[[y]], replicates = replicates, ci_type = ci_type,
+        description <- mean_ci(dt[[y_str]], replicates = replicates, ci_type = ci_type,
                                ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
         description <- data.table::data.table(description[1], description[2], description[3])
         names(description) <- c(st, "lower", "upper")
       } else {
-        description <- stat_ci(dt[[y]], stat = stat, replicates = replicates, ci_type = ci_type,
+        description <- stat_ci(dt[[y_str]], stat = stat, replicates = replicates, ci_type = ci_type,
                   ci_level = ci_level, parallel = parallel, cores = cores, na.rm = na.rm)
         description <- data.table::data.table(description[1], description[2], description[3])
         names(description) <- c(st, "lower", "upper")

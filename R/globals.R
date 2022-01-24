@@ -25,4 +25,4 @@ utils::globalVariables(c(".", "group", "measure", "variable", ".N", "tcvs",
                          "p50", "p25", "p75", "n_", "p_",
                          "ytot", "st_coords", "margin", "dnorm_y",
                          "n_copies", "copy_number", "dupe_count",
-                         "x_var_labs"))
+                         "x_var_labs", "..g"))

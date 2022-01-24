@@ -1,3 +1,7 @@
+# elucidate 0.1.0.9005 - January 23rd, 2022
+
+* Fixed a bug which caused `describe()` and `describe_ci()` to fail when attempting to evaluate columns from data.table objects.
+
 # elucidate 0.1.0.9004 - December 13th, 2021
 
 * `describe()` and `describe_all()` now work for "POSIXct" and "POSIXlt" date/time class vectors in addition to the previously supported "Date" class vectors.

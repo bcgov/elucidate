@@ -266,7 +266,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
            "\nIf you want summaries for all variables in data, use describe_all() instead"))
     } else {
       if(is.error(class(data[[y]]))) {
-        y <- deparse(substitute(y))
+        y_str <- deparse(substitute(y))
       } else if(!is.character(y) || length(y) > 1){
         stop(paste0('`y` must be a single symbol or character string representing a column',
              '\nin the input data frame supplied to the `data` argument.'))
@@ -278,123 +278,123 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 
     dt <- data.table::as.data.table(data)
 
-    if(is.numeric(dt[[y]])){
+    if(is.numeric(dt[[y_str]])){
       if(!missing(...)){
         description <- dt[, .(cases = .N,
-                              n = sum(!is.na(get(y))),
-                              na = sum(is.na(get(y))),
-                              p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                              mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits),
-                              sd = round(stats::sd(get(y), na.rm = na.rm), digits),
-                              se = round(se(get(y), na.rm = na.rm), digits),
-                              p0 = round(as.double(min(get(y), na.rm = na.rm)), digits),
-                              p25 = round(stats::quantile(get(y), probs = 0.25, na.rm = na.rm), digits),
-                              p50 = round(as.double(stats::median(get(y), na.rm = na.rm)), digits),
-                              p75 = round(stats::quantile(get(y), probs = 0.75, na.rm = na.rm), digits),
-                              p100 = round(as.double(max(get(y), na.rm = na.rm)), digits),
-                              skew = round(skewness(get(y), type = type, na.rm = na.rm), digits),
-                              kurt = round(kurtosis(get(y), type = type, na.rm = na.rm), digits)),
+                              n = sum(!is.na(get(y_str))),
+                              na = sum(is.na(get(y_str))),
+                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                              mean = round(sum(get(y_str), na.rm = na.rm)/length(na.omit(get(y_str))), digits),
+                              sd = round(stats::sd(get(y_str), na.rm = na.rm), digits),
+                              se = round(se(get(y_str), na.rm = na.rm), digits),
+                              p0 = round(as.double(min(get(y_str), na.rm = na.rm)), digits),
+                              p25 = round(stats::quantile(get(y_str), probs = 0.25, na.rm = na.rm), digits),
+                              p50 = round(as.double(stats::median(get(y_str), na.rm = na.rm)), digits),
+                              p75 = round(stats::quantile(get(y_str), probs = 0.75, na.rm = na.rm), digits),
+                              p100 = round(as.double(max(get(y_str), na.rm = na.rm)), digits),
+                              skew = round(skewness(get(y_str), type = type, na.rm = na.rm), digits),
+                              kurt = round(kurtosis(get(y_str), type = type, na.rm = na.rm), digits)),
                           by = eval(g)]
       } else {
         description <- dt[, .(cases = .N,
-                              n = sum(!is.na(get(y))),
-                              na = sum(is.na(get(y))),
-                              p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                              mean = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits),
-                              sd = round(stats::sd(get(y), na.rm = na.rm), digits),
-                              se = round(se(get(y), na.rm = na.rm), digits),
-                              p0 = round(as.double(min(get(y), na.rm = na.rm)), digits),
-                              p25 = round(stats::quantile(get(y), probs = 0.25, na.rm = na.rm), digits),
-                              p50 = round(as.double(stats::median(get(y), na.rm = na.rm)), digits),
-                              p75 = round(stats::quantile(get(y), probs = 0.75, na.rm = na.rm), digits),
-                              p100 = round(as.double(max(get(y), na.rm = na.rm)), digits),
-                              skew = round(skewness(get(y), type = type, na.rm = na.rm), digits),
-                              kurt = round(kurtosis(get(y), type = type, na.rm = na.rm), digits))]
+                              n = sum(!is.na(get(y_str))),
+                              na = sum(is.na(get(y_str))),
+                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                              mean = round(sum(get(y_str), na.rm = na.rm)/length(na.omit(get(y_str))), digits),
+                              sd = round(stats::sd(get(y_str), na.rm = na.rm), digits),
+                              se = round(se(get(y_str), na.rm = na.rm), digits),
+                              p0 = round(as.double(min(get(y_str), na.rm = na.rm)), digits),
+                              p25 = round(stats::quantile(get(y_str), probs = 0.25, na.rm = na.rm), digits),
+                              p50 = round(as.double(stats::median(get(y_str), na.rm = na.rm)), digits),
+                              p75 = round(stats::quantile(get(y_str), probs = 0.75, na.rm = na.rm), digits),
+                              p100 = round(as.double(max(get(y_str), na.rm = na.rm)), digits),
+                              skew = round(skewness(get(y_str), type = type, na.rm = na.rm), digits),
+                              kurt = round(kurtosis(get(y_str), type = type, na.rm = na.rm), digits))]
       }
-    } else if (is.logical(dt[[y]])) {
+    } else if (is.logical(dt[[y_str]])) {
       if(!missing(...)){
         description <- dt[, .(cases = .N,
-                              n = sum(!is.na(get(y))),
-                              na = sum(is.na(get(y))),
-                              p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                              n_TRUE = round(sum(get(y), na.rm = na.rm), digits),
-                              n_FALSE = round(sum(get(y) == 0, na.rm = na.rm), digits),
-                              p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits)),
+                              n = sum(!is.na(get(y_str))),
+                              na = sum(is.na(get(y_str))),
+                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                              n_TRUE = round(sum(get(y_str), na.rm = na.rm), digits),
+                              n_FALSE = round(sum(get(y_str) == 0, na.rm = na.rm), digits),
+                              p_TRUE = round(sum(get(y_str), na.rm = na.rm)/length(na.omit(get(y_str))), digits)),
                           by = eval(g)]
       } else {
         description <- dt[, .(cases = .N,
-                              n = sum(!is.na(get(y))),
-                              na = sum(is.na(get(y))),
-                              p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                              n_TRUE = round(sum(get(y), na.rm = na.rm), digits),
-                              n_FALSE = round(sum(get(y) == 0, na.rm = na.rm), digits),
-                              p_TRUE = round(sum(get(y), na.rm = na.rm)/length(na.omit(get(y))), digits))]
+                              n = sum(!is.na(get(y_str))),
+                              na = sum(is.na(get(y_str))),
+                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                              n_TRUE = round(sum(get(y_str), na.rm = na.rm), digits),
+                              n_FALSE = round(sum(get(y_str) == 0, na.rm = na.rm), digits),
+                              p_TRUE = round(sum(get(y_str), na.rm = na.rm)/length(na.omit(get(y_str))), digits))]
       }
-    } else if (lubridate::is.instant(dt[[y]])) {
+    } else if (lubridate::is.instant(dt[[y_str]])) {
       if(!missing(...)){
         description <- dt[, .(cases = .N,
-                              n = sum(!is.na(get(y))),
-                              na = sum(is.na(get(y))),
-                              p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                              n_unique = data.table::uniqueN(get(y)),
-                              start = min(get(y), na.rm = na.rm),
-                              end = max(get(y), na.rm = na.rm)),
+                              n = sum(!is.na(get(y_str))),
+                              na = sum(is.na(get(y_str))),
+                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                              n_unique = data.table::uniqueN(get(y_str)),
+                              start = min(get(y_str), na.rm = na.rm),
+                              end = max(get(y_str), na.rm = na.rm)),
                           by = eval(g)]
       } else {
         description <- dt[, .(cases = .N,
-                              n = sum(!is.na(get(y))),
-                              na = sum(is.na(get(y))),
-                              p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                              n_unique = data.table::uniqueN(get(y)),
-                              start = min(get(y), na.rm = na.rm),
-                              end = max(get(y), na.rm = na.rm))]
+                              n = sum(!is.na(get(y_str))),
+                              na = sum(is.na(get(y_str))),
+                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                              n_unique = data.table::uniqueN(get(y_str)),
+                              start = min(get(y_str), na.rm = na.rm),
+                              end = max(get(y_str), na.rm = na.rm))]
       }
-    } else if (is.factor(dt[[y]])) {
+    } else if (is.factor(dt[[y_str]])) {
       if(!missing(...)){
         suppressMessages(
           description <- dt[, .(cases = .N,
-                                n = sum(!is.na(get(y))),
-                                na = sum(is.na(get(y))),
-                                p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                                n_unique = data.table::uniqueN(get(y)),
-                                ordered = is.ordered(get(y)),
-                                counts_tb = tbcvs(get(y), sep = sep)),
+                                n = sum(!is.na(get(y_str))),
+                                na = sum(is.na(get(y_str))),
+                                p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                                n_unique = data.table::uniqueN(get(y_str)),
+                                ordered = is.ordered(get(y_str)),
+                                counts_tb = tbcvs(get(y_str), sep = sep)),
                             by = eval(g)]
         )
       } else {
         suppressMessages(
           description <- dt[, .(cases = .N,
-                                n = sum(!is.na(get(y))),
-                                na = sum(is.na(get(y))),
-                                p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                                n_unique = data.table::uniqueN(get(y)),
-                                ordered = is.ordered(get(y)),
-                                counts_tb = tbcvs(get(y), sep = sep))]
+                                n = sum(!is.na(get(y_str))),
+                                na = sum(is.na(get(y_str))),
+                                p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                                n_unique = data.table::uniqueN(get(y_str)),
+                                ordered = is.ordered(get(y_str)),
+                                counts_tb = tbcvs(get(y_str), sep = sep))]
         )
       }
-    } else if (is.character(dt[[y]])) {
+    } else if (is.character(dt[[y_str]])) {
       if(!missing(...)){
         suppressMessages(
           description <- dt[, .(cases = .N,
-                                n = sum(!is.na(get(y))),
-                                na = sum(is.na(get(y))),
-                                p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                                n_unique = data.table::uniqueN(get(y)),
-                                min_chars = as.integer(min(nchar(get(y)), na.rm = na.rm)),
-                                max_chars = as.integer(max(nchar(get(y)), na.rm = na.rm)),
-                                counts_tb = tbcvs(get(y), sep = sep)),
+                                n = sum(!is.na(get(y_str))),
+                                na = sum(is.na(get(y_str))),
+                                p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                                n_unique = data.table::uniqueN(get(y_str)),
+                                min_chars = as.integer(min(nchar(get(y_str)), na.rm = na.rm)),
+                                max_chars = as.integer(max(nchar(get(y_str)), na.rm = na.rm)),
+                                counts_tb = tbcvs(get(y_str), sep = sep)),
                             by = eval(g)]
         )
       } else {
         suppressMessages(
           description <- dt[, .(cases = .N,
-                                n = sum(!is.na(get(y))),
-                                na = sum(is.na(get(y))),
-                                p_na = round(sum(is.na(get(y)))/length(get(y)), digits),
-                                n_unique = data.table::uniqueN(get(y)),
-                                min_chars = as.integer(min(nchar(get(y)), na.rm = na.rm)),
-                                max_chars = as.integer(max(nchar(get(y)), na.rm = na.rm)),
-                                counts_tb = tbcvs(get(y), sep = sep))]
+                                n = sum(!is.na(get(y_str))),
+                                na = sum(is.na(get(y_str))),
+                                p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits),
+                                n_unique = data.table::uniqueN(get(y_str)),
+                                min_chars = as.integer(min(nchar(get(y_str)), na.rm = na.rm)),
+                                max_chars = as.integer(max(nchar(get(y_str)), na.rm = na.rm)),
+                                counts_tb = tbcvs(get(y_str), sep = sep))]
         )
       }
     } else {
