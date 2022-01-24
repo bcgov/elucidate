@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9005</span>
       </span>
     </div>
 
@@ -79,9 +79,9 @@
 
     
     
-<div class="section level1">
-<h1 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h1>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p><strong>Exploratory data analysis (EDA)</strong> is a key step in nearly all analysis workflows. However, this critical step in conducting meaningful analyses is inadequately covered in most STEM training programs, which typically make use of previously cleaned and explored data sets for course exercises. Consequently, aspiring researchers are often left to figure EDA out on their own when they encounter real (i.e. messy) data in their work, where finding suitable tools and accessible documentation can be daunting.</p>
 <p><code>elucidate</code> helps you <em>explore</em> data in R by making it easy and efficient to perform the three core exploratory data analysis operations:</p>
 <ol style="list-style-type: decimal">
@@ -98,15 +98,15 @@
 <pre><code><span class="co">## The following object is masked from 'package:base':</span>
 <span class="co">## </span>
 <span class="co">##     mode</span></code></pre>
-<div class="section level3">
-<h3 id="magrittr-pipe-compatibility">
+<div class="section level4">
+<h4 id="magrittr-pipe-compatibility">
 <code>magrittr</code> pipe compatibility<a class="anchor" aria-label="anchor" href="#magrittr-pipe-compatibility"></a>
-</h3>
+</h4>
 <p>Many <code>elucidate</code> functions accept a data frame as the 1st argument and return a data frame (or a list of data frames) as output, so they are compatible with the base R (<code>|&gt;</code>; introduced in version 4.1) or <a href="https://magrittr.tidyverse.org/" class="external-link">magrittr</a> (<code>%&gt;%</code>) <a href="https://craig.rbind.io/post/2019-12-30-asgr-2-1-data-transformation-part-1/#chaining-functions-with-the-pipe-operator" class="external-link">pipe operators</a>.</p>
 </div>
-<div class="section level2">
-<h2 id="data-pdata">Data: pdata<a class="anchor" aria-label="anchor" href="#data-pdata"></a>
-</h2>
+<div class="section level3">
+<h3 id="data-pdata">Data: pdata<a class="anchor" aria-label="anchor" href="#data-pdata"></a>
+</h3>
 <p>In this vignette, I will demonstrate how to use elucidate with a contrived <em>p</em>ractice dataset that comes with the package, called <code>pdata</code>. Using <code><a href="https://rdrr.io/r/utils/str.html" class="external-link">str()</a></code> shows us that <code>pdata</code> is a tibble containing 12,000 rows and 10 columns of various classes. In case you are wondering, tibbles are enhanced data frames. If you haven’t worked with them before, you can learn about them <a href="https://tibble.tidyverse.org" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span></code></pre></div>
@@ -122,19 +122,19 @@
 <span class="co">##  $ x2      : int [1:12000] 116 101 111 130 196 163 133 191 106 134 ...</span>
 <span class="co">##  $ x3      : int [1:12000] 248 238 250 287 284 206 201 249 277 209 ...</span></code></pre>
 </div>
-<div class="section level2">
-<h2 id="interrogating-functions">Interrogating functions<a class="anchor" aria-label="anchor" href="#interrogating-functions"></a>
-</h2>
+<div class="section level3">
+<h3 id="interrogating-functions">Interrogating functions<a class="anchor" aria-label="anchor" href="#interrogating-functions"></a>
+</h3>
 <p>The first core EDA task is to check for common problems that can seriously perturb<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> your analysis, a process I refer to as data <strong>“interrogation”</strong>. When interrogating data, we want to make sure there aren’t any duplicated rows, data entry errors, or other anomalies that need to be addressed before we can try to derive any “results” from the data. We also want to check to make sure that the data are consistent, e.g. dates are in a common format, each “category” of a factor has a single unique value, etc. If the data were entered manually and/or by multiple individuals there is a good chance they contain at least one erroneous value. Another common issue occurs when data are passed through Microsoft Excel before being imported into R, because Excel has a nasty habit of parsing some numeric and string sequences as dates when it shouldn’t. If you’re importing, data into R directly from an Excel file, you may also end up with a column of dates being parsed as 5-digit numbers, which is how Excel represents dates internally. If you work with health data, you might also be familiar with missing values being coded as specific numbers like “999” instead of the usual <code>NA</code>.</p>
 <p>Fortunately, in my work as a researcher and data scientist I’ve found that most of these issues can be detected with only two simple operations:</p>
 <ol style="list-style-type: decimal">
 <li><p>Checking for duplicated rows.</p></li>
 <li><p>Checking the most/least common unique values of each column in the data.</p></li>
 </ol>
-<div class="section level3">
-<h3 id="dupes">
+<div class="section level4">
+<h4 id="dupes">
 <code>dupes()</code><a class="anchor" aria-label="anchor" href="#dupes"></a>
-</h3>
+</h4>
 <p><code><a href="../reference/dupes.html">dupes()</a></code> can tell you how many rows are duplicated based on one or more variables (default is all of them). We care about this because duplicated records mislead you into thinking you have a larger sample size than you really do. Variables to use when searching for duplicates are simply specified using their names via the special <a href="https://r4ds.had.co.nz/functions.html?q=...#dot-dot-dot" class="external-link">ellipsis</a> (<code>...</code>) argument after the “data” argument. I initially used the <code><a href="https://rdrr.io/pkg/janitor/man/get_dupes.html" class="external-link">janitor::get_dupes()</a></code> function for this purpose, but developed <code><a href="../reference/dupes.html">elucidate::dupes()</a></code> because I found <code><a href="https://rdrr.io/pkg/janitor/man/get_dupes.html" class="external-link">janitor::get_dupes()</a></code> to be prohibitively slow when working with large administrative datasets (&gt; 1 million rows). You can see some timed comparisons between them <a href="https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/#dupes-vs-janitorget_dupes" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bcgov/elucidate" class="external-link">elucidate</a></span><span class="op">)</span>
@@ -206,10 +206,10 @@
 <span class="co">## <span style="color: #BCBCBC;">10</span>    10 2019-01-01 c     low      TRUE   248.  95.9    63   113   213</span>
 <span class="co">## <span style="color: #949494;"># … with 990 more rows</span></span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="counts">
+<div class="section level4">
+<h4 id="counts">
 <code>counts*</code><a class="anchor" aria-label="anchor" href="#counts"></a>
-</h3>
+</h4>
 <p>Anomalous values, inconsistent value codes, and data entry errors tend to show up in the few most common or few least common unique values of a vector or data frame column. Counts of unique values can be easily obtained with the <code>counts*</code> set of functions.</p>
 <p>Use <code><a href="../reference/counts.html">counts()</a></code> to get all counts for unique values of a vector in descending (default) order…</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -308,9 +308,9 @@
 <p>I’ve found <code><a href="../reference/counts_tb_all.html">counts_tb_all()</a></code> to be particularly useful when exploring a new data set for the first time, especially if someone else collected the data.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="describing-functions">Describing functions<a class="anchor" aria-label="anchor" href="#describing-functions"></a>
-</h2>
+<div class="section level3">
+<h3 id="describing-functions">Describing functions<a class="anchor" aria-label="anchor" href="#describing-functions"></a>
+</h3>
 <p>The second core EDA task is describing data, typically with summary (AKA “descriptive”) statistics. Getting most of the descriptive statistics you probably need for research purposes is incredibly easy with the <code>describe*</code> set of functions.</p>
 <p>You can <code><a href="../reference/describe.html">describe()</a></code> numeric vectors…</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
@@ -532,7 +532,7 @@
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 3</span></span>
 <span class="co">##   median lower upper</span>
 <span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span>   146.  135.  150.</span></code></pre>
+<span class="co">## <span style="color: #BCBCBC;">1</span>   146.  135.  151.</span></code></pre>
 <p><code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> extends <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to provide a CI for the chosen summary statistic for each numeric variable in a data frame. For example, to get the 95% CI for the mean of each numeric variable in pdata, for each group in “g”, we can use:</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -553,9 +553,9 @@
 <span class="co">## <span style="color: #BCBCBC;">10</span> x2       b     150.  149.  151. </span>
 <span class="co">## <span style="color: #949494;"># … with 15 more rows</span></span></code></pre>
 </div>
-<div class="section level2">
-<h2 id="visualization-functions">Visualization functions<a class="anchor" aria-label="anchor" href="#visualization-functions"></a>
-</h2>
+<div class="section level3">
+<h3 id="visualization-functions">Visualization functions<a class="anchor" aria-label="anchor" href="#visualization-functions"></a>
+</h3>
 <p>Descriptive summary statistics are great, but you should also look at your data if you want to really make sense of it. Data visualization is the third core EDA task you’ll need to tackle in most data analysis projects you work on. <code>elucidate</code> provides a set of 14 <code>plot_*</code> functions that make it easy to generate customized exploratory graphs using <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a>, with an option to convert (most of) them into <a href="https://plotly-r.com/" class="external-link">plotly</a> format for interactive exploration.</p>
 <p><strong>Geometry-specific <code>plot_*</code> functions:</strong></p>
 <ol style="list-style-type: decimal">
@@ -582,9 +582,9 @@
 <code><a href="../reference/plot_c.html">plot_c()</a></code>: combine multiple graphs into a lattice-type display.</li>
 </ol>
 <p>Examples of each of these <code>plot_*</code> functions are presented in the remainder of this section.</p>
-<div class="section level3">
-<h3 id="plot_-basics">plot_* basics<a class="anchor" aria-label="anchor" href="#plot_-basics"></a>
-</h3>
+<div class="section level4">
+<h4 id="plot_-basics">plot_* basics<a class="anchor" aria-label="anchor" href="#plot_-basics"></a>
+</h4>
 <p>The <code>elucidate::plot_*</code> functions are built upon the <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graphics system, which allows for incredible flexibility in customizing plots, but can be intimidating for new users to work with. The <code>plot_*</code> functions make it easier for users to quickly explore data by providing shortcuts to graphing options that are appropriate for a particular type of graph through documented arguments. The easiest way to learn about all options available for each <code>plot_*</code> function is therefore to check that function’s documentation with <code>?function()</code>, e.g. <code>?plot_bar()</code> for <code><a href="../reference/plot_bar.html">plot_bar()</a></code>.</p>
 <p>In general, each <code>plot_*</code> function accepts a data frame source as the first argument (for pipe-compatibility), then requires one or two variables be assigned to the “x and/or”y" axes (depending on the graph type). For convenience, the principal axis used by each graph type/geometry is that <code>plot_*</code> function’s second argument (e.g. x-axis for <code>plot_hisogram()</code>, y-axis for <code><a href="../reference/plot_box.html">plot_box()</a></code>), so you can always make a basic graph as easily as <code>plot_*(data, variable)</code>. For example, to get a simple histogram of the “y1” numeric variable in <code>pdata</code>, all you need to do is:</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
@@ -632,9 +632,9 @@
                  theme <span class="op">=</span> <span class="st">"light"</span><span class="op">)</span> </code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram6-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="bar-graphs">bar graphs<a class="anchor" aria-label="anchor" href="#bar-graphs"></a>
-</h3>
+<div class="section level4">
+<h4 id="bar-graphs">bar graphs<a class="anchor" aria-label="anchor" href="#bar-graphs"></a>
+</h4>
 <p>Bar graphs are one of the best ways to visualize categorical variables.</p>
 <p>As mentioned above, all we have to do to make a basic bar graph is pass a data frame to <code><a href="../reference/plot_bar.html">plot_bar()</a></code> and tell it which categorical variable we want bars rendered for. If only the x-variable is specified, the bars will represent the counts of each category.</p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
@@ -662,9 +662,9 @@
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span>fill_var <span class="op">=</span> <span class="va">g</span>, position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_bar5-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="box-plots">box plots<a class="anchor" aria-label="anchor" href="#box-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="box-plots">box plots<a class="anchor" aria-label="anchor" href="#box-plots"></a>
+</h4>
 <p>Box-and-whisker plots (“box plots”) provide a quick non-parametric visualization of the distribution of a numeric variables using the five-number percentile summary.</p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_box.html">plot_box</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">y2</span><span class="op">)</span></code></pre></div>
@@ -689,9 +689,9 @@
 <p><img src="elucidate_files/figure-html/plot_box3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>In this case, it doesn’t look like we have to worry about any multi-modal distributions.</p>
 </div>
-<div class="section level3">
-<h3 id="density-plots">density plots<a class="anchor" aria-label="anchor" href="#density-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="density-plots">density plots<a class="anchor" aria-label="anchor" href="#density-plots"></a>
+</h4>
 <p>(Kernel) density plots are an excellent way to visualize the shape of the distribution of a numeric variable.</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
@@ -713,9 +713,9 @@
                rug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_density3-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="violin-plots">violin plots<a class="anchor" aria-label="anchor" href="#violin-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="violin-plots">violin plots<a class="anchor" aria-label="anchor" href="#violin-plots"></a>
+</h4>
 <p>An alternative to the box plot or density plot is the violin plot, which provides a symmetrical mirrored (kernel) density curve. Like the box plot examples above, we can split it by a grouping variable by assigning that variable to the x-axis (“x”), “fill_var”, and/or “colour_var”.</p>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -728,9 +728,9 @@
               draw_quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_violin3-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="histograms">histograms<a class="anchor" aria-label="anchor" href="#histograms"></a>
-</h3>
+<div class="section level4">
+<h4 id="histograms">histograms<a class="anchor" aria-label="anchor" href="#histograms"></a>
+</h4>
 <p>If you would prefer the traditional histogram over the kernel density plot to visualize the distribution of a numeric variable, use <code><a href="../reference/plot_histogram.html">plot_histogram()</a></code> instead.</p>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
@@ -748,9 +748,9 @@
                  dnorm <span class="op">=</span> <span class="cn">TRUE</span>, dnorm_colour <span class="op">=</span> <span class="st">"blue2"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram9-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="line-graphs">line graphs<a class="anchor" aria-label="anchor" href="#line-graphs"></a>
-</h3>
+<div class="section level4">
+<h4 id="line-graphs">line graphs<a class="anchor" aria-label="anchor" href="#line-graphs"></a>
+</h4>
 <p>Line graphs are typically used to show changes in a numeric variable (on the y-axis) over time (on the x-axis).</p>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -792,9 +792,9 @@
 <p><img src="elucidate_files/figure-html/geom_line_messy-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>As you can see, it’s easier and more intuitive to use <code><a href="../reference/plot_line.html">plot_line()</a></code> for these kinds of line graphs. Other convenience aggregation “stat” options currently accepted by <code><a href="../reference/plot_line.html">plot_line()</a></code> include “sum” and “count”.</p>
 </div>
-<div class="section level3">
-<h3 id="pie-charts">pie charts<a class="anchor" aria-label="anchor" href="#pie-charts"></a>
-</h3>
+<div class="section level4">
+<h4 id="pie-charts">pie charts<a class="anchor" aria-label="anchor" href="#pie-charts"></a>
+</h4>
 <p>The vilified pie chart is an alternative way of visualizing categorical data than the bar graph, the primary criticism of which is that visually comparing slices is much harder for humans than comparing bar lengths. However, <code>elucidate</code> was developed for use by researchers working in business and government in addition to those working in academia, and sometimes executives or project stakeholders want to see pie charts regardless of their limitations. I have therefore attempted to provide a convenience function that allows users to produce <code>ggplot2</code> pie charts that stand a chance at being reasonably interpretable.</p>
 <p>In my professional opinion, a pie chart should only be used when:</p>
 <ul>
@@ -820,9 +820,9 @@
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span>fill_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/bar_v_pie-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="scatter-plots">scatter plots<a class="anchor" aria-label="anchor" href="#scatter-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="scatter-plots">scatter plots<a class="anchor" aria-label="anchor" href="#scatter-plots"></a>
+</h4>
 <p>The scatter plot is an excellent way of graphing a relationship between two continuous variables, which can be done with <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code>.</p>
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -857,9 +857,9 @@
 <p><img src="elucidate_files/figure-html/plot_density4-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>From this perspective it looks like group “e” is the only one with a unimodal distribution of y1.</p>
 </div>
-<div class="section level3">
-<h3 id="statistic---error-bar-plots">statistic +/- error bar plots<a class="anchor" aria-label="anchor" href="#statistic---error-bar-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="statistic---error-bar-plots">statistic +/- error bar plots<a class="anchor" aria-label="anchor" href="#statistic---error-bar-plots"></a>
+</h4>
 <p>One of the most common types of graphs in the sciences, requested by both lab Principal Investigators and journal reviewers/editors, is the bar or point graph of a summary statistic (typically the sample mean) and error bars representing either the standard error or a 95 % confidence interval (CI). These so-called “dynamite plots” can easily be made with <code><a href="../reference/plot_stat_error.html">plot_stat_error()</a></code>, which will give you the mean and 95% confidence interval error bars by default.</p>
 <div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -876,9 +876,9 @@
 <p><img src="elucidate_files/figure-html/plot_stat_error2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>The principal limitation of these graphs is that they don’t reveal anything about the underlying distribution of the data and have been <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3087125/" class="external-link">criticised</a> for concealing other pertinent information such as sample sizes. You should therefore use them with caution and perhaps present them alongside other graphics which show additional features of the data.</p>
 </div>
-<div class="section level3">
-<h3 id="raincloud-plots">raincloud plots<a class="anchor" aria-label="anchor" href="#raincloud-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="raincloud-plots">raincloud plots<a class="anchor" aria-label="anchor" href="#raincloud-plots"></a>
+</h4>
 <p><a href="https://wellcomeopenresearch.org/articles/4-63" class="external-link">Raincloud plots</a> overcome the limitations of the dynamite plots covered above by presenting a combination of the raw data, box plots and half-violin plots together in a single graph.</p>
 <div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -907,9 +907,9 @@
 <p><img src="elucidate_files/figure-html/plot_raincloud3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>This gives us a more transparent display of the between-group differences in y1 than the previous <code><a href="../reference/plot_stat_error.html">plot_stat_error()</a></code> graphs, simultaneously showing the distribution of the data, sample sizes, and non-parametric summary statistics.</p>
 </div>
-<div class="section level3">
-<h3 id="generalized-univariate-plots">generalized univariate plots<a class="anchor" aria-label="anchor" href="#generalized-univariate-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="generalized-univariate-plots">generalized univariate plots<a class="anchor" aria-label="anchor" href="#generalized-univariate-plots"></a>
+</h4>
 <p>To facilitate rapid visual exploration of data, <code>elucidate</code> also provides a more flexible set of <code>plot_var*()</code> functions which generate appropriate plots for the data type without requiring the user to specify a plot geometry. The simplest of these functions is <code><a href="../reference/plot_var.html">plot_var()</a></code>, which allows you to plot up to two variables and optionally split the plot by a categorical grouping variable.</p>
 <p>For a single numeric (classes “double” or “integer”) or date variable, <code><a href="../reference/plot_var.html">plot_var()</a></code> generates a density plot. By default it will be enhanced by the addition of a normal density curve:</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
@@ -963,9 +963,9 @@
 <span class="co">## See help("plot_box") for details.</span></code></pre>
 <p><img src="elucidate_files/figure-html/plot_var8-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="generalized-multivariate-plots">generalized multivariate plots<a class="anchor" aria-label="anchor" href="#generalized-multivariate-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="generalized-multivariate-plots">generalized multivariate plots<a class="anchor" aria-label="anchor" href="#generalized-multivariate-plots"></a>
+</h4>
 <p>When exploring data we often want to plot more than a couple of variables at a time. <code><a href="../reference/plot_var_all.html">plot_var_all()</a></code> extends <code><a href="../reference/plot_var.html">plot_var()</a></code> by generating a plot of each variable in a data frame and combining them into a <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> grid.</p>
 <div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -989,9 +989,9 @@
                basic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">#disable the violin plot layer</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var_all4-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level3">
-<h3 id="generalized-pair-plots">generalized pair plots<a class="anchor" aria-label="anchor" href="#generalized-pair-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="generalized-pair-plots">generalized pair plots<a class="anchor" aria-label="anchor" href="#generalized-pair-plots"></a>
+</h4>
 <p><code><a href="../reference/plot_var_pairs.html">plot_var_pairs()</a></code> extends <code><a href="../reference/plot_var_all.html">plot_var_all()</a></code> even further by generating a plot for each pairwise combination of variables in a data frame (“pair plots”). Here I’ll focus on a few columns at a time with the “cols” argument so the graphs are easier to read.</p>
 <div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -1010,9 +1010,9 @@
 <p><img src="elucidate_files/figure-html/plot_var_pairs2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Although I unfortunately cannot demonstrate it in this vignette, <code><a href="../reference/plot_var_all.html">plot_var_all()</a></code> and <code><a href="../reference/plot_var_pairs.html">plot_var_pairs()</a></code> also have a “trelliscope” mode that can be enabled by setting the “trelliscope” argument to <code>TRUE</code>. Enabling this option will render the plots as panels in an interactive JavaScript-based trelliscope display with the <a href="https://hafen.github.io/trelliscopejs/" class="external-link">trelliscopejs</a> package. Trellisope mode is particularly useful in situations where there would be too many graphs in a multi-panel display to view them all on a single page.</p>
 </div>
-<div class="section level3">
-<h3 id="combining-plots">combining plots<a class="anchor" aria-label="anchor" href="#combining-plots"></a>
-</h3>
+<div class="section level4">
+<h4 id="combining-plots">combining plots<a class="anchor" aria-label="anchor" href="#combining-plots"></a>
+</h4>
 <p><code><a href="../reference/plot_c.html">plot_c()</a></code> makes it easy to combine multiple plots into a multi-panel display with the <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> package. For example, we might want to show a box plot and density plot side by side:</p>
 <div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">pdata</span> |&gt; 
@@ -1048,9 +1048,9 @@
 <p><img src="elucidate_files/figure-html/plot_c2-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="auxiliary-functions">Auxiliary functions<a class="anchor" aria-label="anchor" href="#auxiliary-functions"></a>
-</h2>
+<div class="section level3">
+<h3 id="auxiliary-functions">Auxiliary functions<a class="anchor" aria-label="anchor" href="#auxiliary-functions"></a>
+</h3>
 <p>To simplify your workflow even further, <code>elucidate</code> also provides a variety convenience functions that support the core operations outlined above, such as:</p>
 <ul>
 <li>Correcting data entry errors, anomaly indicator values, and structural inconsistencies seen in real world data more easily using <code><a href="../reference/recode_errors.html">recode_errors()</a></code> and <code><a href="../reference/wash_df.html">wash_df()</a></code>.</li>
@@ -1274,9 +1274,9 @@
 <span class="co">## <span style="color: #949494;"># … with 6,938 more rows</span></span></code></pre>
 <p>There you have it. Now you’ve seen most of what <code>elucidate</code> has to offer. Hopefully you’ll find that the package helpful when exploring data!</p>
 </div>
-<div class="section level2">
-<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
-</h2>
+<div class="section level3">
+<h3 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h3>
 <ul>
 <li>To learn more about <code>elucidate</code>, visit the package’s <a href="https://github.com/bcgov/elucidate" class="external-link">GitHub repository</a> and checkout this <a href="https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/" class="external-link">blog post</a>.</li>
 </ul>
@@ -1307,7 +1307,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
