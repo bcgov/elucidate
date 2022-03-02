@@ -46,6 +46,7 @@ se <- function(y, na.rm = TRUE) {
   return(se)
 }
 
+
 # inverse quantile:get the quantiles corresponding to a vector of  --------
 #' @title
 #' Get the quantile(s) corresponding to a vector of values.
