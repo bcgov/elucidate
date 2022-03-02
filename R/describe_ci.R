@@ -93,9 +93,8 @@
 #' @param na.rm should missing values be removed before attempting to calculate
 #'   the chosen statistic and confidence intervals? Default is TRUE.
 #'
-#' @param output "tibble" for tibble or "dt" for data.table. Tibble is used as
-#'   the default output to facilitate subsequent use/modification of the output
-#'   with the tidyverse collection of packages.
+#' @param output Output type for each class of variables. dt" for data.table or
+#'   "tibble" for tibble.
 #'
 #' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
 #'
@@ -127,18 +126,11 @@
 #' @export
 describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
                         ci_level = 0.95, ci_type = c("perc", "bca", "basic", "norm"), parallel = FALSE, cores = NULL,
-                        na.rm = TRUE, output = c("tibble", "dt")) {
+                        na.rm = TRUE, output = c("dt", "tibble")) {
   ci_type <- match.arg(ci_type)
   output <- match.arg(output)
   st <- deparse(substitute(stat))
   dt <- data.table::as.data.table(data)
-
-  if(is.error(class(data[[y]]))) {
-    y_str <- deparse(substitute(y))
-  } else if(!is.character(y) || length(y) > 1){
-    stop('If specified, `y` must be a single symbol or character string',
-         '\n representing a column in the input data frame supplied to the `data` argument.')
-  }
 
   if(is.numeric(data)){
     if(st == "mean") {
@@ -155,6 +147,23 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
   } else if(!is.data.frame(data)) {
     stop("data must either be a numeric vector or data frame")
   } else if(is.data.frame(data)){
+    if(missing(y)){
+      stop(paste0("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.",
+                  "\nIf you want summaries for all variables in data, use describe_na_all() instead"))
+    } else {
+      if(is.error(class(data[[y]]))) {
+        y_str <- deparse(substitute(y))
+        if(y_str %ni% names(data)) {
+          stop(paste0('`y` must be a single symbol or character string representing a column',
+                      '\nin the input data frame supplied to the `data` argument.'))
+        }
+      } else if(!is.character(y) || length(y) > 1 || y %ni% names(data)){
+        stop(paste0('`y` must be a single symbol or character string representing a column',
+                    '\nin the input data frame supplied to the `data` argument.'))
+      } else {
+        y_str <- y
+      }
+    }
     if(!is.numeric(dt[[y_str]])){
       stop("y must be a numeric vector or column of a data frame")
     }
@@ -321,7 +330,7 @@ describe_ci <- function(data, y = NULL, ..., stat = mean, replicates = 2000,
 describe_ci_all <- function(data, ..., stat = mean, replicates = 2000,
                             ci_level = 0.95, ci_type = c("perc", "bca", "basic", "norm"),
                             parallel = FALSE, cores = NULL,
-                            na.rm = TRUE, output = c("tibble", "dt")) {
+                            na.rm = TRUE, output = c("dt", "tibble")) {
 
   ci_type <- match.arg(ci_type)
   output <- match.arg(output)

@@ -1,3 +1,13 @@
+# elucdaite 0.1.1.9000 - March 3rd, 2022
+
+* Added `describe_na()`. `describe_na_all()`, `plot_na()`, and `plot_na_all()` to facilitate exploration of missing values in data frames. 
+
+* Fixed a bug which caused `describe()` and `describe_ci()` to fail when specifying the "y" argument using a quoted variable name.
+
+* Changed the default output format of `describe_*` functions from "tibble" to "dt" (data.table) for efficiency.
+
+* Changed the default theme of `plot_*` functions to "bw" (`ggplot2::theme_bw()`). 
+
 # elucidate 0.1.0.9005 - January 23rd, 2022
 
 * Fixed a bug which caused `describe()` and `describe_ci()` to fail when attempting to evaluate columns from data.table objects.

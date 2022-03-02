@@ -44,9 +44,8 @@ before attempting to calculate summary statistics.}
 \item{sep}{A character string to use to separate unique values from their
 counts ("_" by default). Only applicable to factors and character vectors.}
 
-\item{output}{"tibble" for tibble or "dt" for data.table. Tibble is used as
-the default output to facilitate subsequent use/modification of the output
-with the tidyverse collection of packages.}
+\item{output}{Output type for each class of variables. dt" for data.table or
+"tibble" for tibble.}
 }
 \value{
 The output varies as a function of the class of input data/y, referred to as "y" below

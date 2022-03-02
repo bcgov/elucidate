@@ -271,9 +271,9 @@ colour_options <- function(print_to_pdf = FALSE, pdf_name = "base_r_colour_optio
 #'   transparent to 1 = 100% opaque.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -391,7 +391,7 @@ plot_density <- function(data, x, #essential parameters
                          dnorm = FALSE, dnorm_colour = "black",
                          dnorm_line_type = c("dashed", "solid", "dotted", "dotdash", "longdash", "twodash"),
                          dnorm_line_size = 1.1, dnorm_alpha = 0.6,
-                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                         theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                          text_size = 14, font = c("sans", "serif", "mono"),#theme options
                          facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                          facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -884,9 +884,9 @@ plot_density <- function(data, x, #essential parameters
 #'   drawn if dnorm = TRUE to show the scale for the normal density curve.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -1000,7 +1000,7 @@ plot_histogram <- function(data, x, #essential parameters
                            dnorm = FALSE, dnorm_colour = "black",
                            dnorm_line_type = c("dashed", "solid", "dotted", "dotdash", "longdash", "twodash"),
                            dnorm_line_size = 1.1, dnorm_alpha = 0.6, dnorm_y_axis = TRUE,
-                           theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                           theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                            text_size = 14, font = c("sans", "serif", "mono"),#theme options
                            facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                            facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -1504,9 +1504,9 @@ plot_histogram <- function(data, x, #essential parameters
 #'   dots = TRUE. See \code{\link[ggplot2]{geom_dotplot}} for details.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -1624,7 +1624,7 @@ plot_box <- function(data, y,#essential parameters
                      palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                      alpha = 0.75, greyscale = FALSE, #control transparency, convert to greyscale
                      line_size = 1, dots = FALSE, dots_colour = "black", dots_alpha = 0.4, dots_binwidth = 0.9,
-                     theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                     theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                      text_size = 14, font = c("sans", "serif", "mono"), #theme options
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                      facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -2073,9 +2073,9 @@ plot_box <- function(data, y,#essential parameters
 #' @param line_size Controls the thickness of the violin outlines.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -2189,7 +2189,7 @@ plot_violin <- function(data, y, #essential parameters
                         palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                         alpha = 0.75, greyscale = FALSE, #control transparency, convert to greyscale
                         line_size = 1,
-                        theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                        theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                         text_size = 14, font = c("sans", "serif", "mono"),#theme options
                         facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                         facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -2729,9 +2729,9 @@ plot_violin <- function(data, y, #essential parameters
 #' @param greyscale Set to TRUE if you want the plot converted to greyscale.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -2940,7 +2940,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                          regression_method_args = NULL, loess_span = 0.75,
 
                          alpha = 0.6, greyscale = FALSE, #control transparency, convert to greyscale
-                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                         theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                          text_size = 14, font = c("sans", "serif", "mono"), #theme options
                          facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                          facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -3600,9 +3600,9 @@ plot_scatter <- function(data, y, x,#essential parameters
 #'   \code{\link[ggplot2]{coord_flip}} for details.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -3705,7 +3705,7 @@ plot_bar <- function(data, x = NULL,
                      alpha = 0.8, greyscale = FALSE, #control transparency, convert to greyscale
                      line_size = 1,
                      coord_flip = FALSE,
-                     theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                     theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                      text_size = 14, font = c("sans", "serif", "mono"), #theme options
                      facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                      facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -4359,9 +4359,9 @@ plot_bar <- function(data, x = NULL,
 #'   0.5.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -4512,7 +4512,7 @@ plot_stat_error <- function(data, y, x = NULL, geom = c("point", "bar"), stat = 
                             eb_line_type = 1, eb_colour = NULL,
                             add_lines = F, line_alpha = 0.75, line_group = NULL,
                             line_colour = NULL, line_type = 1, line_size = 0.5,
-                            theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                            theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                             text_size = 14, font = c("sans", "serif", "mono"),
                             coord_flip = FALSE, omit_legend = FALSE,
                             legend_position = c("right", "left", "bottom", "top"),
@@ -6056,9 +6056,9 @@ plot_pie <- function(data,
 #'   arguments.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -6171,7 +6171,7 @@ plot_raincloud <- function(data, y,#essential parameters
                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 1, #viridis colour palette options
                            coord_flip = FALSE, #flip the x- and y- axes so that the half-violin plots look like rain clouds
                            greyscale = FALSE, #control transparency, convert to greyscale
-                           theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                           theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                            text_size = 14, font = c("sans", "serif", "mono"), #theme options
                            facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                            facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -6742,9 +6742,9 @@ plot_raincloud <- function(data, y,#essential parameters
 #' @param point_size If points = TRUE, this controls the size of the points.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -6842,7 +6842,7 @@ plot_line <- function(data, y, x, ...,
                       points = FALSE,
                       point_colour = "black", point_fill = "black", point_alpha = 1,
                       point_shape = "circle", point_size = 3,
-                      theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                      theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                       text_size = 14, font = c("sans", "serif", "mono"), #theme options
                       facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
                       facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
@@ -7333,9 +7333,9 @@ plot_line <- function(data, y, x, ...,
 #' @param line_size Controls the thickness of plotted lines.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -7508,7 +7508,7 @@ plot_var <- function(data,
                      palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
                      palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
                      alpha = 0.75, greyscale = FALSE, line_size = 1,
-                     theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                     theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                      text_size = 14, font = c("sans", "serif", "mono"),
                      legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE,
                      dnorm = TRUE, violin = TRUE, var1_log10 = FALSE, var2_log10 = FALSE,
@@ -8034,9 +8034,9 @@ plot_var <- function(data,
 #' @param line_size Controls the thickness of plotted lines.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -8194,7 +8194,7 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
                          palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
                          palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
                          alpha = 0.75, greyscale = FALSE, line_size = 1,
-                         theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
+                         theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
                          text_size = 14, font = c("sans", "serif", "mono"),
                          legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE,
                          dnorm = TRUE, violin = TRUE, var1_log10 = FALSE, var2_log10 = FALSE,
@@ -8523,9 +8523,9 @@ plot_var_all <- function(data, var2 = NULL, group_var = NULL, cols = NULL,
 #' @param line_size Controls the thickness of plotted lines.
 #'
 #' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
-#'   templates provided by ggplot2. Currently supported options are: "classic"
-#'   (the elucidate default), "bw", "grey" (the ggplot2 default), "light",
-#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
 #'   information.
 #'
 #' @param text_size This controls the size of all plot text. Default = 14.
@@ -8682,7 +8682,8 @@ plot_var_pairs <- function(data, group_var = NULL, cols = NULL, title = ggplot2:
                            palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"),
                            palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.8,
                            alpha = 0.75, greyscale = FALSE, line_size = 1,
-                           theme = "classic", text_size = 14, font = c("sans", "serif", "mono"),
+                           theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
+                           text_size = 14, font = c("sans", "serif", "mono"),
                            legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE,
                            dnorm = TRUE, violin = TRUE, var1_log10 = FALSE, var2_log10 = FALSE,
                            point_size = 2, point_shape = c("circle", "square", "diamond", "triangle up", "triangle down"),
@@ -9002,5 +9003,1294 @@ plot_c <- function(..., nrow = NULL, ncol = NULL, guides = c("collect", "auto", 
                                    nrow = nrow, ncol = ncol)
       }
     }
+  }
+}
+
+
+# plot_na ---------------------------------------------------------------
+#' @title
+#'
+#' Generate a bar plot of missing values for a variable.
+#'
+#' @description Easily generate bar plots of missing value summary statistics
+#'   using ggplot2 with a simplified customization interface for common
+#'   modifications with static (ggplot) and interactive (plotly) output options.
+#'   The static output is useful for producing static reports (e.g. for
+#'   manuscripts) and is readily customized further using ggplot2 syntax. The
+#'   interactive output is helpful for exploring the data and producing dynamic
+#'   html reports. To plot bar graphs of raw data, see \code{\link{plot_bar}}
+#'   instead.  See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
+#'
+#' @importFrom dplyr mutate
+#' @importFrom forcats fct_relevel
+#' @importFrom forcats fct_recode
+#' @importFrom forcats fct_reorder
+#' @importFrom forcats fct_infreq
+#' @importFrom forcats fct_rev
+#' @importFrom rlang !!!
+#' @importFrom rlang .data
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_bar
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 scale_colour_manual
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_fill_grey
+#' @importFrom ggplot2 lims
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 theme_gray
+#' @importFrom ggplot2 theme_light
+#' @importFrom ggplot2 theme_dark
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 position_dodge2
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
+#' @importFrom plotly ggplotly
+#' @importFrom utils browseURL
+#'
+#' @param data A data frame or tibble containing at least one categorical
+#'   variable.
+#'
+#' @param x A variable you want to check for missing values.
+#'
+#' @param y Measure to plot on the y-axis. One of "p_na" for the proportion of
+#'   missing values (default), "na" for the count of missing values, or "n" for
+#'   the count of non-missing values.
+#'
+#' @param ... graphical parameters (not associated with variables) to be passed
+#'   to \code{\link[ggplot2]{geom_bar}}, e.g. colour or fill, to be applied
+#'   to all bars. To see some of the available options in a web browser, set the
+#'   aesthetic_options argument to TRUE.
+#'
+#' @param width Adjusts the width of the bars (default = 0.85).
+#'
+#' @param position Determines how bars are arranged relative to one another when
+#'   a grouping variable is assigned to either fill_var or colour_var. The
+#'   default, "dodge", uses \code{\link[ggplot2]{position_dodge2}} to arrange
+#'   bars side-by-side; "stack" places the bars on top of each other; "fill"
+#'   also stacks bars but additionally converts y-axis from raw "y"-axis values to
+#'   proportions. N.B. Stacked bars may be harder to interpret.
+#'
+#' @param dodge_padding If position = "dodge", this controls the gap width
+#'   between adjacent bars (default = 0.1). To eliminate the gap, set this to 0.
+#'   To overlay bars use a negative value e.g. -0.5. See
+#'   \code{\link[ggplot2]{position_dodge2}} for details.
+#'
+#' @param fill_var Use if you want to assign a variable to the bar fill colour,
+#'   e.g. fill_var = "grouping_variable" or fill_var = grouping_variable.
+#'   Produces separate sets of bars for each level of the fill variable. See
+#'   \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param colour_var Use if you want to assign a variable to the bar outline
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
+#'   "x-axis label"
+#'
+#' @param ylab Specify/overwrite the y-axis label using a character string, e.g.
+#'   "y-axis label"
+#'
+#' @param title Add a main title to the plot using a character string, e.g.
+#'   "bar plots of y for each group of x"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
+#'
+#' @param fill_var_title If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the variable label in the plot legend.
+#'
+#' @param colour_var_title If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the variable label in the plot
+#'   legend.
+#'
+#' @param ylim specify the y-axis limits, e.g. ylim = c(lower_limit,
+#'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
+#'   the default is ylim = c(NA, NA)
+#'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
+#' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
+#'
+#' @param y_transformation If transform_y = TRUE, this determines the
+#'   transformation to be applied. Common choices include "log10" (the default),
+#'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
+#'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
+#'
+#' @param x_var_order_by_y If a variable has been assigned to x, this allows you
+#'   to sort the bars in order of increasing/ascending ("i" or "a") or
+#'   decreasing ("d") value of y. If no variable is assigned to y, then the
+#'   sorting occurs based on relative counts (position = "dodge" or position =
+#'   "stack") or proportions (position = "fill").
+#'
+#' @param x_var_order If a variable has been assigned to x, this allows you to
+#'   manually modify the order of the variable groups, e.g. x =
+#'   grouping_variable, x_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param fill_var_order_by_y If a variable has been assigned to fill_var, this
+#'   allows you to sort the bars in order of increasing/ascending ("i" or "a")
+#'   or decreasing ("d") value of y. If no variable is assigned to y, then the
+#'   sorting occurs based on relative counts (position = "dodge" or position =
+#'   "stack") or proportions (position = "fill").
+#'
+#' @param fill_var_order If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the order of the variable groups, e.g. fill_var =
+#'   grouping_variable, fill_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param colour_var_order_by_y If a variable has been assigned to colour_var,
+#'   this allows you to sort the bars in order of increasing/ascending ("i" or
+#'   "a") or decreasing ("d") value of y. If no variable is assigned to y, then
+#'   the sorting occurs based on relative counts (position = "dodge" or position
+#'   = "stack") or proportions (position = "fill").
+#'
+#' @param colour_var_order If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the order of the variable groups,
+#'   e.g. colour_var = grouping_variable, fill_var_order = c("group_2",
+#'   "group_1"). See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param x_var_labs If a variable has been assigned to x, this allows you to
+#'   modify the labels of the variable groups, e.g. x = grouping_variable,
+#'   x_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_labs If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the labels of the variable groups, e.g. fill_var
+#'   = grouping_variable, fill_var_labs = c("group_1_new_label" =
+#'   "group_1_old_label", "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param colour_var_labs If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the labels of the variable groups,
+#'   e.g. colour_var = grouping_variable, colour_var_labs =
+#'   c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
+#'   "group_2_old_label"). See \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_values If a variable has been assigned to fill using
+#'   fill_var, this allows you to modify the colours assigned to the fill of
+#'   each of the variable groups, e.g. fill_var = grouping_variable,
+#'   fill_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param colour_var_values If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the colours assigned to the outline
+#'   of each of the variable groups, e.g. colour_var = grouping_variable,
+#'   colour_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param palette If a variable is assigned to fill_var or colour_var, this
+#'   determines which
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
+#'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'    link} for examples. You can override these colour palettes with
+#'   fill_var_values or colour_var_values.
+#'
+#' @param palette_direction Choose "d2l" for dark to light (default) or "l2d"
+#'   for light to dark.
+#'
+#' @param palette_begin Value between 0 and 1 that determines where along the
+#'   full range of the chosen colour palette's spectrum to begin sampling
+#'   colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param palette_end Value between 0 and 1 that determines where along the full
+#'   range of the chosen colour palette's spectrum to end sampling colours. See
+#'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param alpha This adjusts the transparency/opacity of the graphical
+#'   components of the plot, ranging from 0 = 100% transparent to 1 = 100%
+#'   opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to greyscale.
+#'
+#' @param line_size Controls the thickness of the bar outlines.
+#'
+#' @param coord_flip Flips the x and y axes. See
+#'   \code{\link[ggplot2]{coord_flip}} for details.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
+#'
+#' @param facet_var Use if you want separate plots for each level of a grouping
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
+#'
+#' @param facet_var_order If a variable has been assigned for faceting using
+#'   facet_var, this allows you to modify the order of the variable groups, e.g.
+#'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
+#'   See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param facet_var_labs If a variable has been assigned for faceting using
+#'   facet_var, this allows you to modify the labels of the variable groups
+#'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
+#'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param facet_var_strip_position If a variable has been assigned for faceting
+#'   using facet_var, this allows you to modify the position of the facet strip
+#'   labels. Sensible options include "top" (the default) or "bottom".
+#'
+#' @param facet_var_text_bold If a variable has been assigned for faceting
+#'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
+#'   for the facet strip label text.
+#'
+#' @param legend_position This allows you to modify the legend position.
+#'   Options include "right" (the default), "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legends.
+#'
+#' @param interactive Determines whether a static ggplot object or an interactive html
+#'   plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.
+#'
+#' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
+#'   online aesthetic options vignette.
+#'
+#' @return A ggplot object or plotly object depending on whether static or
+#'   interactive output was requested.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' #simulate missing data
+#' na_cars <- recode_errors(mtcars, errors = c(8, 90:100, 2))
+#'
+#' #plot the proportion of missing values for the "cyl" variable
+#' plot_na(na_cars, x = cyl)
+#'
+#' #plot the count of missing values for the "carb" variable
+#' plot_na(na_cars, carb, y = "na")
+#'
+#' #plot the proportion of missing values for "cyl" split by grouping variable "am"
+#' # assigned to the fill aesthetic via the "fill_var" argument
+#' plot_na(na_cars, x = cyl, fill_var = am)
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
+#'   \code{\link{plot_bar}}, \code{\link{plot_na_all}}
+#'
+#' @export
+plot_na <- function(data, x, y = c("p_na", "na", "n"),
+                    ..., #geom-specific customization see ?geom_bar for details
+                    width = 0.85,
+                    position = c("dodge", "fill", "stack"),
+                    dodge_padding = 0.1,
+                    fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
+                    xlab = NULL, ylab = NULL,
+                    title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
+                    fill_var_title = NULL, colour_var_title = NULL, #titles
+                    ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                    transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
+                    x_var_order_by_y = NULL, x_var_order = NULL,
+                    fill_var_order_by_y = NULL, fill_var_order = NULL,
+                    colour_var_order_by_y = NULL, colour_var_order = NULL, #modify grouping variable level order
+                    x_var_labs = NULL, fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
+                    fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
+                    palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
+                    palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.9, #viridis colour palette options
+                    alpha = 0.8, greyscale = FALSE, #control transparency, convert to greyscale
+                    line_size = 1,
+                    coord_flip = FALSE,
+                    theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
+                    text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                    facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
+                    facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                    legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
+                    interactive = FALSE, aesthetic_options = FALSE) {#output format
+
+  y <- match.arg(y)
+  theme <- match.arg(theme)
+  position <- match.arg(position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+
+  .classes <- class(data)
+
+  if(missing(x)) {
+    stop("`x` must be specified")
+  }
+
+  if(is.error(class(data[[x]]))) {
+    x <- deparse(substitute(x))
+    if(x %ni% names(data)) {
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  } else if(!is.character(x) || length(x) > 1 ||class(data[[x]]) == "NULL") {
+    stop('`x` must be a single symbol or character string',
+         '\n representing a column in the input data frame supplied to the `data` argument.')
+  }
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+      if(fill_var %ni% names(data)) {
+        stop('If specified, `fill_var` must be a single symbol or character string',
+             '\n representing a column in the input data frame supplied to the `data` argument.')
+      }
+    } else if(!is.character(fill_var) || length(fill_var) > 1 || class(data[[fill_var]]) == "NULL"){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+      if(colour_var %ni% names(data)) {
+        stop('If specified, `colour_var` must be a single symbol or character string',
+             '\n representing a column in the input data frame supplied to the `data` argument.')
+      }
+    } else if(!is.character(colour_var) || length(colour_var) > 1 || class(data[[colour_var]]) == "NULL"){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+      if(facet_var %ni% names(data)) {
+        stop('If specified, `facet_var` must be a single symbol or character string',
+             '\n representing a column in the input data frame supplied to the `data` argument.')
+      }
+    } else if(!is.character(facet_var) || length(facet_var) > 1 || class(data[[facet_var]]) == "NULL"){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+
+  if("data.frame" %ni% .classes) {
+    stop("Input data must be a data.table, tibble, or data.frame.")
+  }
+
+  #grouping options
+  if (!missing(fill_var) && missing(colour_var) && missing(facet_var)) {
+    G <- fill_var
+
+  } else if (missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- colour_var
+
+  } else if (missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- facet_var
+
+  } else if (!missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(fill_var, colour_var)
+
+  } else if (!missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(fill_var, facet_var)
+
+  } else if (missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(colour_var, facet_var)
+
+  }else if (!missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(fill_var, colour_var, facet_var)
+
+  }
+
+  if("data.table" %ni% .classes) {
+    data <- data.table::as.data.table(data)
+  }
+  #get the table of missing values
+  if(!missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+    desc <- data[, .(n = sum(!is.na(get(x))),
+                     na = sum(is.na(get(x))),
+                     p_na = round(sum(is.na(get(x)))/length(get(x)), 4)),
+                 by = eval(G)]
+  } else {
+    desc <- data[, .(n = sum(!is.na(get(x))),
+                     na = sum(is.na(get(x))),
+                     p_na = round(sum(is.na(get(x)))/length(get(x)), 4))]
+  }
+
+  #fill variable recoding
+  if(!missing(fill_var)){
+    desc <- dplyr::mutate(desc, {{fill_var}} := as.character(.data[[fill_var]]))
+  }
+  if(!missing(fill_var) && !missing(fill_var_order_by_y)) {
+    if(fill_var_order_by_y == "d") {
+      desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], .data[[y]], .desc = TRUE))
+    } else {
+      desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], .data[[y]], .desc = FALSE))
+    }
+  }
+  if(!missing(fill_var) && !missing(fill_var_order)){
+    desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
+  }
+  if(!missing(fill_var) && !missing(fill_var_labs)){
+    desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
+  }
+
+  #colour variable recoding
+  if(!missing(colour_var)){
+    desc <- dplyr::mutate(desc, {{colour_var}} := as.character(.data[[colour_var]]))
+  }
+  if(!missing(colour_var) && !missing(colour_var_order_by_y)) {
+    if(colour_var_order_by_y == "d") {
+      desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = TRUE))
+    } else {
+      desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = FALSE))
+    }
+  }
+  if(!missing(colour_var) && !missing(colour_var_order)){
+    desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
+  }
+  if(!missing(colour_var) && !missing(colour_var_labs)){
+    desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
+  }
+
+  #facet label recoding
+  if(!missing(facet_var)){
+    desc <- dplyr::mutate(desc, {{facet_var}} := as.character(.data[[facet_var]]))
+  }
+  if(!missing(facet_var) && !missing(facet_var_order)){
+    desc <- dplyr::mutate(desc, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
+  }
+  if(!missing(facet_var) && !missing(facet_var_labs)){
+    desc <- dplyr::mutate(desc, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
+  }
+
+  #setup foundational plotting object layer
+  desc <- dplyr::mutate(desc, x = x)
+  p <- ggplot2::ggplot(desc, ggplot2::aes_string(x = "x", y = y, fill = fill_var, colour = colour_var))
+
+  #add the geom layer
+  if(position == "dodge") {
+    p <- p +
+      ggplot2::geom_bar(alpha = alpha, stat = "identity", width = width,
+                        position = ggplot2::position_dodge2(padding = dodge_padding), size = line_size, ...)
+  } else {
+    p <- p +
+      ggplot2::geom_bar(alpha = alpha, stat = "identity", width = width, position = position, size = line_size, ...)
+  }
+
+  #modification of the colour or fill values
+  if (!missing(fill_var) && missing(colour_var)){
+    if(!missing(fill_var_values)){
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                      option = palette, direction = palette_direction)
+    }
+  } else if(missing(fill_var) && !missing(colour_var)) {
+    if(!missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+    }
+  } else if(!missing(fill_var) && !missing(colour_var)) {
+    if(!missing(fill_var_values) && missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values) +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+    } else if(missing(fill_var_values) && !missing(colour_var_values)) {
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values) +
+        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                      option = palette, direction = palette_direction)
+    } else if(!missing(fill_var_values) && !missing(colour_var_values)) {
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values) +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction) +
+        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                      option = palette, direction = palette_direction)
+    }
+  }
+
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
+  #misc
+  if(omit_legend == TRUE){
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  if(legend_position != "right"){
+    p <- p + ggplot2::theme(legend.position = legend_position)
+  }
+  if(!missing(facet_var)){
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
+  }
+  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
+  }
+
+  #modification of y-axis limits & transformations
+  if(!missing(ylim) && coord_flip == FALSE) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (!missing(ylim) && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip(ylim = c(ylim[1], ylim[2]))
+  } else if (missing(ylim) && y == "p_na" && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip(ylim = c(0, 1))
+  } else if (missing(ylim) && y == "p_na" && coord_flip == FALSE) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(0, 1))
+  } else if (missing(ylim) && y != "p_na" && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip()
+  }
+
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
+  }
+
+  #modification of axis labels
+  if(!missing(xlab)){
+    p <- p + ggplot2::labs(x = xlab)
+  } else {
+    p <- p + ggplot2::labs(x = "variable")
+  }
+  if(!missing(ylab)){
+    p <- p + ggplot2::labs(y = ylab)
+  } else if (position == "fill"){
+    p <- p + ggplot2::labs(y = paste0("proportion of ", y))
+  } else if (y == "p_na") {
+    p <- p + ggplot2::labs(y = "proportion of values missing")
+  } else if (y == "na") {
+    p <- p + ggplot2::labs(y = "missing value count")
+  } else if (y == "n") {
+    p <- p + ggplot2::labs(y = "complete case count")
+  }
+  if(!missing(fill_var_title)){
+    p <- p + ggplot2::labs(fill = fill_var_title)
+  }
+  if(!missing(colour_var_title)){
+    p <- p + ggplot2::labs(colour = colour_var_title)
+  }
+  if(!missing(title)){
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
+  }
+  if(aesthetic_options == TRUE){
+    utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
+  }
+  if(interactive == TRUE){
+    return(plotly::ggplotly(p))
+  }
+  if(interactive == FALSE){
+    return(p)
+  }
+}
+
+# plot_na_all -----------------------------------------------------------
+#' @title
+#'
+#' Generate a set of bar plots to assess the amount of missing (NA) values for all
+#' variables in a data frame.
+#'
+#' @description Extends \code{\link{plot_na}} to generate bar plots of missing
+#'   values for all variables in a data frame using ggplot2. See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/}{this
+#'    blog post} for an introduction to ggplot2.
+#'
+#' @importFrom dplyr mutate
+#' @importFrom forcats fct_relevel
+#' @importFrom forcats fct_recode
+#' @importFrom forcats fct_reorder
+#' @importFrom forcats fct_infreq
+#' @importFrom forcats fct_rev
+#' @importFrom rlang !!!
+#' @importFrom rlang .data
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_bar
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 aes_string
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 scale_colour_manual
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_fill_grey
+#' @importFrom ggplot2 lims
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 theme_gray
+#' @importFrom ggplot2 theme_light
+#' @importFrom ggplot2 theme_dark
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 position_dodge2
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 rel
+#' @importFrom plotly ggplotly
+#' @importFrom utils browseURL
+#'
+#' @param data A data frame or tibble containing at least one categorical
+#'   variable.
+#'
+#' @param y Measure to plot on the y-axis. One of "p_na" for the proportion of
+#'   missing values (default), "na" for the count of missing values, or "n" for
+#'   the count of non-missing values.
+#'
+#' @param ... graphical parameters (not associated with variables) to be passed
+#'   to \code{\link[ggplot2]{geom_bar}}, e.g. colour or fill, to be applied
+#'   to all bars. To see some of the available options in a web browser, set the
+#'   aesthetic_options argument to TRUE.
+#'
+#' @param width Adjusts the width of the bars (default = 0.85).
+#'
+#' @param position Determines how bars are arranged relative to one another when
+#'   a grouping variable is assigned to either fill_var or colour_var. The
+#'   default, "dodge", uses \code{\link[ggplot2]{position_dodge2}} to arrange
+#'   bars side-by-side; "stack" places the bars on top of each other; "fill"
+#'   also stacks bars but additionally converts y-axis from raw "y"-axis values to
+#'   proportions. N.B. Stacked bars may be harder to interpret.
+#'
+#' @param dodge_padding If position = "dodge", this controls the gap width
+#'   between adjacent bars (default = 0.1). To eliminate the gap, set this to 0.
+#'   To overlay bars use a negative value e.g. -0.5. See
+#'   \code{\link[ggplot2]{position_dodge2}} for details.
+#'
+#' @param fill_var Use if you want to assign a variable to the bar fill colour,
+#'   e.g. fill_var = "grouping_variable" or fill_var = grouping_variable.
+#'   Produces separate sets of bars for each level of the fill variable. See
+#'   \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param colour_var Use if you want to assign a variable to the bar outline
+#'   colour, e.g. colour_var = "grouping_variable" or colour_var =
+#'   grouping_variable. Produces separate sets of bars for each level of the
+#'   colour variable. See \code{\link[ggplot2]{aes}} for details.
+#'
+#' @param xlab Specify/overwrite the x-axis label using a character string, e.g.
+#'   "x-axis label"
+#'
+#' @param ylab Specify/overwrite the y-axis label using a character string, e.g.
+#'   "y-axis label"
+#'
+#' @param title Add a main title to the plot using a character string, e.g.
+#'   "bar plots of y for each group of x"
+#'
+#' @param title_hjust Left-to-right/horizontal justification (alignment) of
+#'   the main plot title. Accepts values from 0 (far left) to 1 (far right).
+#'   Default is 0.5 (centre).
+#'
+#' @param caption Add a figure caption to the bottom of the plot using a character string.
+#'
+#' @param caption_hjust Left-to-right/horizontal justification (alignment) of the
+#'   caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
+#'   (left).
+#'
+#' @param fill_var_title If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the variable label in the plot legend.
+#'
+#' @param colour_var_title If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the variable label in the plot
+#'   legend.
+#'
+#' @param ylim specify the y-axis limits, e.g. ylim = c(lower_limit,
+#'   upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
+#'   the default is ylim = c(NA, NA)
+#'
+#' @param ybreaks This allows you to change the break points to use for tick
+#'   marks on the y-axis. \code{\link{seq}} is particularly useful here. See
+#'   \code{\link[ggplot2]{scale_y_continuous}} for details. If ybreaks is
+#'   specified, then ylim should be also.
+#'
+#' @param transform_y Would you like to transform the y axis? (TRUE or FALSE)
+#'
+#' @param y_transformation If transform_y = TRUE, this determines the
+#'   transformation to be applied. Common choices include "log10" (the default),
+#'   "log2", "sqrt", or "exp". See \code{\link[ggplot2]{scale_continuous}} for
+#'   details.
+#'
+#' @param y_var_labs Allows you to modify the labels displayed with the y-axis
+#'   tick marks. See \code{\link[ggplot2]{scale_continuous}} for details.
+#'
+#' @param x_var_order_by_y If a variable has been assigned to x, this allows you
+#'   to sort the bars in order of increasing/ascending ("i" or "a") or
+#'   decreasing ("d") value of y. If no variable is assigned to y, then the
+#'   sorting occurs based on relative counts (position = "dodge" or position =
+#'   "stack") or proportions (position = "fill").
+#'
+#' @param x_var_order If a variable has been assigned to x, this allows you to
+#'   manually modify the order of the variable groups, e.g. x =
+#'   grouping_variable, x_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param fill_var_order_by_y If a variable has been assigned to fill_var, this
+#'   allows you to sort the bars in order of increasing/ascending ("i" or "a")
+#'   or decreasing ("d") value of y. If no variable is assigned to y, then the
+#'   sorting occurs based on relative counts (position = "dodge" or position =
+#'   "stack") or proportions (position = "fill").
+#'
+#' @param fill_var_order If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the order of the variable groups, e.g. fill_var =
+#'   grouping_variable, fill_var_order = c("group_2", "group_1"). See
+#'   \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param colour_var_order_by_y If a variable has been assigned to colour_var,
+#'   this allows you to sort the bars in order of increasing/ascending ("i" or
+#'   "a") or decreasing ("d") value of y. If no variable is assigned to y, then
+#'   the sorting occurs based on relative counts (position = "dodge" or position
+#'   = "stack") or proportions (position = "fill").
+#'
+#' @param colour_var_order If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the order of the variable groups,
+#'   e.g. colour_var = grouping_variable, fill_var_order = c("group_2",
+#'   "group_1"). See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param x_var_labs If a variable has been assigned to x, this allows you to
+#'   modify the labels of the variable groups, e.g. x = grouping_variable,
+#'   x_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_labs If a variable has been assigned to fill using fill_var,
+#'   this allows you to modify the labels of the variable groups, e.g. fill_var
+#'   = grouping_variable, fill_var_labs = c("group_1_new_label" =
+#'   "group_1_old_label", "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param colour_var_labs If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the labels of the variable groups,
+#'   e.g. colour_var = grouping_variable, colour_var_labs =
+#'   c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
+#'   "group_2_old_label"). See \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param fill_var_values If a variable has been assigned to fill using
+#'   fill_var, this allows you to modify the colours assigned to the fill of
+#'   each of the variable groups, e.g. fill_var = grouping_variable,
+#'   fill_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param colour_var_values If a variable has been assigned to colour using
+#'   colour_var, this allows you to modify the colours assigned to the outline
+#'   of each of the variable groups, e.g. colour_var = grouping_variable,
+#'   colour_var_values = c("blue", "red"). See
+#'   \code{\link[ggplot2]{scale_fill_manual}} for details. For the colour
+#'   options available in base R, see \code{\link[elucidate]{colour_options}}.
+#'
+#' @param palette If a variable is assigned to fill_var or colour_var, this
+#'   determines which
+#'   \href{https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html}{viridis
+#'    colour palette} to use. Options include "plasma" or "C" (default), "magma"
+#'   or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
+#'   \href{https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes}{this
+#'    link} for examples. You can override these colour palettes with
+#'   fill_var_values or colour_var_values.
+#'
+#' @param palette_direction Choose "d2l" for dark to light (default) or "l2d"
+#'   for light to dark.
+#'
+#' @param palette_begin Value between 0 and 1 that determines where along the
+#'   full range of the chosen colour palette's spectrum to begin sampling
+#'   colours. See \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param palette_end Value between 0 and 1 that determines where along the full
+#'   range of the chosen colour palette's spectrum to end sampling colours. See
+#'   \code{\link[ggplot2]{scale_fill_viridis_d}} for details.
+#'
+#' @param alpha This adjusts the transparency/opacity of the graphical
+#'   components of the plot, ranging from 0 = 100% transparent to 1 = 100%
+#'   opaque.
+#'
+#' @param greyscale Set to TRUE if you want the plot converted to greyscale.
+#'
+#' @param line_size Controls the thickness of the bar outlines.
+#'
+#' @param coord_flip Flips the x and y axes. See
+#'   \code{\link[ggplot2]{coord_flip}} for details.
+#'
+#' @param theme Adjusts the theme using 1 of 6 predefined "complete" theme
+#'   templates provided by ggplot2. Currently supported options are: "classic",
+#'   "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
+#'   "dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
+#'   information.
+#'
+#' @param text_size This controls the size of all plot text. Default = 14.
+#'
+#' @param font This controls the font of all plot text. Default = "sans"
+#'   (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
+#'   New).
+#'
+#' @param facet_var Use if you want separate plots for each level of a grouping
+#'   variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
+#'   facet_var = grouping_variable. See \code{\link[ggplot2]{facet_wrap}} for
+#'   details.
+#'
+#' @param facet_var_order If a variable has been assigned for faceting using
+#'   facet_var, this allows you to modify the order of the variable groups, e.g.
+#'   facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
+#'   See \code{\link[forcats]{fct_relevel}} for details.
+#'
+#' @param facet_var_labs If a variable has been assigned for faceting using
+#'   facet_var, this allows you to modify the labels of the variable groups
+#'   which will appear in the facet strips, e.g. facet_var = grouping_variable,
+#'   facet_var_labs = c("group_1_new_label" = "group_1_old_label",
+#'   "group_2_new_label" = "group_2_old_label"). See
+#'   \code{\link[forcats]{fct_recode}} for details.
+#'
+#' @param facet_var_strip_position If a variable has been assigned for faceting
+#'   using facet_var, this allows you to modify the position of the facet strip
+#'   labels. Sensible options include "top" (the default) or "bottom".
+#'
+#' @param facet_var_text_bold If a variable has been assigned for faceting
+#'   using facet_var, this allows you to use boldface (TRUE/default or FALSE)
+#'   for the facet strip label text.
+#'
+#' @param legend_position This allows you to modify the legend position.
+#'   Options include "right" (the default), "left", "top", & "bottom".
+#'
+#' @param omit_legend Set to TRUE if you want to remove/omit the legends.
+#'
+#' @param interactive Determines whether a static ggplot object or an interactive html
+#'   plotly object is returned. See \code{\link[plotly]{ggplotly}} for details.
+#'
+#' @param aesthetic_options If set to TRUE, opens a web browser to the tidyverse
+#'   online aesthetic options vignette.
+#'
+#' @return A ggplot object or plotly object depending on whether static or
+#'   interactive output was requested.
+#'
+#' @author Craig P. Hutton, \email{Craig.Hutton@@gov.bc.ca}
+#'
+#' @examples
+#'
+#' #plotting group counts
+#'
+#' plot_bar(pdata,
+#'          x = g,
+#'          xlab = "group",
+#'          fill_var = high_low,
+#'          colour = "black",
+#'          fill_var_values = c("blue2", "red2"))
+#'
+#' #plotting specific values on the y-axis, e.g. a grouped summary statistic
+#'
+#' library(dplyr)
+#'
+#' grouped_y1_max <- pdata %>%
+#'    group_by(g) %>%
+#'    summarise(y1_max = max(y1), .groups = "drop")
+#'
+#' plot_bar(grouped_y1_max, x = g, y = y1_max,
+#'          xlab = "group", ylab = "y1 maximum value",
+#'          x_var_order_by_y = "i", #order levels of x by increasing y value
+#'          fill = "blue2")
+#'
+#' @references
+#' Wickham, H. (2016). ggplot2: elegant graphics for data analysis. New York, N.Y.: Springer-Verlag.
+#'
+#' @seealso \code{\link[ggplot2]{geom_bar}}, \code{\link[plotly]{ggplotly}},
+#'   \code{\link{plot_stat_error}}
+#'
+#' @export
+plot_na_all <- function(data, y = c("p_na", "na", "n"),
+                        ..., #geom-specific customization see ?geom_bar for details
+                        width = 0.85,
+                        position = c("dodge", "fill", "stack"),
+                        dodge_padding = 0.1,
+                        fill_var = NULL, colour_var = NULL, #grouping variable aesthetic mappings
+                        xlab = NULL, ylab = NULL,
+                        title = NULL, title_hjust = 0.5, caption = NULL, caption_hjust = 0,
+                        fill_var_title = NULL, colour_var_title = NULL, #titles
+                        ylim = c(NA, NA), ybreaks = ggplot2::waiver(), #control the y axis limits and scaling
+                        transform_y = FALSE, y_transformation = "log10", y_var_labs = ggplot2::waiver(),
+                        x_var_order_by_y = NULL, x_var_order = NULL,
+                        fill_var_order_by_y = NULL, fill_var_order = NULL,
+                        colour_var_order_by_y = NULL, colour_var_order = NULL, #modify grouping variable level order
+                        x_var_labs = NULL, fill_var_labs = NULL, colour_var_labs = NULL, #modify grouping variable labels
+                        fill_var_values = NULL, colour_var_values = NULL, #manual colour specification
+                        palette = c("plasma", "C", "magma", "A", "inferno", "B", "viridis", "D", "cividis", "E"), #viridis colour palettes
+                        palette_direction = c("d2l", "l2d"), palette_begin = 0, palette_end = 0.9, #viridis colour palette options
+                        alpha = 0.8, greyscale = FALSE, #control transparency, convert to greyscale
+                        line_size = 1,
+                        coord_flip = FALSE,
+                        theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
+                        text_size = 14, font = c("sans", "serif", "mono"), #theme options
+                        facet_var = NULL, facet_var_order = NULL, facet_var_labs = NULL, #facet options
+                        facet_var_strip_position = c("top", "bottom"), facet_var_text_bold = TRUE, #facet aesthetic customization
+                        legend_position = c("right", "left", "top", "bottom"), omit_legend = FALSE, #legend position
+                        interactive = FALSE, aesthetic_options = FALSE) {
+  y <- match.arg(y)
+  theme <- match.arg(theme)
+  position <- match.arg(position)
+  font <- match.arg(font)
+  legend_position <- match.arg(legend_position)
+  facet_var_strip_position <- match.arg(facet_var_strip_position)
+  palette <- match.arg(palette)
+  palette_direction <- match.arg(palette_direction)
+  palette_direction <- ifelse(palette_direction == "d2l", 1, -1)
+
+  if(!missing(fill_var)) {
+    if(is.error(class(data[[fill_var]]))) {
+      fill_var <- deparse(substitute(fill_var))
+      if(fill_var %ni% names(data)) {
+        stop('If specified, `fill_var` must be a single symbol or character string',
+             '\n representing a column in the input data frame supplied to the `data` argument.')
+      }
+    } else if(!is.character(fill_var) || length(fill_var) > 1 || class(data[[fill_var]]) == "NULL"){
+      stop('If specified, `fill_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(colour_var)) {
+    if(is.error(class(data[[colour_var]]))) {
+      colour_var <- deparse(substitute(colour_var))
+      if(colour_var %ni% names(data)) {
+        stop('If specified, `colour_var` must be a single symbol or character string',
+             '\n representing a column in the input data frame supplied to the `data` argument.')
+      }
+    } else if(!is.character(colour_var) || length(colour_var) > 1 || class(data[[colour_var]]) == "NULL"){
+      stop('If specified, `colour_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(facet_var)) {
+    if(is.error(class(data[[facet_var]]))) {
+      facet_var <- deparse(substitute(facet_var))
+      if(facet_var %ni% names(data)) {
+        stop('If specified, `facet_var` must be a single symbol or character string',
+             '\n representing a column in the input data frame supplied to the `data` argument.')
+      }
+    } else if(!is.character(facet_var) || length(facet_var) > 1 || class(data[[facet_var]]) == "NULL"){
+      stop('If specified, `facet_var` must be a single symbol or character string',
+           '\n representing a column in the input data frame supplied to the `data` argument.')
+    }
+  }
+  if(!missing(x_var_order_by_y)) {
+    if(x_var_order_by_y != "d" && x_var_order_by_y != "a" && x_var_order_by_y != "i"){
+      stop('"x_var_order_by_y" should be one of "d", "a", or "i"')
+    }
+  }
+  if(!missing(fill_var_order_by_y)) {
+    if(fill_var_order_by_y != "d" && fill_var_order_by_y != "a" && fill_var_order_by_y != "i"){
+      stop('"fill_var_order_by_y" should be one of "d", "a", or "i"')
+    }
+  }
+  if(!missing(colour_var_order_by_y)) {
+    if(colour_var_order_by_y != "d" && colour_var_order_by_y != "a" && colour_var_order_by_y != "i"){
+      stop('"colour_var_order_by_y" should be one of "d", "a", or "i"')
+    }
+  }
+  #grouping options
+  if (!missing(fill_var) && missing(colour_var) && missing(facet_var)) {
+    G <- fill_var
+
+  } else if (missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- colour_var
+
+  } else if (missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- facet_var
+
+  } else if (!missing(fill_var) && !missing(colour_var) && missing(facet_var)) {
+    G <- c(fill_var, colour_var)
+
+  } else if (!missing(fill_var) && missing(colour_var) && !missing(facet_var)) {
+    G <- c(fill_var, facet_var)
+
+  } else if (missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(colour_var, facet_var)
+
+  }else if (!missing(fill_var) && !missing(colour_var) && !missing(facet_var)) {
+    G <- c(fill_var, colour_var, facet_var)
+
+  }
+  .classes <- class(data)
+  if("data.frame" %ni% .classes) {
+    stop("Input data must be a data.table, tibble, or data.frame.")
+  }
+
+  if("data.table" %ni% .classes) {
+    data <- data.table::as.data.table(data)
+  }
+  #get the table of missing values
+  if(!missing(colour_var) || !missing(fill_var) || !missing(facet_var)){
+    desc <- data[,  purrr::map_dfr(.SD, ~describe_na(.x), .id = "variable"), by = eval(G)]
+  } else {
+    desc <- data[,  purrr::map_dfr(.SD, ~describe_na(.x), .id = "variable")]
+  }
+
+  #x-axis recoding
+  if(!missing(x_var_order_by_y)) {
+    if(x_var_order_by_y == "d") {
+      desc<- dplyr::mutate(desc, variable = forcats::fct_reorder(variable, .data[[y]], .desc = TRUE))
+    } else {
+      desc <- dplyr::mutate(desc, variable = forcats::fct_reorder(variable, .data[[y]], .desc = FALSE))
+    }
+  }
+  if(!missing(x_var_order)){
+    desc <- dplyr::mutate(desc, variable = forcats::fct_relevel(variable, levels = !!!x_var_order))
+  }
+  if(!missing(x_var_labs)){
+    desc <- dplyr::mutate(desc, variable = forcats::fct_recode(variable, !!!x_var_labs))
+  }
+
+  #fill variable recoding
+  if(!missing(fill_var)){
+    desc <- dplyr::mutate(desc, {{fill_var}} := as.character(.data[[fill_var]]))
+  }
+  if(!missing(fill_var) && !missing(fill_var_order_by_y)) {
+    if(fill_var_order_by_y == "d") {
+      desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], .data[[y]], .desc = TRUE))
+    } else {
+      desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_reorder(.data[[fill_var]], .data[[y]], .desc = FALSE))
+    }
+  }
+  if(!missing(fill_var) && !missing(fill_var_order)){
+    desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
+  }
+  if(!missing(fill_var) && !missing(fill_var_labs)){
+    desc <- dplyr::mutate(desc, {{fill_var}} := forcats::fct_recode(.data[[fill_var]], !!!fill_var_labs))
+  }
+
+  #colour variable recoding
+  if(!missing(colour_var)){
+    desc <- dplyr::mutate(desc, {{colour_var}} := as.character(.data[[colour_var]]))
+  }
+  if(!missing(colour_var) && !missing(colour_var_order_by_y)) {
+    if(colour_var_order_by_y == "d") {
+      desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = TRUE))
+    } else {
+      desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_reorder(.data[[colour_var]], .data[[y]], .desc = FALSE))
+    }
+  }
+  if(!missing(colour_var) && !missing(colour_var_order)){
+    desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
+  }
+  if(!missing(colour_var) && !missing(colour_var_labs)){
+    desc <- dplyr::mutate(desc, {{colour_var}} := forcats::fct_recode(.data[[colour_var]], !!!colour_var_labs))
+  }
+
+  #facet label recoding
+  if(!missing(facet_var)){
+    desc <- dplyr::mutate(desc, {{facet_var}} := as.character(.data[[facet_var]]))
+  }
+  if(!missing(facet_var) && !missing(facet_var_order)){
+    desc <- dplyr::mutate(desc, {{facet_var}} := forcats::fct_relevel(.data[[facet_var]], levels = !!!facet_var_order))
+  }
+  if(!missing(facet_var) && !missing(facet_var_labs)){
+    desc <- dplyr::mutate(desc, {{facet_var}} := forcats::fct_recode(.data[[facet_var]], !!!facet_var_labs))
+  }
+
+  #setup foundational plotting object layer
+  p <- ggplot2::ggplot(desc, ggplot2::aes_string(x = "variable", y = y, fill = fill_var, colour = colour_var))
+
+  #add the geom layer
+  if(position == "dodge") {
+    p <- p +
+      ggplot2::geom_bar(alpha = alpha, stat = "identity", width = width,
+                        position = ggplot2::position_dodge2(padding = dodge_padding), size = line_size, ...)
+  } else {
+    p <- p +
+      ggplot2::geom_bar(alpha = alpha, stat = "identity", width = width, position = position, size = line_size, ...)
+  }
+
+  #modification of the colour or fill values
+  if (!missing(fill_var) && missing(colour_var)){
+    if(!missing(fill_var_values)){
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                      option = palette, direction = palette_direction)
+    }
+  } else if(missing(fill_var) && !missing(colour_var)) {
+    if(!missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+    }
+  } else if(!missing(fill_var) && !missing(colour_var)) {
+    if(!missing(fill_var_values) && missing(colour_var_values)){
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values) +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction)
+    } else if(missing(fill_var_values) && !missing(colour_var_values)) {
+      p <- p +
+        ggplot2::scale_colour_manual(values = colour_var_values) +
+        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                      option = palette, direction = palette_direction)
+    } else if(!missing(fill_var_values) && !missing(colour_var_values)) {
+      p <- p +
+        ggplot2::scale_fill_manual(values = fill_var_values) +
+        ggplot2::scale_colour_manual(values = colour_var_values)
+    } else {
+      p <- p +
+        ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
+                                        option = palette, direction = palette_direction) +
+        ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
+                                      option = palette, direction = palette_direction)
+    }
+  }
+
+  #convert to greyscale
+  if(greyscale == TRUE){
+    p <- p + ggplot2::scale_fill_grey()
+  }
+
+  #themes
+  if(theme == "classic"){
+    p <- p + ggplot2::theme_classic(base_size = text_size, base_family = font)
+  } else if (theme == "bw"){
+    p <- p + ggplot2::theme_bw(base_size = text_size, base_family = font)
+  } else if (theme == "grey"){
+    p <- p + ggplot2::theme_grey(base_size = text_size, base_family = font)
+  } else if (theme == "light"){
+    p <- p + ggplot2::theme_light(base_size = text_size, base_family = font)
+  } else if (theme == "dark"){
+    p <- p + ggplot2::theme_dark(base_size = text_size, base_family = font)
+  } else if (theme == "minimal"){
+    p <- p + ggplot2::theme_minimal(base_size = text_size, base_family = font)
+  }
+
+  #misc
+  if(omit_legend == TRUE){
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  if(legend_position != "right"){
+    p <- p + ggplot2::theme(legend.position = legend_position)
+  }
+  if(!missing(facet_var)){
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet_var]]), strip.position = facet_var_strip_position)
+  }
+  if(!missing(facet_var) & facet_var_text_bold == TRUE){
+    p <- p + ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
+  }
+
+  #modification of y-axis limits & transformations
+  if(!missing(ylim) && coord_flip == FALSE) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(ylim[1], ylim[2]))
+  } else if (!missing(ylim) && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip(ylim = c(ylim[1], ylim[2]))
+  } else if (missing(ylim) && y == "p_na" && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip(ylim = c(0, 1))
+  } else if (missing(ylim) && y == "p_na" && coord_flip == FALSE) {
+    p <- p + ggplot2::coord_cartesian(ylim = c(0, 1))
+  } else if (missing(ylim) && y != "p_na" && coord_flip == TRUE) {
+    p <- p + ggplot2::coord_flip()
+  }
+
+  if(class(y_var_labs) != "waiver") {
+    p <- p + ggplot2::scale_y_continuous(labels = y_var_labs)
+  } else if(transform_y == FALSE && class(ybreaks) != "waiver"){
+    p <- p + ggplot2::scale_y_continuous(breaks = ybreaks, labels = y_var_labs)
+  } else if (transform_y == TRUE){
+    p <- p + ggplot2::scale_y_continuous(trans = y_transformation, breaks = ybreaks, labels = y_var_labs)
+  }
+
+  #modification of axis labels
+  if(!missing(xlab)){
+    p <- p + ggplot2::labs(x = xlab)
+  }
+  if(!missing(ylab)){
+    p <- p + ggplot2::labs(y = ylab)
+  } else if (position == "fill"){
+    p <- p + ggplot2::labs(y = paste0("proportion of ", y))
+  } else if (y == "p_na") {
+    p <- p + ggplot2::labs(y = "proportion of values missing")
+  } else if (y == "na") {
+    p <- p + ggplot2::labs(y = "missing value count")
+  } else if (y == "n") {
+    p <- p + ggplot2::labs(y = "complete case count")
+  }
+  if(!missing(fill_var_title)){
+    p <- p + ggplot2::labs(fill = fill_var_title)
+  }
+  if(!missing(colour_var_title)){
+    p <- p + ggplot2::labs(colour = colour_var_title)
+  }
+  if(!missing(title)){
+    p <- p + ggplot2::labs(title = title) +
+      ggplot2::theme(plot.title = element_text(hjust = title_hjust))
+  }
+  if(!missing(caption)) {
+    p <- p + ggplot2::labs(caption = caption) +
+      ggplot2::theme(plot.caption = element_text(hjust = caption_hjust, size = ggplot2::rel(1.1)))
+  }
+  if(aesthetic_options == TRUE){
+    utils::browseURL("https://ggplot2.tidyverse.org/articles/ggplot2-specs.html")
+  }
+  if(interactive == TRUE){
+    return(plotly::ggplotly(p))
+  }
+  if(interactive == FALSE){
+    return(p)
   }
 }
