@@ -46,7 +46,6 @@ se <- function(y, na.rm = TRUE) {
   return(se)
 }
 
-
 # inverse quantile:get the quantiles corresponding to a vector of  --------
 #' @title
 #' Get the quantile(s) corresponding to a vector of values.
@@ -995,8 +994,17 @@ consum <- function(x, skip_na = FALSE) {
 #'
 #' @noRd
 group_parser <- function(data, ...) {
-  if(!missing(...)) {
-    if(is.error(names(data[, c(...)])) || is.null(names(data[, c(...)]))) {
+  if(data.table::is.data.table(data)) {
+    if(is.error(names(data[, list(...)]))) {
+      g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
+    } else {
+      g <- unlist(list(...))
+      if(!is.character(g)) {
+        g <- names(data)[g]
+      }
+    }
+  } else {
+    if(is.error(names(data[, c(...)]))) {
       g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
     } else {
       g <- unlist(list(...))
