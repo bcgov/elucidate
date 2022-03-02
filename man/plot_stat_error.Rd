@@ -61,7 +61,7 @@ plot_stat_error(
   line_colour = NULL,
   line_type = 1,
   line_size = 0.5,
-  theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
+  theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
   text_size = 14,
   font = c("sans", "serif", "mono"),
   coord_flip = FALSE,
@@ -339,9 +339,9 @@ specified.}
 0.5.}
 
 \item{theme}{Adjusts the theme using 1 of 6 predefined "complete" theme
-templates provided by ggplot2. Currently supported options are: "classic",
-"bw" (the elucidate default), "grey" (the ggplot2 default), "light",
-"dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
+templates provided by ggplot2. Currently supported options are: "classic"
+(the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+"dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 information.}
 
 \item{text_size}{This controls the size of all plot text. Default = 14.}

@@ -15,7 +15,7 @@ describe_ci_all(
   parallel = FALSE,
   cores = NULL,
   na.rm = TRUE,
-  output = c("dt", "tibble")
+  output = c("tibble", "dt")
 )
 }
 \arguments{

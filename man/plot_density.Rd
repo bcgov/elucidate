@@ -45,7 +45,7 @@ plot_density(
   dnorm_line_type = c("dashed", "solid", "dotted", "dotdash", "longdash", "twodash"),
   dnorm_line_size = 1.1,
   dnorm_alpha = 0.6,
-  theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
+  theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
   text_size = 14,
   font = c("sans", "serif", "mono"),
   facet_var = NULL,
@@ -216,9 +216,9 @@ density curve (if dnorm = TRUE) with valid values ranging from 0 = 100\%
 transparent to 1 = 100\% opaque.}
 
 \item{theme}{Adjusts the theme using 1 of 6 predefined "complete" theme
-templates provided by ggplot2. Currently supported options are: "classic",
-"bw" (the elucidate default), "grey" (the ggplot2 default), "light",
-"dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
+templates provided by ggplot2. Currently supported options are: "classic"
+(the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+"dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 information.}
 
 \item{text_size}{This controls the size of all plot text. Default = 14.}

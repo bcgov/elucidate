@@ -15,7 +15,7 @@ describe_ci(
   parallel = FALSE,
   cores = NULL,
   na.rm = TRUE,
-  output = c("dt", "tibble")
+  output = c("tibble", "dt")
 )
 }
 \arguments{
@@ -75,8 +75,9 @@ cores - 1 will be used by default.}
 \item{na.rm}{should missing values be removed before attempting to calculate
 the chosen statistic and confidence intervals? Default is TRUE.}
 
-\item{output}{Output type for each class of variables. dt" for data.table or
-"tibble" for tibble.}
+\item{output}{"tibble" for tibble or "dt" for data.table. Tibble is used as
+the default output to facilitate subsequent use/modification of the output
+with the tidyverse collection of packages.}
 }
 \description{
 describe_ci extends the functionality of \code{\link{stat_ci}}

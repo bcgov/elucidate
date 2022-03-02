@@ -65,7 +65,7 @@ plot_raincloud(
   palette_end = 1,
   coord_flip = FALSE,
   greyscale = FALSE,
-  theme = c("bw", "classic", "grey", "light", "dark", "minimal"),
+  theme = c("classic", "bw", "grey", "light", "dark", "minimal"),
   text_size = 14,
   font = c("sans", "serif", "mono"),
   facet_var = NULL,
@@ -322,9 +322,9 @@ Note that this will override colours you may have specified with other
 arguments.}
 
 \item{theme}{Adjusts the theme using 1 of 6 predefined "complete" theme
-templates provided by ggplot2. Currently supported options are: "classic",
-"bw" (the elucidate default), "grey" (the ggplot2 default), "light",
-"dark", & "minimal". See \code{\link[ggplot2]{theme_bw}} for more
+templates provided by ggplot2. Currently supported options are: "classic"
+(the elucidate default), "bw", "grey" (the ggplot2 default), "light",
+"dark", & "minimal". See \code{\link[ggplot2]{theme_classic}} for more
 information.}
 
 \item{text_size}{This controls the size of all plot text. Default = 14.}

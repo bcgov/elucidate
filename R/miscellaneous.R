@@ -995,17 +995,8 @@ consum <- function(x, skip_na = FALSE) {
 #'
 #' @noRd
 group_parser <- function(data, ...) {
-  if(data.table::is.data.table(data)) {
-    if(is.error(names(data[, list(...)]))) {
-      g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
-    } else {
-      g <- unlist(list(...))
-      if(!is.character(g)) {
-        g <- names(data)[g]
-      }
-    }
-  } else {
-    if(is.error(names(data[, c(...)]))) {
+  if(!missing(...)) {
+    if(is.error(names(data[, c(...)])) || is.null(names(data[, c(...)]))) {
       g <- gsub(" ", "", unlist(strsplit(deparse(substitute(list(...))), "[(,)]")))[-1]
     } else {
       g <- unlist(list(...))

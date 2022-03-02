@@ -239,24 +239,6 @@ For logical vectors:
 
 -   "p_TRUE" = the proportion of values that are `TRUE`.
 
-If you're only interested in checking for missing values, you can use `describe_na()` (as of `elucidate` version 0.1.1.9000), which runs substantially faster without having to calculate the full set of summary statistics provided by `describe()`.
-
-```{r describe_na}
-describe_na(pdata, y1)
-
-#resample the data so the speed difference is more noticable
-pdata_rs <- pdata[sample(1:nrow(pdata), 1e6, replace = TRUE), ] 
-
-system.time(
-  describe(pdata_rs, y1)
-)
-
-system.time(
-  describe_na(pdata_rs, y1)
-)
-```
-
-
 `elucidate` was designed to support group-oriented analysis workflows that are common in scientific research, where one group is being compared against other groups. To split a description by a grouping variable, simply specify the name of that variable after the column you want a description of.
 
 ```{r describe5}
@@ -295,20 +277,6 @@ pdata |>
   #pass them to describe_all()
   describe_all(g, #split by factor variable "g" 
                output = "dt") #change output to data.table format
-```
-
-If you are primarily interested in simply checking all columns of a data frame for missing/non-missing values, you can use `describe_na_all()` instead (as of `elucidate` version 0.1.1.9000) to save some time.
-
-```{r describe_na_all}
-describe_na_all(pdata)
-
-system.time(
-  describe_all(pdata_rs),
-)
-
-system.time(
-  describe_na_all(pdata_rs)
-)
 ```
 
 There are also `describe_ci()` and `describe_ci_all()` functions that can be used to obtain confidence intervals for the mean or other summary statistics of numeric variables, which can also be split by an arbitrary number of grouping variables.
@@ -637,7 +605,7 @@ pdata |>
   ggplot(aes(y = median_y1, x = d, colour = g)) +
   geom_line(size = 1.1) +
   scale_colour_viridis_d(option = "plasma", end = 0.8) +
-  theme_bw(14) +
+  theme_classic(14) +
   labs(y = "median y1")
 
 ```
@@ -650,7 +618,7 @@ pdata |>
   ggplot(aes(y = y1, x = d, colour = g)) +
   geom_line(size = 1.1) +
   scale_colour_viridis_d(option = "plasma", end = 0.8) +
-  theme_bw(14) +
+  theme_classic(14) +
   labs(y = "y1")
 ```
 
@@ -944,52 +912,6 @@ plot_var_list <- purrr::map(col_names, ~plot_density(pdata, .x))
 plot_c(plot_var_list)
 
 ```
-
-## plotting missing values
-
-`elucidate` version 0.1.1.9000 extends the `plot_*` function set a step further with `plot_na()` and `plot_na_all()` to make it easier to check a data set for missing values.
-
-`plot_na()` is useful for making bar graphs of the proportions (y = "p_na") or counts (y = "na) of missing values (`NA`s) for a single variable with options for splitting the bars by secondary variables via the "fill_var", "colour_var", or "facet_var" arguments.
-
-```{r plot_na_prep}
-#First we will modify the pdata data frame to introduces some NAs representing
-#missing values. More informaiton on the recode_errors() function can be found
-#in the next section of this vignette.
-
-set.seed(2022) #for reproducibility
-pdata_na <- recode_errors(pdata, errors = c("e", sample(1:1000, 100)), replacement = NA)
-
-#next we use describe_na_all() to see columns have missing values
-describe_na_all(pdata_na)
-
-```
-
-
-It looks like the ID, g, and x1-x3 variables are now missing some observations.
-
-we can plot one of them using the "x" argument of `plot_na()` and see if the proportion of NAs differs between levels of the "high_low" variable by assigning it to the "fill_var" argument
-
-```{r plot_na}
-plot_na(pdata_na, x = x1, fill_var = high_low, ylim = c(0, 0.2))
-```
-This is fine if we only want to inspect one or two variables, but for a quick visual assessment of missing data in an entire data frame, we can use `plot_na_all()` instead.
-
-```{r plot_na_all}
-plot_na_all(pdata_na, fill = "blue2")
-```
-For counts instead of proportions, set the "y" argument to "na" instead of the default value of "p_na" (or "n" for counts of non-missing values). We can also examine missing values for each date value of the "d" column by assigning it to the "facet_var" argument.
-
-```{r}
-pdata_na |> 
-  plot_na_all(facet_var = d,
-              fill = "blue2", 
-              #you can also flip the figure axes "coord_flip = TRUE" so the
-              #variable names are easier to read
-              coord_flip = TRUE,
-              #and sort the variables by the amount of NAs values they contain
-              x_var_order_by_y = "a") 
-```
-
 
 ## Auxiliary functions
 

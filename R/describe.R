@@ -69,11 +69,13 @@ tbcvs <- function(y, sep = "_") {
 #'
 #' @importFrom data.table as.data.table
 #' @importFrom data.table uniqueN
+#' @importFrom data.table dcast
 #' @importFrom lubridate is.instant
 #' @importFrom stats sd
 #' @importFrom stats quantile
 #' @importFrom stats na.omit
 #' @importFrom tibble as_tibble
+#' @importFrom tidyr separate
 #'
 #' @param data Either a vector or a data frame or tibble containing the
 #'   vector ("y") to be summarized and any grouping variables.
@@ -104,8 +106,9 @@ tbcvs <- function(y, sep = "_") {
 #' @param sep A character string to use to separate unique values from their
 #'   counts ("_" by default). Only applicable to factors and character vectors.
 #'
-#' @param output Output type for each class of variables. dt" for data.table or
-#'   "tibble" for tibble.
+#' @param output "tibble" for tibble or "dt" for data.table. Tibble is used as
+#'   the default output to facilitate subsequent use/modification of the output
+#'   with the tidyverse collection of packages.
 #'
 #' @return The output varies as a function of the class of input data/y, referred to as "y" below
 #'
@@ -260,19 +263,13 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
   } else {
     if(missing(y)){
       stop(paste0("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.",
-                  "\nIf you want summaries for all variables in data, use describe_na_all() instead"))
+           "\nIf you want summaries for all variables in data, use describe_all() instead"))
     } else {
       if(is.error(class(data[[y]]))) {
         y_str <- deparse(substitute(y))
-        if(y_str %ni% names(data)) {
-          stop(paste0('`y` must be a single symbol or character string representing a column',
-                      '\nin the input data frame supplied to the `data` argument.'))
-        }
-      } else if(!is.character(y) || length(y) > 1 || y %ni% names(data)){
+      } else if(!is.character(y) || length(y) > 1){
         stop(paste0('`y` must be a single symbol or character string representing a column',
-                    '\nin the input data frame supplied to the `data` argument.'))
-      } else {
-        y_str <- y
+             '\nin the input data frame supplied to the `data` argument.'))
       }
     }
     if(!missing(...)) {
@@ -471,8 +468,10 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #' @param sep A character string to use to separate unique values from their
 #'   counts ("_" by default). Only applicable to factors and character vectors.
 #'
-#' @param output Output type for each class of variables. dt" for data.table or
-#'   "tibble" for tibble.
+#' @param output Output type for each class of variables. "tibble" for tibble or
+#'   "dt" for data.table. Tibble is used as the default output to facilitate
+#'   subsequent use/modification of the output with the tidyverse collection of
+#'   packages.
 #'
 #' @return The output varies as a function of the class of input data/y,
 #'   referred to as "y" below. Each output type is grouped together in a data
@@ -555,7 +554,7 @@ describe <- function(data, y = NULL, ..., digits = 3, type = 2, na.rm = TRUE, se
 #' @seealso \code{\link{describe}}
 #'
 #' @export
-describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, sep = "_", output = c("dt", "tibble")) {
+describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm = TRUE, sep = "_", output = c("tibble", "dt")) {
   output <- match.arg(output)
 
   if(any(class %ni%  c("all", "d", "f", "c", "l", "n"))) {
@@ -680,213 +679,4 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
     ls <- ls[[1]]
   }
   return(ls)
-}
-
-
-# describe_na -------------------------------------------------------------
-#' @title
-#' Obtain a descriptive summary of missing values for a variable.
-#'
-#' @description Obtain a summary of missing values for a vector/variable. This
-#'   function is a more efficient alternative to \code{\link{describe}} when
-#'   assessment of missing values is the focus of describing a variable/vector.
-#'   Uses a combination of tidyverse packages and data.table to provide a
-#'   user-friendly interface that is pipe-friendly while leveraging the
-#'   excellent performance of data.table. The use of the ... argument also makes
-#'   it incredibly easy to obtain summaries split by grouping variables. To
-#'   obtain summaries of missing values for all variables in a data frame use
-#'   \code{\link{describe_na_all}} instead.
-#'
-#' @importFrom data.table as.data.table
-#' @importFrom lubridate is.instant
-#' @importFrom tibble as_tibble
-#'
-#' @param data Either a vector or a data frame or tibble containing the
-#'   vector ("y") to be summarized and any grouping variables.
-#'
-#' @param y If the data object is a data.frame, this is the variable for which
-#'   you wish to obtain a summary of missing values. You can use either the
-#'   quoted or unquoted name of the variable, e.g. "y_var" or y_var.
-#'
-#' @param ... If the data object is a data.frame, this special argument accepts
-#'   any number of unquoted grouping variable names (also present in the data
-#'   source) to use for subsetting, separated by commas, e.g. `group_var1,
-#'   group_var2`. Also accepts a character vector of column names or index
-#'   numbers, e.g. c("group_var1", "group_var2") or c(1, 2), but not a mixture
-#'   of formats in the same call. If no column names are specified, all columns
-#'   will be used.
-#'
-#' @param digits This determines the number of digits used for rounding of
-#'   the "p_na" column in the output.
-#'
-#' @param output Output type for each class of variables. dt" for data.table or
-#'   "tibble" for tibble.
-#'
-#' @return A tibble or data.table with the following columns in addition to any specified grouping variables:
-#'
-#'   \describe{
-#'     \item{cases}{the total number of cases}
-#'     \item{n}{number of complete cases}
-#'     \item{na}{the number of missing values}
-#'     \item{p_na}{the proportion of total cases with missing values}
-#'   }
-#'
-#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
-#'
-#' @examples
-#'
-#' describe_na(data = mtcars, y = mpg) #data frame column input method
-#'
-#' describe_na(mtcars$mpg) #vector input method
-#'
-#' @seealso \code{\link{describe}}, \code{\link{describe_all}}, \code{\link{describe_na_all}}
-#'
-#' @export
-describe_na <- function(data, y = NULL, ..., digits = 4, output = c("dt", "tibble")){
-
-  output <- match.arg(output)
-
-  if((is.vector(data) || is.factor(data)) || lubridate::is.instant(data)) {
-    data <- data.table::as.data.table(data)
-    description <- data[, .(cases = .N,
-                            n = sum(!is.na(data)),
-                            na = sum(is.na(data)),
-                            p_na = round(sum(is.na(data))/length(data), digits))]
-    if(output == "tibble") {
-      description <- tibble::as_tibble(description)
-    }
-    return(description)
-  } else {
-    if(missing(y)){
-      stop(paste0("If a non-vector (e.g. data frame) is supplied to the data argument, y must also be specified.",
-                  "\nIf you want summaries for all variables in data, use describe_na_all() instead"))
-    } else {
-      if(is.error(class(data[[y]]))) {
-        y_str <- deparse(substitute(y))
-        if(y_str %ni% names(data)) {
-          stop(paste0('`y` must be a single symbol or character string representing a column',
-                      '\nin the input data frame supplied to the `data` argument.'))
-        }
-      } else if(!is.character(y) || length(y) > 1 || y %ni% names(data)){
-        stop(paste0('`y` must be a single symbol or character string representing a column',
-                    '\nin the input data frame supplied to the `data` argument.'))
-      } else {
-        y_str <- y
-      }
-    }
-    if(!missing(...)) {
-      g <- group_parser(data, ...)
-    }
-    .classes <- class(data)
-    if("data.table" %ni% .classes) {
-      data <- data.table::as.data.table(data)
-    }
-
-    if(!missing(...)){
-      description <- data[, .(cases = .N,
-                              n = sum(!is.na(get(y_str))),
-                              na = sum(is.na(get(y_str))),
-                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits)),
-                          by = eval(g)]
-    } else {
-      description <- data[, .(cases = .N,
-                              n = sum(!is.na(get(y_str))),
-                              na = sum(is.na(get(y_str))),
-                              p_na = round(sum(is.na(get(y_str)))/length(get(y_str)), digits))]
-    }
-    if(output == "tibble") {
-      description <- tibble::as_tibble(description)
-    }
-    return(description)
-  }
-}
-
-# describe_na_all ---------------------------------------------------------
-#' @title
-#' Obtain a descriptive summary of missing values for all variables in a data frame.
-#'
-#' @description This function extends \code{{describe_na}} by applying to it all
-#'   columns in a data frame using functional programming tools from the purrr
-#'   package (e.g. \code{\link[purrr]{map}}). To obtain a summary of missing
-#'   values for a single variable in a data frame use \code{\link{describe_na}}
-#'   instead. This function is a more efficient way of checking for missing
-#'   values than using \code{\link{describe_all}}, which calculates additional
-#'   summary statistics.
-#'
-#' @importFrom data.table as.data.table
-#' @importFrom dplyr select
-#' @importFrom dplyr select_if
-#' @importFrom dplyr arrange
-#' @importFrom dplyr mutate
-#' @importFrom dplyr group_by
-#' @importFrom dplyr group_cols
-#' @importFrom lubridate is.instant
-#' @importFrom tidyr nest
-#' @importFrom tidyr unnest
-#' @importFrom purrr map
-#' @importFrom tidyselect everything
-#'
-#' @param data A data frame or tibble.
-#'
-#' @param ... This special argument accepts any number of unquoted grouping
-#'   variable names (also present in the data source) to use for subsetting,
-#'   separated by commas, e.g. `group_var1, group_var2`. Also accepts a
-#'   character vector of column names or index numbers, e.g. c("group_var1",
-#'   "group_var2") or c(1, 2), but not a mixture of formats in the same call. If
-#'   no column names are specified, all columns will be used.
-#'
-#' @param digits This determines the number of digits used for rounding of
-#'   the "p_na" column in the output.
-#'
-#' @param output Output type for each class of variables. dt" for data.table or
-#'   "tibble" for tibble.
-#'
-#' @return A tibble or data.table with the following columns in addition to any specified grouping variables:
-#'
-#'   \describe{
-#'     \item{cases}{the total number of cases}
-#'     \item{n}{number of complete cases}
-#'     \item{na}{the number of missing values}
-#'     \item{p_na}{the proportion of total cases with missing values}
-#'   }
-#'
-#' @author Craig P. Hutton, \email{craig.hutton@@gov.bc.ca}
-#'
-#' @examples
-#'
-#' describe_na_all(mtcars)
-#'
-#' @seealso \code{\link{describe}}, \code{\link{describe_na}}, \code{\link{describe_all}}
-#'
-#' @export
-describe_na_all <- function(data, ..., digits = 4, output = c("dt", "tibble")) {
-  output <- match.arg(output)
-
-  .classes <- class(data)
-
-  if("data.frame" %ni% .classes) {
-    stop("Input data must be a data.table, tibble, or data.frame.")
-  }
-
-  nms <- names(data)
-  col_classes <- sapply(data, class)
-
-  if(!missing(...)) {
-    g <- group_parser(data, ...)
-  }
-
-  if("data.table" %ni% .classes) {
-    data <- data.table::as.data.table(data)
-  }
-
-  if(!missing(...)) {
-    description <- data[,  purrr::map_dfr(.SD, ~describe_na(.x, digits = digits), .id = "variable"), by = eval(g)]
-  } else {
-    description <- data[,  purrr::map_dfr(.SD, ~describe_na(.x, digits = digits), .id = "variable")]
-  }
-
-  if(output == "tibble") {
-    description <- tibble::as_tibble(description)
-  }
-  return(description)
 }
