@@ -302,6 +302,8 @@ If you are primarily interested in simply checking all columns of a data frame f
 ```{r describe_na_all}
 describe_na_all(pdata)
 
+pdata_rs <- pdata[sample(1:nrow(pdata), 1e6, replace = TRUE), ] 
+
 system.time(
   describe_all(pdata_rs),
 )
