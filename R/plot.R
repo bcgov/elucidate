@@ -2789,11 +2789,6 @@ plot_violin <- function(data, y, #essential parameters
 #' \donttest{
 #' plot_scatter(mtcars, y = mpg, x = hp)
 #'
-#' plot_scatter(mtcars, y = mpg, x = hp, fill_var = cyl)
-#'
-#' plot_scatter(mtcars, y = mpg, x = hp,
-#'              fill_var = cyl, shape = 21, size = 2)
-#'
 #' plot_scatter(mtcars, y = mpg, x = hp,
 #'              colour_var = cyl, shape_var = am, size = 4)
 #'
@@ -3009,7 +3004,7 @@ plot_scatter <- function(data, y, x,#essential parameters
   }
 
   #fill variable recoding
-  if(!missing(fill_var) && class(.data[[fill_var]]) %ni% c("numeric", "integer")){
+  if(!missing(fill_var)){
     data <- dplyr::mutate(data, {{fill_var}} := as.character(.data[[fill_var]]))
     if(!missing(fill_var) && !missing(fill_var_order)){
       data <- dplyr::mutate(data, {{fill_var}} := forcats::fct_relevel(.data[[fill_var]], levels = !!!fill_var_order))
@@ -3020,7 +3015,7 @@ plot_scatter <- function(data, y, x,#essential parameters
   }
 
   #colour variable recoding
-  if(!missing(colour_var) && class(.data[[colour_var]]) %ni% c("numeric", "integer")){
+  if(!missing(colour_var)){
     data <- dplyr::mutate(data, {{colour_var}} := as.character(.data[[colour_var]]))
     if(!missing(colour_var_order)){
       data <- dplyr::mutate(data, {{colour_var}} := forcats::fct_relevel(.data[[colour_var]], levels = !!!colour_var_order))
@@ -3091,7 +3086,7 @@ plot_scatter <- function(data, y, x,#essential parameters
       p <- p +
         ggplot2::scale_fill_manual(values = fill_var_values)
     } else {
-      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+      if(class(data[[fill_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
                                         option = palette, direction = palette_direction)
@@ -3102,11 +3097,11 @@ plot_scatter <- function(data, y, x,#essential parameters
       }
     }
   } else if(missing(fill_var) && !missing(colour_var)) {
-    if(!missing(colour_var_values) && class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+    if(!missing(colour_var_values)) {
       p <- p +
         ggplot2::scale_colour_manual(values = colour_var_values)
     } else {
-      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+      if(class(data[[colour_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
                                           option = palette, direction = palette_direction)
@@ -3118,7 +3113,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     }
   } else if(!missing(fill_var) && !missing(colour_var)) {
     if(!missing(fill_var_values) && missing(colour_var_values)){
-      if(class(.data[[fill_var]]) %ni% c("numeric", "integer")) {
+      if(class(data[[fill_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_fill_manual(values = fill_var_values) +
           ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
@@ -3130,7 +3125,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                           option = palette, direction = palette_direction)
       }
     } else if(missing(fill_var_values) && !missing(colour_var_values)) {
-      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+      if(class(data[[colour_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_colour_manual(values = colour_var_values) +
           ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
@@ -3146,22 +3141,22 @@ plot_scatter <- function(data, y, x,#essential parameters
         ggplot2::scale_fill_manual(values = fill_var_values) +
         ggplot2::scale_colour_manual(values = colour_var_values)
     } else {
-      if(class(.data[[fill_var]]) %ni% c("numeric", "integer") &&
-         class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+      if(class(data[[fill_var]]) %ni% c("numeric", "integer") &&
+         class(data[[colour_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
                                         option = palette, direction = palette_direction) +
           ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
                                           option = palette, direction = palette_direction)
-      } else if(class(.data[[fill_var]]) %in% c("numeric", "integer") &&
-                class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+      } else if(class(data[[fill_var]]) %in% c("numeric", "integer") &&
+                class(data[[colour_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_fill_viridis_c(begin = palette_begin, end = palette_end,
                                         option = palette, direction = palette_direction) +
           ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
                                           option = palette, direction = palette_direction)
-      } else if(class(.data[[fill_var]]) %ni% c("numeric", "integer") &&
-                class(.data[[colour_var]]) %in% c("numeric", "integer")) {
+      } else if(class(data[[fill_var]]) %ni% c("numeric", "integer") &&
+                class(data[[colour_var]]) %in% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
                                         option = palette, direction = palette_direction) +

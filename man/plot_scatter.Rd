@@ -404,11 +404,6 @@ plot_scatter(mtcars, y = mpg, x = hp, colour = "blue")
 \donttest{
 plot_scatter(mtcars, y = mpg, x = hp)
 
-plot_scatter(mtcars, y = mpg, x = hp, fill_var = cyl)
-
-plot_scatter(mtcars, y = mpg, x = hp,
-             fill_var = cyl, shape = 21, size = 2)
-
 plot_scatter(mtcars, y = mpg, x = hp,
              colour_var = cyl, shape_var = am, size = 4)
 
