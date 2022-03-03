@@ -394,13 +394,13 @@
   <span class="fu"><a href="../reference/describe.html">describe</a></span><span class="op">(</span><span class="va">pdata_rs</span>, <span class="va">y1</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.471   0.032   0.503</span></code></pre>
+<span class="co">##   0.432   0.036   0.469</span></code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/describe_na.html">describe_na</a></span><span class="op">(</span><span class="va">pdata_rs</span>, <span class="va">y1</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.016   0.024   0.040</span></code></pre>
+<span class="co">##   0.015   0.024   0.040</span></code></pre>
 <p><code>elucidate</code> was designed to support group-oriented analysis workflows that are common in scientific research, where one group is being compared against other groups. To split a description by a grouping variable, simply specify the name of that variable after the column you want a description of.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt;
@@ -538,18 +538,18 @@
   <span class="fu"><a href="../reference/describe_all.html">describe_all</a></span><span class="op">(</span><span class="va">pdata_rs</span><span class="op">)</span>,
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   1.713   0.080   1.794</span></code></pre>
+<span class="co">##   1.565   0.095   1.661</span></code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/describe_na_all.html">describe_na_all</a></span><span class="op">(</span><span class="va">pdata_rs</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.107   0.060   0.167</span></code></pre>
+<span class="co">##   0.117   0.052   0.169</span></code></pre>
 <p>There are also <code><a href="../reference/describe_ci.html">describe_ci()</a></code> and <code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> functions that can be used to obtain confidence intervals for the mean or other summary statistics of numeric variables, which can also be split by an arbitrary number of grouping variables.</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/describe_ci.html">describe_ci</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##        mean    lower    upper</span>
-<span class="co">## 1: 153.7048 152.9434 154.4822</span></code></pre>
+<span class="co">## 1: 153.7048 152.9314 154.5012</span></code></pre>
 <p>Here the first column is named after the chosen summary statistic (“mean” in this case), “lower” refers to the lower bound of the confidence interval (CI), and “upper” refers to the upper bound of the CI. The default behaviour of <code><a href="../reference/describe_ci.html">describe_ci()</a></code> is to provide 95% CIs based on 95% (percentile) bootstrapped CIs for the mean (default) for another chosen statistic. You can change this to the more common CIs calculated from a normal distribution by switching the ci_type to “norm” (also runs faster).</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -576,7 +576,7 @@
               cores <span class="op">=</span> <span class="fl">2</span> <span class="co">#use 2 CPU cores</span>
               <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##      median    lower    upper</span>
-<span class="co">## 1: 146.2088 135.1347 150.6838</span></code></pre>
+<span class="co">## 1: 146.2088 135.1347 150.4827</span></code></pre>
 <p><code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> extends <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to provide a CI for the chosen summary statistic for each numeric variable in a data frame. For example, to get the 95% CI for the mean of each numeric variable in pdata, for each group in “g”, we can use:</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -1084,32 +1084,21 @@
 <p><code><a href="../reference/plot_c.html">plot_c()</a></code> can also be used to combine a list of plots, such as a set of density plots rendered by looping <code><a href="../reference/plot_density.html">plot_density()</a></code> over all numeric columns of <code>pdata</code>, other than the “id” column, like this:</p>
 <div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">col_names</span> <span class="op">&lt;-</span> <span class="va">pdata</span> |&gt; 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span> |&gt; <span class="co">#select all non-ID numeric variables</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#get the names of the numeric columns</span></code></pre></div>
-<pre><code><span class="co">## Warning: Predicate functions must be wrapped in `where()`.</span>
-<span class="co">## </span>
-<span class="co">##   # Bad</span>
-<span class="co">##   data %&gt;% select(is.numeric)</span>
-<span class="co">## </span>
-<span class="co">##   # Good</span>
-<span class="co">##   data %&gt;% select(where(is.numeric))</span>
-<span class="co">## </span>
-<span class="co">## <span style="color: #0000BB;">ℹ</span> Please update your code.</span>
-<span class="co">## <span style="color: #555555;">This message is displayed once per session.</span></span></code></pre>
-<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#map plot_density() over all the numeric variables  </span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span> |&gt; <span class="co">#select all non-ID numeric variables</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#get the names of the numeric columns</span>
+
+<span class="co">#map plot_density() over all the numeric variables  </span>
 <span class="va">plot_var_list</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">col_names</span>, <span class="op">~</span><span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/plot_c.html">plot_c</a></span><span class="op">(</span><span class="va">plot_var_list</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_c2-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
-</div>
-<div class="section level3">
-<h3 id="plotting-missing-values">plotting missing values<a class="anchor" aria-label="anchor" href="#plotting-missing-values"></a>
-</h3>
+<div class="section level4">
+<h4 id="plotting-missing-values">plotting missing values<a class="anchor" aria-label="anchor" href="#plotting-missing-values"></a>
+</h4>
 <p><code>elucidate</code> version 0.1.1.9000 extends the <code>plot_*</code> function set a step further with <code><a href="../reference/plot_na.html">plot_na()</a></code> and <code><a href="../reference/plot_na_all.html">plot_na_all()</a></code> to make it easier to check a data set for missing values.</p>
 <p><code><a href="../reference/plot_na.html">plot_na()</a></code> is useful for making bar graphs of the proportions (y = “p_na”) or counts (y = “na) of missing values (<code>NA</code>s) for a single variable with options for splitting the bars by secondary variables via the”fill_var“,”colour_var“, or”facet_var" arguments.</p>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#First we will modify the pdata data frame to introduces some NAs representing</span>
 <span class="co">#missing values. More informaiton on the recode_errors() function can be found</span>
 <span class="co">#in the next section of this vignette.</span>
@@ -1132,13 +1121,13 @@
 <span class="co">## 10:       x3 12000 10691 1309 0.1091</span></code></pre>
 <p>It looks like the ID, g, and x1-x3 variables are now missing some observations.</p>
 <p>we can plot one of them using the “x” argument of <code><a href="../reference/plot_na.html">plot_na()</a></code> and see if the proportion of NAs differs between levels of the “high_low” variable by assigning it to the “fill_var” argument</p>
-<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_na.html">plot_na</a></span><span class="op">(</span><span class="va">pdata_na</span>, x <span class="op">=</span> <span class="va">x1</span>, fill_var <span class="op">=</span> <span class="va">high_low</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_na-1.png" width="85%" style="display: block; margin: auto;"> This is fine if we only want to inspect one or two variables, but for a quick visual assessment of missing data in an entire data frame, we can use <code><a href="../reference/plot_na_all.html">plot_na_all()</a></code> instead.</p>
-<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_na_all.html">plot_na_all</a></span><span class="op">(</span><span class="va">pdata_na</span>, fill <span class="op">=</span> <span class="st">"blue2"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_na_all-1.png" width="85%" style="display: block; margin: auto;"> For counts instead of proportions, set the “y” argument to “na” instead of the default value of “p_na” (or “n” for counts of non-missing values). We can also examine missing values for each date value of the “d” column by assigning it to the “facet_var” argument.</p>
-<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata_na</span> |&gt; 
   <span class="fu"><a href="../reference/plot_na_all.html">plot_na_all</a></span><span class="op">(</span>facet_var <span class="op">=</span> <span class="va">d</span>,
               fill <span class="op">=</span> <span class="st">"blue2"</span>, 
@@ -1149,6 +1138,7 @@
               x_var_order_by_y <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span> </code></pre></div>
 <p><img src="elucidate_files/figure-html/unnamed-chunk-1-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
+</div>
 <div class="section level3">
 <h3 id="auxiliary-functions">Auxiliary functions<a class="anchor" aria-label="anchor" href="#auxiliary-functions"></a>
 </h3>
@@ -1157,11 +1147,11 @@
 <li>Correcting data entry errors, anomaly indicator values, and structural inconsistencies seen in real world data more easily using <code><a href="../reference/recode_errors.html">recode_errors()</a></code> and <code><a href="../reference/wash_df.html">wash_df()</a></code>.</li>
 </ul>
 <p><code><a href="../reference/recode_errors.html">recode_errors()</a></code> replaces a vector of error values with <code>NA</code> or another user-specified error indicator value.</p>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>,  
               errors <span class="op">=</span> <span class="fl">99</span><span class="op">)</span> <span class="co">#"99" is an erroneous value</span></code></pre></div>
 <pre><code><span class="co">## [1]  1  0  1  0  1  1  1 NA</span></code></pre>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>,
               errors <span class="op">=</span> <span class="fl">99</span>,
               replacement <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="co">#recode it as -1 instead of NA</span></code></pre></div>
@@ -1176,7 +1166,7 @@
 <code><a href="https://readr.tidyverse.org/reference/parse_guess.html" class="external-link">readr::parse_guess()</a></code> to re-parse the class of each column, which is especially useful after recoding values.</li>
 </ol>
 <p>For example, consider the following data frame with an erroneous letter value in an otherwise numeric column, inconsistent column name formatting, and a useless empty “notes” column.</p>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">messy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>`Column A` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"A"</span><span class="op">)</span>, Column_B <span class="op">=</span> <span class="fl">10</span><span class="op">:</span><span class="fl">5</span>, NOTES <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##   Column.A Column_B NOTES</span>
 <span class="co">## 1        1       10    NA</span>
@@ -1185,7 +1175,7 @@
 <span class="co">## 4        4        7    NA</span>
 <span class="co">## 5        5        6    NA</span>
 <span class="co">## 6        A        5    NA</span></code></pre>
-<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">recoded_messy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span><span class="va">messy_data</span>, <span class="st">"A"</span>, cols <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##   Column.A Column_B NOTES</span>
 <span class="co">## 1        1       10    NA</span>
@@ -1195,7 +1185,7 @@
 <span class="co">## 5        5        6    NA</span>
 <span class="co">## 6     &lt;NA&gt;        5    NA</span></code></pre>
 <p>Fixing the error in the first column still leaves that column as a “character” vector even though it only contains numeric values. We can correct all of the formatting issues with this data using a single call to <code><a href="../reference/wash_df.html">wash_df()</a></code>:</p>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recoded_messy_data</span> |&gt; <span class="fu"><a href="../reference/wash_df.html">wash_df</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 2</span></span>
 <span class="co">##   column_a column_b</span>
@@ -1210,7 +1200,7 @@
 <ul>
 <li>Rapidly converting one vector into another (i.e. vectorized re-coding) with <code><a href="../reference/translate.html">translate()</a></code>. For example, you can use it to recode a column in a data frame within a call to <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>:</li>
 </ul>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>new_g <span class="op">=</span> <span class="fu"><a href="../reference/translate.html">translate</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">g</span>, 
                               old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span><span class="op">)</span>,
@@ -1240,14 +1230,14 @@
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mode.html">mode</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">g</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "a"</span></code></pre>
 <pre><code>-   `se()`: the standard error of the mean of a numeric vector.</code></pre>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/se.html">se</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 0.3900124</span></code></pre>
-<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#demonstration of equivalence to SE calculation from base/stats package R</span>
 <span class="co">#functions</span>
 <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="../reference/se.html">se</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span>, 
@@ -1255,10 +1245,10 @@
           <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 <pre><code>-   `skewness()`: a convenience wrapper implementing the same functionality provided by `e1071::skewness()` or `psych::skew()` functions, which calculate the degree of skewness in a numeric distribution (Joanes &amp; Gill, 1998). Unlike these alternatives, the `elucidate` version uses the type 2 calculation by default since this incorporates a correction for sample size that also matches what is used in SPSS and SAS.</code></pre>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/skewness.html">skewness</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 0.7390796</span></code></pre>
-<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#demonstration of equivalence to psych::skew(type = 2)</span>
 <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"psych"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span>
@@ -1269,10 +1259,10 @@
 <pre><code><span class="co">## Loading required namespace: psych</span></code></pre>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 <pre><code>-   `kurtosis()`: a convenience wrapper implementing the same functionality provided by `e1071::kurtosis()` or `psych::kurtosi()` functions, which calculate the degree of skewness in a numeric distribution (Joanes &amp; Gill, 1998). Unlike these alternatives, the elucidate version uses the type 2 calculation by default since this incorporates a correction for sample size that also matches what is used in SPSS and SAS.</code></pre>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] -0.1805952</span></code></pre>
-<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#demonstration of equivalence to psych::kurtosi(type = 2)</span>
 <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"psych"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span>
@@ -1282,29 +1272,29 @@
 <span class="op">}</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 <pre><code>-   `inv_quantile()`: inverse quantiles, or the opposite of what you get from `stats::quantile()`, namely, the probabilities corresponding to specific values in the input vector. These can be converted to percentiles by multiplying the results by 100, which could be useful for educators (or students) who want to know what their percetile rank is on a test for example.</code></pre>
-<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Which quantile in vector "y" is a value of 80?</span>
 <span class="fu"><a href="../reference/inv_quantile.html">inv_quantile</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>, 
              values <span class="op">=</span> <span class="fl">80</span><span class="op">)</span> </code></pre></div>
 <pre><code><span class="co">## [1] 0.8</span></code></pre>
 <pre><code>-   `consum()`: cumulative summation of consecutive 0/1 or FALSE/TRUE values.</code></pre>
-<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/consum.html">consum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 1 0 1 2 0 1 2 3</span></code></pre>
 <pre><code>-   `mean_ci()`: theoretical (i.e. assuming normality) or bootstrapped confidence intervals for a sample mean.</code></pre>
-<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">9999</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mean_ci.html">mean_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##      mean     lower     upper </span>
 <span class="co">## 10.031340  9.828066 10.234614</span></code></pre>
 <pre><code>-   `median_ci()`: boostrapped confidence intervals for a sample median.</code></pre>
-<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/median_ci.html">median_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    median     lower     upper </span>
 <span class="co">##  9.899695  9.733724 10.174393</span></code></pre>
 <pre><code>-   `stat_ci()`: boostrapped confidence intervals for other summary statistics.</code></pre>
-<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/stat_ci.html">stat_ci</a></span><span class="op">(</span><span class="va">x</span>, 
         <span class="co">#assign the unquoted name of a summary statistic function to the "stat"</span>
         <span class="co">#argument</span>
@@ -1315,27 +1305,27 @@
 <li>
 <code><a href="../reference/colour_options.html">colour_options()</a></code> renders a graph of all of the base R colour options to facilitate custom colour modifications. Note that it is much easier to read if expanded to full-screen viewing or printed to a pdf file (via the “print_to_pdf” argument).</li>
 </ul>
-<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/colour_options.html">colour_options</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/colour_options-1.png" width="85%" style="display: block; margin: auto;"></p>
 <ul>
 <li>The <code>%ni%</code> operator, which does the opposite of the <code>%in%</code> operator, checking for values in one vector that are <em><strong>n</strong>ot</em> <em><strong>i</strong>n</em> another vector.</li>
 </ul>
-<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#%in% checks for matching values</span>
 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="st">"a"</span></code></pre></div>
 <pre><code><span class="co">## [1]  TRUE FALSE  TRUE FALSE FALSE</span></code></pre>
-<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="st">"z"</span></code></pre></div>
 <pre><code><span class="co">## [1] FALSE FALSE FALSE FALSE FALSE</span></code></pre>
-<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#%ni% checks for non-matching values </span>
 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-ni-grapes.html">%ni%</a></span> <span class="st">"a"</span> </code></pre></div>
 <pre><code><span class="co">## [1] FALSE  TRUE FALSE  TRUE  TRUE</span></code></pre>
-<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-ni-grapes.html">%ni%</a></span> <span class="st">"z"</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE TRUE TRUE TRUE TRUE</span></code></pre>
-<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#using %in% for subsetting with dplyr::filter()</span>
 <span class="va">pdata</span> |&gt; 
   <span class="co">#extract only records for groups "a" or "b"</span>
@@ -1354,7 +1344,7 @@
 <span class="co">## <span style="color: #BCBCBC;"> 9</span>    16 2008-01-01 b     low      TRUE  112.   99.8    35   179   295</span>
 <span class="co">## <span style="color: #BCBCBC;">10</span>    18 2008-01-01 b     low      TRUE  103.   86.2    27   187   210</span>
 <span class="co">## <span style="color: #949494;"># … with 5,042 more rows</span></span></code></pre>
-<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#using %ni% for subsetting with dplyr::filter()</span>
 <span class="va">pdata</span> |&gt; 
   <span class="co">#extract records for groups other than "a" or "b"</span>
