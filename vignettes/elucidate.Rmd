@@ -934,7 +934,7 @@ plot_c(p1, p2)
 
 ```{r plot_c2}
 col_names <- pdata |> 
-  dplyr::select(is.numeric, -id) |> #select all non-ID numeric variables
+  dplyr::select(where(is.numeric), -id) |> #select all non-ID numeric variables
   names() #get the names of the numeric columns
 
 #map plot_density() over all the numeric variables  
@@ -944,7 +944,7 @@ plot_c(plot_var_list)
 
 ```
 
-## plotting missing values
+### plotting missing values
 
 `elucidate` version 0.1.1.9000 extends the `plot_*` function set a step further with `plot_na()` and `plot_na_all()` to make it easier to check a data set for missing values.
 
