@@ -714,7 +714,7 @@ We can also see how the relationship varies between categories of the grouping v
 ```{r plot_scatter3}
 pdata |> 
   plot_scatter(y1, y2, 
-               colour_var = g,
+               colour_var = "g", #can be quoted or unquoted
                regression_line = TRUE, regression_se = TRUE,
                jitter = TRUE, alpha = 0.7)
 ```
