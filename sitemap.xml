@@ -61,6 +61,12 @@
     <loc>/reference/describe_ci_all.html</loc>
   </url>
   <url>
+    <loc>/reference/describe_na.html</loc>
+  </url>
+  <url>
+    <loc>/reference/describe_na_all.html</loc>
+  </url>
+  <url>
     <loc>/reference/dupes.html</loc>
   </url>
   <url>
@@ -107,6 +113,12 @@
   </url>
   <url>
     <loc>/reference/plot_line.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_na.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_na_all.html</loc>
   </url>
   <url>
     <loc>/reference/plot_pie.html</loc>

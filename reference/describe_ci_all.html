@@ -33,7 +33,7 @@ a data frame, use describe_ci instead."><!-- mathjax --><script src="https://cdn
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@ a data frame, use <code><a href="describe_ci.html">describe_ci</a></code> instea
   parallel <span class="op">=</span> <span class="cn">FALSE</span>,
   cores <span class="op">=</span> <span class="cn">NULL</span>,
   na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"dt"</span><span class="op">)</span>
+  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dt"</span>, <span class="st">"tibble"</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -187,31 +187,27 @@ York: Chapman &amp; Hall.</p>
 <span class="r-in"><span class="fu">describe_ci_all</span><span class="op">(</span><span class="va">pdata</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="op">]</span>, stat <span class="op">=</span> <span class="va">median</span><span class="op">)</span> <span class="co">#bootstrapped CIs for the median</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"><span class="fu">describe_ci_all</span><span class="op">(</span><span class="va">pdata</span>, stat <span class="op">=</span> <span class="va">mean</span><span class="op">)</span> <span class="co">#the default</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   variable  mean lower upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> id       500.  495.  506. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> y1       154.  153.  154. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> y2       100.   99.9 100. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> x1        50.5  50.0  51.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> x2       151.  150.  151. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> x3       250.  250.  251. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    variable     mean     lower     upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:       id 500.5000 495.33483 505.66517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:       y1 153.7048 152.94037 154.46919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:       y2 100.0921  99.91106 100.27319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:       x1  50.4945  49.97677  51.01223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:       x2 150.6513 150.13560 151.16690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:       x3 250.4971 249.98063 251.01354</span>
 <span class="r-in"><span class="fu">describe_ci_all</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, stat <span class="op">=</span> <span class="va">mean</span><span class="op">)</span> <span class="co">#split by a grouping variable</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    variable high_low  mean lower upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> id       high     494.  487.  502. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> id       low      507.  499.  514. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> x1       high      50.5  49.8  51.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> x1       low       50.5  49.8  51.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> x2       high     151.  150.  152. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> x2       low      150.  150.  151. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> x3       high     250.  250.  251. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> x3       low      251.  250.  251. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> y1       high     154.  153.  155. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> y1       low      154.  153.  155. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> y2       high     108.  108.  108. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> y2       low       92.0  91.8  92.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     variable high_low      mean     lower     upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:       id     high 494.33929 487.07751 501.60106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:       id      low 506.75382 499.40845 514.09919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:       x1     high  50.49909  49.77409  51.22409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:       x1      low  50.48984  49.75031  51.22937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:       x2     high 150.87031 150.14356 151.59706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:       x2      low 150.42888 149.69711 151.16065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:       x3     high 250.45806 249.72851 251.18762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:       x3      low 250.53669 249.80545 251.26793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:       y1     high 153.74021 152.65785 154.82256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:       y1      low 153.66882 152.58911 154.74853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:       y2     high 108.08392 107.93062 108.23722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:       y2      low  91.97956  91.82262  92.13649</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="co">#using multiple cores (parallel processing)</span></span>

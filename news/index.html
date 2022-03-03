@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
       </span>
     </div>
 
@@ -50,6 +50,13 @@
       <small>Source: <a href="https://github.com/bcgov/elucidate/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.1.9000" id="elucidate-0119000---march-2nd-2022">elucidate 0.1.1.9000 - March 2nd, 2022<a class="anchor" aria-label="anchor" href="#elucidate-0119000---march-2nd-2022"></a></h2>
+<ul><li><p>Added <code><a href="../reference/describe_na.html">describe_na()</a></code>. <code><a href="../reference/describe_na_all.html">describe_na_all()</a></code>, <code><a href="../reference/plot_na.html">plot_na()</a></code>, and <code><a href="../reference/plot_na_all.html">plot_na_all()</a></code> to facilitate exploration of missing values in data frames.</p></li>
+<li><p>Fixed a bug which caused <code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to fail when specifying the “y” argument using a quoted variable name.</p></li>
+<li><p>Changed the default output format of <code>describe_*</code> functions from “tibble” to “dt” (data.table) for efficiency.</p></li>
+<li><p>Changed the default theme of <code>plot_*</code> functions to “bw” (<code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">ggplot2::theme_bw()</a></code>).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.9005" id="elucidate-0109005---january-23rd-2022">elucidate 0.1.0.9005 - January 23rd, 2022<a class="anchor" aria-label="anchor" href="#elucidate-0109005---january-23rd-2022"></a></h2>
 <ul><li>Fixed a bug which caused <code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to fail when attempting to evaluate columns from data.table objects.</li>

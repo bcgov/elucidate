@@ -21,7 +21,7 @@ describe instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@ To obtain a summary of a single variable in a data frame use
   type <span class="op">=</span> <span class="fl">2</span>,
   na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
   sep <span class="op">=</span> <span class="st">"_"</span>,
-  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"dt"</span><span class="op">)</span>
+  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dt"</span>, <span class="st">"tibble"</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -113,10 +113,8 @@ before attempting to calculate summary statistics.</p></dd>
 <dd><p>A character string to use to separate unique values from their
 counts ("_" by default). Only applicable to factors and character vectors.</p></dd>
 <dt>output</dt>
-<dd><p>Output type for each class of variables. "tibble" for tibble or
-"dt" for data.table. Tibble is used as the default output to facilitate
-subsequent use/modification of the output with the tidyverse collection of
-packages.</p></dd>
+<dd><p>Output type for each class of variables. dt" for data.table or
+"tibble" for tibble.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -225,21 +223,30 @@ output type, in which case the data frame is returned directly.
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
 <span class="r-in"><span class="fu">describe_all</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 11 × 15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    variable cases     n    na  p_na    mean      sd     se    p0    p25    p50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> mpg         32    32     0     0  20.1     6.03   1.06  10.4   15.4   19.2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> cyl         32    32     0     0   6.19    1.79   0.316  4      4      6   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> disp        32    32     0     0 231.    124.    21.9   71.1  121.   196.  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> hp          32    32     0     0 147.     68.6   12.1   52     96.5  123   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> drat        32    32     0     0   3.60    0.535  0.095  2.76   3.08   3.70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> wt          32    32     0     0   3.22    0.978  0.173  1.51   2.58   3.32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> qsec        32    32     0     0  17.8     1.79   0.316 14.5   16.9   17.7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> vs          32    32     0     0   0.438   0.504  0.089  0      0      0   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> am          32    32     0     0   0.406   0.499  0.088  0      0      0   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> gear        32    32     0     0   3.69    0.738  0.13   3      3      4   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> carb        32    32     0     0   2.81    1.62   0.286  1      2      2   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 4 more variables: p75 &lt;dbl&gt;, p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     variable cases  n na p_na    mean      sd     se     p0     p25     p50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      mpg    32 32  0    0  20.091   6.027  1.065 10.400  15.425  19.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      cyl    32 32  0    0   6.188   1.786  0.316  4.000   4.000   6.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:     disp    32 32  0    0 230.722 123.939 21.909 71.100 120.825 196.300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:       hp    32 32  0    0 146.688  68.563 12.120 52.000  96.500 123.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:     drat    32 32  0    0   3.597   0.535  0.095  2.760   3.080   3.695</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:       wt    32 32  0    0   3.217   0.978  0.173  1.513   2.581   3.325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     qsec    32 32  0    0  17.849   1.787  0.316 14.500  16.892  17.710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:       vs    32 32  0    0   0.438   0.504  0.089  0.000   0.000   0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:       am    32 32  0    0   0.406   0.499  0.088  0.000   0.000   0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:     gear    32 32  0    0   3.688   0.738  0.130  3.000   3.000   4.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     carb    32 32  0    0   2.812   1.615  0.286  1.000   2.000   2.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p75    p100   skew   kurt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:  22.80  33.900  0.672 -0.022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:   8.00   8.000 -0.192 -1.763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 326.00 472.000  0.420 -1.068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 180.00 335.000  0.799  0.275</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   3.92   4.930  0.293 -0.450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   3.61   5.424  0.466  0.417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  18.90  22.900  0.406  0.865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:   1.00   1.000  0.265 -2.063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:   1.00   1.000  0.401 -1.967</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:   4.00   5.000  0.582 -0.895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:   4.00   8.000  1.157  2.020</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span> <span class="co">#all summary types in a list</span></span>

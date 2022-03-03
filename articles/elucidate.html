@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
       </span>
     </div>
 
@@ -381,8 +381,28 @@
 <li><p>“n_FALSE” = the number of <code>FALSE</code> values.</p></li>
 <li><p>“p_TRUE” = the proportion of values that are <code>TRUE</code>.</p></li>
 </ul>
-<p><code>elucidate</code> was designed to support group-oriented analysis workflows that are common in scientific research, where one group is being compared against other groups. To split a description by a grouping variable, simply specify the name of that variable after the column you want a description of.</p>
+<p>If you’re only interested in checking for missing values, you can use <code><a href="../reference/describe_na.html">describe_na()</a></code> (as of <code>elucidate</code> version 0.1.1.9000), which runs substantially faster without having to calculate the full set of summary statistics provided by <code><a href="../reference/describe.html">describe()</a></code>.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/describe_na.html">describe_na</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">y1</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    cases     n na p_na</span>
+<span class="co">## 1: 12000 12000  0    0</span></code></pre>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#resample the data so the speed difference is more noticable</span>
+<span class="va">pdata_rs</span> <span class="op">&lt;-</span> <span class="va">pdata</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span>, <span class="fl">1e6</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="op">]</span> 
+
+<span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/describe.html">describe</a></span><span class="op">(</span><span class="va">pdata_rs</span>, <span class="va">y1</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    user  system elapsed </span>
+<span class="co">##   0.471   0.032   0.503</span></code></pre>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/describe_na.html">describe_na</a></span><span class="op">(</span><span class="va">pdata_rs</span>, <span class="va">y1</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    user  system elapsed </span>
+<span class="co">##   0.016   0.024   0.040</span></code></pre>
+<p><code>elucidate</code> was designed to support group-oriented analysis workflows that are common in scientific research, where one group is being compared against other groups. To split a description by a grouping variable, simply specify the name of that variable after the column you want a description of.</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt;
   <span class="fu"><a href="../reference/describe.html">describe</a></span><span class="op">(</span><span class="va">y1</span>, <span class="co">#describe numeric column "y1"</span>
            <span class="va">g</span><span class="op">)</span> <span class="co">#split by each level/category/group of the factor "g"</span></code></pre></div>
@@ -396,7 +416,7 @@
 <span class="co">## <span style="color: #BCBCBC;">5</span> b      <span style="text-decoration: underline;">2</span>460  <span style="text-decoration: underline;">2</span>460     0     0  152.  37.8 0.763  74.4  118.  147.  188.  247.</span>
 <span class="co">## <span style="color: #949494;"># … with 2 more variables: skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></span></code></pre>
 <p>This grouping variable specification is passed to the special ellipsis argument, allowing you to split on as many grouping variables as you like, e.g. to split the description of numeric column “y1” by both factor column “g” and date column “d”, I just add “d” to the function call.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/describe.html">describe</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">g</span>, <span class="va">d</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 60 × 16</span></span>
 <span class="co">##    g     d          cases     n    na  p_na  mean    sd    se    p0   p25   p50</span>
@@ -414,60 +434,64 @@
 <span class="co">## <span style="color: #949494;"># … with 50 more rows, and 4 more variables: p75 &lt;dbl&gt;, p100 &lt;dbl&gt;, skew &lt;dbl&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   kurt &lt;dbl&gt;</span></span></code></pre>
 <p>If you want to describe more than one column at a time, you can use the <code><a href="../reference/describe_all.html">describe_all()</a></code> function, which will describe each column of a data frame, where the variable being described will appear under the “variable” column.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/describe_all.html">describe_all</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## $date</span>
-<span class="co">## <span style="color: #949494;"># A tibble: 1 × 8</span></span>
-<span class="co">##   variable cases     n    na  p_na n_unique start      end       </span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> d        <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0       12 2008-01-01 2019-01-01</span>
+<span class="co">##    variable cases     n na p_na n_unique      start        end</span>
+<span class="co">## 1:        d 12000 12000  0    0       12 2008-01-01 2019-01-01</span>
 <span class="co">## </span>
 <span class="co">## $factor</span>
-<span class="co">## <span style="color: #949494;"># A tibble: 1 × 8</span></span>
-<span class="co">##   variable cases     n    na  p_na n_unique ordered counts_tb                   </span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       </span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> g        <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0        5 FALSE   a_2592, b_2460, ..., e_2352…</span>
+<span class="co">##    variable cases     n na p_na n_unique ordered</span>
+<span class="co">## 1:        g 12000 12000  0    0        5   FALSE</span>
+<span class="co">##                              counts_tb</span>
+<span class="co">## 1: a_2592, b_2460, ..., e_2352, c_2220</span>
 <span class="co">## </span>
 <span class="co">## $character</span>
-<span class="co">## <span style="color: #949494;"># A tibble: 1 × 9</span></span>
-<span class="co">##   variable cases     n    na  p_na n_unique min_chars max_chars counts_tb       </span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> high_low <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0        2         3         4 high_6045, low_…</span>
+<span class="co">##    variable cases     n na p_na n_unique min_chars max_chars</span>
+<span class="co">## 1: high_low 12000 12000  0    0        2         3         4</span>
+<span class="co">##              counts_tb</span>
+<span class="co">## 1: high_6045, low_5955</span>
 <span class="co">## </span>
 <span class="co">## $logical</span>
-<span class="co">## <span style="color: #949494;"># A tibble: 1 × 8</span></span>
-<span class="co">##   variable cases     n    na  p_na n_TRUE n_FALSE p_TRUE</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> even     <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0   <span style="text-decoration: underline;">6</span>000    <span style="text-decoration: underline;">6</span>000    0.5</span>
+<span class="co">##    variable cases     n na p_na n_TRUE n_FALSE p_TRUE</span>
+<span class="co">## 1:     even 12000 12000  0    0   6000    6000    0.5</span>
 <span class="co">## </span>
 <span class="co">## $numeric</span>
-<span class="co">## <span style="color: #949494;"># A tibble: 6 × 15</span></span>
-<span class="co">##   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> id       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 500.  289.  2.64    1   251.   500.  750.</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> y1       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 154.   42.7 0.39   69.2 121.   145.  181.</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> y2       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 100.   10.1 0.092  60.0  93.4  100.  107.</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> x1       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0  50.5  28.9 0.264   1    25     50    75 </span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> x2       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 151.   28.8 0.263 101   126    150   176 </span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> x3       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 250.   28.9 0.264 201   225    251   276 </span>
-<span class="co">## <span style="color: #949494;"># … with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></span></code></pre>
+<span class="co">##    variable cases     n na p_na    mean      sd    se      p0     p25     p50</span>
+<span class="co">## 1:       id 12000 12000  0    0 500.500 288.687 2.635   1.000 250.750 500.500</span>
+<span class="co">## 2:       y1 12000 12000  0    0 153.705  42.724 0.390  69.224 120.941 144.782</span>
+<span class="co">## 3:       y2 12000 12000  0    0 100.092  10.120 0.092  59.963  93.351 100.128</span>
+<span class="co">## 4:       x1 12000 12000  0    0  50.495  28.937 0.264   1.000  25.000  50.000</span>
+<span class="co">## 5:       x2 12000 12000  0    0 150.651  28.820 0.263 101.000 126.000 150.000</span>
+<span class="co">## 6:       x3 12000 12000  0    0 250.497  28.865 0.264 201.000 225.000 251.000</span>
+<span class="co">##        p75     p100   skew   kurt</span>
+<span class="co">## 1: 750.250 1000.000  0.000 -1.200</span>
+<span class="co">## 2: 181.022  289.235  0.739 -0.181</span>
+<span class="co">## 3: 106.906  142.181 -0.032  0.059</span>
+<span class="co">## 4:  75.000  100.000  0.008 -1.208</span>
+<span class="co">## 5: 176.000  200.000  0.002 -1.209</span>
+<span class="co">## 6: 276.000  300.000  0.006 -1.214</span></code></pre>
 <p>This returns a list of data frames, each containing a description for a set of variables that share a class. To describe variables of a particular class only, you can use the class argument. For example, to describe numeric columns, use:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/describe_all.html">describe_all</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 15</span></span>
-<span class="co">##   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> id       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 500.  289.  2.64    1   251.   500.  750.</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> y1       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 154.   42.7 0.39   69.2 121.   145.  181.</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> y2       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 100.   10.1 0.092  60.0  93.4  100.  107.</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> x1       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0  50.5  28.9 0.264   1    25     50    75 </span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> x2       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 151.   28.8 0.263 101   126    150   176 </span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> x3       <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0 250.   28.9 0.264 201   225    251   276 </span>
-<span class="co">## <span style="color: #949494;"># … with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></span></code></pre>
+<pre><code><span class="co">##    variable cases     n na p_na    mean      sd    se      p0     p25     p50</span>
+<span class="co">## 1:       id 12000 12000  0    0 500.500 288.687 2.635   1.000 250.750 500.500</span>
+<span class="co">## 2:       y1 12000 12000  0    0 153.705  42.724 0.390  69.224 120.941 144.782</span>
+<span class="co">## 3:       y2 12000 12000  0    0 100.092  10.120 0.092  59.963  93.351 100.128</span>
+<span class="co">## 4:       x1 12000 12000  0    0  50.495  28.937 0.264   1.000  25.000  50.000</span>
+<span class="co">## 5:       x2 12000 12000  0    0 150.651  28.820 0.263 101.000 126.000 150.000</span>
+<span class="co">## 6:       x3 12000 12000  0    0 250.497  28.865 0.264 201.000 225.000 251.000</span>
+<span class="co">##        p75     p100   skew   kurt</span>
+<span class="co">## 1: 750.250 1000.000  0.000 -1.200</span>
+<span class="co">## 2: 181.022  289.235  0.739 -0.181</span>
+<span class="co">## 3: 106.906  142.181 -0.032  0.059</span>
+<span class="co">## 4:  75.000  100.000  0.008 -1.208</span>
+<span class="co">## 5: 176.000  200.000  0.002 -1.209</span>
+<span class="co">## 6: 276.000  300.000  0.006 -1.214</span></code></pre>
 <p>The class argument to <code><a href="../reference/describe_all.html">describe_all()</a></code> accepts any combination of “l” (logical), “d” (date), “n” (numeric), “f” (factor), or “c” (character) as a character vector to use for class-based subsetting. As you can see, if only one class if specified this way we end up with a single tibble or data frame as output. If you prefer to work with data.tables instead of tibbles, you can also change the “output” argument from the default value of “tibble” to “dt”.</p>
 <p>The easiest way to describe a subset of columns of mixed classes at once is to simply pass the data through a <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> layer or use another subsetting method prior to passing it to <code><a href="../reference/describe_all.html">describe_all()</a></code>. We can also split these tabular descriptions by an arbitrary number of grouping variables just as we did for the basic <code><a href="../reference/describe.html">describe()</a></code> function.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="co">#select grouping variables and variables to be described</span>
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">y1</span>, <span class="va">even</span><span class="op">)</span> |&gt; 
@@ -495,29 +519,51 @@
 <span class="co">## 3: 213.949 268.205 -0.158 -1.168</span>
 <span class="co">## 4: 156.244 202.216  0.103 -1.075</span>
 <span class="co">## 5: 187.891 247.292  0.109 -1.406</span></code></pre>
+<p>If you are primarily interested in simply checking all columns of a data frame for missing/non-missing values, you can use <code><a href="../reference/describe_na_all.html">describe_na_all()</a></code> instead (as of <code>elucidate</code> version 0.1.1.9000) to save some time.</p>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/describe_na_all.html">describe_na_all</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##     variable cases     n na p_na</span>
+<span class="co">##  1:       id 12000 12000  0    0</span>
+<span class="co">##  2:        d 12000 12000  0    0</span>
+<span class="co">##  3:        g 12000 12000  0    0</span>
+<span class="co">##  4: high_low 12000 12000  0    0</span>
+<span class="co">##  5:     even 12000 12000  0    0</span>
+<span class="co">##  6:       y1 12000 12000  0    0</span>
+<span class="co">##  7:       y2 12000 12000  0    0</span>
+<span class="co">##  8:       x1 12000 12000  0    0</span>
+<span class="co">##  9:       x2 12000 12000  0    0</span>
+<span class="co">## 10:       x3 12000 12000  0    0</span></code></pre>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/describe_all.html">describe_all</a></span><span class="op">(</span><span class="va">pdata_rs</span><span class="op">)</span>,
+<span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    user  system elapsed </span>
+<span class="co">##   1.713   0.080   1.794</span></code></pre>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/describe_na_all.html">describe_na_all</a></span><span class="op">(</span><span class="va">pdata_rs</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    user  system elapsed </span>
+<span class="co">##   0.107   0.060   0.167</span></code></pre>
 <p>There are also <code><a href="../reference/describe_ci.html">describe_ci()</a></code> and <code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> functions that can be used to obtain confidence intervals for the mean or other summary statistics of numeric variables, which can also be split by an arbitrary number of grouping variables.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/describe_ci.html">describe_ci</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 3</span></span>
-<span class="co">##    mean lower upper</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span>  154.  153.  154.</span></code></pre>
+<pre><code><span class="co">##        mean    lower    upper</span>
+<span class="co">## 1: 153.7048 152.9434 154.4822</span></code></pre>
 <p>Here the first column is named after the chosen summary statistic (“mean” in this case), “lower” refers to the lower bound of the confidence interval (CI), and “upper” refers to the upper bound of the CI. The default behaviour of <code><a href="../reference/describe_ci.html">describe_ci()</a></code> is to provide 95% CIs based on 95% (percentile) bootstrapped CIs for the mean (default) for another chosen statistic. You can change this to the more common CIs calculated from a normal distribution by switching the ci_type to “norm” (also runs faster).</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/describe_ci.html">describe_ci</a></span><span class="op">(</span><span class="va">y1</span>, 
               <span class="va">g</span>, <span class="co">#separate 95% CIs for each group in "g"</span>
               ci_type <span class="op">=</span> <span class="st">"norm"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 5 × 4</span></span>
-<span class="co">##   g      mean lower upper</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> a      134.  133.  135.</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> b      152.  150.  153.</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> c      177.  175.  180.</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> d      174.  172.  176.</span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> e      135.  134.  136.</span></code></pre>
+<pre><code><span class="co">##    g     mean    lower    upper</span>
+<span class="co">## 1: a 133.9888 132.9951 134.9825</span>
+<span class="co">## 2: b 151.6226 150.1277 153.1175</span>
+<span class="co">## 3: c 177.2161 174.8458 179.5864</span>
+<span class="co">## 4: d 174.0355 172.2701 175.8008</span>
+<span class="co">## 5: e 134.8805 134.1290 135.6320</span></code></pre>
 <p>To get bias-corrected and accelerated (BCa) boostrapped confidence for the median of the “y1” variable in <code>pdata</code>, we can change the “stat” argument to median (unquoted; median, not “median”) and the “ci_type” argument to “bca”. This argument accepts the name of any function that calculates a single value based on a numeric vector and uses it to generate bootstrapped confidence intervals with the <a href="https://cran.r-project.org/web/packages/boot/index.html" class="external-link">boot</a> package. I’ve also incorporated the parallel processing capabilities of the <code>boot</code> package into <code><a href="../reference/describe_ci.html">describe_ci()</a></code> and <code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> functions, which can sometimes speed things up if you have multiple cores.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#set random number generator seed for reproducibility</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span>
 
@@ -529,29 +575,40 @@
               parallel <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">#use parallel processing</span>
               cores <span class="op">=</span> <span class="fl">2</span> <span class="co">#use 2 CPU cores</span>
               <span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 3</span></span>
-<span class="co">##   median lower upper</span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span>   146.  135.  151.</span></code></pre>
+<pre><code><span class="co">##      median    lower    upper</span>
+<span class="co">## 1: 146.2088 135.1347 150.6838</span></code></pre>
 <p><code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> extends <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to provide a CI for the chosen summary statistic for each numeric variable in a data frame. For example, to get the 95% CI for the mean of each numeric variable in pdata, for each group in “g”, we can use:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span><span class="op">)</span> |&gt; <span class="co">#drop the id column</span>
   <span class="fu"><a href="../reference/describe_ci_all.html">describe_ci_all</a></span><span class="op">(</span><span class="va">g</span>, ci_type <span class="op">=</span> <span class="st">"norm"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 25 × 5</span></span>
-<span class="co">##    variable g      mean lower upper</span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> x1       e      50.7  49.5  51.8</span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> x1       c      49.9  48.7  51.1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> x1       d      50.5  49.4  51.7</span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> x1       a      51.3  50.2  52.4</span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> x1       b      50.0  48.8  51.1</span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> x2       e     151.  150.  152. </span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> x2       c     150.  149.  151. </span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> x2       d     151.  150.  152. </span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> x2       a     151.  150.  153. </span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> x2       b     150.  149.  151. </span>
-<span class="co">## <span style="color: #949494;"># … with 15 more rows</span></span></code></pre>
+<pre><code><span class="co">##     variable g      mean     lower     upper</span>
+<span class="co">##  1:       x1 e  50.66156  49.49973  51.82340</span>
+<span class="co">##  2:       x1 c  49.90946  48.70391  51.11501</span>
+<span class="co">##  3:       x1 d  50.54251  49.37511  51.70991</span>
+<span class="co">##  4:       x1 a  51.31636  50.19838  52.43434</span>
+<span class="co">##  5:       x1 b  49.95041  48.80944  51.09138</span>
+<span class="co">##  6:       x2 e 150.71471 149.55883 151.87059</span>
+<span class="co">##  7:       x2 c 150.22432 149.01736 151.43129</span>
+<span class="co">##  8:       x2 d 150.75000 149.58508 151.91492</span>
+<span class="co">##  9:       x2 a 151.46914 150.35898 152.57929</span>
+<span class="co">## 10:       x2 b 150.01870 148.88501 151.15238</span>
+<span class="co">## 11:       x3 e 249.99745 248.84220 251.15270</span>
+<span class="co">## 12:       x3 c 251.22342 250.01065 252.43620</span>
+<span class="co">## 13:       x3 d 250.16414 248.99748 251.33081</span>
+<span class="co">## 14:       x3 a 250.14082 249.03959 251.24205</span>
+<span class="co">## 15:       x3 b 251.01626 249.87035 252.16217</span>
+<span class="co">## 16:       y1 e 134.88050 134.12897 135.63202</span>
+<span class="co">## 17:       y1 c 177.21605 174.84575 179.58635</span>
+<span class="co">## 18:       y1 d 174.03547 172.27014 175.80080</span>
+<span class="co">## 19:       y1 a 133.98881 132.99507 134.98255</span>
+<span class="co">## 20:       y1 b 151.62257 150.12769 153.11745</span>
+<span class="co">## 21:       y2 e 100.14593  99.73068 100.56118</span>
+<span class="co">## 22:       y2 c  99.94487  99.52470 100.36504</span>
+<span class="co">## 23:       y2 d 100.09437  99.69043 100.49831</span>
+<span class="co">## 24:       y2 a 100.05909  99.67373 100.44445</span>
+<span class="co">## 25:       y2 b 100.20623  99.80394 100.60852</span>
+<span class="co">##     variable g      mean     lower     upper</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="visualization-functions">Visualization functions<a class="anchor" aria-label="anchor" href="#visualization-functions"></a>
@@ -587,31 +644,31 @@
 </h4>
 <p>The <code>elucidate::plot_*</code> functions are built upon the <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graphics system, which allows for incredible flexibility in customizing plots, but can be intimidating for new users to work with. The <code>plot_*</code> functions make it easier for users to quickly explore data by providing shortcuts to graphing options that are appropriate for a particular type of graph through documented arguments. The easiest way to learn about all options available for each <code>plot_*</code> function is therefore to check that function’s documentation with <code>?function()</code>, e.g. <code>?plot_bar()</code> for <code><a href="../reference/plot_bar.html">plot_bar()</a></code>.</p>
 <p>In general, each <code>plot_*</code> function accepts a data frame source as the first argument (for pipe-compatibility), then requires one or two variables be assigned to the “x and/or”y" axes (depending on the graph type). For convenience, the principal axis used by each graph type/geometry is that <code>plot_*</code> function’s second argument (e.g. x-axis for <code>plot_hisogram()</code>, y-axis for <code><a href="../reference/plot_box.html">plot_box()</a></code>), so you can always make a basic graph as easily as <code>plot_*(data, variable)</code>. For example, to get a simple histogram of the “y1” numeric variable in <code>pdata</code>, all you need to do is:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Or for a violin plot of y1:</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_violin.html">plot_violin</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_violin-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>The second general design principle of the <code>plot_*</code> functions is that variables are mapped to aesthetic features of the graphs using arguments that have “_var” in their name (with the exception of “x” and “y” which map variables to the x and y axes). For example, many of the <code>plot_*</code> functions allow you to map a variable onto the fill colour aesthetic of a graph with a “fill_var” argument (short for “fill variable”), or (outline) colour via a “colour_var” argument. For instance, if we wanted to split the histogram of “y1” above for each category of the “g” variable, all you need to do is:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">y1</span>, fill_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>As you can see, by assigning a categorical variable (“g”) in the data source (<code>pdata</code>) to the “fill_var” argument of <code><a href="../reference/plot_histogram.html">plot_histogram()</a></code>, I get overlapping histograms of the primary numeric variable (“y1”) assigned to the “x” argument, which are differentiated by their fill colour.</p>
 <p>The transparency of the bars (or geometric elements of other graph types) can adjusted with the alpha argument, with acceptable values ranging from 0 (fully transparent) to 1 (fully opaque).</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">y1</span>, fill_var <span class="op">=</span> <span class="va">g</span>, 
                  alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="co">#80% opaque</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>To instead change the fill colour of a plot without splitting it by a grouping variable, we just use the “fill” argument instead.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span>, fill <span class="op">=</span> <span class="st">"blue2"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram4-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Similarly, to change the outline colour of the bars, we can use the “colour” argument.</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span>, 
                          fill <span class="op">=</span> <span class="st">"blue2"</span>,
                          colour <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></code></pre></div>
@@ -619,7 +676,7 @@
 <p>Don’t worry too much if terms like aesthetic parameters and variable mappings are confusing at this point. I wrote a blog post, available <a href="https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/" class="external-link">here</a>, on the basics of the ggplot2 graphing system with many examples that assumes no prior knowledge of R graphics and should help clear things up for you.</p>
 <p>The third general feature of most of the <code>plot_*</code> functions (except for <code><a href="../reference/plot_raincloud.html">plot_raincloud()</a></code> and <code><a href="../reference/plot_pie.html">plot_pie()</a></code>) that you may find helpful is a logical “interactive” argument which converts the graph to an interactive <code>plotly</code> format. This feature is more useful for interactively exploring data than for generating static graph images to be used in reports. You can see an example of the interactive version of <code><a href="../reference/plot_stat_error.html">plot_stat_error()</a></code> <a href="https://craig.rbind.io/post/2020-12-07-asgr-3-0-exploring-data-with-elucidate/#interacting-with-dynamic-data-representations" class="external-link">here</a>.</p>
 <p>All <code>plot_*</code> functions also allow you to customize the axis labels with “xlab” and “ylab” arguments and add a figure caption with the “caption” argument. You can also adjust the font family and size with the “font” and “text_size” arguments, and the theme with the “theme” argument. For example, all at once:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span>,
                  fill <span class="op">=</span> <span class="st">"blue2"</span>,
@@ -637,11 +694,11 @@
 </h4>
 <p>Bar graphs are one of the best ways to visualize categorical variables.</p>
 <p>As mentioned above, all we have to do to make a basic bar graph is pass a data frame to <code><a href="../reference/plot_bar.html">plot_bar()</a></code> and tell it which categorical variable we want bars rendered for. If only the x-variable is specified, the bars will represent the counts of each category.</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_bar-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>If you want the bars to represent a specific value, such as the mean of a numeric variable, first calculate the grouped means and then assign the column containing the group means to the y argument.</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="co">#here I use describe() as a shortcut to get the mean of "y1" for each group</span>
   <span class="co">#in "g"; pdata |&gt; dplyr::group_by(g) |&gt; summarise(mean = mean(y1)) would work just as well</span>
@@ -649,16 +706,16 @@
   <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">g</span>, y <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_bar2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>The main thing to note here is that you want a single unique value for each category when using <code><a href="../reference/plot_bar.html">plot_bar()</a></code> this way, otherwise you’ll end up with a graph that is pretty tough to read, like this:</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">y1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_bar3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>All <code>elucidate::plot_*</code> functions provide a wide variety of options to help you enhance your graphs. For example, we might want to use a different colour for each bar, in which case we can assign categorical variable “g” to the “fill_var” argument instead of “x” (or in addition to “x”).</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span>fill_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_bar4-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>If a variable has been assigned to “fill_var” you can stack the bars and get the proportions (of the total count) represented by each category instead of the counts by setting the “position” argument to “fill”. As a bonus, the y axis label will be updated for you.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span>fill_var <span class="op">=</span> <span class="va">g</span>, position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_bar5-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
@@ -666,18 +723,18 @@
 <h4 id="box-plots">box plots<a class="anchor" aria-label="anchor" href="#box-plots"></a>
 </h4>
 <p>Box-and-whisker plots (“box plots”) provide a quick non-parametric visualization of the distribution of a numeric variables using the five-number percentile summary.</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_box.html">plot_box</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">y2</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_box-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>In the basic box plot of <code>pdata</code> variable y2 above, the lower edge of the box represents the 25th percentile, the line inside the box represents the median (50th percentile), the upper edge of the box represents the 75th percentile, and the vertical lines extending from the box represent the limits of 1.5x the interquartile range (75th percentile - 25th percentile), or the minimum and maximum values (if no points are more extreme than the 1.5x IQR threshold). Points appearing beyond the ends of these lines are potential outliers that you should consider investigating further.</p>
 <p>You can get a box plot for each level of a factor by assigning another variable to the x-axis, and can make extreme values easier to see by changing their colour with <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot()</a></code>’s “outlier.colour”/“outlier.color” argument, e.g.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_box.html">plot_box</a></span><span class="op">(</span><span class="va">y2</span>, <span class="va">g</span>, 
            outlier.colour <span class="op">=</span> <span class="st">"red2"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_box2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>The biggest flaw with box plots is that they won’t show you if there the y-axis variable has a multi-modal distribution. To mitigate this issue, <code><a href="../reference/plot_box.html">plot_box()</a></code> has a convenient “dots” argument which overlays a dot plot (via <code><a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html" class="external-link">geom_dotplot()</a></code>) over the box plot so that the shape of the distribution is also visible.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_box.html">plot_box</a></span><span class="op">(</span><span class="va">y2</span>, <span class="va">g</span>,
            outlier.colour <span class="op">=</span> <span class="st">"red2"</span>,
@@ -693,17 +750,17 @@
 <h4 id="density-plots">density plots<a class="anchor" aria-label="anchor" href="#density-plots"></a>
 </h4>
 <p>(Kernel) density plots are an excellent way to visualize the shape of the distribution of a numeric variable.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_density-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>The y1 distribution appears to be left-skewed. To see how far off it is from a normal distribution, we can easily compare them on the same plot via <code><a href="../reference/plot_density.html">plot_density()</a></code>’s “dnorm” argument, which adds a normal density curve as a dashed line.</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">y1</span>, 
                dnorm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_density2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>You can also add rug lines if you want to see how much data underlies each region of the density curve with the “rug” argument. Note that rug lines can take quite a while to render if you have many values.</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> |&gt; 
   <span class="co">#here I am just randomly sampling 100 of the 12,000 y1 values with</span>
@@ -717,12 +774,12 @@
 <h4 id="violin-plots">violin plots<a class="anchor" aria-label="anchor" href="#violin-plots"></a>
 </h4>
 <p>An alternative to the box plot or density plot is the violin plot, which provides a symmetrical mirrored (kernel) density curve. Like the box plot examples above, we can split it by a grouping variable by assigning that variable to the x-axis (“x”), “fill_var”, and/or “colour_var”.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_violin.html">plot_violin</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">g</span>, fill_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_violin2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Quantile lines can be added with the “draw_quantiles” argument. To draw lines at the median, 25th percentile, and 75th percentile to mimic a box plot, we can use:</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_violin.html">plot_violin</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">g</span>, fill_var <span class="op">=</span> <span class="va">g</span>, 
               draw_quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -732,16 +789,16 @@
 <h4 id="histograms">histograms<a class="anchor" aria-label="anchor" href="#histograms"></a>
 </h4>
 <p>If you would prefer the traditional histogram over the kernel density plot to visualize the distribution of a numeric variable, use <code><a href="../reference/plot_histogram.html">plot_histogram()</a></code> instead.</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram7-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>An advantage of the histogram over the density plot is that we see the counts of the binned values and immediately get an impression of how much data was used to generate the plot. The main disadvantage is that the rendered shape of the distribution depends upon the chosen number of bins or binwidth (30 bins it the ggplot2 default). For example, if I change the number of bins to 10, the second mode near a y1 value of 200 disappears…</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span>, bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_histogram8-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p><code><a href="../reference/plot_histogram.html">plot_histogram()</a></code> also has a “dnorm” argument to make it easy to add a normal density curve to the histogram, which also adds a secondary axis on the right side of the plot for the density curve. The “dnorm” argument is incompatible with the (default) “bins” argument, so we also need to set the “binwidth” rather than the number of “bins” to use “dnorm”.</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_histogram.html">plot_histogram</a></span><span class="op">(</span><span class="va">y1</span>, 
                  binwidth <span class="op">=</span> <span class="fl">10</span>,
@@ -752,42 +809,42 @@
 <h4 id="line-graphs">line graphs<a class="anchor" aria-label="anchor" href="#line-graphs"></a>
 </h4>
 <p>Line graphs are typically used to show changes in a numeric variable (on the y-axis) over time (on the x-axis).</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="co">#plot numeric variable "y1" by date variable "d"</span>
   <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span><span class="op">)</span> </code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_line-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Assigning a categorical variable to the “colour_var” argument gives you a different line for each category.</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_line2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>A key feature of <code><a href="../reference/plot_line.html">plot_line()</a></code> which makes it more convenient to use than <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">ggplot2::geom_line()</a></code> is that <code><a href="../reference/plot_line.html">plot_line()</a></code>, unlike <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">ggplot2::geom_line()</a></code>, will automatically aggregate the y variable for you if there isn’t a single unique value of y for each level of the time/x variable and/or any other grouping variables you might use. By default, the mean is used for aggregation (as per the y-axis label), but you can change it to a percentile with the “stat” and “qprob” arguments, where the default quantile is 0.5 (the median):</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="va">g</span>,
             stat <span class="op">=</span> <span class="st">"quantile"</span>, <span class="co">#supports partial matching, could use "q" instead</span>
             qprob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="co">#adjust "qprob" for a different quantile (0 = min., 1 = max)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_line3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>To reproduce this plot using <code>ggplot2</code> directly, we would need to pre-aggregate the data with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">dplyr::group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarise()</a></code>. To replicate the formatting we also need to apply some additional layers, like this:</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">g</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>median_y1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">median_y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour <span class="op">=</span> <span class="va">g</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"plasma"</span>, end <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="fl">14</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="fl">14</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"median y1"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/geom_line-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Otherwise you’ll end up with an incoherent mess because there isn’t a single unique value of the y-axis variable for each combination of values for the x-axis variable and colour variable, like this:</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="co">#without the grouping and aggregation steps</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour <span class="op">=</span> <span class="va">g</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"plasma"</span>, end <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="fl">14</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="fl">14</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"y1"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/geom_line_messy-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>As you can see, it’s easier and more intuitive to use <code><a href="../reference/plot_line.html">plot_line()</a></code> for these kinds of line graphs. Other convenience aggregation “stat” options currently accepted by <code><a href="../reference/plot_line.html">plot_line()</a></code> include “sum” and “count”.</p>
@@ -807,7 +864,7 @@
 <li><p><code><a href="../reference/plot_pie.html">plot_pie()</a></code> also provides a set of “slice_text*” arguments that make it easy for you to annotate the slices of the pie chart to display the slice percentages for example. I strongly encourage you use these arguments to help the consumers/viewers of your pie chart quickly compare slices.</p></li>
 </ul>
 <p>Unlike most of the other <code>plot_*</code> functions, I will only demonstrate a single example of a “responsible” use of <code><a href="../reference/plot_pie.html">plot_pie()</a></code>:</p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_pie.html">plot_pie</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pdata</span>,
          <span class="co">#assign categorical variable "g" to slice fill colour</span>
          fill_var <span class="op">=</span> <span class="va">g</span>,
@@ -816,7 +873,7 @@
          alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> </code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_pie-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>As you can see, without the additional text specifying the percentages each category represents in terms of frequency of appearance in the data, it would be very difficult to compare slices. In contrast, a fairly basic bar graph is easier to read without requiring any extra text in/over the bars.</p>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span>fill_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/bar_v_pie-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
@@ -824,34 +881,33 @@
 <h4 id="scatter-plots">scatter plots<a class="anchor" aria-label="anchor" href="#scatter-plots"></a>
 </h4>
 <p>The scatter plot is an excellent way of graphing a relationship between two continuous variables, which can be done with <code><a href="../reference/plot_scatter.html">plot_scatter()</a></code>.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_scatter.html">plot_scatter</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">y2</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_scatter-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>The “regression_line” and “regression_se” arguments make it easy to add a regression line (by default using a generalized additive model) with confidence envelope. If overplotting is an issue, as it is here, you can also adjust the transparency with the “alpha” argument (lower is more transparent) and add some jittering with the “jitter” argument.</p>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_scatter.html">plot_scatter</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">y2</span>, 
                regression_line <span class="op">=</span> <span class="cn">TRUE</span>, regression_se <span class="op">=</span> <span class="cn">TRUE</span>,
                jitter <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_scatter2-1.png" width="85%" style="display: block; margin: auto;"></p>
-<p>The relationship in this case looks to be pretty linear, so we can change the regression_method to “lm” for a basic linear model. We can also see how the relationship varies between categories of the grouping variable “g” by assigning it to the “colour_var” argument.</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<p>We can also see how the relationship varies between categories of the grouping variable “g” by assigning it to the “colour_var” argument.</p>
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_scatter.html">plot_scatter</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">y2</span>, 
                colour_var <span class="op">=</span> <span class="va">g</span>,
                regression_line <span class="op">=</span> <span class="cn">TRUE</span>, regression_se <span class="op">=</span> <span class="cn">TRUE</span>,
-               regression_method <span class="op">=</span> <span class="st">"lm"</span>,
                jitter <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_scatter3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Now we can see that there is some separation between groups along the y-axis (y1) but not much change for any group along the x-axis (y2). We can make the grouped subsets of the data more clearly visible by separating them into facets with “facet_var” and making the points smaller with the “size” argument.</p>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_scatter.html">plot_scatter</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">y2</span>, facet_var <span class="op">=</span> <span class="va">g</span>,
                jitter <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_scatter4-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>From this perspective it looks like y1 has a bi-modal distribution for groups “b”, “c”, and “d” (and perhaps “a”). We could follow this up with a density plot to investigate further via <code><a href="../reference/plot_density.html">plot_density()</a></code>.</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">y1</span>, facet_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_density4-1.png" width="85%" style="display: block; margin: auto;"></p>
@@ -861,14 +917,14 @@
 <h4 id="statistic---error-bar-plots">statistic +/- error bar plots<a class="anchor" aria-label="anchor" href="#statistic---error-bar-plots"></a>
 </h4>
 <p>One of the most common types of graphs in the sciences, requested by both lab Principal Investigators and journal reviewers/editors, is the bar or point graph of a summary statistic (typically the sample mean) and error bars representing either the standard error or a 95 % confidence interval (CI). These so-called “dynamite plots” can easily be made with <code><a href="../reference/plot_stat_error.html">plot_stat_error()</a></code>, which will give you the mean and 95% confidence interval error bars by default.</p>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_stat_error.html">plot_stat_error</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>,
                   <span class="co">#set geom = "bar" for the bar-graph version.</span>
                   fill <span class="op">=</span> <span class="st">"blue2"</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_stat_error-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>If the y-axis variable is not normally distributed, you can get bootstrapped confidence intervals for the median by simply changing the “stat” argument to “median”.</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_stat_error.html">plot_stat_error</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, 
                   fill <span class="op">=</span> <span class="st">"blue2"</span>,
@@ -880,12 +936,12 @@
 <h4 id="raincloud-plots">raincloud plots<a class="anchor" aria-label="anchor" href="#raincloud-plots"></a>
 </h4>
 <p><a href="https://wellcomeopenresearch.org/articles/4-63" class="external-link">Raincloud plots</a> overcome the limitations of the dynamite plots covered above by presenting a combination of the raw data, box plots and half-violin plots together in a single graph.</p>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_raincloud.html">plot_raincloud</a></span><span class="op">(</span><span class="va">y1</span>, box_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_raincloud-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>If you want it to look more like a rain cloud, you can flip the axes with the “coord_flip” argument. We can take things a step further by also adjusting the fill colours of the points and the half-violin plot.</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_raincloud.html">plot_raincloud</a></span><span class="op">(</span><span class="va">y1</span>, 
                  box_plot <span class="op">=</span> <span class="cn">TRUE</span>, 
@@ -895,7 +951,7 @@
                  point_fill <span class="op">=</span> <span class="st">"blue3"</span>, point_alpha <span class="op">=</span> <span class="fl">0.2</span>, point_size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_raincloud2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>For a grouped version, just assign a variable to “x”. You can also adjust the width of the box plots with the “box_width” argument, and you can move the box to the points side with the “box_side” argument.</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_raincloud.html">plot_raincloud</a></span><span class="op">(</span><span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>,
                  coord_flip <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -912,7 +968,7 @@
 </h4>
 <p>To facilitate rapid visual exploration of data, <code>elucidate</code> also provides a more flexible set of <code>plot_var*()</code> functions which generate appropriate plots for the data type without requiring the user to specify a plot geometry. The simplest of these functions is <code><a href="../reference/plot_var.html">plot_var()</a></code>, which allows you to plot up to two variables and optionally split the plot by a categorical grouping variable.</p>
 <p>For a single numeric (classes “double” or “integer”) or date variable, <code><a href="../reference/plot_var.html">plot_var()</a></code> generates a density plot. By default it will be enhanced by the addition of a normal density curve:</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="co">#here "var1" refers to the primary variable, which will be assigned to either</span>
   <span class="co">#the x- or y-axis for you automatically depending on the type of variable and</span>
@@ -920,11 +976,11 @@
   <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span>var1 <span class="op">=</span> <span class="va">y1</span><span class="op">)</span> </code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>To split it by a categorical variable assign that variable to the “group_var” argument:</p>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span>var1 <span class="op">=</span> <span class="va">y1</span>, group_var <span class="op">=</span> <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Enhancements like the normal density curve can be disabled by setting the “basic” argument of any <code>plot_var*()</code> function to <code>TRUE</code>. Beginners may also find it helpful to enable “verbose” mode, which prints a message to the console explicitly stating which geom-specific <code>plot*()</code> function will be used to build the plot according to the detected varible class and which axes the primary (and secondary if specified) variable(s) will assigned to.</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span><span class="va">y1</span>, basic <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## `var1` class = "numeric".</span>
 <span class="co">## Building graph with `plot_density()`.</span>
@@ -933,23 +989,23 @@
 <span class="co">## See help("plot_density") for details.</span></code></pre>
 <p><img src="elucidate_files/figure-html/plot_var3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>One categorical (or logical) variable will be represented as a bar graph:</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var4-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>A jittered scatter plot with an added smooth (generalized additive model) regression line and confidence envelope is used for a combination of two numeric and/or date variables:</p>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span>var1 <span class="op">=</span> <span class="va">y1</span>, var2 <span class="op">=</span> <span class="va">d</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var5-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Two categorical variable will be graphed using a faceted bar plot:</p>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">high_low</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var6-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>A combination of a numeric variable and a categorical variable will be graphed using a box plot enhanced with a violin plot layer, where the numeric variable will be assigned to the y-axis and the categorical variable will be assigned to the x-axis.</p>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span><span class="va">y1</span>, <span class="va">g</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var7-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>Note that the extra violin plot layer can be disabled by setting <code>basic = TRUE</code>, and splitting the graph by an additional grouping variable is again as easy as assigning that variable to the “group_var” argument.</p>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_var.html">plot_var</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="co">#data is the 1st argument</span>
          <span class="va">y1</span>, <span class="co">#"var1" for the primary variable is the 2nd argument </span>
          <span class="va">g</span>, <span class="co">#"var2" for a secondary variable is the 3rd argument</span>
@@ -967,22 +1023,22 @@
 <h4 id="generalized-multivariate-plots">generalized multivariate plots<a class="anchor" aria-label="anchor" href="#generalized-multivariate-plots"></a>
 </h4>
 <p>When exploring data we often want to plot more than a couple of variables at a time. <code><a href="../reference/plot_var_all.html">plot_var_all()</a></code> extends <code><a href="../reference/plot_var.html">plot_var()</a></code> by generating a plot of each variable in a data frame and combining them into a <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> grid.</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var_all-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>To plot a subset of variables you can pass a character vector of column names to the “cols” argument</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"x1"</span>, <span class="st">"x2"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var_all2-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>You can also plot each variable against a secondary variable of interest using the “var2” argument…</p>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span>, 
                var2 <span class="op">=</span> <span class="va">high_low</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var_all3-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p>…and split all of the plots by a grouping variable with “group_var”:</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span>, 
                var2 <span class="op">=</span> <span class="va">high_low</span>, group_var <span class="op">=</span> <span class="va">g</span>,
@@ -993,7 +1049,7 @@
 <h4 id="generalized-pair-plots">generalized pair plots<a class="anchor" aria-label="anchor" href="#generalized-pair-plots"></a>
 </h4>
 <p><code><a href="../reference/plot_var_pairs.html">plot_var_pairs()</a></code> extends <code><a href="../reference/plot_var_all.html">plot_var_all()</a></code> even further by generating a plot for each pairwise combination of variables in a data frame (“pair plots”). Here I’ll focus on a few columns at a time with the “cols” argument so the graphs are easier to read.</p>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_var_pairs.html">plot_var_pairs</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"g"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_var_pairs-1.png" width="85%" style="display: block; margin: auto;"></p>
@@ -1003,7 +1059,7 @@
 <li><p>Off of the diagonal, you get scatter plots (plus optional regression lines) for comparisons of two numeric variables, faceted bar graphs for comparisons of two categorical variables (not shown), and box-and-whisker plots (plus optional violin plot outlines) for a comparison of a numeric and categorical variables.</p></li>
 </ul>
 <p>The pair plots produced by <code><a href="../reference/plot_var_pairs.html">plot_var_pairs()</a></code> can also be split by a grouping variable with the “group_var” argument, and it may be easier to read the basic versions of each plot when there are many splits (via <code>basic = TRUE</code>).</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_var_pairs.html">plot_var_pairs</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"g"</span><span class="op">)</span>, 
                  group_var <span class="op">=</span> <span class="va">high_low</span>, basic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -1014,7 +1070,7 @@
 <h4 id="combining-plots">combining plots<a class="anchor" aria-label="anchor" href="#combining-plots"></a>
 </h4>
 <p><code><a href="../reference/plot_c.html">plot_c()</a></code> makes it easy to combine multiple plots into a multi-panel display with the <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> package. For example, we might want to show a box plot and density plot side by side:</p>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">pdata</span> |&gt; 
   <span class="fu"><a href="../reference/plot_box.html">plot_box</a></span><span class="op">(</span><span class="va">y1</span>, fill_var <span class="op">=</span> <span class="va">g</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span>
 
@@ -1022,11 +1078,11 @@
   <span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">y1</span>, fill_var <span class="op">=</span> <span class="va">g</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## Coordinate system already present. Adding new coordinate system, which will replace the existing one.</span></code></pre>
-<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_c.html">plot_c</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_c-1.png" width="85%" style="display: block; margin: auto;"></p>
 <p><code><a href="../reference/plot_c.html">plot_c()</a></code> can also be used to combine a list of plots, such as a set of density plots rendered by looping <code><a href="../reference/plot_density.html">plot_density()</a></code> over all numeric columns of <code>pdata</code>, other than the “id” column, like this:</p>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">col_names</span> <span class="op">&lt;-</span> <span class="va">pdata</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span> |&gt; <span class="co">#select all non-ID numeric variables</span>
   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#get the names of the numeric columns</span></code></pre></div>
@@ -1040,13 +1096,58 @@
 <span class="co">## </span>
 <span class="co">## <span style="color: #0000BB;">ℹ</span> Please update your code.</span>
 <span class="co">## <span style="color: #555555;">This message is displayed once per session.</span></span></code></pre>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#map plot_density() over all the numeric variables  </span>
 <span class="va">plot_var_list</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">col_names</span>, <span class="op">~</span><span class="fu"><a href="../reference/plot_density.html">plot_density</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/plot_c.html">plot_c</a></span><span class="op">(</span><span class="va">plot_var_list</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/plot_c2-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
+</div>
+<div class="section level3">
+<h3 id="plotting-missing-values">plotting missing values<a class="anchor" aria-label="anchor" href="#plotting-missing-values"></a>
+</h3>
+<p><code>elucidate</code> version 0.1.1.9000 extends the <code>plot_*</code> function set a step further with <code><a href="../reference/plot_na.html">plot_na()</a></code> and <code><a href="../reference/plot_na_all.html">plot_na_all()</a></code> to make it easier to check a data set for missing values.</p>
+<p><code><a href="../reference/plot_na.html">plot_na()</a></code> is useful for making bar graphs of the proportions (y = “p_na”) or counts (y = “na) of missing values (<code>NA</code>s) for a single variable with options for splitting the bars by secondary variables via the”fill_var“,”colour_var“, or”facet_var" arguments.</p>
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#First we will modify the pdata data frame to introduces some NAs representing</span>
+<span class="co">#missing values. More informaiton on the recode_errors() function can be found</span>
+<span class="co">#in the next section of this vignette.</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2022</span><span class="op">)</span> <span class="co">#for reproducibility</span>
+<span class="va">pdata_na</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span><span class="va">pdata</span>, errors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, replacement <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
+
+<span class="co">#next we use describe_na_all() to see columns have missing values</span>
+<span class="fu"><a href="../reference/describe_na_all.html">describe_na_all</a></span><span class="op">(</span><span class="va">pdata_na</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##     variable cases     n   na   p_na</span>
+<span class="co">##  1:       id 12000 10800 1200 0.1000</span>
+<span class="co">##  2:        d 12000 12000    0 0.0000</span>
+<span class="co">##  3:        g 12000  9648 2352 0.1960</span>
+<span class="co">##  4: high_low 12000 12000    0 0.0000</span>
+<span class="co">##  5:     even 12000 12000    0 0.0000</span>
+<span class="co">##  6:       y1 12000 12000    0 0.0000</span>
+<span class="co">##  7:       y2 12000 12000    0 0.0000</span>
+<span class="co">##  8:       x1 12000 11192  808 0.0673</span>
+<span class="co">##  9:       x2 12000 10962 1038 0.0865</span>
+<span class="co">## 10:       x3 12000 10691 1309 0.1091</span></code></pre>
+<p>It looks like the ID, g, and x1-x3 variables are now missing some observations.</p>
+<p>we can plot one of them using the “x” argument of <code><a href="../reference/plot_na.html">plot_na()</a></code> and see if the proportion of NAs differs between levels of the “high_low” variable by assigning it to the “fill_var” argument</p>
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_na.html">plot_na</a></span><span class="op">(</span><span class="va">pdata_na</span>, x <span class="op">=</span> <span class="va">x1</span>, fill_var <span class="op">=</span> <span class="va">high_low</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="elucidate_files/figure-html/plot_na-1.png" width="85%" style="display: block; margin: auto;"> This is fine if we only want to inspect one or two variables, but for a quick visual assessment of missing data in an entire data frame, we can use <code><a href="../reference/plot_na_all.html">plot_na_all()</a></code> instead.</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_na_all.html">plot_na_all</a></span><span class="op">(</span><span class="va">pdata_na</span>, fill <span class="op">=</span> <span class="st">"blue2"</span><span class="op">)</span></code></pre></div>
+<p><img src="elucidate_files/figure-html/plot_na_all-1.png" width="85%" style="display: block; margin: auto;"> For counts instead of proportions, set the “y” argument to “na” instead of the default value of “p_na” (or “n” for counts of non-missing values). We can also examine missing values for each date value of the “d” column by assigning it to the “facet_var” argument.</p>
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pdata_na</span> |&gt; 
+  <span class="fu"><a href="../reference/plot_na_all.html">plot_na_all</a></span><span class="op">(</span>facet_var <span class="op">=</span> <span class="va">d</span>,
+              fill <span class="op">=</span> <span class="st">"blue2"</span>, 
+              <span class="co">#you can also flip the figure axes "coord_flip = TRUE" so the</span>
+              <span class="co">#variable names are easier to read</span>
+              coord_flip <span class="op">=</span> <span class="cn">TRUE</span>,
+              <span class="co">#and sort the variables by the amount of NAs values they contain</span>
+              x_var_order_by_y <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span> </code></pre></div>
+<p><img src="elucidate_files/figure-html/unnamed-chunk-1-1.png" width="85%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="auxiliary-functions">Auxiliary functions<a class="anchor" aria-label="anchor" href="#auxiliary-functions"></a>
@@ -1056,11 +1157,11 @@
 <li>Correcting data entry errors, anomaly indicator values, and structural inconsistencies seen in real world data more easily using <code><a href="../reference/recode_errors.html">recode_errors()</a></code> and <code><a href="../reference/wash_df.html">wash_df()</a></code>.</li>
 </ul>
 <p><code><a href="../reference/recode_errors.html">recode_errors()</a></code> replaces a vector of error values with <code>NA</code> or another user-specified error indicator value.</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>,  
               errors <span class="op">=</span> <span class="fl">99</span><span class="op">)</span> <span class="co">#"99" is an erroneous value</span></code></pre></div>
 <pre><code><span class="co">## [1]  1  0  1  0  1  1  1 NA</span></code></pre>
-<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>,
               errors <span class="op">=</span> <span class="fl">99</span>,
               replacement <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="co">#recode it as -1 instead of NA</span></code></pre></div>
@@ -1075,7 +1176,7 @@
 <code><a href="https://readr.tidyverse.org/reference/parse_guess.html" class="external-link">readr::parse_guess()</a></code> to re-parse the class of each column, which is especially useful after recoding values.</li>
 </ol>
 <p>For example, consider the following data frame with an erroneous letter value in an otherwise numeric column, inconsistent column name formatting, and a useless empty “notes” column.</p>
-<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">messy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>`Column A` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"A"</span><span class="op">)</span>, Column_B <span class="op">=</span> <span class="fl">10</span><span class="op">:</span><span class="fl">5</span>, NOTES <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##   Column.A Column_B NOTES</span>
 <span class="co">## 1        1       10    NA</span>
@@ -1084,7 +1185,7 @@
 <span class="co">## 4        4        7    NA</span>
 <span class="co">## 5        5        6    NA</span>
 <span class="co">## 6        A        5    NA</span></code></pre>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">recoded_messy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recode_errors.html">recode_errors</a></span><span class="op">(</span><span class="va">messy_data</span>, <span class="st">"A"</span>, cols <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##   Column.A Column_B NOTES</span>
 <span class="co">## 1        1       10    NA</span>
@@ -1094,7 +1195,7 @@
 <span class="co">## 5        5        6    NA</span>
 <span class="co">## 6     &lt;NA&gt;        5    NA</span></code></pre>
 <p>Fixing the error in the first column still leaves that column as a “character” vector even though it only contains numeric values. We can correct all of the formatting issues with this data using a single call to <code><a href="../reference/wash_df.html">wash_df()</a></code>:</p>
-<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recoded_messy_data</span> |&gt; <span class="fu"><a href="../reference/wash_df.html">wash_df</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 2</span></span>
 <span class="co">##   column_a column_b</span>
@@ -1109,7 +1210,7 @@
 <ul>
 <li>Rapidly converting one vector into another (i.e. vectorized re-coding) with <code><a href="../reference/translate.html">translate()</a></code>. For example, you can use it to recode a column in a data frame within a call to <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>:</li>
 </ul>
-<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>new_g <span class="op">=</span> <span class="fu"><a href="../reference/translate.html">translate</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">g</span>, 
                               old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span><span class="op">)</span>,
@@ -1139,14 +1240,14 @@
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mode.html">mode</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">g</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "a"</span></code></pre>
 <pre><code>-   `se()`: the standard error of the mean of a numeric vector.</code></pre>
-<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/se.html">se</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 0.3900124</span></code></pre>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#demonstration of equivalence to SE calculation from base/stats package R</span>
 <span class="co">#functions</span>
 <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="../reference/se.html">se</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span>, 
@@ -1154,10 +1255,10 @@
           <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 <pre><code>-   `skewness()`: a convenience wrapper implementing the same functionality provided by `e1071::skewness()` or `psych::skew()` functions, which calculate the degree of skewness in a numeric distribution (Joanes &amp; Gill, 1998). Unlike these alternatives, the `elucidate` version uses the type 2 calculation by default since this incorporates a correction for sample size that also matches what is used in SPSS and SAS.</code></pre>
-<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/skewness.html">skewness</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 0.7390796</span></code></pre>
-<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#demonstration of equivalence to psych::skew(type = 2)</span>
 <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"psych"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span>
@@ -1168,10 +1269,10 @@
 <pre><code><span class="co">## Loading required namespace: psych</span></code></pre>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 <pre><code>-   `kurtosis()`: a convenience wrapper implementing the same functionality provided by `e1071::kurtosis()` or `psych::kurtosi()` functions, which calculate the degree of skewness in a numeric distribution (Joanes &amp; Gill, 1998). Unlike these alternatives, the elucidate version uses the type 2 calculation by default since this incorporates a correction for sample size that also matches what is used in SPSS and SAS.</code></pre>
-<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">$</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] -0.1805952</span></code></pre>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#demonstration of equivalence to psych::kurtosi(type = 2)</span>
 <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"psych"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span>
@@ -1181,29 +1282,29 @@
 <span class="op">}</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 <pre><code>-   `inv_quantile()`: inverse quantiles, or the opposite of what you get from `stats::quantile()`, namely, the probabilities corresponding to specific values in the input vector. These can be converted to percentiles by multiplying the results by 100, which could be useful for educators (or students) who want to know what their percetile rank is on a test for example.</code></pre>
-<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Which quantile in vector "y" is a value of 80?</span>
 <span class="fu"><a href="../reference/inv_quantile.html">inv_quantile</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>, 
              values <span class="op">=</span> <span class="fl">80</span><span class="op">)</span> </code></pre></div>
 <pre><code><span class="co">## [1] 0.8</span></code></pre>
 <pre><code>-   `consum()`: cumulative summation of consecutive 0/1 or FALSE/TRUE values.</code></pre>
-<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/consum.html">consum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 1 0 1 2 0 1 2 3</span></code></pre>
 <pre><code>-   `mean_ci()`: theoretical (i.e. assuming normality) or bootstrapped confidence intervals for a sample mean.</code></pre>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">9999</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mean_ci.html">mean_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##      mean     lower     upper </span>
 <span class="co">## 10.031340  9.828066 10.234614</span></code></pre>
 <pre><code>-   `median_ci()`: boostrapped confidence intervals for a sample median.</code></pre>
-<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/median_ci.html">median_ci</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    median     lower     upper </span>
 <span class="co">##  9.899695  9.733724 10.174393</span></code></pre>
 <pre><code>-   `stat_ci()`: boostrapped confidence intervals for other summary statistics.</code></pre>
-<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/stat_ci.html">stat_ci</a></span><span class="op">(</span><span class="va">x</span>, 
         <span class="co">#assign the unquoted name of a summary statistic function to the "stat"</span>
         <span class="co">#argument</span>
@@ -1214,27 +1315,27 @@
 <li>
 <code><a href="../reference/colour_options.html">colour_options()</a></code> renders a graph of all of the base R colour options to facilitate custom colour modifications. Note that it is much easier to read if expanded to full-screen viewing or printed to a pdf file (via the “print_to_pdf” argument).</li>
 </ul>
-<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/colour_options.html">colour_options</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="elucidate_files/figure-html/colour_options-1.png" width="85%" style="display: block; margin: auto;"></p>
 <ul>
 <li>The <code>%ni%</code> operator, which does the opposite of the <code>%in%</code> operator, checking for values in one vector that are <em><strong>n</strong>ot</em> <em><strong>i</strong>n</em> another vector.</li>
 </ul>
-<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#%in% checks for matching values</span>
 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="st">"a"</span></code></pre></div>
 <pre><code><span class="co">## [1]  TRUE FALSE  TRUE FALSE FALSE</span></code></pre>
-<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="st">"z"</span></code></pre></div>
 <pre><code><span class="co">## [1] FALSE FALSE FALSE FALSE FALSE</span></code></pre>
-<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#%ni% checks for non-matching values </span>
 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-ni-grapes.html">%ni%</a></span> <span class="st">"a"</span> </code></pre></div>
 <pre><code><span class="co">## [1] FALSE  TRUE FALSE  TRUE  TRUE</span></code></pre>
-<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-ni-grapes.html">%ni%</a></span> <span class="st">"z"</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE TRUE TRUE TRUE TRUE</span></code></pre>
-<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#using %in% for subsetting with dplyr::filter()</span>
 <span class="va">pdata</span> |&gt; 
   <span class="co">#extract only records for groups "a" or "b"</span>
@@ -1253,7 +1354,7 @@
 <span class="co">## <span style="color: #BCBCBC;"> 9</span>    16 2008-01-01 b     low      TRUE  112.   99.8    35   179   295</span>
 <span class="co">## <span style="color: #BCBCBC;">10</span>    18 2008-01-01 b     low      TRUE  103.   86.2    27   187   210</span>
 <span class="co">## <span style="color: #949494;"># … with 5,042 more rows</span></span></code></pre>
-<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#using %ni% for subsetting with dplyr::filter()</span>
 <span class="va">pdata</span> |&gt; 
   <span class="co">#extract records for groups other than "a" or "b"</span>
