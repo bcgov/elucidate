@@ -709,25 +709,17 @@ pdata |>
                jitter = TRUE, alpha = 0.7)
 ```
 
-We can also see how the relationship varies between categories of the grouping variable "g" by assigning it to the "colour_var" argument.
+We can also see how the relationship varies between categories of the grouping variable "g" by assigning it to the "facet_var" (or "colour_var") argument.
 
 ```{r plot_scatter3}
 pdata |> 
   plot_scatter(y1, y2, 
-               colour_var = "g", #can be quoted or unquoted
+               facet_var = g,
                regression_line = TRUE, regression_se = TRUE,
                jitter = TRUE, alpha = 0.7)
 ```
 
-Now we can see that there is some separation between groups along the y-axis (y1) but not much change for any group along the x-axis (y2). We can make the grouped subsets of the data more clearly visible by separating them into facets with "facet_var" and making the points smaller with the "size" argument.
-
-```{r plot_scatter4}
-pdata |> 
-  plot_scatter(y1, y2, facet_var = g,
-               jitter = TRUE, alpha = 0.7, size = 1)
-```
-
-From this perspective it looks like y1 has a bi-modal distribution for groups "b", "c", and "d" (and perhaps "a"). We could follow this up with a density plot to investigate further via `plot_density()`.
+Now we can see that there is some separation between groups along the y-axis (y1) but not much change for any group along the x-axis (y2). From this perspective it looks like y1 has a bi-modal distribution for groups "b", "c", and "d" (and perhaps "a"). We could follow this up with a density plot to investigate further via `plot_density()`.
 
 ```{r plot_density4}
 pdata |> 
