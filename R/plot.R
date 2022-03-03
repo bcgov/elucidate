@@ -3118,7 +3118,7 @@ plot_scatter <- function(data, y, x,#essential parameters
     }
   } else if(!missing(fill_var) && !missing(colour_var)) {
     if(!missing(fill_var_values) && missing(colour_var_values)){
-      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
+      if(class(.data[[fill_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_fill_manual(values = fill_var_values) +
           ggplot2::scale_colour_viridis_d(begin = palette_begin, end = palette_end,
@@ -3130,7 +3130,7 @@ plot_scatter <- function(data, y, x,#essential parameters
                                           option = palette, direction = palette_direction)
       }
     } else if(missing(fill_var_values) && !missing(colour_var_values)) {
-      if(class(.data[[fill_var]]) %ni% c("numeric", "integer")) {
+      if(class(.data[[colour_var]]) %ni% c("numeric", "integer")) {
         p <- p +
           ggplot2::scale_colour_manual(values = colour_var_values) +
           ggplot2::scale_fill_viridis_d(begin = palette_begin, end = palette_end,
