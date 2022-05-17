@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9001</span>
       </span>
     </div>
 
@@ -394,13 +394,13 @@
   <span class="fu"><a href="../reference/describe.html">describe</a></span><span class="op">(</span><span class="va">pdata_rs</span>, <span class="va">y1</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.432   0.036   0.469</span></code></pre>
+<span class="co">##   0.451   0.044   0.495</span></code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/describe_na.html">describe_na</a></span><span class="op">(</span><span class="va">pdata_rs</span>, <span class="va">y1</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.015   0.024   0.040</span></code></pre>
+<span class="co">##   0.032   0.016   0.047</span></code></pre>
 <p><code>elucidate</code> was designed to support group-oriented analysis workflows that are common in scientific research, where one group is being compared against other groups. To split a description by a grouping variable, simply specify the name of that variable after the column you want a description of.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt;
@@ -538,18 +538,18 @@
   <span class="fu"><a href="../reference/describe_all.html">describe_all</a></span><span class="op">(</span><span class="va">pdata_rs</span><span class="op">)</span>,
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   1.565   0.095   1.661</span></code></pre>
+<span class="co">##   1.545   0.104   1.649</span></code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/describe_na_all.html">describe_na_all</a></span><span class="op">(</span><span class="va">pdata_rs</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   0.117   0.052   0.169</span></code></pre>
+<span class="co">##   0.113   0.056   0.170</span></code></pre>
 <p>There are also <code><a href="../reference/describe_ci.html">describe_ci()</a></code> and <code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> functions that can be used to obtain confidence intervals for the mean or other summary statistics of numeric variables, which can also be split by an arbitrary number of grouping variables.</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; <span class="fu"><a href="../reference/describe_ci.html">describe_ci</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##        mean    lower    upper</span>
-<span class="co">## 1: 153.7048 152.9314 154.5012</span></code></pre>
+<pre><code><span class="co">##        mean   lower    upper</span>
+<span class="co">## 1: 153.7048 152.927 154.4856</span></code></pre>
 <p>Here the first column is named after the chosen summary statistic (“mean” in this case), “lower” refers to the lower bound of the confidence interval (CI), and “upper” refers to the upper bound of the CI. The default behaviour of <code><a href="../reference/describe_ci.html">describe_ci()</a></code> is to provide 95% CIs based on 95% (percentile) bootstrapped CIs for the mean (default) for another chosen statistic. You can change this to the more common CIs calculated from a normal distribution by switching the ci_type to “norm” (also runs faster).</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -576,7 +576,7 @@
               cores <span class="op">=</span> <span class="fl">2</span> <span class="co">#use 2 CPU cores</span>
               <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##      median    lower    upper</span>
-<span class="co">## 1: 146.2088 135.1347 150.4827</span></code></pre>
+<span class="co">## 1: 146.2088 135.0035 150.4827</span></code></pre>
 <p><code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code> extends <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to provide a CI for the chosen summary statistic for each numeric variable in a data frame. For example, to get the 95% CI for the mean of each numeric variable in pdata, for each group in “g”, we can use:</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pdata</span> |&gt; 
@@ -1398,7 +1398,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

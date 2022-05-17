@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">elucidate</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9001</span>
       </span>
     </div>
 
@@ -51,6 +51,9 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.1.9001" id="elucidate-0119001---may-17th-2022">elucidate 0.1.1.9001 - May 17th, 2022<a class="anchor" aria-label="anchor" href="#elucidate-0119001---may-17th-2022"></a></h2>
+<ul><li>Fixed a bug which led to <code><a href="../reference/describe_all.html">describe_all()</a></code> calculating and returning uninformative summary statistics for variables in the source data when they are specified as grouping variables.</li></ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.1.9000" id="elucidate-0119000---march-2nd-2022">elucidate 0.1.1.9000 - March 2nd, 2022<a class="anchor" aria-label="anchor" href="#elucidate-0119000---march-2nd-2022"></a></h2>
 <ul><li><p>Added <code><a href="../reference/describe_na.html">describe_na()</a></code>. <code><a href="../reference/describe_na_all.html">describe_na_all()</a></code>, <code><a href="../reference/plot_na.html">plot_na()</a></code>, and <code><a href="../reference/plot_na_all.html">plot_na_all()</a></code> to facilitate exploration of missing values in data frames.</p></li>
 <li><p>Fixed a bug which caused <code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to fail when specifying the “y” argument using a quoted variable name.</p></li>
@@ -59,13 +62,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.9005" id="elucidate-0109005---january-23rd-2022">elucidate 0.1.0.9005 - January 23rd, 2022<a class="anchor" aria-label="anchor" href="#elucidate-0109005---january-23rd-2022"></a></h2>
-<ul><li>Fixed a bug which caused <code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to fail when attempting to evaluate columns from data.table objects.</li>
-</ul></div>
+<ul><li>Fixed a bug which caused <code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_ci.html">describe_ci()</a></code> to fail when attempting to evaluate columns from data.table objects.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.9004" id="elucidate-0109004---december-13th-2021">elucidate 0.1.0.9004 - December 13th, 2021<a class="anchor" aria-label="anchor" href="#elucidate-0109004---december-13th-2021"></a></h2>
 <ul><li>
-<code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_all.html">describe_all()</a></code> now work for “POSIXct” and “POSIXlt” date/time class vectors in addition to the previously supported “Date” class vectors.</li>
-</ul></div>
+<code><a href="../reference/describe.html">describe()</a></code> and <code><a href="../reference/describe_all.html">describe_all()</a></code> now work for “POSIXct” and “POSIXlt” date/time class vectors in addition to the previously supported “Date” class vectors.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.9003" id="elucidate-0109003---october-31st-2021">elucidate 0.1.0.9003 - October 31st, 2021<a class="anchor" aria-label="anchor" href="#elucidate-0109003---october-31st-2021"></a></h2>
 <ul><li><p>Fixed a bug that caused <code><a href="../reference/plot_var.html">plot_var()</a></code> to fail for ordered factors.</p></li>
@@ -85,8 +86,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.9001" id="elucidate-0109001---june-27th-2021">elucidate 0.1.0.9001 - June 27th, 2021<a class="anchor" aria-label="anchor" href="#elucidate-0109001---june-27th-2021"></a></h2>
-<ul><li>Fixed a bug with <code><a href="../reference/plot_var.html">plot_var()</a></code> that was preventing the combined box-and-whisker plots + violin plots produced by default for a mix of numeric and categorical variables from generating a plotly graph when the “interactive” argument was set to <code>TRUE</code>.</li>
-</ul></div>
+<ul><li>Fixed a bug with <code><a href="../reference/plot_var.html">plot_var()</a></code> that was preventing the combined box-and-whisker plots + violin plots produced by default for a mix of numeric and categorical variables from generating a plotly graph when the “interactive” argument was set to <code>TRUE</code>.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0.9000" id="elucidate-0109000---june-25th-2021">elucidate 0.1.0.9000 - June 25th, 2021<a class="anchor" aria-label="anchor" href="#elucidate-0109000---june-25th-2021"></a></h2>
 <div class="section level3">
@@ -156,8 +156,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9021" id="elucidate-0009021---april-20th-2021">elucidate 0.0.0.9021 - April 20th, 2021<a class="anchor" aria-label="anchor" href="#elucidate-0009021---april-20th-2021"></a></h2>
-<ul><li>Added <code><a href="../reference/plot_bar.html">plot_bar()</a></code> for building bar plots using <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">ggplot2::geom_bar()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">ggplot2::geom_col()</a></code> with options to allow easy sorting bars in order of decreasing or increasing counts (or proportions if position = “fill”), based on values of a y-axis variable if one is specified, or manually.</li>
-</ul></div>
+<ul><li>Added <code><a href="../reference/plot_bar.html">plot_bar()</a></code> for building bar plots using <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">ggplot2::geom_bar()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">ggplot2::geom_col()</a></code> with options to allow easy sorting bars in order of decreasing or increasing counts (or proportions if position = “fill”), based on values of a y-axis variable if one is specified, or manually.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9020" id="elucidate-0009020---february-3rd-2021">elucidate 0.0.0.9020 - February 3rd, 2021<a class="anchor" aria-label="anchor" href="#elucidate-0009020---february-3rd-2021"></a></h2>
 <ul><li><p>Upgraded <code><a href="../reference/describe.html">describe()</a></code>, <code><a href="../reference/mode.html">mode()</a></code>, and the <code>counts*</code> function set to use the more efficient <code>Rfast::Table()</code> instead of <code><a href="https://rdrr.io/r/base/table.html" class="external-link">base::table()</a></code> for counting the unique values of a vector. We are trying to avoid adding any more dependencies to <code>elucidate</code> but the substantial performance improvements of using <code>Rfast::Table()</code> made using it worth the added dependency on <code>Rfast</code>.</p></li>
@@ -185,8 +184,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9011" id="elucidate-0009011---march-5th-2020">elucidate 0.0.0.9011 - March 5th, 2020<a class="anchor" aria-label="anchor" href="#elucidate-0009011---march-5th-2020"></a></h2>
-<ul><li>Removed references to <code><a href="https://rdrr.io/r/grDevices/windowsFonts.html" class="external-link">grDevices::windowsFonts()</a></code> from the documentation to avoid linux compatibility issues.</li>
-</ul></div>
+<ul><li>Removed references to <code><a href="https://rdrr.io/r/grDevices/windowsFonts.html" class="external-link">grDevices::windowsFonts()</a></code> from the documentation to avoid linux compatibility issues.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9010" id="elucidate-0009010---march-3rd-2020">elucidate 0.0.0.9010 - March 3rd, 2020<a class="anchor" aria-label="anchor" href="#elucidate-0009010---march-3rd-2020"></a></h2>
 <ul><li><p>Updated readme and made the font options argument for plots available to Windows OS systems only.</p></li>
@@ -203,8 +201,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9008" id="elucidate-0009008---dec-10th-2019">elucidate 0.0.0.9008 - Dec. 10th, 2019<a class="anchor" aria-label="anchor" href="#elucidate-0009008---dec-10th-2019"></a></h2>
-<ul><li>Added the <code>%ni%</code> operator which returns the negative of the <code>%in%</code> operator, i.e. FALSE for matching values and TRUE for non-matching values instead of TRUE for matches and FALSE for non-matches</li>
-</ul></div>
+<ul><li>Added the <code>%ni%</code> operator which returns the negative of the <code>%in%</code> operator, i.e. FALSE for matching values and TRUE for non-matching values instead of TRUE for matches and FALSE for non-matches</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9007" id="elucidate-0009007---dec-9th-2019">elucidate 0.0.0.9007 - Dec. 9th, 2019<a class="anchor" aria-label="anchor" href="#elucidate-0009007---dec-9th-2019"></a></h2>
 <ul><li><p>added <code><a href="../reference/inv_quantile.html">inv_quantile()</a></code> to calculate values of a vector <code>y</code> at different quantiles. Added convenience wrappers for calculating <code><a href="../reference/skewness.html">skewness()</a></code> and <code><a href="../reference/kurtosis.html">kurtosis()</a></code>.</p></li>
@@ -232,8 +229,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9003" id="elucidate-0009003---sept-23rd-2019">elucidate 0.0.0.9003 - Sept. 23rd, 2019<a class="anchor" aria-label="anchor" href="#elucidate-0009003---sept-23rd-2019"></a></h2>
-<ul><li>Updated documentation, dependencies, &amp; fixed documentation typos.</li>
-</ul></div>
+<ul><li>Updated documentation, dependencies, &amp; fixed documentation typos.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9002" id="elucidate-0009002---sept-19th-2019">elucidate 0.0.0.9002 - Sept. 19th, 2019<a class="anchor" aria-label="anchor" href="#elucidate-0009002---sept-19th-2019"></a></h2>
 <ul><li><p>fixed an issue from version 0.0.0.9000 where <code><a href="../reference/describe_all.html">describe_all()</a></code> output incorrectly displayed grouping variable names.</p></li>
@@ -242,13 +238,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9001" id="elucidate-0009001---sept-16th-2019">elucidate 0.0.0.9001 - Sept. 16th, 2019<a class="anchor" aria-label="anchor" href="#elucidate-0009001---sept-16th-2019"></a></h2>
-<ul><li>reformatted <code>mcvals()</code> &amp; <code>mcvals_all()</code>, removed <code>lcvals()</code> &amp; <code>lcvals_all()</code>. Fixed issue from version 0.0.0.9000 with <code><a href="../reference/describe_ci.html">describe_ci()</a></code> failing for sample sizes over 3,000.</li>
-</ul></div>
+<ul><li>reformatted <code>mcvals()</code> &amp; <code>mcvals_all()</code>, removed <code>lcvals()</code> &amp; <code>lcvals_all()</code>. Fixed issue from version 0.0.0.9000 with <code><a href="../reference/describe_ci.html">describe_ci()</a></code> failing for sample sizes over 3,000.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.0.9000" id="elucidate-0009000---july-16th-2019">elucidate 0.0.0.9000 - July 16th, 2019<a class="anchor" aria-label="anchor" href="#elucidate-0009000---july-16th-2019"></a></h2>
 <ul><li>package created locally with initial definitions for functions <code><a href="../reference/se.html">se()</a></code>, <code>mcvals()</code>, <code>lcvals()</code>, <code>mcvals_all()</code>, <code>lcvals_all()</code>, <code><a href="../reference/describe.html">describe()</a></code>, <code><a href="../reference/describe_all.html">describe_all()</a></code>, <code><a href="../reference/describe_ci.html">describe_ci()</a></code>, and <code><a href="../reference/describe_ci_all.html">describe_ci_all()</a></code>
-</li>
-</ul></div>
+</li></ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -263,7 +257,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
