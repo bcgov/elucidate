@@ -573,41 +573,46 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
   if(class == "all" || "d" %chin% class) {
     date_cols <- vapply(data, lubridate::is.instant, FUN.VALUE = logical(1))
     if(!missing(...)) {
-      date_cols <- length(setdiff(names(data)[date_cols], g))
+      date_cols <- setdiff(names(data)[date_cols], g)
+      date_cols_n <- length(date_cols)
     } else {
-      date_cols <- sum(date_cols)
+      date_cols_n <- sum(date_cols)
     }
   }
   if(class == "all" || "f" %chin% class) {
     fct_cols <- vapply(data, is.factor, FUN.VALUE = logical(1))
     if(!missing(...)) {
-      fct_cols <- length(setdiff(names(data)[fct_cols], g))
+      fct_cols <- setdiff(names(data)[fct_cols], g)
+      fct_cols_n <- length(fct_cols)
     } else {
-      fct_cols <- sum(fct_cols)
+      fct_cols_n <- sum(fct_cols)
     }
   }
   if(class == "all" || "c" %chin% class){
     chr_cols <- vapply(data, is.character, FUN.VALUE = logical(1))
     if(!missing(...)) {
-      chr_cols <- length(setdiff(names(data)[chr_cols], g))
+      chr_cols <- setdiff(names(data)[chr_cols], g)
+      chr_cols_n <- length(chr_cols)
     } else {
-      chr_cols <- sum(chr_cols)
+      chr_cols_n <- sum(chr_cols)
     }
   }
   if(class == "all" || "l" %chin% class) {
     lgl_cols <- vapply(data, is.logical, FUN.VALUE = logical(1))
     if(!missing(...)) {
-      lgl_cols <- length(setdiff(names(data)[lgl_cols], g))
+      lgl_cols <- setdiff(names(data)[lgl_cols], g)
+      lgl_cols_n <- length(lgl_cols)
     } else {
-      lgl_cols <- sum(lgl_cols)
+      lgl_cols_n <- sum(lgl_cols)
     }
   }
   if(class == "all" || "n" %chin% class) {
     num_cols <- vapply(data, is.numeric, FUN.VALUE = logical(1))
     if(!missing(...)) {
-      num_cols <- length(setdiff(names(data)[num_cols], g))
+      num_cols <- setdiff(names(data)[num_cols], g)
+      num_cols_n <- length(num_cols)
     } else {
-      num_cols <- sum(num_cols)
+      num_cols_n <- sum(num_cols)
     }
   }
 
@@ -615,57 +620,57 @@ describe_all <- function(data, ..., class = "all", digits = 3, type = 2, na.rm =
   ls <- list()
 
   if(!missing(...)) {
-    if((class == "all" || "d" %chin% class) && date_cols >= 1){
+    if((class == "all" || "d" %chin% class) && date_cols_n >= 1){
       ls[["date"]] <- data[,  purrr::map_dfr(.SD,
                                              ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
-                                             .id = "variable"), by = eval(g), .SDcols = lubridate::is.instant]
+                                             .id = "variable"), by = eval(g), .SDcols = date_cols]
     }
-    if((class == "all" || "f" %chin% class) && fct_cols >= 1){
+    if((class == "all" || "f" %chin% class) && fct_cols_n >= 1){
       ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
                                                ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
-                                               .id = "variable"), by = eval(g), .SDcols = is.factor]
+                                               .id = "variable"), by = eval(g), .SDcols = fct_cols]
     }
-    if((class == "all" || "c" %chin% class) && chr_cols >= 1){
+    if((class == "all" || "c" %chin% class) && chr_cols_n >= 1){
       ls[["character"]] <- data[,  purrr::map_dfr(.SD,
                                                   ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
-                                                  .id = "variable"), by = eval(g), .SDcols = is.character]
+                                                  .id = "variable"), by = eval(g), .SDcols = chr_cols]
     }
-    if((class == "all" || "l" %chin% class) && lgl_cols >= 1){
+    if((class == "all" || "l" %chin% class) && lgl_cols_n >= 1){
       ls[["logical"]] <- data[,  purrr::map_dfr(.SD,
                                                 ~describe(.x, na.rm = na.rm, output = output),
-                                                .id = "variable"), by = eval(g), .SDcols = is.logical]
+                                                .id = "variable"), by = eval(g), .SDcols = lgl_cols]
     }
-    if((class == "all" || "n" %chin% class) && num_cols >= 1){
+    if((class == "all" || "n" %chin% class) && num_cols_n >= 1){
       ls[["numeric"]] <- data[,  purrr::map_dfr(.SD,
                                                 ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
-                                                .id = "variable"), by = eval(g), .SDcols = is.numeric]
+                                                .id = "variable"), by = eval(g), .SDcols = num_cols]
     }
   } else {
-    if((class == "all" || "d" %chin% class) && date_cols >= 1){
+    if((class == "all" || "d" %chin% class) && date_cols_n >= 1){
       ls[["date"]] <- data[,  purrr::map_dfr(.SD,
                                              ~describe(.x, output = output),
-                                             .id = "variable"), .SDcols = lubridate::is.instant]
+                                             .id = "variable"), .SDcols = date_cols]
 
     }
-    if((class == "all" || "f" %chin% class) && fct_cols >= 1){
+    if((class == "all" || "f" %chin% class) && fct_cols_n >= 1){
       ls[["factor"]] <- data[,  purrr::map_dfr(.SD,
                                                ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
-                                               .id = "variable"), .SDcols = is.factor]
+                                               .id = "variable"), .SDcols = fct_cols]
     }
-    if((class == "all" || "c" %chin% class) && chr_cols >= 1){
+    if((class == "all" || "c" %chin% class) && chr_cols_n >= 1){
       ls[["character"]] <- data[,  purrr::map_dfr(.SD,
                                                   ~describe(.x, digits = digits, order = order, na.rm = na.rm, sep = sep, output = output),
-                                                  .id = "variable"), .SDcols = is.character]
+                                                  .id = "variable"), .SDcols = chr_cols]
     }
-    if((class == "all" || "l" %chin% class) && lgl_cols >= 1){
+    if((class == "all" || "l" %chin% class) && lgl_cols_n >= 1){
       ls[["logical"]] <- data[,  purrr::map_dfr(.SD,
                                                 ~describe(.x, na.rm = na.rm, output = output),
-                                                .id = "variable"),.SDcols = is.logical]
+                                                .id = "variable"), .SDcols = lgl_cols]
     }
-    if((class == "all" || "n" %chin% class) && num_cols >= 1){
+    if((class == "all" || "n" %chin% class) && num_cols_n >= 1){
       ls[["numeric"]] <- data[,  purrr::map_dfr(.SD,
                                                 ~describe(.x, digits = digits, type = type, na.rm = na.rm, output = output),
-                                                .id = "variable"), .SDcols = is.numeric]
+                                                .id = "variable"), .SDcols = num_cols]
     }
   }
 

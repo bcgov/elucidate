@@ -1,3 +1,7 @@
+# elucidate 0.1.1.9001 - May 17th, 2022
+
+* Fixed a bug which led to `describe_all()` calculating and returning uninformative summary statistics for variables in the source data when they are specified as grouping variables. 
+
 # elucidate 0.1.1.9000 - March 2nd, 2022
 
 * Added `describe_na()`. `describe_na_all()`, `plot_na()`, and `plot_na_all()` to facilitate exploration of missing values in data frames. 
