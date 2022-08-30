@@ -79,24 +79,28 @@ with <code><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html" class="externa
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">static_to_dynamic</span><span class="op">(</span>
-  <span class="va">static_object</span>,
-  caption <span class="op">=</span> <span class="cn">NULL</span>,
-  reactable <span class="op">=</span> <span class="cn">FALSE</span>,
-  reactable_threshold <span class="op">=</span> <span class="fl">10000</span>,
-  group_by <span class="op">=</span> <span class="cn">NULL</span>,
-  reactable_stripe_colour <span class="op">=</span> <span class="st">"#e4e2e9"</span>,
-  reactable_highlight_colour <span class="op">=</span> <span class="st">"#a28adb"</span>,
-  reactable_selected_colour <span class="op">=</span> <span class="st">"#aaaadb"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">static_to_dynamic</span><span class="op">(</span></span>
+<span>  <span class="va">static_object</span>,</span>
+<span>  caption <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reactable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reactable_threshold <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reactable_stripe_colour <span class="op">=</span> <span class="st">"#e4e2e9"</span>,</span>
+<span>  reactable_highlight_colour <span class="op">=</span> <span class="st">"#a28adb"</span>,</span>
+<span>  reactable_selected_colour <span class="op">=</span> <span class="st">"#aaaadb"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>static_object</dt>
 <dd><p>A data frame, tibble, or ggplot2 object.</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>Add a caption/title to the dynamic table/figure.</p></dd>
+
+
 <dt>reactable</dt>
 <dd><p>Affects data frame inputs only. overrides the row-limit to
 convert a dataframe to reactable() format instead of datatable() format
@@ -104,41 +108,56 @@ even when there are fewer rows than reactable_threshold. You might want to
 do this to take advantage of custom highlighting/stripe colours or grouping
 via the "group_by" argument. Alternatively, you could set
 reactable_threshold to 0 and achieve the same effect.</p></dd>
+
+
 <dt>reactable_threshold</dt>
 <dd><p>Affects data frame inputs only. Determines the
 threshold for the number of rows in a input data frame beyond which a
 reactable() is generated as output instead of a datatable().</p></dd>
+
+
 <dt>group_by</dt>
 <dd><p>If the input is a data frame and reactable is TRUE and/or the
 number of rows exceeds the reactable_threshold, this allows you to group the
 reactable output by input columns, which can be specified using a character
 vector.</p></dd>
+
+
 <dt>reactable_stripe_colour</dt>
 <dd><p>If the input is a data frame and reactable is
 TRUE and/or the number of rows exceeds the reactable_threshold, this allows
 you to change the row striping colour (specified using a hexcode or base R
 colour name). Use <code><a href="colour_options.html">elucidate::colour_options()</a></code> to see which colour options
 are available.</p></dd>
+
+
 <dt>reactable_highlight_colour</dt>
 <dd><p>If the input is a data frame and reactable is
 TRUE and/or the number of rows exceeds the reactable_threshold, this allows
 you to change the row highlight colour (specified using a hexcode or base R
 colour name). Use <code><a href="colour_options.html">elucidate::colour_options()</a></code> to see which colour options
 are available.</p></dd>
+
+
 <dt>reactable_selected_colour</dt>
 <dd><p>If the input is a data frame and reactable
 is TRUE and/or the number of rows exceeds the reactable_threshold, this
 allows you to change the background colour of selected rows (specified
 using a hexcode or base R colour name). Use <code><a href="colour_options.html">elucidate::colour_options()</a></code>
 to see which colour options are available.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If a data frame or tibble was provided, the output will be a
+    
+
+<p>If a data frame or tibble was provided, the output will be a
 DataTables or reactable html widget (according to criteria specified
 above). If a ggplot object was provided, the output will be a plotly html
-widget.
-Unique features of the DataTable-derived output for data frames include
+widget.</p>
+
+
+<p>Unique features of the DataTable-derived output for data frames include
 Excel-like cell editing and filling, the ability to rearrange and/or
 selectively hide columns, and convenience buttons for printing or
 downloading the table to Excel, csv, or PDF format. Unfortunately the
@@ -163,24 +182,24 @@ search-based filtering of rows for some or all of the columns.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span>, reactable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span>, reactable <span class="op">=</span> <span class="cn">TRUE</span>, group_by <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span>, reactable <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                       reactable_hightlight_colour <span class="op">=</span> <span class="st">"lightgreen"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span>, reactable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span>, reactable <span class="op">=</span> <span class="cn">TRUE</span>, group_by <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">static_to_dynamic</span><span class="op">(</span><span class="va">mtcars</span>, reactable <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                       reactable_hightlight_colour <span class="op">=</span> <span class="st">"lightgreen"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -195,7 +214,7 @@ search-based filtering of rows for some or all of the columns.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

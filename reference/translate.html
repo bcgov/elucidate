@@ -66,25 +66,32 @@ conditional replacements to be specified.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">translate</span><span class="op">(</span><span class="va">y</span>, <span class="va">old</span>, <span class="va">new</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">translate</span><span class="op">(</span><span class="va">y</span>, <span class="va">old</span>, <span class="va">new</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>y</dt>
 <dd><p>A vector that you wish to translate/recode.</p></dd>
+
+
 <dt>old</dt>
 <dd><p>A vector containing values of the old coding scheme with
 corresponding values/rows in "new". Should be the same length as the "new"
 vector.</p></dd>
+
+
 <dt>new</dt>
 <dd><p>A vector containing values of the new coding scheme with
 corresponding values/rows in "old". Should be the same length as the "old"
 vector.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An updated version of the input vector that has been translated from
+    
+
+<p>An updated version of the input vector that has been translated from
 the old coding scheme to the new one.</p>
     </div>
     <div id="see-also">
@@ -98,26 +105,26 @@ the old coding scheme to the new one.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">old_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">new_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span>, <span class="st">"four"</span>, <span class="st">"five"</span>,</span>
-<span class="r-in">                <span class="st">"six"</span>, <span class="st">"seven"</span>, <span class="st">"eight"</span>, <span class="st">"nine"</span>, <span class="st">"ten"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#use it on its own</span></span>
-<span class="r-in"><span class="fu">translate</span><span class="op">(</span>y <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span>, old <span class="op">=</span> <span class="va">old_values</span>, new <span class="op">=</span> <span class="va">new_values</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">old_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">new_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span>, <span class="st">"four"</span>, <span class="st">"five"</span>,</span></span>
+<span class="r-in"><span>                <span class="st">"six"</span>, <span class="st">"seven"</span>, <span class="st">"eight"</span>, <span class="st">"nine"</span>, <span class="st">"ten"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#use it on its own</span></span></span>
+<span class="r-in"><span><span class="fu">translate</span><span class="op">(</span>y <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span>, old <span class="op">=</span> <span class="va">old_values</span>, new <span class="op">=</span> <span class="va">new_values</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "six"   "six"   "four"  "six"   "eight" "six"   "eight" "four"  "four" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [10] "six"   "six"   "eight" "eight" "eight" "eight" "eight" "eight" "four" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [19] "four"  "four"  "four"  "eight" "eight" "eight" "eight" "four"  "four" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [28] "four"  "eight" "six"   "eight" "four" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#or within a dplyr::mutate call</span></span>
-<span class="r-in"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">mtcars</span>,</span>
-<span class="r-in">              translated_cyl <span class="op">=</span> <span class="fu">translate</span><span class="op">(</span><span class="va">cyl</span>,</span>
-<span class="r-in">                                         old <span class="op">=</span> <span class="va">old_values</span>,</span>
-<span class="r-in">                                         new <span class="op">=</span> <span class="va">new_values</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#or within a dplyr::mutate call</span></span></span>
+<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">mtcars</span>,</span></span>
+<span class="r-in"><span>              translated_cyl <span class="op">=</span> <span class="fu">translate</span><span class="op">(</span><span class="va">cyl</span>,</span></span>
+<span class="r-in"><span>                                         old <span class="op">=</span> <span class="va">old_values</span>,</span></span>
+<span class="r-in"><span>                                         new <span class="op">=</span> <span class="va">new_values</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -184,7 +191,7 @@ the old coding scheme to the new one.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Ferrari Dino                   six</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora                eight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E                    four</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -199,7 +206,7 @@ the old coding scheme to the new one.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -64,27 +64,36 @@ rare cases. For complex use cases see <code><a href="describe_all.html">describe
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="fl">10</span>, sep <span class="op">=</span> <span class="st">"_"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="fl">10</span>, sep <span class="op">=</span> <span class="st">"_"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame (required).</p></dd>
+
+
 <dt>n</dt>
 <dd><p>The number of top &amp; bottom unique values you want frequency counts
 for. Default is 10 (fewer than "n" will be shown if there aren't "n" unique
 values).</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>This only needs to be modified if some values to be counted
 contain an underscore, in which case you should change it to a character
 string that is not present in any of the values in the data source.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>Should missing values be omitted (TRUE/FALSE)?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of data frames of the top and bottom counts for each variable
+    
+
+<p>A list of data frames of the top and bottom counts for each variable
 of the input data frame. Return value columns are "top_v" = top value,
 "top_n" = count of the top value in the same row of the adjacent top_v
 column, "bot_v" = bottom value, &amp; "bot_n" = count of the bottom value in
@@ -101,29 +110,29 @@ the same row of the adjacent bot_v column.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">#using the mtcars data</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="co">#(up to) the top &amp; bottom 10 values</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#using the mtcars data</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="co">#(up to) the top &amp; bottom 10 values</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    top_v top_n  bot_v bot_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 mtcars     1 mtcars     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#the most &amp; least common values of all variables in \code{data}</span></span>
-<span class="r-in"><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">df</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#the most &amp; least common values of all variables in \code{data}</span></span></span>
+<span class="r-in"><span><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">df</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    top_v top_n  bot_v bot_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 mtcars     1 mtcars     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#the top 5 most &amp; least common unique values for all variables in  \code{data}</span></span>
-<span class="r-in"><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">df</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#the top 5 most &amp; least common unique values for all variables in  \code{data}</span></span></span>
+<span class="r-in"><span><span class="fu">counts_tb_all</span><span class="op">(</span><span class="va">df</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    top_v top_n  bot_v bot_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 mtcars     1 mtcars     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -138,7 +147,7 @@ the same row of the adjacent bot_v column.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -74,22 +74,24 @@ for <code>copies(filter = "dupes", sort_by_copies = TRUE)</code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">copies</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">...</span>,
-  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"dupes"</span>, <span class="st">"first"</span>, <span class="st">"last"</span>, <span class="st">"unique"</span><span class="op">)</span>,
-  keep_all_cols <span class="op">=</span> <span class="cn">TRUE</span>,
-  sort_by_copies <span class="op">=</span> <span class="cn">FALSE</span>,
-  order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="st">"a"</span>, <span class="st">"i"</span><span class="op">)</span>,
-  na_last <span class="op">=</span> <span class="cn">FALSE</span>,
-  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"same"</span>, <span class="st">"tibble"</span>, <span class="st">"dt"</span>, <span class="st">"data.frame"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">copies</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"dupes"</span>, <span class="st">"first"</span>, <span class="st">"last"</span>, <span class="st">"unique"</span><span class="op">)</span>,</span>
+<span>  keep_all_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sort_by_copies <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="st">"a"</span>, <span class="st">"i"</span><span class="op">)</span>,</span>
+<span>  na_last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"same"</span>, <span class="st">"tibble"</span>, <span class="st">"dt"</span>, <span class="st">"data.frame"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>a data frame, tibble, or data.table.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>This special argument accepts any number of unquoted column names
 (also present in the data source) to use when searching for duplicates,
@@ -97,6 +99,8 @@ e.g. <code>x, y, z</code>. Also accepts a character vector of column names or in
 numbers, e.g. c("x", "y", "z") or c(1, 2, 3), but not a mixture of formats
 in the same call. If no column names are specified, all columns will be
 used.</p></dd>
+
+
 <dt>filter</dt>
 <dd><p>Shortcuts for filtering (retaining a subset of) the rows of the
 output based on the number of copies detected. Options include: <code>"all"</code> =
@@ -109,37 +113,57 @@ cases where duplicates are detected (mimics the behaviour of
 the last copy in cases where duplicates are detected. Note: if <code>"dupes"</code> is
 selected a message will be printed to the console indicating whether or
 not duplicates were detected.</p></dd>
+
+
 <dt>keep_all_cols</dt>
 <dd><p>If column names are specified using <code>...</code>, this allows
 you to drop unspecified columns, similarly to the <code>.keep_all</code> argument for
 `dplyr::distinct()``</p></dd>
+
+
 <dt>sort_by_copies</dt>
 <dd><p>Only applicable to the "all" &amp; "dupes" filtering
 options. If TRUE, sorts the results by the number of copies, in order
 specified by the <code>order</code> argument. Default is FALSE to maximize
 performance.</p></dd>
+
+
 <dt>order</dt>
 <dd><p>Only applicable to the "all" &amp; "dupes" filtering options. If
 sort_by_copies is set to TRUE, this controls whether the results should be
 sorted in order of descending/decreasing = "d" (the default) or
 ascending/increasing = "a" or "i" copy numbers.</p></dd>
+
+
 <dt>na_last</dt>
 <dd><p>should rows of the specified columns with missing values be
 listed below non-missing values (TRUE/FALSE)? Default is FALSE.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>"tibble" for tibble, "dt" for data.table, or "data.frame" for a
 data frame. "same", the default option, returns the same format as the
 input data.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>filter</code> argument is set to "all", returns a modified version of the
+    
+
+<p>If <code>filter</code> argument is set to "all", returns a modified version of the
 input data frame with two additional columns added to the end/right side:</p><div class="sourceCode"><pre><code>- `copy_number` = the row copy number which is included to allow
 subsequent filtering based on the 1st or last copy detected.
 
 - `n_copies` = the total number of copies detected
-</code></pre></div><p>If <code>filter</code> is set to <code>dupes</code>, then only the <code>n_copies</code> column is appended
-and only duplicated rows are returned. If any other of the other <code>filter</code>argument options are chosen, only the chosen subset of the rows &amp; columns
+</code></pre></div>
+
+
+
+<p>If <code>filter</code> is set to <code>dupes</code>, then only the <code>n_copies</code> column is appended
+and only duplicated rows are returned. If any other of the other <code>filter</code></p>
+
+
+<p>argument options are chosen, only the chosen subset of the rows &amp; columns
 will be returned.</p>
     </div>
     <div id="see-also">
@@ -155,27 +179,27 @@ will be returned.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># check based on one variable &amp; return all rows with copy indicators</span></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="co">#the default</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check based on one variable &amp; return all rows with copy indicators</span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="co">#the default</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12,000 × 12</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       id d          g     high_low even     y1    y2    x1    x2    x3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 2008-01-01 e     high     FALSE 106.  118.     59   116   248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6 2008-01-01 a     high     TRUE  102.  114.     19   163   206</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 2008-01-01 e     low      FALSE  99.8  89.8    92   106   277</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 11,990 more rows, and 2 more variables: copy_number &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   n_copies &lt;int&gt;</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check based on one variable &amp; return duplicated rows only</span></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"dupes"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id d          g     high_low even     y1    y2    x1    x2    x3 copy_nu…¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 2008-01-01 e     high     FALSE 106.  118.     59   116   248         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 2008-01-01 c     high     TRUE   96.5 107.      5   101   238         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4 2008-01-01 c     high     TRUE  109.  102.     60   130   287         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6 2008-01-01 a     high     TRUE  102.  114.     19   163   206         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 2008-01-01 d     low      FALSE  91.0  87.9    77   133   201         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 2008-01-01 e     low      FALSE  99.8  89.8    92   106   277         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 11,990 more rows, 1 more variable: n_copies &lt;int&gt;, and abbreviated</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   variable name ¹​copy_number</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check based on one variable &amp; return duplicated rows only</span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"dupes"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12,000 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies</span>
@@ -191,16 +215,16 @@ will be returned.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 2008-01-01 e     low      FALSE  99.8  89.8    92   106   277     <span style="text-decoration: underline;">2</span>352</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 2008-01-01 c     low      TRUE  122.   83.6     4   134   209     <span style="text-decoration: underline;">2</span>220</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 11,990 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check based on one variable &amp; return distinct/unique rows only</span></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"unique"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check based on one variable &amp; return distinct/unique rows only</span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"unique"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 10 variables: id &lt;int&gt;, d &lt;date&gt;, g &lt;fct&gt;, high_low &lt;chr&gt;, even &lt;lgl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   y1 &lt;dbl&gt;, y2 &lt;dbl&gt;, x1 &lt;int&gt;, x2 &lt;int&gt;, x3 &lt;int&gt;</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check based on one variable &amp; return the 1st detected copy for cases where</span></span>
-<span class="r-in"><span class="co"># more than one copy is detected (like `dplyr::distinct()` or `unique()`)</span></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check based on one variable &amp; return the 1st detected copy for cases where</span></span></span>
+<span class="r-in"><span><span class="co"># more than one copy is detected (like `dplyr::distinct()` or `unique()`)</span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id d          g     high_low even     y1    y2    x1    x2    x3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -209,10 +233,10 @@ will be returned.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     3 2008-01-01 d     low      FALSE  99.3  96.2    71   111   250</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     5 2008-01-01 a     high     FALSE  99.7 113.     96   196   284</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     8 2008-01-01 b     low      TRUE  109.   98.7    74   191   249</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check based on one variable &amp; return the last detected copy for cases where</span></span>
-<span class="r-in"><span class="co"># more than one copy is detected (like `unique()` with fromLast = TRUE`)</span></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check based on one variable &amp; return the last detected copy for cases where</span></span></span>
+<span class="r-in"><span><span class="co"># more than one copy is detected (like `unique()` with fromLast = TRUE`)</span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span>, filter <span class="op">=</span> <span class="st">"last"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id d          g     high_low even     y1    y2    x1    x2    x3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
@@ -221,13 +245,13 @@ will be returned.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>   997 2019-01-01 a     high     FALSE  171. 103.     12   172   221</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   998 2019-01-01 e     high     TRUE   154. 116.     35   115   254</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>  <span style="text-decoration: underline;">1</span>000 2019-01-01 c     low      TRUE   280.  84.3    50   118   278</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, <span class="va">g</span><span class="op">)</span> <span class="co">#check based on 2 variables</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span> <span class="co">#check based on all columns</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, <span class="va">g</span><span class="op">)</span> <span class="co">#check based on 2 variables</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">copies</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span> <span class="co">#check based on all columns</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -242,7 +266,7 @@ will be returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

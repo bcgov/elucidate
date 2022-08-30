@@ -62,7 +62,7 @@ to specify custom colours for plots.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">colour_options</span><span class="op">(</span>print_to_pdf <span class="op">=</span> <span class="cn">FALSE</span>, pdf_name <span class="op">=</span> <span class="st">"base_r_colour_options.pdf"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colour_options</span><span class="op">(</span>print_to_pdf <span class="op">=</span> <span class="cn">FALSE</span>, pdf_name <span class="op">=</span> <span class="st">"base_r_colour_options.pdf"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -70,10 +70,13 @@ to specify custom colours for plots.</p>
     <dl><dt>print_to_pdf</dt>
 <dd><p>IF TRUE, output is exported to a PDF in the working
 directory instead of displayed in an R graphics device.</p></dd>
+
+
 <dt>pdf_name</dt>
 <dd><p>The name of the PDF file. Default is
 "base_r_colour_options.pdf". Must end in .pdf. Ignored if print_to_pdf =
 FALSE.</p></dd>
+
 </dl></div>
     <div id="references">
     <h2>References</h2>
@@ -86,11 +89,11 @@ FALSE.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">#default settings. Prints to the active graphics device.</span></span>
-<span class="r-in"><span class="fu">colour_options</span><span class="op">(</span>print_to_pdf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#the default</span></span>
-<span class="r-in"><span class="fu">colour_options</span><span class="op">(</span>print_to_pdf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">#print to a single page PDF file in your working directory.</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">#default settings. Prints to the active graphics device.</span></span></span>
+<span class="r-in"><span><span class="fu">colour_options</span><span class="op">(</span>print_to_pdf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#the default</span></span></span>
+<span class="r-in"><span><span class="fu">colour_options</span><span class="op">(</span>print_to_pdf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">#print to a single page PDF file in your working directory.</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -105,7 +108,7 @@ FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

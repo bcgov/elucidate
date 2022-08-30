@@ -62,20 +62,20 @@ functions from the janitor, readr, &amp; tibble packages.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">wash_df</span><span class="op">(</span>
-  <span class="va">data</span>,
-  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,
-  case <span class="op">=</span> <span class="st">"snake"</span>,
-  remove_empty <span class="op">=</span> <span class="cn">TRUE</span>,
-  remove_which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rows"</span>, <span class="st">"cols"</span><span class="op">)</span>,
-  parse <span class="op">=</span> <span class="cn">TRUE</span>,
-  guess_integer <span class="op">=</span> <span class="cn">FALSE</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NA"</span><span class="op">)</span>,
-  rownames_to_column <span class="op">=</span> <span class="cn">FALSE</span>,
-  col_name <span class="op">=</span> <span class="st">"rowname"</span>,
-  column_to_rownames <span class="op">=</span> <span class="cn">FALSE</span>,
-  names_col <span class="op">=</span> <span class="st">"rowname"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">wash_df</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  case <span class="op">=</span> <span class="st">"snake"</span>,</span>
+<span>  remove_empty <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  remove_which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rows"</span>, <span class="st">"cols"</span><span class="op">)</span>,</span>
+<span>  parse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  guess_integer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NA"</span><span class="op">)</span>,</span>
+<span>  rownames_to_column <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  col_name <span class="op">=</span> <span class="st">"rowname"</span>,</span>
+<span>  column_to_rownames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  names_col <span class="op">=</span> <span class="st">"rowname"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,50 +83,75 @@ functions from the janitor, readr, &amp; tibble packages.</p>
     <dl><dt>data</dt>
 <dd><p>A messy data frame that contains inappropriate column
 classifications, inconsistently structured column names, empty rows/columns</p></dd>
+
+
 <dt>clean_names</dt>
 <dd><p>If TRUE (default), applies
 <code><a href="https://rdrr.io/pkg/janitor/man/clean_names.html" class="external-link">clean_names</a></code> to reformat column names according to
 the specified case.</p></dd>
+
+
 <dt>case</dt>
 <dd><p>The case/format you want column names to be converted to if
 clean_names = TRUE. Default is snake_case.</p></dd>
+
+
 <dt>remove_empty</dt>
 <dd><p>If TRUE (the default), applies
 <code><a href="https://rdrr.io/pkg/janitor/man/remove_empty.html" class="external-link">remove_empty</a></code> to remove empty rows &amp;/or columns as
 per remove_which</p></dd>
+
+
 <dt>remove_which</dt>
 <dd><p>Either "rows" to remove empty rows, "cols" to remove
 empty columns, or c("rows", "cols") to remove both (the default).</p></dd>
+
+
 <dt>parse</dt>
 <dd><p>If TRUE (the default), applies <code><a href="https://readr.tidyverse.org/reference/parse_guess.html" class="external-link">parse_guess</a></code>
 to each column in data to guess the appropriate column classes and update
 them accordingly.</p></dd>
+
+
 <dt>guess_integer</dt>
 <dd><p>If TRUE, will classify variables containing whole
 numbers as integer, otherwise they are classified as the more general
 double/numeric class.</p></dd>
+
+
 <dt>na</dt>
 <dd><p>A character vector of values that should be read as missing/NA when
 parse = TRUE. Default is c("", "NA").</p></dd>
+
+
 <dt>rownames_to_column</dt>
 <dd><p>If TRUE, applies
 <code><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames_to_column</a></code> to add the row names of data as a
 column. This is often helpful when cleaning up a data frame or tibble that
 used to be a matrix with row names.</p></dd>
+
+
 <dt>col_name</dt>
 <dd><p>If rownames_to_column = TRUE, this specifies the name of the
 new column to store the row names in.</p></dd>
+
+
 <dt>column_to_rownames</dt>
 <dd><p>If TRUE, applies
 <code><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">column_to_rownames</a></code> to use the values of a column as
 the row names for the data object.</p></dd>
+
+
 <dt>names_col</dt>
 <dd><p>If column_to_rownames = TRUE, this specifies the column
 containing the names you want to assign to the rows of the data object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An updated version of the input data, modified according to the
+    
+
+<p>An updated version of the input data, modified according to the
 chosen options.</p>
     </div>
     <div id="see-also">
@@ -140,13 +165,13 @@ chosen options.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">mtcars</span><span class="op">$</span><span class="va">`Extra Column`</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span> <span class="co">#add an empty column</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">mtcars</span><span class="op">[</span><span class="fl">33</span><span class="op">:</span><span class="fl">50</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span> <span class="co">#add some missing rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">mtcars</span> <span class="co">#now mtcars is messy &amp; more like a real raw data set</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span><span class="op">$</span><span class="va">`Extra Column`</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span> <span class="co">#add an empty column</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span><span class="op">[</span><span class="fl">33</span><span class="op">:</span><span class="fl">50</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span> <span class="co">#add some missing rows</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="co">#now mtcars is messy &amp; more like a real raw data set</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -249,11 +274,11 @@ chosen options.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 48                            NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 49                            NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 50                            NA</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#clean it up and convert the row names to a column</span></span>
-<span class="r-in"><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu">wash_df</span><span class="op">(</span><span class="va">mtcars</span>, rownames_to_column <span class="op">=</span> <span class="cn">TRUE</span>, col_name <span class="op">=</span> <span class="st">"car"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">mtcars</span> <span class="co">#the empty rows and column are gone, huzzah! So is that awkard column name!</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#clean it up and convert the row names to a column</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu">wash_df</span><span class="op">(</span><span class="va">mtcars</span>, rownames_to_column <span class="op">=</span> <span class="cn">TRUE</span>, col_name <span class="op">=</span> <span class="st">"car"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="co">#the empty rows and column are gone, huzzah! So is that awkard column name!</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 32 × 12</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    car           mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -268,10 +293,10 @@ chosen options.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Merc 230     22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Merc 280     19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 22 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#or turn a column with rownames into row names</span></span>
-<span class="r-in"><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu">wash_df</span><span class="op">(</span><span class="va">mtcars</span>, column_to_rownames <span class="op">=</span> <span class="cn">TRUE</span>, names_col <span class="op">=</span> <span class="st">"car"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mtcars</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#or turn a column with rownames into row names</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu">wash_df</span><span class="op">(</span><span class="va">mtcars</span>, column_to_rownames <span class="op">=</span> <span class="cn">TRUE</span>, names_col <span class="op">=</span> <span class="st">"car"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -305,7 +330,7 @@ chosen options.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -320,7 +345,7 @@ chosen options.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

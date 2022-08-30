@@ -70,59 +70,59 @@ blog post</a> for an introduction to ggplot2.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_box</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">y</span>,
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  fill_var <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var <span class="op">=</span> <span class="cn">NULL</span>,
-  xlab <span class="op">=</span> <span class="cn">NULL</span>,
-  ylab <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="cn">NULL</span>,
-  title_hjust <span class="op">=</span> <span class="fl">0.5</span>,
-  caption <span class="op">=</span> <span class="cn">NULL</span>,
-  caption_hjust <span class="op">=</span> <span class="fl">0</span>,
-  fill_var_title <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_title <span class="op">=</span> <span class="cn">NULL</span>,
-  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,
-  ybreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  transform_y <span class="op">=</span> <span class="cn">FALSE</span>,
-  y_transformation <span class="op">=</span> <span class="st">"log10"</span>,
-  y_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  x_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  x_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_values <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_values <span class="op">=</span> <span class="cn">NULL</span>,
-  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plasma"</span>, <span class="st">"C"</span>, <span class="st">"magma"</span>, <span class="st">"A"</span>, <span class="st">"inferno"</span>, <span class="st">"B"</span>, <span class="st">"viridis"</span>, <span class="st">"D"</span>, <span class="st">"cividis"</span>,
-    <span class="st">"E"</span><span class="op">)</span>,
-  palette_direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2l"</span>, <span class="st">"l2d"</span><span class="op">)</span>,
-  palette_begin <span class="op">=</span> <span class="fl">0</span>,
-  palette_end <span class="op">=</span> <span class="fl">1</span>,
-  alpha <span class="op">=</span> <span class="fl">0.75</span>,
-  greyscale <span class="op">=</span> <span class="cn">FALSE</span>,
-  line_size <span class="op">=</span> <span class="fl">1</span>,
-  dots <span class="op">=</span> <span class="cn">FALSE</span>,
-  dots_colour <span class="op">=</span> <span class="st">"black"</span>,
-  dots_alpha <span class="op">=</span> <span class="fl">0.4</span>,
-  dots_binwidth <span class="op">=</span> <span class="fl">0.9</span>,
-  theme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bw"</span>, <span class="st">"classic"</span>, <span class="st">"grey"</span>, <span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"minimal"</span><span class="op">)</span>,
-  text_size <span class="op">=</span> <span class="fl">14</span>,
-  font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sans"</span>, <span class="st">"serif"</span>, <span class="st">"mono"</span><span class="op">)</span>,
-  facet_var <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_strip_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,
-  facet_var_text_bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  legend_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,
-  omit_legend <span class="op">=</span> <span class="cn">FALSE</span>,
-  interactive <span class="op">=</span> <span class="cn">FALSE</span>,
-  aesthetic_options <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_box</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  fill_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title_hjust <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  caption <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  caption_hjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  fill_var_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  ybreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  transform_y <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  y_transformation <span class="op">=</span> <span class="st">"log10"</span>,</span>
+<span>  y_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  x_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plasma"</span>, <span class="st">"C"</span>, <span class="st">"magma"</span>, <span class="st">"A"</span>, <span class="st">"inferno"</span>, <span class="st">"B"</span>, <span class="st">"viridis"</span>, <span class="st">"D"</span>, <span class="st">"cividis"</span>,</span>
+<span>    <span class="st">"E"</span><span class="op">)</span>,</span>
+<span>  palette_direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2l"</span>, <span class="st">"l2d"</span><span class="op">)</span>,</span>
+<span>  palette_begin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  palette_end <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  greyscale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  line_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  dots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dots_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  dots_alpha <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  dots_binwidth <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  theme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bw"</span>, <span class="st">"classic"</span>, <span class="st">"grey"</span>, <span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"minimal"</span><span class="op">)</span>,</span>
+<span>  text_size <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>  font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sans"</span>, <span class="st">"serif"</span>, <span class="st">"mono"</span><span class="op">)</span>,</span>
+<span>  facet_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_strip_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
+<span>  facet_var_text_bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  legend_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
+<span>  omit_legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  aesthetic_options <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -130,105 +130,155 @@ blog post</a> for an introduction to ggplot2.</p>
     <dl><dt>data</dt>
 <dd><p>A data frame or tibble containing the dependent measure "y" and
 any grouping variables.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>The name of a numeric variable you want boxplots for (quoted or
 unquoted), e.g. y = "variable" or y = variable.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A categorical variable you want to obtain separate boxplots of y
 for, e.g. x = "grouping_variable" or x = grouping_variable.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>graphical parameters (not associated with variables) to be passed
 to <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></code>, e.g. colour or fill, to be applied
 to all bars. To see some of the available options in a web browser, set the
 aesthetic_options argument to TRUE.</p></dd>
+
+
 <dt>fill_var</dt>
 <dd><p>Use if you want to assign a variable to the box fill colour,
 e.g. fill_var = "grouping_variable" or fill_var = grouping_variable.
 Produces separate sets of boxes for each level of the fill variable. See
 <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></code> for details.</p></dd>
+
+
 <dt>colour_var</dt>
 <dd><p>Use if you want to assign a variable to the box outline
 colour, e.g. colour_var = "grouping_variable" or colour_var =
 grouping_variable. Produces separate sets of boxes for each level of the
 colour variable. See <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></code> for details.</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>Specify/overwrite the x-axis label using a character string, e.g.
 "x-axis label"</p></dd>
+
+
 <dt>ylab</dt>
 <dd><p>Specify/overwrite the y-axis label using a character string, e.g.
 "y-axis label"</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Add a main title to the plot using a character string, e.g.
 "boxplots graph of y for each group of x"</p></dd>
+
+
 <dt>title_hjust</dt>
 <dd><p>Left-to-right/horizontal justification (alignment) of
 the main plot title. Accepts values from 0 (far left) to 1 (far right).
 Default is 0.5 (centre).</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>Add a figure caption to the bottom of the plot using a character string.</p></dd>
+
+
 <dt>caption_hjust</dt>
 <dd><p>Left-to-right/horizontal justification (alignment) of the
 caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
 (left).</p></dd>
+
+
 <dt>fill_var_title</dt>
 <dd><p>If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.</p></dd>
+
+
 <dt>colour_var_title</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the variable label in the plot
 legend.</p></dd>
+
+
 <dt>ylim</dt>
 <dd><p>specify the y-axis limits, e.g. ylim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 the default is ylim = c(NA, NA).</p></dd>
+
+
 <dt>ybreaks</dt>
 <dd><p>This allows you to change the break points to use for tick
 marks on the y-axis. <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code> is particularly useful here. See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></code> for details. If ybreaks is
 specified, then ylim should be also.</p></dd>
+
+
 <dt>transform_y</dt>
 <dd><p>Would you like to transform the y axis? (TRUE or FALSE)</p></dd>
+
+
 <dt>y_transformation</dt>
 <dd><p>If transform_y = TRUE, this determines the
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See <code>scale_continuous</code> for
 details.</p></dd>
+
+
 <dt>y_var_labs</dt>
 <dd><p>Allows you to modify the labels displayed with the y-axis
 tick marks. See <code>scale_continuous</code> for details.</p></dd>
+
+
 <dt>x_var_order</dt>
 <dd><p>If a variable has been assigned to x, this allows you to
 modify the order of the variable groups, e.g. x = grouping_variable,
 x_var_order = c("group_2", "group_1"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>x_var_labs</dt>
 <dd><p>If a variable has been assigned to x, this allows you to
 modify the labels of the variable groups, e.g. x = grouping_variable,
 x_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>fill_var_order</dt>
 <dd><p>If a variable has been assigned to fill using fill_var,
 this allows you to modify the order of the variable groups, e.g. fill_var =
 grouping_variable, fill_var_order = c("group_2", "group_1"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>colour_var_order</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the order of the variable groups,
 e.g. colour_var = grouping_variable, fill_var_order = c("group_2",
 "group_1"). See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>fill_var_labs</dt>
 <dd><p>If a variable has been assigned to fill using fill_var,
 this allows you to modify the labels of the variable groups, e.g. fill_var
 = grouping_variable, fill_var_labs = c("group_1_new_label" =
 "group_1_old_label", "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>colour_var_labs</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the labels of the variable groups,
 e.g. colour_var = grouping_variable, colour_var_labs =
 c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
 "group_2_old_label"). See <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>fill_var_values</dt>
 <dd><p>If a variable has been assigned to fill using
 fill_var, this allows you to modify the colours assigned to the fill of
@@ -236,6 +286,8 @@ each of the variable groups, e.g. fill_var = grouping_variable,
 fill_var_values = c("blue", "red"). See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></code> for details. For the colour
 options available in base R, see <code><a href="colour_options.html">colour_options</a></code>.</p></dd>
+
+
 <dt>colour_var_values</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the colours assigned to the outline
@@ -243,6 +295,8 @@ of each of the variable groups, e.g. colour_var = grouping_variable,
 colour_var_values = c("blue", "red"). See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></code> for details. For the colour
 options available in base R, see <code><a href="colour_options.html">colour_options</a></code>.</p></dd>
+
+
 <dt>palette</dt>
 <dd><p>If a variable is assigned to fill_var or colour_var, this
 determines which
@@ -252,59 +306,91 @@ or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
 <a href="https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes" class="external-link">this
 link</a> for examples. You can override these colour palettes with
 fill_var_values or colour_var_values.</p></dd>
+
+
 <dt>palette_direction</dt>
 <dd><p>Choose "d2l" for dark to light (default) or "l2d"
 for light to dark.</p></dd>
+
+
 <dt>palette_begin</dt>
 <dd><p>Value between 0 and 1 that determines where along the
 full range of the chosen colour palette's spectrum to begin sampling
 colours. See <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></code> for details.</p></dd>
+
+
 <dt>palette_end</dt>
 <dd><p>Value between 0 and 1 that determines where along the full
 range of the chosen colour palette's spectrum to end sampling colours. See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></code> for details.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>This adjusts the transparency/opacity of the box-and-whisker
 plots(s), ranging from 0 = 100% transparent to 1 = 100% opaque.</p></dd>
+
+
 <dt>greyscale</dt>
 <dd><p>Set to TRUE if you want the plot converted to greyscale.</p></dd>
+
+
 <dt>line_size</dt>
 <dd><p>Controls the thickness of the box plot lines.</p></dd>
+
+
 <dt>dots</dt>
 <dd><p>Set to TRUE if you want to add a dotplot layer over the
 box-and-whisker plot(s).</p></dd>
+
+
 <dt>dots_colour</dt>
 <dd><p>Controls the colour of the dots in the dotplot layer.
 Ignored if "dots" = FALSE or if a variable is assigned to "colour_var".</p></dd>
+
+
 <dt>dots_alpha</dt>
 <dd><p>This adjusts the transparency/opacity of the graphical
 components of the dotplot layer if "dots" = TRUE, with acceptable values
 ranging from 0 = 100% transparent to 1 = 100% opaque.</p></dd>
+
+
 <dt>dots_binwidth</dt>
 <dd><p>Controls the binwidth to use for the dotplot layer if
 dots = TRUE. See <code><a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html" class="external-link">geom_dotplot</a></code> for details.</p></dd>
+
+
 <dt>theme</dt>
 <dd><p>Adjusts the theme using 1 of 6 predefined "complete" theme
 templates provided by ggplot2. Currently supported options are: "classic",
 "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
 "dark", &amp; "minimal". See <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></code> for more
 information.</p></dd>
+
+
 <dt>text_size</dt>
 <dd><p>This controls the size of all plot text. Default = 14.</p></dd>
+
+
 <dt>font</dt>
 <dd><p>This controls the font of all plot text. Default = "sans"
 (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
 New).</p></dd>
+
+
 <dt>facet_var</dt>
 <dd><p>Use if you want separate plots for each level of a grouping
 variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 facet_var = grouping_variable. See <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></code> for
 details.</p></dd>
+
+
 <dt>facet_var_order</dt>
 <dd><p>If a variable has been assigned for faceting using
 facet_var, this allows you to modify the order of the variable groups, e.g.
 facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>facet_var_labs</dt>
 <dd><p>If a variable has been assigned for faceting using
 facet_var, this allows you to modify the labels of the variable groups
@@ -312,19 +398,29 @@ which will appear in the facet strips, e.g. facet_var = grouping_variable,
 facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>facet_var_strip_position</dt>
 <dd><p>If a variable has been assigned for faceting
 using facet_var, this allows you to modify the position of the facet strip
 labels. Sensible options include "top" (the default) or "bottom".</p></dd>
+
+
 <dt>facet_var_text_bold</dt>
 <dd><p>If a variable has been assigned for faceting
 using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 for the facet strip label text.</p></dd>
+
+
 <dt>legend_position</dt>
 <dd><p>This allows you to modify the legend position.
 Options include "right" (the default), "left", "top", &amp; "bottom".</p></dd>
+
+
 <dt>omit_legend</dt>
 <dd><p>Set to TRUE if you want to remove/omit the legends.</p></dd>
+
+
 <dt>interactive</dt>
 <dd><p>Determines whether a static ggplot object or an
 interactive html plotly object is returned. See
@@ -335,13 +431,18 @@ will cause a spurious warning message about 'layout' objects not having a
 <a href="https://github.com/ropensci/plotly/issues/994" class="external-link">documented bug</a> with
 plotly that can be safely ignored, although unfortunately the message
 cannot be suppressed.</p></dd>
+
+
 <dt>aesthetic_options</dt>
 <dd><p>If set to TRUE, opens a web browser to the tidyverse
 online aesthetic options vignette.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object or plotly object depending on whether static or
+    
+
+<p>A ggplot object or plotly object depending on whether static or
 interactive output was requested.</p>
     </div>
     <div id="references">
@@ -359,47 +460,47 @@ interactive output was requested.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="co">#load the mtcars data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="va">cyl</span>, fill <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="co">#load the mtcars data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="va">cyl</span>, fill <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_box-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">hp</span>,</span>
-<span class="r-in">         xlab <span class="op">=</span> <span class="st">"# of cylinders"</span>,</span>
-<span class="r-in">         ylab <span class="op">=</span> <span class="st">"horsepower"</span>,</span>
-<span class="r-in">         fill_var <span class="op">=</span> <span class="va">am</span>,</span>
-<span class="r-in">         fill_var_title <span class="op">=</span> <span class="st">"transmission"</span>,</span>
-<span class="r-in">         fill_var_labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"manual"</span> <span class="op">=</span> <span class="st">"0"</span>, <span class="st">"automatic"</span> <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span>
-<span class="r-in">         fill_var_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
-<span class="r-in">         theme <span class="op">=</span> <span class="st">"bw"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">hp</span>,</span></span>
+<span class="r-in"><span>         xlab <span class="op">=</span> <span class="st">"# of cylinders"</span>,</span></span>
+<span class="r-in"><span>         ylab <span class="op">=</span> <span class="st">"horsepower"</span>,</span></span>
+<span class="r-in"><span>         fill_var <span class="op">=</span> <span class="va">am</span>,</span></span>
+<span class="r-in"><span>         fill_var_title <span class="op">=</span> <span class="st">"transmission"</span>,</span></span>
+<span class="r-in"><span>         fill_var_labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"manual"</span> <span class="op">=</span> <span class="st">"0"</span>, <span class="st">"automatic"</span> <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         fill_var_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         theme <span class="op">=</span> <span class="st">"bw"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_box-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#modifying fill doesn't work as well for the interactive version of a boxplot</span></span>
-<span class="r-in"><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">hp</span>,</span>
-<span class="r-in">         xlab <span class="op">=</span> <span class="st">"# of cylinders"</span>,</span>
-<span class="r-in">         ylab <span class="op">=</span> <span class="st">"horsepower"</span>,</span>
-<span class="r-in">         fill_var <span class="op">=</span> <span class="va">am</span>,</span>
-<span class="r-in">         fill_var_title <span class="op">=</span> <span class="st">"transmission"</span>,</span>
-<span class="r-in">         fill_var_labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"manual"</span> <span class="op">=</span> <span class="st">"0"</span>, <span class="st">"automatic"</span> <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span>
-<span class="r-in">         fill_var_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
-<span class="r-in">         theme <span class="op">=</span> <span class="st">"bw"</span>,</span>
-<span class="r-in">         interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<div id="htmlwidget-0edaa401009391c14849" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0edaa401009391c14849">{"x":{"data":[{"x":[2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1],"y":[123,110,105,123,175,180,230,175,245,180,205,215,180,150,245,150,95,97,62],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,0,255,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(51,51,51,1)","width":3.77952755905512},"name":"manual","legendgroup":"manual","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,1,1,1,1,1,1,1,1,3,3],"y":[110,110,175,93,65,52,113,66,91,109,66,264,335],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,0,0,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(51,51,51,1)","width":3.77952755905512},"name":"automatic","legendgroup":"automatic","showlegend":true,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":25.2984640929846,"r":9.29846409298464,"b":47.4221668742217,"l":54.8609381486094},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"y","title":{"text":"# of cylinders","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[37.85,349.15],"tickmode":"array","ticktext":["100","200","300"],"tickvals":[100,200,300],"categoryorder":"array","categoryarray":["100","200","300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"x","title":{"text":"horsepower","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.845314917544058,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.40515390121689,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":14.8775425487754},"title":{"text":"transmission","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}}},"hovermode":"closest","barmode":"relative","boxmode":"group"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"40d28b96328":{"fill":{},"colour":{},"x":{},"y":{},"type":"box"}},"cur_data":"40d28b96328","visdat":{"40d28b96328":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><span class="r-in"></span>
-<span class="r-in"><span class="co">#using colour works better for the interactive version</span></span>
-<span class="r-in"><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">hp</span>,</span>
-<span class="r-in">         xlab <span class="op">=</span> <span class="st">"# of cylinders"</span>,</span>
-<span class="r-in">         ylab <span class="op">=</span> <span class="st">"horsepower"</span>,</span>
-<span class="r-in">         colour_var <span class="op">=</span> <span class="va">am</span>,</span>
-<span class="r-in">         colour_var_title <span class="op">=</span> <span class="st">"transmission"</span>,</span>
-<span class="r-in">         colour_var_labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"manual"</span> <span class="op">=</span> <span class="st">"0"</span>, <span class="st">"automatic"</span> <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span>
-<span class="r-in">         colour_var_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
-<span class="r-in">         theme <span class="op">=</span> <span class="st">"bw"</span>, interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<div id="htmlwidget-748da316ae0a41014938" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-748da316ae0a41014938">{"x":{"data":[{"x":[2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1],"y":[123,110,105,123,175,180,230,175,245,180,205,215,180,150,245,150,95,97,62],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(0,0,255,1)","width":3.77952755905512},"name":"manual","legendgroup":"manual","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,1,1,1,1,1,1,1,1,3,3],"y":[110,110,175,93,65,52,113,66,91,109,66,264,335],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(255,0,0,1)","width":3.77952755905512},"name":"automatic","legendgroup":"automatic","showlegend":true,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":25.2984640929846,"r":9.29846409298464,"b":47.4221668742217,"l":54.8609381486094},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"y","title":{"text":"# of cylinders","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[37.85,349.15],"tickmode":"array","ticktext":["100","200","300"],"tickvals":[100,200,300],"categoryorder":"array","categoryarray":["100","200","300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"x","title":{"text":"horsepower","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.845314917544058,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.40515390121689,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":14.8775425487754},"title":{"text":"transmission","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}}},"hovermode":"closest","barmode":"relative","boxmode":"group"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"40d226b9bd2a":{"fill":{},"colour":{},"x":{},"y":{},"type":"box"}},"cur_data":"40d226b9bd2a","visdat":{"40d226b9bd2a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#modifying fill doesn't work as well for the interactive version of a boxplot</span></span></span>
+<span class="r-in"><span><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">hp</span>,</span></span>
+<span class="r-in"><span>         xlab <span class="op">=</span> <span class="st">"# of cylinders"</span>,</span></span>
+<span class="r-in"><span>         ylab <span class="op">=</span> <span class="st">"horsepower"</span>,</span></span>
+<span class="r-in"><span>         fill_var <span class="op">=</span> <span class="va">am</span>,</span></span>
+<span class="r-in"><span>         fill_var_title <span class="op">=</span> <span class="st">"transmission"</span>,</span></span>
+<span class="r-in"><span>         fill_var_labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"manual"</span> <span class="op">=</span> <span class="st">"0"</span>, <span class="st">"automatic"</span> <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         fill_var_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         theme <span class="op">=</span> <span class="st">"bw"</span>,</span></span>
+<span class="r-in"><span>         interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<div id="htmlwidget-91e183a952c8d8d13030" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-91e183a952c8d8d13030">{"x":{"data":[{"x":[2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1],"y":[123,110,105,123,175,180,230,175,245,180,205,215,180,150,245,150,95,97,62],"hoverinfo":"y","type":"box","fillcolor":"rgba(0,0,255,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(51,51,51,1)","width":3.77952755905512},"name":"manual","legendgroup":"manual","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,1,1,1,1,1,1,1,1,3,3],"y":[110,110,175,93,65,52,113,66,91,109,66,264,335],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,0,0,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(51,51,51,1)","width":3.77952755905512},"name":"automatic","legendgroup":"automatic","showlegend":true,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":25.2984640929846,"r":9.29846409298464,"b":47.4221668742217,"l":54.8609381486094},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"y","title":{"text":"# of cylinders","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[37.85,349.15],"tickmode":"array","ticktext":["100","200","300"],"tickvals":[100,200,300],"categoryorder":"array","categoryarray":["100","200","300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"x","title":{"text":"horsepower","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.845314917544058,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.40515390121689,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":14.8775425487754},"title":{"text":"transmission","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}}},"hovermode":"closest","barmode":"relative","boxmode":"group"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"3cf883cea6d":{"fill":{},"colour":{},"x":{},"y":{},"type":"box"}},"cur_data":"3cf883cea6d","visdat":{"3cf883cea6d":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#using colour works better for the interactive version</span></span></span>
+<span class="r-in"><span><span class="fu">plot_box</span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">hp</span>,</span></span>
+<span class="r-in"><span>         xlab <span class="op">=</span> <span class="st">"# of cylinders"</span>,</span></span>
+<span class="r-in"><span>         ylab <span class="op">=</span> <span class="st">"horsepower"</span>,</span></span>
+<span class="r-in"><span>         colour_var <span class="op">=</span> <span class="va">am</span>,</span></span>
+<span class="r-in"><span>         colour_var_title <span class="op">=</span> <span class="st">"transmission"</span>,</span></span>
+<span class="r-in"><span>         colour_var_labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"manual"</span> <span class="op">=</span> <span class="st">"0"</span>, <span class="st">"automatic"</span> <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         colour_var_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         theme <span class="op">=</span> <span class="st">"bw"</span>, interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<div id="htmlwidget-6814ef54833fcaa27eb1" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6814ef54833fcaa27eb1">{"x":{"data":[{"x":[2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1],"y":[123,110,105,123,175,180,230,175,245,180,205,215,180,150,245,150,95,97,62],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(0,0,255,1)","width":3.77952755905512},"name":"manual","legendgroup":"manual","showlegend":true,"xaxis":"x","yaxis":"y","frame":null},{"x":[2,2,2,1,1,1,1,1,1,1,1,3,3],"y":[110,110,175,93,65,52,113,66,91,109,66,264,335],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,0.75)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"},"size":5.66929133858268},"line":{"color":"rgba(255,0,0,1)","width":3.77952755905512},"name":"automatic","legendgroup":"automatic","showlegend":true,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":25.2984640929846,"r":9.29846409298464,"b":47.4221668742217,"l":54.8609381486094},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"y","title":{"text":"# of cylinders","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[37.85,349.15],"tickmode":"array","ticktext":["100","200","300"],"tickvals":[100,200,300],"categoryorder":"array","categoryarray":["100","200","300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"x","title":{"text":"horsepower","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.845314917544058,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.40515390121689,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":14.8775425487754},"title":{"text":"transmission","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}}},"hovermode":"closest","barmode":"relative","boxmode":"group"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"3cf8d529c04":{"fill":{},"colour":{},"x":{},"y":{},"type":"box"}},"cur_data":"3cf8d529c04","visdat":{"3cf8d529c04":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -414,7 +515,7 @@ interactive output was requested.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

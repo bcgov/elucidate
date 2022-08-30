@@ -82,16 +82,16 @@ all variables in a data frame use <code><a href="describe_all.html">describe_all
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">describe</span><span class="op">(</span>
-  <span class="va">data</span>,
-  y <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  digits <span class="op">=</span> <span class="fl">3</span>,
-  type <span class="op">=</span> <span class="fl">2</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  sep <span class="op">=</span> <span class="st">"_"</span>,
-  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"dt"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">describe</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"_"</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"dt"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -99,10 +99,14 @@ all variables in a data frame use <code><a href="describe_all.html">describe_all
     <dl><dt>data</dt>
 <dd><p>Either a vector or a data frame or tibble containing the
 vector ("y") to be summarized and any grouping variables.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>If the data object is a data.frame, this is the variable for which
 you wish to obtain a descriptive summary. You can use either the quoted or
 unquoted name of the variable, e.g. "y_var" or y_var.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>If the data object is a data.frame, this special argument accepts
 any number of unquoted grouping variable names (also present in the data
@@ -110,28 +114,47 @@ source) to use for subsetting, separated by commas, e.g. <code>group_var1, group
 numbers, e.g. c("group_var1", "group_var2") or c(1, 2), but not a mixture
 of formats in the same call. If no column names are specified, all columns
 will be used.</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>This determines the number of digits used for rounding of
 numeric outputs.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>For numeric and integer vectors this determines the type of
 skewness and kurtosis calculations to perform. See
 <code>skewness</code> or <code><a href="https://rdrr.io/pkg/psych/man/skew.html" class="external-link">skew</a></code> and
 <code>kurtosis</code> or <code><a href="https://rdrr.io/pkg/psych/man/skew.html" class="external-link">kurtosi</a></code> for details.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>This determines whether missing values (NAs) should be removed
 before attempting to calculate summary statistics.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>A character string to use to separate unique values from their
 counts ("_" by default). Only applicable to factors and character vectors.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>Output type for each class of variables. dt" for data.table or
 "tibble" for tibble.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The output varies as a function of the class of input data/y, referred to as "y" below
-<strong>For all input variables, the following are returned (part 1):</strong></p><dl><dt>cases</dt>
+    
+
+<p>The output varies as a function of the class of input data/y, referred to as "y" below</p>
+
+
+<p><strong>For all input variables, the following are returned (part 1):</strong></p>
+
+
+
+<dl><dt>cases</dt>
 <dd><p>the total number of cases</p></dd>
 
 <dt>n</dt>
@@ -144,7 +167,10 @@ counts ("_" by default). Only applicable to factors and character vectors.</p></
 <dd><p>the proportion of total cases with missing values</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>dates</strong>:</p><dl><dt>n_unique</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>dates</strong>:</p>
+
+
+<dl><dt>n_unique</dt>
 <dd><p>the total number of unique values or levels of y. For dates this tells you how many time points there are</p></dd>
 
 <dt>start</dt>
@@ -154,7 +180,10 @@ counts ("_" by default). Only applicable to factors and character vectors.</p></
 <dd><p>the latest or maximum date in y</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>factors</strong>:</p><dl><dt>n_unique</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>factors</strong>:</p>
+
+
+<dl><dt>n_unique</dt>
 <dd><p>the total number of unique values or levels of y</p></dd>
 
 <dt>ordered</dt>
@@ -164,7 +193,10 @@ counts ("_" by default). Only applicable to factors and character vectors.</p></
 <dd><p>the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use <code><a href="counts.html">counts</a></code> instead.</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>character/string</strong> vectors:</p><dl><dt>n_unique</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>character/string</strong> vectors:</p>
+
+
+<dl><dt>n_unique</dt>
 <dd><p>the total number of unique values or levels of y</p></dd>
 
 <dt>min_chars</dt>
@@ -177,7 +209,10 @@ counts ("_" by default). Only applicable to factors and character vectors.</p></
 <dd><p>the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use <code><a href="counts.html">counts</a></code> instead.</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>logical</strong> vectors:</p><dl><dt>n_TRUE</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>logical</strong> vectors:</p>
+
+
+<dl><dt>n_TRUE</dt>
 <dd><p>the total number of y values that are TRUE</p></dd>
 
 <dt>n_FALSE</dt>
@@ -187,7 +222,10 @@ counts ("_" by default). Only applicable to factors and character vectors.</p></
 <dd><p>the proportion of y values that are TRUE</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>numeric</strong> variables:</p><dl><dt>mean</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>numeric</strong> variables:</p>
+
+
+<dl><dt>mean</dt>
 <dd><p>the mean of y</p></dd>
 
 <dt>sd</dt>
@@ -240,31 +278,31 @@ kurtosis. The Statistician, 47, 183-189.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">describe</span><span class="op">(</span>data <span class="op">=</span> <span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span><span class="op">)</span> <span class="co">#no grouping variables, numeric input class</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">describe</span><span class="op">(</span>data <span class="op">=</span> <span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span><span class="op">)</span> <span class="co">#no grouping variables, numeric input class</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 14</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100  skew</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0  154.  42.7  0.39  69.2  121.  145.  181.  289. 0.739</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: kurt &lt;dbl&gt;</span></span>
-<span class="r-in"><span class="fu">describe</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">y1</span>, <span class="va">high_low</span><span class="op">)</span> <span class="co">#one grouping variable, numeric input class</span></span>
+<span class="r-in"><span><span class="fu">describe</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">y1</span>, <span class="va">high_low</span><span class="op">)</span> <span class="co">#one grouping variable, numeric input class</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 15</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   high_low cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> high      <span style="text-decoration: underline;">6</span>045  <span style="text-decoration: underline;">6</span>045     0     0  154.  42.9 0.552  70.7  121.  145.  182.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> low       <span style="text-decoration: underline;">5</span>955  <span style="text-decoration: underline;">5</span>955     0     0  154.  42.5 0.551  69.2  121.  145.  180.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></span>
-<span class="r-in"><span class="fu">describe</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span><span class="op">)</span> <span class="co">#factor input class</span></span>
+<span class="r-in"><span><span class="fu">describe</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span><span class="op">)</span> <span class="co">#factor input class</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   cases     n    na  p_na n_unique ordered counts_tb                          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0        5 FALSE   a_2592, b_2460, ..., e_2352, c_2220</span>
-<span class="r-in"><span class="fu">describe</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">even</span><span class="op">)</span> <span class="co">#logical input class</span></span>
+<span class="r-in"><span><span class="fu">describe</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">even</span><span class="op">)</span> <span class="co">#logical input class</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   cases     n    na  p_na n_TRUE n_FALSE p_TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">12</span>000 <span style="text-decoration: underline;">12</span>000     0     0   <span style="text-decoration: underline;">6</span>000    <span style="text-decoration: underline;">6</span>000    0.5</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -279,7 +317,7 @@ kurtosis. The Statistician, 47, 183-189.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

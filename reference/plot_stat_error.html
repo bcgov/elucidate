@@ -70,80 +70,80 @@ blog post</a> for an introduction to ggplot2.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_stat_error</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">y</span>,
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  geom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"point"</span>, <span class="st">"bar"</span><span class="op">)</span>,
-  stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"median"</span><span class="op">)</span>,
-  error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ci"</span>, <span class="st">"sd"</span>, <span class="st">"se"</span>, <span class="st">"var"</span>, <span class="st">"quartile"</span><span class="op">)</span>,
-  ci_level <span class="op">=</span> <span class="fl">0.95</span>,
-  ci_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"perc"</span>, <span class="st">"bca"</span>, <span class="st">"norm"</span>, <span class="st">"basic"</span><span class="op">)</span>,
-  replicates <span class="op">=</span> <span class="fl">2000</span>,
-  parallel <span class="op">=</span> <span class="cn">FALSE</span>,
-  cores <span class="op">=</span> <span class="cn">NULL</span>,
-  xlab <span class="op">=</span> <span class="cn">NULL</span>,
-  ylab <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="cn">NULL</span>,
-  title_hjust <span class="op">=</span> <span class="fl">0.5</span>,
-  caption <span class="op">=</span> <span class="cn">NULL</span>,
-  caption_hjust <span class="op">=</span> <span class="fl">0</span>,
-  <span class="va">...</span>,
-  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,
-  ybreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  transform_y <span class="op">=</span> <span class="cn">FALSE</span>,
-  y_transformation <span class="op">=</span> <span class="st">"log10"</span>,
-  y_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  x_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  x_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_values <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  fill_var_title <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_values <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_title <span class="op">=</span> <span class="cn">NULL</span>,
-  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plasma"</span>, <span class="st">"C"</span>, <span class="st">"magma"</span>, <span class="st">"A"</span>, <span class="st">"inferno"</span>, <span class="st">"B"</span>, <span class="st">"viridis"</span>, <span class="st">"D"</span>, <span class="st">"cividis"</span>,
-    <span class="st">"E"</span><span class="op">)</span>,
-  palette_direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2l"</span>, <span class="st">"l2d"</span><span class="op">)</span>,
-  palette_begin <span class="op">=</span> <span class="fl">0</span>,
-  palette_end <span class="op">=</span> <span class="fl">0.8</span>,
-  greyscale <span class="op">=</span> <span class="cn">FALSE</span>,
-  b_width <span class="op">=</span> <span class="fl">0.75</span>,
-  p_size <span class="op">=</span> <span class="fl">3</span>,
-  p_shape <span class="op">=</span> <span class="fl">21</span>,
-  dodge_width <span class="op">=</span> <span class="fl">0.9</span>,
-  eb_size <span class="op">=</span> <span class="fl">0.3</span>,
-  eb_width <span class="op">=</span> <span class="fl">0.2</span>,
-  eb_alpha <span class="op">=</span> <span class="fl">1</span>,
-  eb_line_type <span class="op">=</span> <span class="fl">1</span>,
-  eb_colour <span class="op">=</span> <span class="cn">NULL</span>,
-  add_lines <span class="op">=</span> <span class="cn">F</span>,
-  line_alpha <span class="op">=</span> <span class="fl">0.75</span>,
-  line_group <span class="op">=</span> <span class="cn">NULL</span>,
-  line_colour <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type <span class="op">=</span> <span class="fl">1</span>,
-  line_size <span class="op">=</span> <span class="fl">0.5</span>,
-  theme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bw"</span>, <span class="st">"classic"</span>, <span class="st">"grey"</span>, <span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"minimal"</span><span class="op">)</span>,
-  text_size <span class="op">=</span> <span class="fl">14</span>,
-  font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sans"</span>, <span class="st">"serif"</span>, <span class="st">"mono"</span><span class="op">)</span>,
-  coord_flip <span class="op">=</span> <span class="cn">FALSE</span>,
-  omit_legend <span class="op">=</span> <span class="cn">FALSE</span>,
-  legend_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"bottom"</span>, <span class="st">"top"</span><span class="op">)</span>,
-  facet_var <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_strip_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,
-  facet_var_text_bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  print_stats <span class="op">=</span> <span class="cn">F</span>,
-  aesthetic_options <span class="op">=</span> <span class="cn">FALSE</span>,
-  output <span class="op">=</span> <span class="st">"p"</span>,
-  interactive <span class="op">=</span> <span class="cn">FALSE</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_stat_error</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  geom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"point"</span>, <span class="st">"bar"</span><span class="op">)</span>,</span>
+<span>  stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"median"</span><span class="op">)</span>,</span>
+<span>  error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ci"</span>, <span class="st">"sd"</span>, <span class="st">"se"</span>, <span class="st">"var"</span>, <span class="st">"quartile"</span><span class="op">)</span>,</span>
+<span>  ci_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  ci_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"perc"</span>, <span class="st">"bca"</span>, <span class="st">"norm"</span>, <span class="st">"basic"</span><span class="op">)</span>,</span>
+<span>  replicates <span class="op">=</span> <span class="fl">2000</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title_hjust <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  caption <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  caption_hjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  ybreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  transform_y <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  y_transformation <span class="op">=</span> <span class="st">"log10"</span>,</span>
+<span>  y_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  x_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fill_var_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plasma"</span>, <span class="st">"C"</span>, <span class="st">"magma"</span>, <span class="st">"A"</span>, <span class="st">"inferno"</span>, <span class="st">"B"</span>, <span class="st">"viridis"</span>, <span class="st">"D"</span>, <span class="st">"cividis"</span>,</span>
+<span>    <span class="st">"E"</span><span class="op">)</span>,</span>
+<span>  palette_direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2l"</span>, <span class="st">"l2d"</span><span class="op">)</span>,</span>
+<span>  palette_begin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  palette_end <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  greyscale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  b_width <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  p_size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  p_shape <span class="op">=</span> <span class="fl">21</span>,</span>
+<span>  dodge_width <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  eb_size <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  eb_width <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  eb_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  eb_line_type <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  eb_colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  add_lines <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  line_alpha <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  line_group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  line_size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  theme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bw"</span>, <span class="st">"classic"</span>, <span class="st">"grey"</span>, <span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"minimal"</span><span class="op">)</span>,</span>
+<span>  text_size <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>  font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sans"</span>, <span class="st">"serif"</span>, <span class="st">"mono"</span><span class="op">)</span>,</span>
+<span>  coord_flip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  omit_legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"bottom"</span>, <span class="st">"top"</span><span class="op">)</span>,</span>
+<span>  facet_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_strip_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
+<span>  facet_var_text_bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  print_stats <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  aesthetic_options <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"p"</span>,</span>
+<span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -151,19 +151,29 @@ blog post</a> for an introduction to ggplot2.</p>
     <dl><dt>data</dt>
 <dd><p>A data frame or tibble containing the dependent measure "y", the
 independent measure "x" (optional), and any grouping variables or covariates.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>A numeric variable you want to plot on the y-axis (quoted or
 unquoted), e.g. y = "variable" or y = variable.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A categorical variable you want to plot on the x-axis (quoted or
 unquoted), e.g. x = "variable" or x = variable.</p></dd>
+
+
 <dt>geom</dt>
 <dd><p>Determines whether the chosen summary statistic is displayed
 using <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></code> (geom = "bar"; the default) or
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></code> (geom = "point")</p></dd>
+
+
 <dt>stat</dt>
 <dd><p>The summary statistic to use for plotting bars/points. Options
 are "mean" (the default) or "median".</p></dd>
+
+
 <dt>error</dt>
 <dd><p>The statistic to use for the error bars. When stat = "mean",
 available options include se (standard error), sd (standard deviation),
@@ -174,9 +184,13 @@ intervals. With respect to CIs, when stat = "mean", CIs are calculated
 directly from a normal distribution based on the standard error using
 <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></code>. In contrast, bootstrapped CIs of the specified
 type are returned via <code><a href="median_ci.html">median_ci</a></code> when stat = "median".</p></dd>
+
+
 <dt>ci_level</dt>
 <dd><p>The confidence level to use for constructing confidence
 intervals. Default is set to <code>ci_level = 0.95</code> for 95 percent CIs.</p></dd>
+
+
 <dt>ci_type</dt>
 <dd><p>The type of confidence intervals to calculate from the
 bootstrap samples when stat = "median" and error = "ci". Most of the
@@ -191,6 +205,8 @@ intervals. However, BCa intervals (the default for the more primitive
 accurate/least-biased results (Efron, 1987), particularly for small-medium
 sized samples, at the obvious cost of requiring more time to calculate. See
 <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot.ci</a></code> for details.</p></dd>
+
+
 <dt>replicates</dt>
 <dd><p>The number of bootstrap replicates to use for calculating
 bootstrapped CIs when stat = "median" and error = "ci". Default is 2,000,
@@ -199,6 +215,8 @@ need more precise estimates, more replications (e.g. &gt;= 5,000) are
 recommended. N.B. more replications will of course take longer to run. If
 you get the error: "estimated adjustment 'a' is NA" then try again with
 more replications.</p></dd>
+
+
 <dt>parallel</dt>
 <dd><p>set to TRUE if you want to use multiple cores or FALSE if you
 don't (the default). Note that there is some processing overhead involved
@@ -208,31 +226,47 @@ to the nature of the underlying parallelisation architecture, performance
 gains will likely be greater on non-Windows machines that can use the
 "multicore" implementation instead of "snow". For obvious reasons this
 option only works on machines with more than 1 logical processing core.</p></dd>
+
+
 <dt>cores</dt>
 <dd><p>If parallel is set to TRUE, this determines the number of cores
 to use. To see how many cores are available on your machine, use
 parallel::detectCores()</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>Specify/overwrite the x-axis label using a character string, e.g.
 "x-axis label". If no variable is assigned to x, then this label will be
 omitted.</p></dd>
+
+
 <dt>ylab</dt>
 <dd><p>Specify/overwrite the y-axis label using a character string, e.g.
 "y-axis label". If not specified, this label will reflect a combination of
 the chosen statistic, y variable, and error bar options.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Add a main title to the plot using a character string, e.g.
 "scatterplot of y as a function of x".</p></dd>
+
+
 <dt>title_hjust</dt>
 <dd><p>Left-to-right/horizontal justification (alignment) of
 the main plot title. Accepts values from 0 (far left) to 1 (far right).
 Default is 0.5 (centre).</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>Add a figure caption to the bottom of the plot using a character string.</p></dd>
+
+
 <dt>caption_hjust</dt>
 <dd><p>Left-to-right/horizontal justification (alignment) of the
 caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
 (left).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>graphical parameters (not associated with variables) to be passed
 to <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></code> or <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></code>
@@ -243,36 +277,52 @@ aesthetic_options argument to TRUE. Exceptions to this are the width of the
 bar graphs which is controlled using the b_width argument, and the shape &amp;
 size of points for geom = "point", which are controlled using p_size &amp;
 p_shape (see below).</p></dd>
+
+
 <dt>ylim</dt>
 <dd><p>specify the y-axis limits, e.g. ylim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 the default is ylim = c(NA, NA)</p></dd>
+
+
 <dt>ybreaks</dt>
 <dd><p>This allows you to change the break points to use for tick
 marks on the y-axis. <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code> is particularly useful here. See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></code> for details. If ybreaks is
 specified, then ylim should be also.</p></dd>
+
+
 <dt>transform_y</dt>
 <dd><p>Would you like to transform the y axis? (TRUE or FALSE)</p></dd>
+
+
 <dt>y_transformation</dt>
 <dd><p>If transform_y = TRUE, this determines the
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See <code>scale_continuous</code> for
 details.</p></dd>
+
+
 <dt>y_var_labs</dt>
 <dd><p>Allows you to modify the labels displayed with the y-axis
 tick marks. See <code>scale_continuous</code> for details.</p></dd>
+
+
 <dt>x_var_order</dt>
 <dd><p>If a variable has been assigned to x, this allows you to
 modify the order of the variable groups, e.g. x = grouping_variable,
 x_var_order = c("group_2", "group_1"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>x_var_labs</dt>
 <dd><p>If a variable has been assigned to x, this allows you to
 modify the labels of the variable groups, e.g. x = grouping_variable,
 x_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>fill_var</dt>
 <dd><p>Use if you want to assign a variable to the point fill
 colour, e.g. fill_var = "grouping_variable" or fill_var =
@@ -281,11 +331,15 @@ fill variable. See <code><a href="https://ggplot2.tidyverse.org/reference/aes.ht
 "point", fill_var and fill only affect shapes 21-24 (21 is the default). To
 split the data by a variable based on colour, it is therefore easier to use
 colour_var for this particular plot geometry.</p></dd>
+
+
 <dt>fill_var_order</dt>
 <dd><p>If a variable has been assigned to fill using fill_var,
 this allows you to modify the order of the variable groups, e.g. fill_var =
 grouping_variable, fill_var_order = c("group_2", "group_1"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>fill_var_values</dt>
 <dd><p>If a variable has been assigned to fill using
 fill_var, this allows you to modify the colours assigned to the fill of
@@ -293,25 +347,35 @@ each of the variable groups, e.g. fill_var = grouping_variable,
 fill_var_values = c("blue", "red"). See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></code> for details. For the colour
 options available in base R, see <code><a href="colour_options.html">colour_options</a></code>.</p></dd>
+
+
 <dt>fill_var_labs</dt>
 <dd><p>If a variable has been assigned to fill using fill_var,
 this allows you to modify the labels of the variable groups, e.g. fill_var
 = grouping_variable, fill_var_labs = c("group_1_new_label" =
 "group_1_old_label", "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>fill_var_title</dt>
 <dd><p>If a variable has been assigned to fill using fill_var,
 this allows you to modify the variable label in the plot legend.</p></dd>
+
+
 <dt>colour_var</dt>
 <dd><p>Use if you want to assign a variable to the point outline
 colour, e.g. colour_var = "grouping_variable" or colour_var =
 grouping_variable. Produces separate sets of points for each level of the
 colour variable. See <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></code> for details.</p></dd>
+
+
 <dt>colour_var_order</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the order of the variable groups,
 e.g. colour_var = grouping_variable, fill_var_order = c("group_2",
 "group_1"). See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>colour_var_values</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the colours assigned to the outline
@@ -319,16 +383,22 @@ of each of the variable groups, e.g. colour_var = grouping_variable,
 colour_var_values = c("blue", "red"). See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></code> for details. For the colour
 options available in base R, see <code><a href="colour_options.html">colour_options</a></code>.</p></dd>
+
+
 <dt>colour_var_labs</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the labels of the variable groups,
 e.g. colour_var = grouping_variable, colour_var_labs =
 c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
 "group_2_old_label"). See <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>colour_var_title</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the variable label in the plot
 legend.</p></dd>
+
+
 <dt>palette</dt>
 <dd><p>If a variable is assigned to fill_var or colour_var, this
 determines which
@@ -338,48 +408,76 @@ or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
 <a href="https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes" class="external-link">this
 link</a> for examples. You can override these colour palettes with
 fill_var_values or colour_var_values.</p></dd>
+
+
 <dt>palette_direction</dt>
 <dd><p>Choose "d2l" for dark to light (default) or "l2d"
 for light to dark.</p></dd>
+
+
 <dt>palette_begin</dt>
 <dd><p>Value between 0 and 1 that determines where along the
 full range of the chosen colour palette's spectrum to begin sampling
 colours. See <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></code> for details.</p></dd>
+
+
 <dt>palette_end</dt>
 <dd><p>Value between 0 and 1 that determines where along the full
 range of the chosen colour palette's spectrum to end sampling colours. See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></code> for details.</p></dd>
+
+
 <dt>greyscale</dt>
 <dd><p>Set to TRUE if you want the plot converted to greyscale.</p></dd>
+
+
 <dt>b_width</dt>
 <dd><p>The width of the bars when geom = "bar". Affects the spacing
 between adjacent bars, where a value of 1 specifies that there should be no
 space between adjacent bars. Default is 0.75.</p></dd>
+
+
 <dt>p_size</dt>
 <dd><p>The size of the points when geom = "point", default = 2.</p></dd>
+
+
 <dt>p_shape</dt>
 <dd><p>The shape of the points when geom = "point". The default is
 21, which is a circle like shape 1 (the ggplot2 default), but unlike the
 latter also has a fill parameter.</p></dd>
+
+
 <dt>dodge_width</dt>
 <dd><p>Determines the amount by which to jitter points and error
 bars when variables are mapped/assigned to x, fill, or colour. To disable
 jittering set this to 0.</p></dd>
+
+
 <dt>eb_size</dt>
 <dd><p>Controls the thickness of error bar lines. Default = 0.3.</p></dd>
+
+
 <dt>eb_width</dt>
 <dd><p>Controls the width of error bar endpoint lines. Default =
 0.2.</p></dd>
+
+
 <dt>eb_alpha</dt>
 <dd><p>This adjusts the transparency/opacity of the graphical
 components of the error bars, ranging from 0 = 100 percent transparent to 1
 = 100% percent opaque.</p></dd>
+
+
 <dt>eb_line_type</dt>
 <dd><p>Controls the error bar line type. Default = 1 or "solid".</p></dd>
+
+
 <dt>eb_colour</dt>
 <dd><p>Controls the colour of error bar lines. If unspecified,
 will either be "black" for all lines, or differ by groups if colour_var is
 specified.</p></dd>
+
+
 <dt>add_lines</dt>
 <dd><p>Would you like to connect the estimated statistics (the
 points or ends of the bars) with lines (TRUE/FALSE)? Default = FALSE.
@@ -389,53 +487,81 @@ colour_var). If only one of fill_var or colour_var are specified then lines
 will be split according to the same variable mapping. If neither or both of
 these parameters are specified and you want the lines split by a grouping
 variable, assign the chosen variable to line_group.</p></dd>
+
+
 <dt>line_alpha</dt>
 <dd><p>This adjusts the transparency/opacity of the lines
 connecting each (groupwise) estimate, ranging from 0 = 100 percent
 transparent to 1 = 100 percent opaque.</p></dd>
+
+
 <dt>line_group</dt>
 <dd><p>Determines which variable to split the connecting lines on.
 Only required if (2 different) variables are already assigned to both
 fill_var and colour_var.</p></dd>
+
+
 <dt>line_colour</dt>
 <dd><p>Controls the colour of connection lines. If unspecified,
 will either be "black" for all lines, or differ by groups if colour_var is
 specified.</p></dd>
+
+
 <dt>line_type</dt>
 <dd><p>Controls the connection line type. Default = 1 or "solid".</p></dd>
+
+
 <dt>line_size</dt>
 <dd><p>Controls the thickness of the connection lines. Default =
 0.5.</p></dd>
+
+
 <dt>theme</dt>
 <dd><p>Adjusts the theme using 1 of 6 predefined "complete" theme
 templates provided by ggplot2. Currently supported options are: "classic",
 "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
 "dark", &amp; "minimal". See <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></code> for more
 information.</p></dd>
+
+
 <dt>text_size</dt>
 <dd><p>This controls the size of all plot text. Default = 14.</p></dd>
+
+
 <dt>font</dt>
 <dd><p>This controls the font of all plot text. Default = "sans"
 (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
 New).</p></dd>
+
+
 <dt>coord_flip</dt>
 <dd><p>Set to TRUE (default = FALSE) if you want to swap the
 x and y axes. See <code><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></code> for more information.</p></dd>
+
+
 <dt>omit_legend</dt>
 <dd><p>Set to TRUE if you want to remove/omit the legends.</p></dd>
+
+
 <dt>legend_position</dt>
 <dd><p>This allows you to modify the legend position.
 Options include "right" (the default), "left", "top", &amp; "bottom".</p></dd>
+
+
 <dt>facet_var</dt>
 <dd><p>Use if you want separate plots for each level of a grouping
 variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 facet_var = grouping_variable. See <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></code> for
 details.</p></dd>
+
+
 <dt>facet_var_order</dt>
 <dd><p>If a variable has been assigned for faceting using
 facet_var, this allows you to modify the order of the variable groups, e.g.
 facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>facet_var_labs</dt>
 <dd><p>If a variable has been assigned for faceting using
 facet_var, this allows you to modify the labels of the variable groups
@@ -443,22 +569,32 @@ which will appear in the facet strips, e.g. facet_var = grouping_variable,
 facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>facet_var_strip_position</dt>
 <dd><p>If a variable has been assigned for faceting
 using facet_var, this allows you to modify the position of the facet strip
 labels. Sensible options include "top" (the default) or "bottom".</p></dd>
+
+
 <dt>facet_var_text_bold</dt>
 <dd><p>If a variable has been assigned for faceting
 using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 for the facet strip label text.</p></dd>
+
+
 <dt>print_stats</dt>
 <dd><p>Set to TRUE (the default is FALSE) if you would like the
 values used for plotting and info on the y variable sample size(s) &amp;
 missing values to be printed as the function is executed. To save/extract
 these values, use output = "ps" instead.</p></dd>
+
+
 <dt>aesthetic_options</dt>
 <dd><p>If set to TRUE, opens a web browser to the tidyverse
 online aesthetic options vignette.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>Set to "p" if only want the ggplot or plotly object (depending
 on whether interactive = T or F) to be returned. Set to "ps" if you would
@@ -466,17 +602,24 @@ instead like a list to be returned containing both the "plot" as a
 ggplot2/plotly object and "stats" used to produce it as a tibble. This
 allows you to extract/save the values for subsequent reporting or
 utilization.</p></dd>
+
+
 <dt>interactive</dt>
 <dd><p>Determines whether a static ggplot object or an
 interactive html plotly object is returned. See
 <code><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html" class="external-link">ggplotly</a></code> for details.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>This determines whether missing values (NAs) should be removed
 before attempting to calculate the summary statistics used for plotting.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object or plotly object depending on whether static or
+    
+
+<p>A ggplot object or plotly object depending on whether static or
 interactive output was requested. This is returned as a standalone object
 if output = "p", or as the "plot" component of a list also containing the
 underlying "stats" as a 2nd component if output = "ps.</p>
@@ -505,21 +648,21 @@ York: Chapman &amp; Hall.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="co">#load the mtcars data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">mtcars</span>, y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="va">cyl</span>, colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="co">#load the mtcars data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">mtcars</span>, y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="va">cyl</span>, colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_stat_error-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">mtcars</span>, y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="va">cyl</span>, colour <span class="op">=</span> <span class="st">"blue"</span>, geom <span class="op">=</span> <span class="st">"point"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">mtcars</span>, y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="va">cyl</span>, colour <span class="op">=</span> <span class="st">"blue"</span>, geom <span class="op">=</span> <span class="st">"point"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_stat_error-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="va">g</span>, print_stats <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                geom <span class="op">=</span> <span class="st">"point"</span>, p_size <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">                add_lines <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                dodge_width <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">                alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="va">g</span>, print_stats <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                geom <span class="op">=</span> <span class="st">"point"</span>, p_size <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>                add_lines <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                dodge_width <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 60 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    d          g     cases     n    na  p_na lower  mean upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -584,35 +727,35 @@ York: Chapman &amp; Hall.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">59</span> 2019-01-01 a       216   216     0     0 159.  160.   162.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">60</span> 2019-01-01 b       205   205     0     0 194.  196.   197.</span>
 <span class="r-plt img"><img src="plot_stat_error-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, coord_flip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                fill_var <span class="op">=</span> <span class="va">g</span>, geom <span class="op">=</span> <span class="st">"point"</span>, eb_size <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span class="r-in">                alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, coord_flip <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                fill_var <span class="op">=</span> <span class="va">g</span>, geom <span class="op">=</span> <span class="st">"point"</span>, eb_size <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>                alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_stat_error-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span class="r-in">                stat <span class="op">=</span> <span class="st">"median"</span>, error <span class="op">=</span> <span class="st">"quartile"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>                stat <span class="op">=</span> <span class="st">"median"</span>, error <span class="op">=</span> <span class="st">"quartile"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_stat_error-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span class="r-in">                  stat <span class="op">=</span> <span class="st">"median"</span>, error <span class="op">=</span> <span class="st">"ci"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>                  stat <span class="op">=</span> <span class="st">"median"</span>, error <span class="op">=</span> <span class="st">"ci"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_stat_error-6.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span class="r-in">                stat <span class="op">=</span> <span class="st">"mean"</span>, error <span class="op">=</span> <span class="st">"ci"</span>, ci_level <span class="op">=</span> <span class="fl">0.8</span>,</span>
-<span class="r-in">                interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<div id="htmlwidget-748adfe6f294ecb4cbf4" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-748adfe6f294ecb4cbf4">{"x":{"data":[{"x":[5,3,4,1,2],"y":[134.88,177.216,174.035,133.989,151.623],"text":["fill: blue<br />colour: black<br />g: e<br />mean: 134.880","fill: blue<br />colour: black<br />g: c<br />mean: 177.216","fill: blue<br />colour: black<br />g: d<br />mean: 174.035","fill: blue<br />colour: black<br />g: a<br />mean: 133.989","fill: blue<br />colour: black<br />g: b<br />mean: 151.623"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,255,1)","opacity":0.6,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[5,3,4,1,2],"y":[134.88,177.216,174.035,133.989,151.623],"text":["colour: black<br />g: e<br />mean: 134.880<br />lower: 134.389<br />upper: 135.372","colour: black<br />g: c<br />mean: 177.216<br />lower: 175.666<br />upper: 178.766","colour: black<br />g: d<br />mean: 174.035<br />lower: 172.881<br />upper: 175.190","colour: black<br />g: a<br />mean: 133.989<br />lower: 133.339<br />upper: 134.639","colour: black<br />g: b<br />mean: 151.623<br />lower: 150.645<br />upper: 152.600"],"type":"scatter","mode":"lines","opacity":1,"line":{"color":"transparent"},"error_y":{"array":[0.492000000000019,1.54999999999998,1.155,0.650000000000006,0.977000000000004],"arrayminus":[0.490999999999985,1.55000000000001,1.154,0.650000000000006,0.97799999999998],"type":"data","width":6.15384615384613,"symmetric":false,"color":"rgba(0,0,0,1)"},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":25.2984640929846,"r":9.29846409298464,"b":47.4221668742217,"l":54.8609381486094},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,5.6],"tickmode":"array","ticktext":["a","b","c","d","e"],"tickvals":[1,2,3,4,5],"categoryorder":"array","categoryarray":["a","b","c","d","e"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"y","title":{"text":"g","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[131.06765,181.03735],"tickmode":"array","ticktext":["140","150","160","170","180"],"tickvals":[140,150,160,170,180],"categoryorder":"array","categoryarray":["140","150","160","170","180"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"x","title":{"text":"mean y1 ± 80% CI","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.845314917544058,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.40515390121689,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":14.8775425487754}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"40d25b844f7":{"fill":{},"colour":{},"x":{},"y":{},"type":"scatter"},"40d27ed09536":{"fill":{},"colour":{},"x":{},"y":{},"ymin":{},"ymax":{}}},"cur_data":"40d25b844f7","visdat":{"40d25b844f7":["function (y) ","x"],"40d27ed09536":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><span class="r-in"></span>
-<span class="r-in"><span class="co">#when output = "ps" the plot is stored as the 1st element of a</span></span>
-<span class="r-in"><span class="co">#list</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span class="r-in">                       stat <span class="op">=</span> <span class="st">"mean"</span>, error <span class="op">=</span> <span class="st">"ci"</span>, output <span class="op">=</span> <span class="st">"ps"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">out</span><span class="op">$</span><span class="va">plot</span> <span class="co">#print the plot to the appropriate active graphics device</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>                stat <span class="op">=</span> <span class="st">"mean"</span>, error <span class="op">=</span> <span class="st">"ci"</span>, ci_level <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>                interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<div id="htmlwidget-069d67d34e596f9c4dc9" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-069d67d34e596f9c4dc9">{"x":{"data":[{"x":[5,3,4,1,2],"y":[134.88,177.216,174.035,133.989,151.623],"text":["fill: blue<br />colour: black<br />g: e<br />mean: 134.880","fill: blue<br />colour: black<br />g: c<br />mean: 177.216","fill: blue<br />colour: black<br />g: d<br />mean: 174.035","fill: blue<br />colour: black<br />g: a<br />mean: 133.989","fill: blue<br />colour: black<br />g: b<br />mean: 151.623"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,255,1)","opacity":0.6,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[5,3,4,1,2],"y":[134.88,177.216,174.035,133.989,151.623],"text":["colour: black<br />g: e<br />mean: 134.880<br />lower: 134.389<br />upper: 135.372","colour: black<br />g: c<br />mean: 177.216<br />lower: 175.666<br />upper: 178.766","colour: black<br />g: d<br />mean: 174.035<br />lower: 172.881<br />upper: 175.190","colour: black<br />g: a<br />mean: 133.989<br />lower: 133.339<br />upper: 134.639","colour: black<br />g: b<br />mean: 151.623<br />lower: 150.645<br />upper: 152.600"],"type":"scatter","mode":"lines","opacity":1,"line":{"color":"transparent"},"error_y":{"array":[0.492000000000019,1.54999999999998,1.155,0.650000000000006,0.977000000000004],"arrayminus":[0.490999999999985,1.55000000000001,1.154,0.650000000000006,0.97799999999998],"type":"data","width":6.15384615384613,"symmetric":false,"color":"rgba(0,0,0,1)"},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":25.2984640929846,"r":9.29846409298464,"b":47.4221668742217,"l":54.8609381486094},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,5.6],"tickmode":"array","ticktext":["a","b","c","d","e"],"tickvals":[1,2,3,4,5],"categoryorder":"array","categoryarray":["a","b","c","d","e"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"y","title":{"text":"g","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[131.06765,181.03735],"tickmode":"array","ticktext":["140","150","160","170","180"],"tickvals":[140,150,160,170,180],"categoryorder":"array","categoryarray":["140","150","160","170","180"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":4.64923204649232,"tickwidth":0.845314917544058,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":14.8775425487754},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.845314917544058,"zeroline":false,"anchor":"x","title":{"text":"mean y1 ± 80% CI","font":{"color":"rgba(0,0,0,1)","family":"sans","size":18.5969281859693}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.845314917544058,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.40515390121689,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":14.8775425487754}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"3cf81307e5b5":{"fill":{},"colour":{},"x":{},"y":{},"type":"scatter"},"3cf870f1b0b1":{"fill":{},"colour":{},"x":{},"y":{},"ymin":{},"ymax":{}}},"cur_data":"3cf81307e5b5","visdat":{"3cf81307e5b5":["function (y) ","x"],"3cf870f1b0b1":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#when output = "ps" the plot is stored as the 1st element of a</span></span></span>
+<span class="r-in"><span><span class="co">#list</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_stat_error</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">g</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>                       stat <span class="op">=</span> <span class="st">"mean"</span>, error <span class="op">=</span> <span class="st">"ci"</span>, output <span class="op">=</span> <span class="st">"ps"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">out</span><span class="op">$</span><span class="va">plot</span> <span class="co">#print the plot to the appropriate active graphics device</span></span></span>
 <span class="r-plt img"><img src="plot_stat_error-7.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">out</span><span class="op">$</span><span class="va">stats</span> <span class="co">#print the descriptive summary table with the values used for plotting to the console</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">out</span><span class="op">$</span><span class="va">stats</span> <span class="co">#print the descriptive summary table with the values used for plotting to the console</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   g     cases     n    na  p_na lower  mean upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -621,8 +764,8 @@ York: Chapman &amp; Hall.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> d      <span style="text-decoration: underline;">2</span>376  <span style="text-decoration: underline;">2</span>376     0     0  172.  174.  176.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> a      <span style="text-decoration: underline;">2</span>592  <span style="text-decoration: underline;">2</span>592     0     0  133.  134.  135.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> b      <span style="text-decoration: underline;">2</span>460  <span style="text-decoration: underline;">2</span>460     0     0  150.  152.  153.</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -637,7 +780,7 @@ York: Chapman &amp; Hall.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -62,27 +62,38 @@ For complex use cases see <code><a href="describe_all.html">describe_all</a></co
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="st">"all"</span>, order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="st">"a"</span>, <span class="st">"i"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="st">"all"</span>, order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="st">"a"</span>, <span class="st">"i"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame (required).</p></dd>
+
+
 <dt>n</dt>
 <dd><p>The number of unique values you want frequency counts for. Default is "all".</p></dd>
+
+
 <dt>order</dt>
 <dd><p>"d" for descending/decreasing order. "a" or "i" for
 ascending/increasing order.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>A character string to use to separate unique values from their counts
 ("_" by default).</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>Should missing values be omitted (TRUE/FALSE)?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of character vectors of the unique value frequency counts for
+    
+
+<p>A list of character vectors of the unique value frequency counts for
 each variable of the input data frame sorted in the chosen order. Return
 values are structured as "value_count", where the "_" portion takes on the
 value of the sep argument. Returning a character vector makes subsequent
@@ -99,27 +110,27 @@ manipulation with stringr and other tidyverse tools fairly easily.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">#using a numeric vector</span></span>
-<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#all unique values of all variables in \code{data} in order of descending frequency</span></span>
-<span class="r-in"><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#using a numeric vector</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#all unique values of all variables in \code{data} in order of descending frequency</span></span></span>
+<span class="r-in"><span><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mtcars_1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#the most common values of all variables in \code{data}</span></span>
-<span class="r-in"><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#the most common values of all variables in \code{data}</span></span></span>
+<span class="r-in"><span><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mtcars_1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#the top 5 most common unique values for all variables in  \code{data}</span></span>
-<span class="r-in"><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#the top 5 most common unique values for all variables in  \code{data}</span></span></span>
+<span class="r-in"><span><span class="fu">counts_all</span><span class="op">(</span><span class="va">data</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mtcars_1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -134,7 +145,7 @@ manipulation with stringr and other tidyverse tools fairly easily.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

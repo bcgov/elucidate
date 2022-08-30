@@ -70,21 +70,23 @@ substantially faster due to the use of <code>data.table</code> as a backend.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dupes</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">...</span>,
-  keep_all_cols <span class="op">=</span> <span class="cn">TRUE</span>,
-  sort_by_copies <span class="op">=</span> <span class="cn">TRUE</span>,
-  order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="st">"a"</span>, <span class="st">"i"</span><span class="op">)</span>,
-  na_last <span class="op">=</span> <span class="cn">FALSE</span>,
-  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"same"</span>, <span class="st">"tibble"</span>, <span class="st">"dt"</span>, <span class="st">"data.frame"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dupes</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  keep_all_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sort_by_copies <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d"</span>, <span class="st">"a"</span>, <span class="st">"i"</span><span class="op">)</span>,</span>
+<span>  na_last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"same"</span>, <span class="st">"tibble"</span>, <span class="st">"dt"</span>, <span class="st">"data.frame"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>a data frame, tibble, or data.table.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>This special argument accepts any number of unquoted column names
 (also present in the data source) to use when searching for duplicates,
@@ -92,28 +94,41 @@ e.g. <code>x, y, z</code>. Also accepts a character vector of column names or in
 numbers, e.g. c("x", "y", "z") or c(1, 2, 3), but not a mixture of formats
 in the same call. If no column names are specified, all columns will be
 used.</p></dd>
+
+
 <dt>keep_all_cols</dt>
 <dd><p>If column names are specified using <code>...</code>, this allows
 you to drop unspecified columns, similarly to the <code>.keep_all</code> argument for
 `dplyr::distinct()``</p></dd>
+
+
 <dt>sort_by_copies</dt>
 <dd><p>If TRUE (the default), sorts the results by the number
 of copies, in order specified by the <code>order</code> argument.</p></dd>
+
+
 <dt>order</dt>
 <dd><p>If sort_by_copies is set to TRUE, this controls whether the
 results should be sorted in order of descending/decreasing = "d" (the
 default) or ascending/increasing = "a" or "i" copy numbers.</p></dd>
+
+
 <dt>na_last</dt>
 <dd><p>should rows of the specified columns with missing values be
 listed below non-missing values (TRUE/FALSE)? Default is FALSE.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>"tibble" for tibble, "dt" for data.table, or "data.frame" for a
 data frame. "same", the default option, returns the same format as the
 input data.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A subset of the input data frame consisting of duplicated rows that were
+    
+
+<p>A subset of the input data frame consisting of duplicated rows that were
 detected based on specified variables used to condition the search. A
 message will also be printed to the console indicating whether or not
 duplicates were detected. An <code>n_copies</code> column is appended specifying the
@@ -130,9 +145,9 @@ total number of copies of each row that were detected.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># check for duplicates based on one variable, "g" in this case</span></span>
-<span class="r-in"><span class="fu">dupes</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check for duplicates based on one variable, "g" in this case</span></span></span>
+<span class="r-in"><span><span class="fu">dupes</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">g</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12,000 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies</span>
@@ -148,14 +163,14 @@ total number of copies of each row that were detected.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    21 2008-01-01 a     high     FALSE  95.6 103.     33   180   231     <span style="text-decoration: underline;">2</span>592</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    22 2008-01-01 a     high     TRUE   86.8 105.     92   117   251     <span style="text-decoration: underline;">2</span>592</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 11,990 more rows</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">dupes</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, <span class="va">g</span><span class="op">)</span> <span class="co">#check based on 2 variables</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check based on all variables, i.e. fully duplicated rows</span></span>
-<span class="r-in"><span class="fu">dupes</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">dupes</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, <span class="va">g</span><span class="op">)</span> <span class="co">#check based on 2 variables</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check based on all variables, i.e. fully duplicated rows</span></span></span>
+<span class="r-in"><span><span class="fu">dupes</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -170,7 +185,7 @@ total number of copies of each row that were detected.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -62,38 +62,49 @@ multiple columns/rows (for data frames), or value indices (for vectors).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">recode_errors</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">errors</span>,
-  replacement <span class="op">=</span> <span class="cn">NA</span>,
-  rows <span class="op">=</span> <span class="cn">NULL</span>,
-  cols <span class="op">=</span> <span class="cn">NULL</span>,
-  ind <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recode_errors</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">errors</span>,</span>
+<span>  replacement <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ind <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A vector, data frame, tibble, or matrix.</p></dd>
+
+
 <dt>errors</dt>
 <dd><p>A vector of erroneous values to be recoded.</p></dd>
+
+
 <dt>replacement</dt>
 <dd><p>The value you wish to replace all errors with. Default =
 NA.</p></dd>
+
+
 <dt>rows</dt>
 <dd><p>A vector specifying the rows of the data object for which to
 replace erroneous values. Default is all rows in data. Use "ind"
 instead if data is a vector.</p></dd>
+
+
 <dt>cols</dt>
 <dd><p>A vector specifying the columns of the data object for which to
 replace erroneous values. Default is all columns in data. Use "ind"
 instead if data is a vector.</p></dd>
+
+
 <dt>ind</dt>
 <dd><p>If data is a vector, this accepts a vector specifying the indices
 the data object for which to replace erroneous values. Default is all
 indices in data. Use "rows" &amp;/or "cols" to specify indices to operate upon
 if data is not a vector.</p></dd>
+
 </dl></div>
     <div id="author">
     <h2>Author</h2>
@@ -102,15 +113,15 @@ if data is not a vector.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">#if (hypothetically) values of 0 &amp; 8 were actually data entry errors in the</span></span>
-<span class="r-in"><span class="co">#mtcars dataset these can easily be recoded as NAs</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">recode_errors</span><span class="op">(</span><span class="va">mtcars</span>,</span>
-<span class="r-in">  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span>, <span class="co">#specify a column number range</span></span>
-<span class="r-in">  errors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#if (hypothetically) values of 0 &amp; 8 were actually data entry errors in the</span></span></span>
+<span class="r-in"><span><span class="co">#mtcars dataset these can easily be recoded as NAs</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">recode_errors</span><span class="op">(</span><span class="va">mtcars</span>,</span></span>
+<span class="r-in"><span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span>, <span class="co">#specify a column number range</span></span></span>
+<span class="r-in"><span>  errors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  21.0   6 160.0 110 3.90 2.620 16.46 NA  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  21.0   6 160.0 110 3.90 2.875 17.02 NA  1    4    4</span>
@@ -144,7 +155,7 @@ if data is not a vector.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30 19.7   6 145.0 175 3.62 2.770 15.50 NA  1    5    6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31 15.0   8 301.0 335 3.54 3.570 14.60 NA  1    5   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -159,7 +170,7 @@ if data is not a vector.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

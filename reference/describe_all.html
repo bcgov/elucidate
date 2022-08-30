@@ -64,22 +64,24 @@ To obtain a summary of a single variable in a data frame use
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">describe_all</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">...</span>,
-  class <span class="op">=</span> <span class="st">"all"</span>,
-  digits <span class="op">=</span> <span class="fl">3</span>,
-  type <span class="op">=</span> <span class="fl">2</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  sep <span class="op">=</span> <span class="st">"_"</span>,
-  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dt"</span>, <span class="st">"tibble"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">describe_all</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  class <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"_"</span>,</span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dt"</span>, <span class="st">"tibble"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame or tibble.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>This special argument accepts any number of unquoted grouping
 variable names (also present in the data source) to use for subsetting,
@@ -87,6 +89,8 @@ separated by commas, e.g. <code>group_var1, group_var2</code>. Also accepts a
 character vector of column names or index numbers, e.g. c("group_var1",
 "group_var2") or c(1, 2), but not a mixture of formats in the same call. If
 no column names are specified, all columns will be used.</p></dd>
+
+
 <dt>class</dt>
 <dd><p>The variable classes in data that you would like summaries for.
 Either "all" for all classes, or a character vector indicating which
@@ -98,31 +102,50 @@ excluding specified grouping variables, a data frame will be returned,
 otherwise you'll get a list of data frames (1 per summary class). If the
 only chosen class of variables is not detected in the input data an error
 will be returned that the class argument needs to be respecified.</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>This determines the number of digits used for rounding of
 numeric outputs.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>For numeric and integer vectors this determines the type of
 skewness and kurtosis calculations to perform. See
 <code>skewness</code> or <code><a href="https://rdrr.io/pkg/psych/man/skew.html" class="external-link">skew</a></code> and
 <code>kurtosis</code> or <code><a href="https://rdrr.io/pkg/psych/man/skew.html" class="external-link">kurtosi</a></code> for details.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>This determines whether missing values (NAs) should be removed
 before attempting to calculate summary statistics.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>A character string to use to separate unique values from their
 counts ("_" by default). Only applicable to factors and character vectors.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>Output type for each class of variables. dt" for data.table or
 "tibble" for tibble.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The output varies as a function of the class of input data/y,
+    
+
+<p>The output varies as a function of the class of input data/y,
 referred to as "y" below. Each output type is grouped together in a data
 frame and returned as a named item of a list, unless there is only one
-output type, in which case the data frame is returned directly.
-<strong>For all input variables, the following are returned (part 1):</strong></p><dl><dt>cases</dt>
+output type, in which case the data frame is returned directly.</p>
+
+
+<p><strong>For all input variables, the following are returned (part 1):</strong></p>
+
+
+
+<dl><dt>cases</dt>
 <dd><p>the total number of cases</p></dd>
 
 <dt>n</dt>
@@ -135,7 +158,10 @@ output type, in which case the data frame is returned directly.
 <dd><p>the proportion of total cases with missing values</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>dates</strong>:</p><dl><dt>n_unique</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>dates</strong>:</p>
+
+
+<dl><dt>n_unique</dt>
 <dd><p>the total number of unique values or levels of y. For dates this tells you how many time points there are</p></dd>
 
 <dt>start</dt>
@@ -145,7 +171,10 @@ output type, in which case the data frame is returned directly.
 <dd><p>the latest or maximum date in y</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>factors</strong>:</p><dl><dt>n_unique</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>factors</strong>:</p>
+
+
+<dl><dt>n_unique</dt>
 <dd><p>the total number of unique values or levels of y</p></dd>
 
 <dt>ordered</dt>
@@ -155,7 +184,10 @@ output type, in which case the data frame is returned directly.
 <dd><p>the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use <code><a href="counts.html">counts</a></code> or <code><a href="counts_tb.html">counts_tb</a></code> instead.</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>character/string</strong> vectors:</p><dl><dt>n_unique</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>character/string</strong> vectors:</p>
+
+
+<dl><dt>n_unique</dt>
 <dd><p>the total number of unique values or levels of y</p></dd>
 
 <dt>min_chars</dt>
@@ -168,7 +200,10 @@ output type, in which case the data frame is returned directly.
 <dd><p>the counts of the top and bottom unique values of y in order of decreasing frequency formatted as "value_count". If there are more than 4 unique values of y, only the top 2 and bottom 2 unique values are shown separated by "...". To get counts for all unique values use <code><a href="counts.html">counts</a></code> or <code><a href="counts_tb.html">counts_tb</a></code> instead.</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>logical</strong> vectors:</p><dl><dt>n_TRUE</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>logical</strong> vectors:</p>
+
+
+<dl><dt>n_TRUE</dt>
 <dd><p>the total number of y values that are TRUE</p></dd>
 
 <dt>n_FALSE</dt>
@@ -178,7 +213,10 @@ output type, in which case the data frame is returned directly.
 <dd><p>the proportion of y values that are TRUE</p></dd>
 
 
-</dl><p>In addition to part 1, these measures are provided for <strong>numeric</strong> variables:</p><dl><dt>mean</dt>
+</dl><p>In addition to part 1, these measures are provided for <strong>numeric</strong> variables:</p>
+
+
+<dl><dt>mean</dt>
 <dd><p>the mean of y</p></dd>
 
 <dt>sd</dt>
@@ -221,8 +259,8 @@ output type, in which case the data frame is returned directly.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">describe_all</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">describe_all</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     variable cases  n na p_na    mean      sd     se     p0     p25     p50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      mpg    32 32  0    0  20.091   6.027  1.065 10.400  15.425  19.200</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:      cyl    32 32  0    0   6.188   1.786  0.316  4.000   4.000   6.000</span>
@@ -247,17 +285,17 @@ output type, in which case the data frame is returned directly.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  9:   1.00   1.000  0.401 -1.967</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10:   4.00   5.000  0.582 -0.895</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11:   4.00   8.000  1.157  2.020</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span> <span class="co">#all summary types in a list</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#numeric summary only</span></span>
-<span class="r-in"><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, output <span class="op">=</span> <span class="st">"dt"</span>, class <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#numeric and logical summaries only</span></span>
-<span class="r-in"><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, output <span class="op">=</span> <span class="st">"dt"</span>, class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span>, <span class="st">"l"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span> <span class="co">#all summary types in a list</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#numeric summary only</span></span></span>
+<span class="r-in"><span><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, output <span class="op">=</span> <span class="st">"dt"</span>, class <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#numeric and logical summaries only</span></span></span>
+<span class="r-in"><span><span class="fu">describe_all</span><span class="op">(</span><span class="va">pdata</span>, <span class="va">high_low</span>, output <span class="op">=</span> <span class="st">"dt"</span>, class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span>, <span class="st">"l"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -272,7 +310,7 @@ output type, in which case the data frame is returned directly.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

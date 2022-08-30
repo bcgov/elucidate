@@ -92,72 +92,72 @@ blog post</a> for an introduction to ggplot2.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_line</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">y</span>,
-  <span class="va">x</span>,
-  <span class="va">...</span>,
-  colour_var <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type_var <span class="op">=</span> <span class="cn">NULL</span>,
-  stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"quantile"</span>, <span class="st">"sum"</span>, <span class="st">"count"</span><span class="op">)</span>,
-  qprob <span class="op">=</span> <span class="fl">0.5</span>,
-  xlab <span class="op">=</span> <span class="cn">NULL</span>,
-  ylab <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="cn">NULL</span>,
-  title_hjust <span class="op">=</span> <span class="fl">0.5</span>,
-  caption <span class="op">=</span> <span class="cn">NULL</span>,
-  caption_hjust <span class="op">=</span> <span class="fl">0</span>,
-  colour_var_title <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type_var_title <span class="op">=</span> <span class="cn">NULL</span>,
-  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,
-  ybreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  transform_y <span class="op">=</span> <span class="cn">FALSE</span>,
-  y_transformation <span class="op">=</span> <span class="st">"log10"</span>,
-  y_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,
-  xbreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  transform_x <span class="op">=</span> <span class="cn">FALSE</span>,
-  x_transformation <span class="op">=</span> <span class="st">"log10"</span>,
-  x_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  x_var_order_by_y <span class="op">=</span> <span class="cn">NULL</span>,
-  x_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_order_by_y <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type_var_order_by_y <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_var_values <span class="op">=</span> <span class="cn">NULL</span>,
-  line_type_var_values <span class="op">=</span> <span class="cn">NULL</span>,
-  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plasma"</span>, <span class="st">"C"</span>, <span class="st">"magma"</span>, <span class="st">"A"</span>, <span class="st">"inferno"</span>, <span class="st">"B"</span>, <span class="st">"viridis"</span>, <span class="st">"D"</span>, <span class="st">"cividis"</span>,
-    <span class="st">"E"</span><span class="op">)</span>,
-  palette_direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2l"</span>, <span class="st">"l2d"</span><span class="op">)</span>,
-  palette_begin <span class="op">=</span> <span class="fl">0</span>,
-  palette_end <span class="op">=</span> <span class="fl">0.8</span>,
-  alpha <span class="op">=</span> <span class="fl">1</span>,
-  greyscale <span class="op">=</span> <span class="cn">FALSE</span>,
-  line_size <span class="op">=</span> <span class="fl">1.1</span>,
-  line_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"solid"</span>, <span class="st">"dashed"</span>, <span class="st">"dotted"</span>, <span class="st">"dotdash"</span>, <span class="st">"longdash"</span>, <span class="st">"twodash"</span><span class="op">)</span>,
-  points <span class="op">=</span> <span class="cn">FALSE</span>,
-  point_colour <span class="op">=</span> <span class="st">"black"</span>,
-  point_fill <span class="op">=</span> <span class="st">"black"</span>,
-  point_alpha <span class="op">=</span> <span class="fl">1</span>,
-  point_shape <span class="op">=</span> <span class="st">"circle"</span>,
-  point_size <span class="op">=</span> <span class="fl">3</span>,
-  theme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bw"</span>, <span class="st">"classic"</span>, <span class="st">"grey"</span>, <span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"minimal"</span><span class="op">)</span>,
-  text_size <span class="op">=</span> <span class="fl">14</span>,
-  font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sans"</span>, <span class="st">"serif"</span>, <span class="st">"mono"</span><span class="op">)</span>,
-  facet_var <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_order <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_labs <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_var_strip_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,
-  facet_var_text_bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  legend_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,
-  omit_legend <span class="op">=</span> <span class="cn">FALSE</span>,
-  interactive <span class="op">=</span> <span class="cn">FALSE</span>,
-  aesthetic_options <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_line</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  colour_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"quantile"</span>, <span class="st">"sum"</span>, <span class="st">"count"</span><span class="op">)</span>,</span>
+<span>  qprob <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title_hjust <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  caption <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  caption_hjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  colour_var_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type_var_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  ybreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  transform_y <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  y_transformation <span class="op">=</span> <span class="st">"log10"</span>,</span>
+<span>  y_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  xbreaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  transform_x <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  x_transformation <span class="op">=</span> <span class="st">"log10"</span>,</span>
+<span>  x_var_labs <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  x_var_order_by_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_order_by_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type_var_order_by_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_var_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_type_var_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plasma"</span>, <span class="st">"C"</span>, <span class="st">"magma"</span>, <span class="st">"A"</span>, <span class="st">"inferno"</span>, <span class="st">"B"</span>, <span class="st">"viridis"</span>, <span class="st">"D"</span>, <span class="st">"cividis"</span>,</span>
+<span>    <span class="st">"E"</span><span class="op">)</span>,</span>
+<span>  palette_direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"d2l"</span>, <span class="st">"l2d"</span><span class="op">)</span>,</span>
+<span>  palette_begin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  palette_end <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  greyscale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  line_size <span class="op">=</span> <span class="fl">1.1</span>,</span>
+<span>  line_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"solid"</span>, <span class="st">"dashed"</span>, <span class="st">"dotted"</span>, <span class="st">"dotdash"</span>, <span class="st">"longdash"</span>, <span class="st">"twodash"</span><span class="op">)</span>,</span>
+<span>  points <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  point_colour <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  point_fill <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  point_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  point_shape <span class="op">=</span> <span class="st">"circle"</span>,</span>
+<span>  point_size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  theme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bw"</span>, <span class="st">"classic"</span>, <span class="st">"grey"</span>, <span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"minimal"</span><span class="op">)</span>,</span>
+<span>  text_size <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>  font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sans"</span>, <span class="st">"serif"</span>, <span class="st">"mono"</span><span class="op">)</span>,</span>
+<span>  facet_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_labs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_var_strip_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
+<span>  facet_var_text_bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  legend_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
+<span>  omit_legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  aesthetic_options <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -165,9 +165,13 @@ blog post</a> for an introduction to ggplot2.</p>
     <dl><dt>data</dt>
 <dd><p>A data frame or tibble containing at least one categorical
 variable.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>A numeric variable containing the values you would like plotted on
 the y-axis (quoted or unquoted), e.g. y = "variable" or y = variable.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>Typically a numeric or date/POSIX.ct variable to use for the x-axis
 (quoted or unquoted), e.g. x = "variable" or x = variable. If you assign a
@@ -175,22 +179,30 @@ variable of a different class to x, it will be converted to a factor and
 arranged in order of factor levels (left to right), unless it is already a
 factor. The ordering of such variables can be modified with x_var_order*
 arguments.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other graphical parameters (not associated with variables) to be
 passed to <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></code> to be applied to all lines can
 be specified as well, e.g. "colour", "linejoin" or "lineend". To see some
 of the available options in a web browser, set the aesthetic_options
 argument to TRUE. For colour options, see <code><a href="colour_options.html">colour_options</a></code>.</p></dd>
+
+
 <dt>colour_var</dt>
 <dd><p>Use if you want to assign a categorical variable to line
 colour, e.g. colour_var = "grouping_variable" or colour_var =
 grouping_variable. Produces separate lines for each level of the colour
 variable. See <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></code> for details.</p></dd>
+
+
 <dt>line_type_var</dt>
 <dd><p>Use if you want to assign a categorical variable to the
 line type, e.g. line_type_var = "grouping_variable" or line_type_var =
 grouping_variable. Produces separate lines for each level of the fill
 variable. See <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></code> for details.</p></dd>
+
+
 <dt>stat</dt>
 <dd><p>If multiple values of the y-variable are detected for at least
 one grouping variable level combination based on variables assigned to any
@@ -201,58 +213,88 @@ default), "quantile", "sum", and "count". This argument supports partial
 matching, so "q" would be read as "quantile" for example. If "quantile" is
 chosen, then the probability value to use to extract a quantile can be
 specified with the "qprob" argument.</p></dd>
+
+
 <dt>qprob</dt>
 <dd><p>Probability value to pass to <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code> if
 stat = "quantile". Default is 0.5 to get the median.</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>Specify/overwrite the x-axis label using a character string, e.g.
 "x-axis label"</p></dd>
+
+
 <dt>ylab</dt>
 <dd><p>Specify/overwrite the y-axis label using a character string, e.g.
 "y-axis label". Note that in cases wehre a summary statistic was used to
 aggregate some of the y-variable values (see "stat" argument description),
 the y-axis label will automatically be updated to specify which summary
 statistic was used by default.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Add a main title to the plot using a character string, e.g.
 "bar plots of y for each group of x"</p></dd>
+
+
 <dt>title_hjust</dt>
 <dd><p>Left-to-right/horizontal justification (alignment) of
 the main plot title. Accepts values from 0 (far left) to 1 (far right).
 Default is 0.5 (centre).</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>Add a figure caption to the bottom of the plot using a character string.</p></dd>
+
+
 <dt>caption_hjust</dt>
 <dd><p>Left-to-right/horizontal justification (alignment) of the
 caption. Accepts values from 0 (far left) to 1 (far right). Default is 0
 (left).</p></dd>
+
+
 <dt>colour_var_title</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the variable label in the plot
 legend.</p></dd>
+
+
 <dt>line_type_var_title</dt>
 <dd><p>If a variable has been assigned to line type using
 line_type_var, this allows you to modify the variable label in the plot
 legend.</p></dd>
+
+
 <dt>ylim</dt>
 <dd><p>specify the y-axis limits, e.g. ylim = c(lower_limit,
 upper_limit). Use NA for the existing minimum or maximum value of y, e.g.
 the default is ylim = c(NA, NA).</p></dd>
+
+
 <dt>ybreaks</dt>
 <dd><p>This allows you to change the break points to use for tick
 marks on the y-axis. <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code> is particularly useful here. See
 <code>scale_continuous</code> for details. If ybreaks is
 specified, then ylim should be also.</p></dd>
+
+
 <dt>transform_y</dt>
 <dd><p>Would you like to transform the y axis (TRUE or FALSE)?</p></dd>
+
+
 <dt>y_transformation</dt>
 <dd><p>If transform_y = TRUE, this determines the
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></code> for
 details.</p></dd>
+
+
 <dt>y_var_labs</dt>
 <dd><p>Allows you to modify the labels displayed with the y-axis
 tick marks. See <code>scale_continuous</code> for details.</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>If x is a numeric or date variable, this allows you to specify
 the x-axis limits, e.g. xlim = c(lower_limit, upper_limit). Use NA for the
@@ -260,6 +302,8 @@ existing minimum or maximum value of y, e.g. the default is ylim = c(NA,
 NA). See <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></code> if x is a numeric
 variable and <code><a href="https://ggplot2.tidyverse.org/reference/scale_date.html" class="external-link">scale_x_date</a></code> if x is a date variable
 for details.</p></dd>
+
+
 <dt>xbreaks</dt>
 <dd><p>If x is a numeric variable, this allows you to change the
 break points to use for tick marks via a numeric vector. <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code>
@@ -269,60 +313,84 @@ interval to use with a string, e.g. "2 years" to use a 2-year break point
 interval. See the "date_breaks" argument documentation under
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_date.html" class="external-link">scale_x_date</a></code> for details. If xbreaks is
 specified for a numeric variable, then xlim should be also.</p></dd>
+
+
 <dt>transform_x</dt>
 <dd><p>Would you like to transform the x-axis (TRUE or FALSE)?
 Only works for numeric variables.</p></dd>
+
+
 <dt>x_transformation</dt>
 <dd><p>If transform_x = TRUE, this determines the
 transformation to be applied. Common choices include "log10" (the default),
 "log2", "sqrt", or "exp". See <code>scale_continuous</code> for
 details. Only works for numeric variables.</p></dd>
+
+
 <dt>x_var_labs</dt>
 <dd><p>Allows you to modify the labels displayed with the x-axis
 tick marks. See <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></code> if x is a numeric
 variable, <code><a href="https://ggplot2.tidyverse.org/reference/scale_date.html" class="external-link">scale_x_date</a></code> if x is a date variable, or
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> if x is a character variable/factor for
 details.</p></dd>
+
+
 <dt>x_var_order_by_y</dt>
 <dd><p>If a non-numeric/non-date variable has been assigned
 to x, this allows you to sort the points used to draw lines in order of
 increasing/ascending ("i" or "a") or decreasing ("d") value of y.</p></dd>
+
+
 <dt>x_var_order</dt>
 <dd><p>If a non-numeric/non-date variable has been assigned to x,
 this allows you to manually modify the order of the variable groups, e.g. x
 = grouping_variable, x_var_order = c("group_2", "group_1"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>colour_var_order_by_y</dt>
 <dd><p>If a variable has been assigned to colour_var,
 this allows you to sort the lines in order of increasing/ascending ("i" or
 "a") or decreasing ("d") value of y.</p></dd>
+
+
 <dt>colour_var_order</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the order of the variable
 groups, e.g. colour_var = grouping_variable, colour_var_order =
 c("group_2", "group_1"). See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for
 details.</p></dd>
+
+
 <dt>line_type_var_order_by_y</dt>
 <dd><p>If a variable has been assigned to
 line_type_var, this allows you to sort the lines in order of
 increasing/ascending ("i" or "a") or decreasing ("d") value of y.</p></dd>
+
+
 <dt>line_type_var_order</dt>
 <dd><p>If a variable has been assigned to line type using
 line_type_var, this allows you to modify the order of the variable groups,
 e.g. line_type_var = grouping_variable, line_type_var_order = c("group_2",
 "group_1"). See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>colour_var_labs</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the labels of the variable groups,
 e.g. colour_var = grouping_variable, colour_var_labs =
 c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
 "group_2_old_label"). See <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>line_type_var_labs</dt>
 <dd><p>If a variable has been assigned to line type using
 line_type_var, this allows you to modify the labels of the variable groups,
 e.g. line_type_var = grouping_variable, line_type_var_labs =
 c("group_1_new_label" = "group_1_old_label", "group_2_new_label" =
 "group_2_old_label"). See <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>colour_var_values</dt>
 <dd><p>If a variable has been assigned to colour using
 colour_var, this allows you to modify the colours assigned to the outline
@@ -330,6 +398,8 @@ of each of the variable groups, e.g. colour_var = grouping_variable,
 colour_var_values = c("blue", "red"). See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></code> for details. For the colour
 options available in base R, see <code><a href="colour_options.html">colour_options</a></code>.</p></dd>
+
+
 <dt>line_type_var_values</dt>
 <dd><p>If a variable has been assigned to line type
 using line_type_var, this allows you to modify the line types assigned to
@@ -337,6 +407,8 @@ each of the variable groups, e.g. line_type_var = grouping_variable,
 fill_var_values = c("solid", "dashed"). See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_linetype_manual</a></code> for details. Options are the
 same as those listed under the "line_type" argument.</p></dd>
+
+
 <dt>palette</dt>
 <dd><p>If a variable is assigned to colour_var, this determines which
 <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html" class="external-link">viridis
@@ -345,70 +417,108 @@ or "A", "inferno" or "B", "viridis" or "D", and "cividis" or "E". See
 <a href="https://craig.rbind.io/post/2021-05-17-asgr-3-1-data-visualization/#colourblind-friendly-palettes" class="external-link">this
 link</a> for examples. You can override these colour palettes with
 colour_var_values.</p></dd>
+
+
 <dt>palette_direction</dt>
 <dd><p>Choose "d2l" for dark to light (default) or "l2d"
 for light to dark.</p></dd>
+
+
 <dt>palette_begin</dt>
 <dd><p>Value between 0 and 1 that determines where along the
 full range of the chosen colour palette's spectrum to begin sampling
 colours. See <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_d</a></code> for details.</p></dd>
+
+
 <dt>palette_end</dt>
 <dd><p>Value between 0 and 1 that determines where along the full
 range of the chosen colour palette's spectrum to end sampling colours. See
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_d</a></code> for details.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>This adjusts the transparency/opacity of the lines on the plot,
 ranging from 0 = 100% transparent to 1 = 100% opaque.</p></dd>
+
+
 <dt>greyscale</dt>
 <dd><p>Set to TRUE if you want the plot converted to greyscale.</p></dd>
+
+
 <dt>line_size</dt>
 <dd><p>Controls the thickness of the lines.</p></dd>
+
+
 <dt>line_type</dt>
 <dd><p>Use this to modify the type of lines used by
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></code> if line_type_var is unspecified. Options
 are: "solid", "dashed", "dotted", "dotdash", "longdash", and "twodash".</p></dd>
+
+
 <dt>points</dt>
 <dd><p>Would you like to add points to the plot with a
 <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></code> layer (TRUE or FALSE)? Default is FALSE.</p></dd>
+
+
 <dt>point_colour</dt>
 <dd><p>If points = TRUE and no variable has been assigned to
 colour_var, this determines the colour to use for points.</p></dd>
+
+
 <dt>point_fill</dt>
 <dd><p>If points = TRUE and point_shape is one of the options that
 have a fill aesthetic (see below), this controls the fill colour of the
 points.</p></dd>
+
+
 <dt>point_alpha</dt>
 <dd><p>If points = TRUE, this controls the transparency of the
 points.</p></dd>
+
+
 <dt>point_shape</dt>
 <dd><p>Point shape to use if points = TRUE. Only shapes 21-25
 have both fill and colour aesthetic parameters; the others only use colour.
 To see the options you can view the ggplot2 aesthetic options web page by
 setting the aesthetic_options argument to TRUE.</p></dd>
+
+
 <dt>point_size</dt>
 <dd><p>If points = TRUE, this controls the size of the points.</p></dd>
+
+
 <dt>theme</dt>
 <dd><p>Adjusts the theme using 1 of 6 predefined "complete" theme
 templates provided by ggplot2. Currently supported options are: "classic",
 "bw" (the elucidate default), "grey" (the ggplot2 default), "light",
 "dark", &amp; "minimal". See <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></code> for more
 information.</p></dd>
+
+
 <dt>text_size</dt>
 <dd><p>This controls the size of all plot text. Default = 14.</p></dd>
+
+
 <dt>font</dt>
 <dd><p>This controls the font of all plot text. Default = "sans"
 (Arial). Other options include "serif" (Times New Roman) and "mono" (Courier
 New).</p></dd>
+
+
 <dt>facet_var</dt>
 <dd><p>Use if you want separate plots for each level of a grouping
 variable (i.e. a faceted plot), e.g. facet_var = "grouping_variable" or
 facet_var = grouping_variable. See <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></code> for
 details.</p></dd>
+
+
 <dt>facet_var_order</dt>
 <dd><p>If a variable has been assigned for faceting using
 facet_var, this allows you to modify the order of the variable groups, e.g.
 facet_var = grouping_variable, facet_var_order = c("group_2", "group_1").
 See <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></code> for details.</p></dd>
+
+
 <dt>facet_var_labs</dt>
 <dd><p>If a variable has been assigned for faceting using
 facet_var, this allows you to modify the labels of the variable groups
@@ -416,33 +526,50 @@ which will appear in the facet strips, e.g. facet_var = grouping_variable,
 facet_var_labs = c("group_1_new_label" = "group_1_old_label",
 "group_2_new_label" = "group_2_old_label"). See
 <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html" class="external-link">fct_recode</a></code> for details.</p></dd>
+
+
 <dt>facet_var_strip_position</dt>
 <dd><p>If a variable has been assigned for faceting
 using facet_var, this allows you to modify the position of the facet strip
 labels. Sensible options include "top" (the default) or "bottom".</p></dd>
+
+
 <dt>facet_var_text_bold</dt>
 <dd><p>If a variable has been assigned for faceting
 using facet_var, this allows you to use boldface (TRUE/default or FALSE)
 for the facet strip label text.</p></dd>
+
+
 <dt>legend_position</dt>
 <dd><p>This allows you to modify the legend position.
 Options include "right" (the default), "left", "top", &amp; "bottom".</p></dd>
+
+
 <dt>omit_legend</dt>
 <dd><p>Set to TRUE if you want to remove/omit the legends.</p></dd>
+
+
 <dt>interactive</dt>
 <dd><p>Determines whether a static ggplot object or an interactive html
 plotly object is returned. See <code><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html" class="external-link">ggplotly</a></code> for details.</p></dd>
+
+
 <dt>aesthetic_options</dt>
 <dd><p>If set to TRUE, opens a web browser to the tidyverse
 online aesthetic options vignette.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Set this to FALSE to prevent a message from being printed to
 the console if some of the data need to be aggregated to display a single
 line per group level combination.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object or plotly object depending on whether static or
+    
+
+<p>A ggplot object or plotly object depending on whether static or
 interactive output was requested.</p>
     </div>
     <div id="references">
@@ -461,21 +588,21 @@ interactive output was requested.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">#basic line graph split by a grouping variable that has been assigned to line</span></span>
-<span class="r-in"><span class="co">#colour</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_line</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="st">"g"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#basic line graph split by a grouping variable that has been assigned to line</span></span></span>
+<span class="r-in"><span><span class="co">#colour</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_line</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="st">"g"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_line-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#add points with "points = TRUE"</span></span>
-<span class="r-in"><span class="co">#disable the message that data needed to be aggregated to show a single line</span></span>
-<span class="r-in"><span class="co">#for each level of the x-variable "d" and colour-variable "g" by setting</span></span>
-<span class="r-in"><span class="co">#"verbose = FALSE"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_line</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="va">g</span>, points <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#add points with "points = TRUE"</span></span></span>
+<span class="r-in"><span><span class="co">#disable the message that data needed to be aggregated to show a single line</span></span></span>
+<span class="r-in"><span><span class="co">#for each level of the x-variable "d" and colour-variable "g" by setting</span></span></span>
+<span class="r-in"><span><span class="co">#"verbose = FALSE"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_line</span><span class="op">(</span><span class="va">pdata</span>, y <span class="op">=</span> <span class="va">y1</span>, x <span class="op">=</span> <span class="va">d</span>, colour_var <span class="op">=</span> <span class="va">g</span>, points <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_line-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -490,7 +617,7 @@ interactive output was requested.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

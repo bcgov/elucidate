@@ -69,8 +69,9 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="elucidate-">elucidate <img src="reference/figures/hex-elucidate.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#elucidate-"></a>
+<div class="page-header"><h1 id="elucidate">elucidate<a class="anchor" aria-label="anchor" href="#elucidate"></a>
 </h1></div>
+<p><img src="reference/figures/hex-elucidate.png" align="center" width="250px"></p>
 <div class="section level2">
 <h2 id="project-status">Project Status<a class="anchor" aria-label="anchor" href="#project-status"></a>
 </h2>
@@ -95,11 +96,11 @@
 </h2>
 <p>You can install the development version of elucidate from this repository with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># use the remotes package to install from a github repository</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co">#only run this 1st if you haven't installed remotes before</span>
-
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bcgov/elucidate"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># use the remotes package to install from a github repository</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co">#only run this 1st if you haven't installed remotes before</span></span>
+<span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bcgov/elucidate"</span><span class="op">)</span></span></code></pre></div>
 <p>The authors of <code>elucidate</code> acknowledge and express their gratitude to the authors of the <a href="https://www.tidyverse.org/" class="external-link">tidyverse packages</a>, <a href="https://github.com/Rdatatable/data.table" class="external-link">data.table</a>, and the functions of other dependency packages which were used to build <code>elucidate</code>, since without their effort and ingenuity <code>elucidate</code> would mostly have remained a collection of ideas instead of functions.</p>
 </div>
 <div class="section level2">
@@ -107,96 +108,90 @@
 </h2>
 <p><code><a href="reference/dupes.html">dupes()</a></code> can tell you how many rows are duplicated based on one or more variables (default is all of them).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bcgov/elucidate" class="external-link">elucidate</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: ggplot2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'elucidate'</span>
-<span class="co">#&gt; The following object is masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     mode</span>
-
-<span class="co">#list any number of variables to use when searching for duplicates after the</span>
-<span class="co">#data argument</span>
-<span class="fu"><a href="reference/dupes.html">dupes</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">d</span><span class="op">)</span> 
-<span class="co">#&gt; Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.</span>
-<span class="co">#&gt; # A tibble: 12,000 x 11</span>
-<span class="co">#&gt;       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;date&gt;     &lt;fct&gt; &lt;chr&gt;    &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;</span>
-<span class="co">#&gt;  1     1 2019-01-01 e     high     FALSE  144. 112.     86   199   261     1000</span>
-<span class="co">#&gt;  2     2 2019-01-01 c     low      TRUE   262.  91.8    88   104   224     1000</span>
-<span class="co">#&gt;  3     3 2019-01-01 d     high     FALSE  224. 120.     29   192   224     1000</span>
-<span class="co">#&gt;  4     4 2019-01-01 c     high     TRUE   262. 102.     77   151   254     1000</span>
-<span class="co">#&gt;  5     5 2019-01-01 a     low      FALSE  167.  91.6    75   186   258     1000</span>
-<span class="co">#&gt;  6     6 2019-01-01 a     low      TRUE   163.  83.6    39   152   293     1000</span>
-<span class="co">#&gt;  7     7 2019-01-01 d     low      FALSE  247.  98.9    88   177   202     1000</span>
-<span class="co">#&gt;  8     8 2019-01-01 b     high     TRUE   189. 102.     79   163   217     1000</span>
-<span class="co">#&gt;  9     9 2019-01-01 e     high     FALSE  156. 110.      4   136   220     1000</span>
-<span class="co">#&gt; 10    10 2019-01-01 c     low      TRUE   248.  95.9    63   113   213     1000</span>
-<span class="co">#&gt; # ... with 11,990 more rows</span>
-<span class="co">#in this case we search for duplicated based on the "d" (date) column        </span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bcgov/elucidate" class="external-link">elucidate</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#list any number of variables to use when searching for duplicates after the</span></span>
+<span><span class="co">#data argument</span></span>
+<span><span class="fu"><a href="reference/dupes.html">dupes</a></span><span class="op">(</span><span class="va">pdata</span>, <span class="va">d</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; Duplicated rows detected! 12000 of 12000 rows in the input data have multiple copies.</span></span>
+<span><span class="co">#&gt; # A tibble: 12,000 x 11</span></span>
+<span><span class="co">#&gt;       id d          g     high_low even     y1    y2    x1    x2    x3 n_copies</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;date&gt;     &lt;fct&gt; &lt;chr&gt;    &lt;lgl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1     1 2019-01-01 e     high     FALSE  144. 112.     86   199   261     1000</span></span>
+<span><span class="co">#&gt;  2     2 2019-01-01 c     low      TRUE   262.  91.8    88   104   224     1000</span></span>
+<span><span class="co">#&gt;  3     3 2019-01-01 d     high     FALSE  224. 120.     29   192   224     1000</span></span>
+<span><span class="co">#&gt;  4     4 2019-01-01 c     high     TRUE   262. 102.     77   151   254     1000</span></span>
+<span><span class="co">#&gt;  5     5 2019-01-01 a     low      FALSE  167.  91.6    75   186   258     1000</span></span>
+<span><span class="co">#&gt;  6     6 2019-01-01 a     low      TRUE   163.  83.6    39   152   293     1000</span></span>
+<span><span class="co">#&gt;  7     7 2019-01-01 d     low      FALSE  247.  98.9    88   177   202     1000</span></span>
+<span><span class="co">#&gt;  8     8 2019-01-01 b     high     TRUE   189. 102.     79   163   217     1000</span></span>
+<span><span class="co">#&gt;  9     9 2019-01-01 e     high     FALSE  156. 110.      4   136   220     1000</span></span>
+<span><span class="co">#&gt; 10    10 2019-01-01 c     low      TRUE   248.  95.9    63   113   213     1000</span></span>
+<span><span class="co">#&gt; # ... with 11,990 more rows</span></span>
+<span><span class="co">#in this case we search for duplicated based on the "d" (date) column        </span></span></code></pre></div>
 <p><code><a href="reference/describe.html">describe()</a></code> a single variable in a data frame or a vector of values.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#set random generator seed for reproducibility</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
-
-<span class="co">#using a numeric vector as input</span>
-<span class="fu"><a href="reference/describe.html">describe</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 14</span>
-<span class="co">#&gt;   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt; 1  1000  1000     0     0  99.9  4.99 0.158  83.0  96.6  99.8  103.  116. -0.005</span>
-<span class="co">#&gt; # ... with 1 more variable: kurt &lt;dbl&gt;</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#set random generator seed for reproducibility</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#using a numeric vector as input</span></span>
+<span><span class="fu"><a href="reference/describe.html">describe</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 x 14</span></span>
+<span><span class="co">#&gt;   cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75  p100   skew</span></span>
+<span><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  1000  1000     0     0  99.9  4.99 0.158  83.0  96.6  99.8  103.  116. -0.005</span></span>
+<span><span class="co">#&gt; # ... with 1 more variable: kurt &lt;dbl&gt;</span></span></code></pre></div>
 <p><code><a href="reference/describe_all.html">describe_all()</a></code> all variables in a data frame.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/describe_all.html">describe_all</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span>
-<span class="co">#&gt; $date</span>
-<span class="co">#&gt; # A tibble: 1 x 8</span>
-<span class="co">#&gt;   variable cases     n    na  p_na n_unique start      end       </span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;    &lt;int&gt; &lt;date&gt;     &lt;date&gt;    </span>
-<span class="co">#&gt; 1 d        12000 12000     0     0       12 2008-01-01 2019-01-01</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor</span>
-<span class="co">#&gt; # A tibble: 1 x 8</span>
-<span class="co">#&gt;   variable cases     n    na  p_na n_unique ordered counts_tb                   </span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;    &lt;int&gt; &lt;lgl&gt;   &lt;chr&gt;                       </span>
-<span class="co">#&gt; 1 g        12000 12000     0     0        5 FALSE   a_2592, b_2460, ..., e_2352~</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character</span>
-<span class="co">#&gt; # A tibble: 1 x 9</span>
-<span class="co">#&gt;   variable cases     n    na  p_na n_unique min_chars max_chars counts_tb       </span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;    &lt;int&gt;     &lt;int&gt;     &lt;int&gt; &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 high_low 12000 12000     0     0        2         3         4 high_6045, low_~</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical</span>
-<span class="co">#&gt; # A tibble: 1 x 8</span>
-<span class="co">#&gt;   variable cases     n    na  p_na n_TRUE n_FALSE p_TRUE</span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 even     12000 12000     0     0   6000    6000    0.5</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric</span>
-<span class="co">#&gt; # A tibble: 6 x 15</span>
-<span class="co">#&gt;   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75</span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 id       12000 12000     0     0 500.  289.  2.64    1   251.   500.  750.</span>
-<span class="co">#&gt; 2 y1       12000 12000     0     0 154.   42.7 0.39   69.2 121.   145.  181.</span>
-<span class="co">#&gt; 3 y2       12000 12000     0     0 100.   10.1 0.092  60.0  93.4  100.  107.</span>
-<span class="co">#&gt; 4 x1       12000 12000     0     0  50.5  28.9 0.264   1    25     50    75 </span>
-<span class="co">#&gt; 5 x2       12000 12000     0     0 151.   28.8 0.263 101   126    150   176 </span>
-<span class="co">#&gt; 6 x3       12000 12000     0     0 250.   28.9 0.264 201   225    251   276 </span>
-<span class="co">#&gt; # ... with 3 more variables: p100 &lt;dbl&gt;, skew &lt;dbl&gt;, kurt &lt;dbl&gt;</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/describe_all.html">describe_all</a></span><span class="op">(</span><span class="va">pdata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $date</span></span>
+<span><span class="co">#&gt;    variable cases     n na p_na n_unique      start        end</span></span>
+<span><span class="co">#&gt; 1:        d 12000 12000  0    0       12 2008-01-01 2019-01-01</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $factor</span></span>
+<span><span class="co">#&gt;    variable cases     n na p_na n_unique ordered</span></span>
+<span><span class="co">#&gt; 1:        g 12000 12000  0    0        5   FALSE</span></span>
+<span><span class="co">#&gt;                              counts_tb</span></span>
+<span><span class="co">#&gt; 1: a_2592, b_2460, ..., e_2352, c_2220</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $character</span></span>
+<span><span class="co">#&gt;    variable cases     n na p_na n_unique min_chars max_chars</span></span>
+<span><span class="co">#&gt; 1: high_low 12000 12000  0    0        2         3         4</span></span>
+<span><span class="co">#&gt;              counts_tb</span></span>
+<span><span class="co">#&gt; 1: high_6045, low_5955</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $logical</span></span>
+<span><span class="co">#&gt;    variable cases     n na p_na n_TRUE n_FALSE p_TRUE</span></span>
+<span><span class="co">#&gt; 1:     even 12000 12000  0    0   6000    6000    0.5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $numeric</span></span>
+<span><span class="co">#&gt;    variable cases     n na p_na    mean      sd    se      p0     p25     p50</span></span>
+<span><span class="co">#&gt; 1:       id 12000 12000  0    0 500.500 288.687 2.635   1.000 250.750 500.500</span></span>
+<span><span class="co">#&gt; 2:       y1 12000 12000  0    0 153.705  42.724 0.390  69.224 120.941 144.782</span></span>
+<span><span class="co">#&gt; 3:       y2 12000 12000  0    0 100.092  10.120 0.092  59.963  93.351 100.128</span></span>
+<span><span class="co">#&gt; 4:       x1 12000 12000  0    0  50.495  28.937 0.264   1.000  25.000  50.000</span></span>
+<span><span class="co">#&gt; 5:       x2 12000 12000  0    0 150.651  28.820 0.263 101.000 126.000 150.000</span></span>
+<span><span class="co">#&gt; 6:       x3 12000 12000  0    0 250.497  28.865 0.264 201.000 225.000 251.000</span></span>
+<span><span class="co">#&gt;        p75     p100   skew   kurt</span></span>
+<span><span class="co">#&gt; 1: 750.250 1000.000  0.000 -1.200</span></span>
+<span><span class="co">#&gt; 2: 181.022  289.235  0.739 -0.181</span></span>
+<span><span class="co">#&gt; 3: 106.906  142.181 -0.032  0.059</span></span>
+<span><span class="co">#&gt; 4:  75.000  100.000  0.008 -1.208</span></span>
+<span><span class="co">#&gt; 5: 176.000  200.000  0.002 -1.209</span></span>
+<span><span class="co">#&gt; 6: 276.000  300.000  0.006 -1.214</span></span></code></pre></div>
 <p>Use <code><a href="reference/plot_var.html">plot_var()</a></code> to produce a class-appropriate <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graph of a single variable in a data frame or a vector of values.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/plot_var.html">plot_var</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
-<p><img src="reference/figures/README-plot_var-1.png" width="100%"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_var.html">plot_var</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="reference/figures/README-plot_var-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#in this case we get a density plot with a normal density curve added for</span>
-<span class="co">#reference (dashed line).</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#in this case we get a density plot with a normal density curve added for</span></span>
+<span><span class="co">#reference (dashed line).</span></span></code></pre></div>
 <p>To generate class-appropriate <code>ggplot2</code> graphs for all variables in a data frame and combine them into a multiple-panel figure with the <a href="https://patchwork.data-imaginist.com/index.html" class="external-link">patchwork</a> package, use <code><a href="reference/plot_var_all.html">plot_var_all()</a></code>. You can also limit the graphing to a subset of columns with the “cols” argument, which accepts a character vector of column names.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span><span class="va">pdata</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"g"</span>, <span class="st">"even"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-plot_var_all-1.png" width="100%"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_var_all.html">plot_var_all</a></span><span class="op">(</span><span class="va">pdata</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span>, <span class="st">"g"</span>, <span class="st">"even"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-plot_var_all-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#density plots for numeric variables and bar graphs for categorical variables</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#density plots for numeric variables and bar graphs for categorical variables</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
@@ -286,7 +281,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
