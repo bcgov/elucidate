@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# elucidate <img src='man/figures/hex-elucidate.png' align="right" height="139" />
+# elucidate
+
+<img src='man/figures/hex-elucidate.png' align="center" width="250px"/>
 
 ## Project Status
 
@@ -75,12 +77,6 @@ variables (default is all of them).
 
 ``` r
 library(elucidate)
-#> Loading required package: ggplot2
-#> 
-#> Attaching package: 'elucidate'
-#> The following object is masked from 'package:base':
-#> 
-#>     mode
 
 #list any number of variables to use when searching for duplicates after the
 #data argument
@@ -123,40 +119,40 @@ describe(data = rnorm(1:1000, 100, 5))
 ``` r
 describe_all(pdata)
 #> $date
-#> # A tibble: 1 x 8
-#>   variable cases     n    na  p_na n_unique start      end       
-#>   <chr>    <int> <int> <int> <dbl>    <int> <date>     <date>    
-#> 1 d        12000 12000     0     0       12 2008-01-01 2019-01-01
+#>    variable cases     n na p_na n_unique      start        end
+#> 1:        d 12000 12000  0    0       12 2008-01-01 2019-01-01
 #> 
 #> $factor
-#> # A tibble: 1 x 8
-#>   variable cases     n    na  p_na n_unique ordered counts_tb                   
-#>   <chr>    <int> <int> <int> <dbl>    <int> <lgl>   <chr>                       
-#> 1 g        12000 12000     0     0        5 FALSE   a_2592, b_2460, ..., e_2352~
+#>    variable cases     n na p_na n_unique ordered
+#> 1:        g 12000 12000  0    0        5   FALSE
+#>                              counts_tb
+#> 1: a_2592, b_2460, ..., e_2352, c_2220
 #> 
 #> $character
-#> # A tibble: 1 x 9
-#>   variable cases     n    na  p_na n_unique min_chars max_chars counts_tb       
-#>   <chr>    <int> <int> <int> <dbl>    <int>     <int>     <int> <chr>           
-#> 1 high_low 12000 12000     0     0        2         3         4 high_6045, low_~
+#>    variable cases     n na p_na n_unique min_chars max_chars
+#> 1: high_low 12000 12000  0    0        2         3         4
+#>              counts_tb
+#> 1: high_6045, low_5955
 #> 
 #> $logical
-#> # A tibble: 1 x 8
-#>   variable cases     n    na  p_na n_TRUE n_FALSE p_TRUE
-#>   <chr>    <int> <int> <int> <dbl>  <dbl>   <dbl>  <dbl>
-#> 1 even     12000 12000     0     0   6000    6000    0.5
+#>    variable cases     n na p_na n_TRUE n_FALSE p_TRUE
+#> 1:     even 12000 12000  0    0   6000    6000    0.5
 #> 
 #> $numeric
-#> # A tibble: 6 x 15
-#>   variable cases     n    na  p_na  mean    sd    se    p0   p25   p50   p75
-#>   <chr>    <int> <int> <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 id       12000 12000     0     0 500.  289.  2.64    1   251.   500.  750.
-#> 2 y1       12000 12000     0     0 154.   42.7 0.39   69.2 121.   145.  181.
-#> 3 y2       12000 12000     0     0 100.   10.1 0.092  60.0  93.4  100.  107.
-#> 4 x1       12000 12000     0     0  50.5  28.9 0.264   1    25     50    75 
-#> 5 x2       12000 12000     0     0 151.   28.8 0.263 101   126    150   176 
-#> 6 x3       12000 12000     0     0 250.   28.9 0.264 201   225    251   276 
-#> # ... with 3 more variables: p100 <dbl>, skew <dbl>, kurt <dbl>
+#>    variable cases     n na p_na    mean      sd    se      p0     p25     p50
+#> 1:       id 12000 12000  0    0 500.500 288.687 2.635   1.000 250.750 500.500
+#> 2:       y1 12000 12000  0    0 153.705  42.724 0.390  69.224 120.941 144.782
+#> 3:       y2 12000 12000  0    0 100.092  10.120 0.092  59.963  93.351 100.128
+#> 4:       x1 12000 12000  0    0  50.495  28.937 0.264   1.000  25.000  50.000
+#> 5:       x2 12000 12000  0    0 150.651  28.820 0.263 101.000 126.000 150.000
+#> 6:       x3 12000 12000  0    0 250.497  28.865 0.264 201.000 225.000 251.000
+#>        p75     p100   skew   kurt
+#> 1: 750.250 1000.000  0.000 -1.200
+#> 2: 181.022  289.235  0.739 -0.181
+#> 3: 106.906  142.181 -0.032  0.059
+#> 4:  75.000  100.000  0.008 -1.208
+#> 5: 176.000  200.000  0.002 -1.209
+#> 6: 276.000  300.000  0.006 -1.214
 ```
 
 Use `plot_var()` to produce a class-appropriate
@@ -167,7 +163,7 @@ a data frame or a vector of values.
 plot_var(data = rnorm(1:1000, 100, 5)) 
 ```
 
-<img src="man/figures/README-plot_var-1.png" width="100%" />
+<img src="man/figures/README-plot_var-1.png" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 #in this case we get a density plot with a normal density curve added for
@@ -185,7 +181,7 @@ column names.
 plot_var_all(pdata, cols = c("y1", "y2", "g", "even"))
 ```
 
-<img src="man/figures/README-plot_var_all-1.png" width="100%" />
+<img src="man/figures/README-plot_var_all-1.png" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 #density plots for numeric variables and bar graphs for categorical variables
